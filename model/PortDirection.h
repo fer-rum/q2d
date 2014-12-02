@@ -1,0 +1,4 @@
+#ifndef PORTDIRECTION_H
+#define PORTDIRECTION_H
+
+#endif // PORTDIRECTION_H
