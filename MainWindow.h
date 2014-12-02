@@ -1,22 +1,29 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 
-namespace Ui {
-class MainWindow;
-}
+#include "Application.h"
 
-class MainWindow : public QMainWindow
-{
+#include "ui_MainWindow.h"
+
+#include <QWindow>
+
+namespace q2d {
+    // forward declaration
+    class Application;
+
+namespace gui {
+
+class MainWindow : public QWindow {
     Q_OBJECT
-
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
 private:
-    Ui::MainWindow *ui;
+    q2d::Application* application;
+public:
+    explicit MainWindow();
+    ~MainWindow();
 };
+
+} // namespace gui
+} // namespace q2d
 
 #endif // MAINWINDOW_H

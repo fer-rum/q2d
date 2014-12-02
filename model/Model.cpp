@@ -1,5 +1,7 @@
 #include "Model.h"
 
-Model::Model()
-{
+using namespace q2d::model;
+
+Model::Model(QString name) {
+    this->name = name;
 }

@@ -1,5 +1,7 @@
-#include "component.h"
+#include "Component.h"
 
-Component::Component()
-{
+using namespace q2d::model;
+
+Component::Component(QString name, Model* internalModel) : ModelElement(name) {
+    this->internalModel = internalModel;
 }
