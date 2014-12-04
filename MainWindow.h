@@ -27,7 +27,7 @@ private:
 
     void addNewSchematicsTab(QString title);
 public:
-    explicit MainWindow();
+    explicit MainWindow(ApplicationContext *parent);
     ~MainWindow();
 
     void setupSignalsAndSlots();

@@ -5,22 +5,22 @@
 
 using namespace q2d::gui;
 
-MainWindow::MainWindow() :
-    QMainWindow(),
-    ui(new Ui::MainWindow){
+MainWindow::MainWindow(ApplicationContext* parent) :
+    QMainWindow(), ui(new Ui::MainWindow){
+
+    Q_CHECK_PTR(parent);
+    this->context = parent;
 
     ui->setupUi(this);
 
     this->application = qobject_cast<Application*>(Application::instance());
-    //NOTE: Do not fetch context, it may not be created yet.
 }
 
 MainWindow::~MainWindow() {}
 
 void
 MainWindow::setupSignalsAndSlots(){
-    // fetch the context since it may not be yet set
-    this->context = this->application->getContext();
+    Q_CHECK_PTR(this->context);
 
     // Menus
     connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));

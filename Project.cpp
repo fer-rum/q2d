@@ -11,5 +11,5 @@ Project::Project(QString name, ApplicationContext* parent) : QObject(parent) {
 
 void
 Project::setupSignalsAndSlots(){
-    connect(this, SIGNAL(signal_nameChanged(QString)), parent, SLOT(slot_projectNameChanged(QString)));
+    connect(this, SIGNAL(signal_nameChanged(QString)), this->parent(), SLOT(slot_projectNameChanged(QString)));
 }

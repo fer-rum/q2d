@@ -7,10 +7,12 @@ using namespace q2d;
 
 ApplicationContext::ApplicationContext(Application *parent) : QObject(parent){
     this->currentProject = nullptr;
-    // NOTE: Do not fetch the main window, it might not be set up yet
+    // TODO load basic libraries
+    // create the main window
+    this->mainWindow = new gui::MainWindow(this);
+    this->mainWindow->setupSignalsAndSlots();
+    this->mainWindow->show();
 
-
-    Q_CHECK_PTR(this->mainWindow);
 }
 
 /**
@@ -34,10 +36,13 @@ ApplicationContext::createProject(QString name){
     // TODO enable document menus
 }
 
+gui::MainWindow*
+ApplicationContext::getMainWindow(){
+    return this->mainWindow;
+}
+
 void
 ApplicationContext::setupSignalsAndSlots(){
-    // get the main window, since it might not be set yet
-     this->mainWindow = qobject_cast<Application*>(this->parent())->getMainWindow();
     Q_CHECK_PTR(this->mainWindow);
 
     connect(this, SIGNAL(signal_projectNameChanged(QString)), this->mainWindow, SLOT(slot_updateProjectName(QString)));
@@ -51,7 +56,7 @@ ApplicationContext::slot_newProject(){
 
     // get name
     bool ok;
-    QString name = QInputDialog::getText(app->getMainWindow(),
+    QString name = QInputDialog::getText(this->mainWindow,
                         tr("Project name required"),
                         tr("Enter the name of the new Project:"),
                         QLineEdit::Normal, "", &ok);
@@ -62,7 +67,7 @@ ApplicationContext::slot_newProject(){
 
     // validate name
     if(name.isEmpty()){
-        QMessageBox::critical(app->getMainWindow(),
+        QMessageBox::critical(this->mainWindow,
             tr("Error: Project name was empty"),
             tr("The projects name must not be empty."),
             QMessageBox::Ok);

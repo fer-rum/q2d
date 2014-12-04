@@ -30,6 +30,7 @@ private:
 public:
     explicit ApplicationContext(Application* parent);
 
+     gui::MainWindow* getMainWindow();
      void setupSignalsAndSlots();
 
 signals:

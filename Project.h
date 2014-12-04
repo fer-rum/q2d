@@ -30,7 +30,10 @@ public:
 // TODO    void createDocument(QString name);
 // TODO    void deleteDocument(Document &toDelete);
 
+    void setupSignalsAndSlots();
+
 signals:
+    void signal_showDocument(Document* document);
     void signal_nameChanged(QString newName);
 
 public slots:
