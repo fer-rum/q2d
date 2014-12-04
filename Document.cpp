@@ -14,3 +14,8 @@ Document::~Document(){
     delete this->describedModel;
     delete this->view;
 }
+
+QString
+Document::getName(){
+    return this->name;
+}

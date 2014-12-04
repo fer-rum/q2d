@@ -3,6 +3,7 @@
 
 
 #include "Application.h"
+#include "Document.h"
 
 #include "ui_MainWindow.h"
 
@@ -11,16 +12,30 @@
 namespace q2d {
     // forward declaration
     class Application;
+    class ApplicationContext;
+    class Document;
 
 namespace gui {
 
-class MainWindow : public QWindow {
+class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
+    Ui::MainWindow* ui;
     q2d::Application* application;
+    q2d::ApplicationContext* context;
+
+
+    void addNewSchematicsTab(QString title);
 public:
     explicit MainWindow();
     ~MainWindow();
+
+    void setupSignalsAndSlots();
+
+private slots:
+    void slot_updateProjectName(QString name);
+    void slot_openDocumentTab(Document* document);
+
 };
 
 } // namespace gui

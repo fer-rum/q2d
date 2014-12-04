@@ -25,9 +25,9 @@ SOURCES +=\
     Document.cpp \
     view/Schematic.cpp \
     Project.cpp \
-    ApplicationContext.cpp \
     Application.cpp \
-    Main.cpp
+    Main.cpp \
+    ApplicationContext.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -41,7 +41,7 @@ HEADERS  += MainWindow.h \
     Document.h \
     view/Schematic.h \
     Project.h \
-    ApplicationContext.h \
-    Application.h
+    Application.h \
+    ApplicationContext.h
 
 FORMS    += MainWindow.ui

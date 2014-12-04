@@ -21,6 +21,8 @@ private:
 public:
     Document(QString name);
     ~Document();
+
+    QString getName();
 };
 
 } // namespace q2d
