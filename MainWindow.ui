@@ -6,88 +6,119 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>937</width>
-    <height>629</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>q2d</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,3">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,5,0,0" columnstretch="0,1,0,4,0,0,0,0,0,0,0,0,0">
+    <item row="0" column="1">
+     <layout class="QHBoxLayout" name="projectNameLayout">
+      <item>
+       <widget class="QLabel" name="currentProjectLabel">
+        <property name="text">
+         <string>Current Project:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="projectNameLabel">
+        <property name="text">
+         <string>(none)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="3">
+     <widget class="QTabWidget" name="schematicsTabWidget">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <layout class="QVBoxLayout" name="componentTreeLayout" stretch="0,0,0">
+      <item>
+       <widget class="QLabel" name="componentTreeLabel">
+        <property name="text">
+         <string>Loaded Components</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTreeView" name="componentTreeView">
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
+      </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="currentProjectLabel">
+         <widget class="QPushButton" name="addTypeButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
-           <string>Current Project:</string>
+           <string>+Type</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="projectNameLabel">
+         <widget class="QPushButton" name="addCategoryButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
-           <string>(none)</string>
+           <string>+Component</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QSplitter" name="documentSplitter">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+     </layout>
+    </item>
+    <item row="0" column="3">
+     <layout class="QGridLayout" name="documentLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="documentListLabel">
+        <property name="text">
+         <string>Available Documents</string>
         </property>
-        <widget class="QLabel" name="documentListLabel">
-         <property name="text">
-          <string>Available Documents</string>
-         </property>
-        </widget>
-        <widget class="QListWidget" name="documentListWidget"/>
        </widget>
       </item>
-      <item>
-       <widget class="QSplitter" name="componentSplitter">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+      <item row="1" column="0">
+       <widget class="QListView" name="documentListView"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="documentDescriptionLabel">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
-        <widget class="QLabel" name="componentTreeLabel">
-         <property name="text">
-          <string>Loaded Components</string>
-         </property>
-        </widget>
-        <widget class="QTreeWidget" name="componentTreeWidget">
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-        </widget>
+        <property name="text">
+         <string>Description</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPlainTextEdit" name="documentDescriptionText">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="plainText">
+         <string>(Not yet implemented)
+Edit your description for the current document here</string>
+        </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QTabWidget" name="schematicsTabWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <property name="tabsClosable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-      </widget>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -96,7 +127,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>937</width>
+     <width>1024</width>
      <height>27</height>
     </rect>
    </property>
@@ -110,28 +141,53 @@
     <property name="title">
      <string>Project</string>
     </property>
-    <addaction name="actionCreate_new_Project"/>
+    <addaction name="action_createProject"/>
+    <addaction name="action_loadProject"/>
+    <addaction name="action_saveProject"/>
+    <addaction name="action_closeProject"/>
+    <addaction name="separator"/>
+    <addaction name="action_createDocument"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProject"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionCreate_new_Project">
+  <action name="action_createProject">
    <property name="text">
-    <string>Create new Project</string>
+    <string>Create Project</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new empty project and make it the current project</string>
+   </property>
+  </action>
+  <action name="action_loadProject">
+   <property name="text">
+    <string>Load Project</string>
+   </property>
+  </action>
+  <action name="action_saveProject">
+   <property name="text">
+    <string>Save Project</string>
+   </property>
+  </action>
+  <action name="action_closeProject">
+   <property name="text">
+    <string>Close Project</string>
+   </property>
+  </action>
+  <action name="action_createDocument">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Create Document</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new empty document in the current project</string>
    </property>
   </action>
  </widget>

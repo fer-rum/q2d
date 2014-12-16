@@ -19,15 +19,16 @@ namespace q2d {
 class Project : public QObject {
     Q_OBJECT
 private:
+    ApplicationContext* applicationContext;
     QString name;
-    QList<Document*> documents;
+    QStandardItemModel documents;
     QSettings projectSettings;
 
 
 
 public:
     Project(QString name, ApplicationContext *parent = 0);
-// TODO    void createDocument(QString name);
+    void createDocument(QString name);
 // TODO    void deleteDocument(Document &toDelete);
 
     void setupSignalsAndSlots();
@@ -37,7 +38,7 @@ signals:
     void signal_nameChanged(QString newName);
 
 public slots:
-// TODO    void slot_newDocument();
+    void slot_newDocument();
 
 };
 

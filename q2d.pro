@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,7 +27,8 @@ SOURCES +=\
     Project.cpp \
     Application.cpp \
     Main.cpp \
-    ApplicationContext.cpp
+    ApplicationContext.cpp \
+    ComponentType.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -42,6 +43,7 @@ HEADERS  += MainWindow.h \
     view/Schematic.h \
     Project.h \
     Application.h \
-    ApplicationContext.h
+    ApplicationContext.h \
+    ComponentType.h
 
 FORMS    += MainWindow.ui

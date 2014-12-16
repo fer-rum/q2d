@@ -5,7 +5,8 @@
 
 using namespace q2d;
 
-ApplicationContext::ApplicationContext(Application *parent) : QObject(parent){
+ApplicationContext::ApplicationContext(Application *parent)
+    : QObject(parent) {
     this->currentProject = nullptr;
     // TODO load basic libraries
     // create the main window
@@ -23,7 +24,7 @@ ApplicationContext::ApplicationContext(Application *parent) : QObject(parent){
  * Assumption: There is no current project
  */
 void
-ApplicationContext::createProject(QString name){
+ApplicationContext::createProject(QString name) {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(this->currentProject == nullptr);
 
@@ -33,7 +34,8 @@ ApplicationContext::createProject(QString name){
     this->currentProject = newProject;
     newProject->setupSignalsAndSlots();
     emit this->signal_projectNameChanged(name);
-    // TODO enable document menus
+    // enable document menus
+    emit this->signal_canAddDocuments(true);
 }
 
 gui::MainWindow*
@@ -45,21 +47,33 @@ void
 ApplicationContext::setupSignalsAndSlots(){
     Q_CHECK_PTR(this->mainWindow);
 
-    connect(this, SIGNAL(signal_projectNameChanged(QString)), this->mainWindow, SLOT(slot_updateProjectName(QString)));
+    connect(this, SIGNAL(signal_projectNameChanged(QString)),
+            this->mainWindow, SLOT(slot_updateProjectName(QString)));
+    connect(this, SIGNAL(signal_canAddDocuments(bool)),
+            this->mainWindow, SLOT(slot_enableDocumentMenus(bool)));
+}
+
+/**
+ * @brief ApplicationContext::slot_newDocument forwards the request of creating
+ * a new document to the project.
+ */
+void
+ApplicationContext::slot_newDocument(){
+
+    Q_CHECK_PTR(this->currentProject);
+
+    emit this->signal_createDocument();
 }
 
 void
 ApplicationContext::slot_newProject(){
-    // get the main window to use as parent
-    Application* app = qobject_cast<Application*>(this->parent());
-    Q_CHECK_PTR(app);
 
     // get name
     bool ok;
     QString name = QInputDialog::getText(this->mainWindow,
-                        tr("Project name required"),
-                        tr("Enter the name of the new Project:"),
-                        QLineEdit::Normal, "", &ok);
+                                         tr("Project name required"),
+                                         tr("Enter the name of the new project:"),
+                                         QLineEdit::Normal, "", &ok);
 
     if(!ok){ // action canceled
         return;
@@ -68,9 +82,9 @@ ApplicationContext::slot_newProject(){
     // validate name
     if(name.isEmpty()){
         QMessageBox::critical(this->mainWindow,
-            tr("Error: Project name was empty"),
-            tr("The projects name must not be empty."),
-            QMessageBox::Ok);
+                              tr("Error: Project name was empty"),
+                              tr("The projects name must not be empty."),
+                              QMessageBox::Ok);
         return;
     }
     // TODO unload current project
@@ -82,6 +96,7 @@ ApplicationContext::slot_newProject(){
 /**
  * @brief ApplicationContext::slot_projectNameChanged
  * Propagates forward a change in the current projects name.
+ *
  * @param newName
  */
 void

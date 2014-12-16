@@ -31,9 +31,12 @@ public:
     ~MainWindow();
 
     void setupSignalsAndSlots();
+    void setDocumentModel(QStandardItemModel* model);
 
+signals:
 private slots:
     void slot_updateProjectName(QString name);
+    void slot_enableDocumentMenus(bool enabled = true);
     void slot_openDocumentTab(Document* document);
 
 };

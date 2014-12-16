@@ -25,6 +25,15 @@ MainWindow::setupSignalsAndSlots(){
     // Menus
     connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));
     connect(this->ui->actionCreate_new_Project, SIGNAL(triggered()), this->context, SLOT(slot_newProject()));
+    connect(this->ui->actionAdd_new_Document, SIGNAL(triggered()), this->context, SLOT(slot_newDocument()));
+}
+
+void
+MainWindow::setDocumentModel(QStandardItemModel* model){
+
+    Q_CHECK_PTR(model);
+
+    this->ui->documentListView->setModel(model);
 }
 
 void
@@ -39,6 +48,11 @@ MainWindow::addNewSchematicsTab(QString title){
 void
 MainWindow::slot_updateProjectName(QString name){
     this->ui->projectNameLabel->setText(name);
+}
+
+void
+MainWindow::slot_enableDocumentMenus(bool enabled){
+    this->ui->actionAdd_new_Document->setEnabled(enabled);
 }
 
 void
