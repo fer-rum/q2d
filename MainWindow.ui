@@ -14,7 +14,7 @@
    <string>q2d</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,5,0,0" columnstretch="0,1,0,4,0,0,0,0,0,0,0,0,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,5" columnstretch="0,1,0,4">
     <item row="0" column="1">
      <layout class="QHBoxLayout" name="projectNameLayout">
       <item>
@@ -95,7 +95,11 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QListView" name="documentListView"/>
+       <widget class="QListView" name="documentListView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditKeyPressed</set>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="documentDescriptionLabel">

@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "gui/SchematicsTab.h"
+
 #include <QGraphicsView>
 
 using namespace q2d::gui;
@@ -24,25 +26,35 @@ MainWindow::setupSignalsAndSlots(){
 
     // Menus
     connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));
-    connect(this->ui->actionCreate_new_Project, SIGNAL(triggered()), this->context, SLOT(slot_newProject()));
-    connect(this->ui->actionAdd_new_Document, SIGNAL(triggered()), this->context, SLOT(slot_newDocument()));
+    connect(this->ui->action_createProject, SIGNAL(triggered()), this->context, SLOT(slot_newProject()));
+    connect(this->ui->action_createDocument, SIGNAL(triggered()), this->context, SLOT(slot_newDocument()));
 }
 
+/**
+ * @brief MainWindow::setDocumentModel
+ *
+ * Will be called whe a new q2d::Project is created, to link the projects
+ * document model with the appropriate list view in the UI.
+ * @param model
+ */
 void
 MainWindow::setDocumentModel(QStandardItemModel* model){
 
     Q_CHECK_PTR(model);
 
     this->ui->documentListView->setModel(model);
+
+    connect(this->ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
 }
 
 void
-MainWindow::addNewSchematicsTab(QString title){
-    Q_ASSERT(!title.isEmpty());
+MainWindow::addNewSchematicsTab(Document* relatedDocument){
+    Q_CHECK_PTR(relatedDocument);
 
-    // TODO implement better tab?
-    QGraphicsScene* scene = new QGraphicsScene();
-    this->ui->schematicsTabWidget->addTab(new QGraphicsView(scene), title);
+    SchematicsTab* newTab = new SchematicsTab(this->ui->schematicsTabWidget, relatedDocument);
+    this->ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
+
+    // TODO connect signals and slots
 }
 
 void
@@ -52,14 +64,23 @@ MainWindow::slot_updateProjectName(QString name){
 
 void
 MainWindow::slot_enableDocumentMenus(bool enabled){
-    this->ui->actionAdd_new_Document->setEnabled(enabled);
+    this->ui->action_createDocument->setEnabled(enabled);
 }
 
 void
-MainWindow::slot_openDocumentTab(Document *document){
+MainWindow::slot_openDocumentTab(const QModelIndex index){
 
+    Project* currentProject = this->context->getCurrentProject();
+    Q_CHECK_PTR(currentProject);
+    QStandardItem* item = currentProject->getDocuments()->itemFromIndex(index);
+    Document* document = static_cast<Document*>(item);
     Q_CHECK_PTR(document);
 
-    this->addNewSchematicsTab(document->getName());
-    // TODO connect the schematic with the tab
+    // TODO check if there is already a tab opened for the document
+
+    this->addNewSchematicsTab(document);
+}
+
+void q2d::gui::MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
+    this->ui->schematicsTabWidget->removeTab(index);
 }

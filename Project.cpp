@@ -27,6 +27,11 @@ Project::setupSignalsAndSlots(){
     connect(this->applicationContext, SIGNAL(signal_createDocument()), this, SLOT(slot_newDocument()));
 }
 
+QStandardItemModel*
+Project::getDocuments(){
+    return &(this->documents);
+}
+
 /**
  * @brief Project::createDocument
  *
@@ -58,7 +63,7 @@ Project::slot_newDocument(){
     QString name = QInputDialog::getText(mainWindow,
                                          tr("Document name required"),
                                          tr("Enter the name of the new document:"),
-                                         QLineEdit::Normal, "", &ok);
+                                         QLineEdit::Normal, "myDocument", &ok);
 
     if(!ok){ // action canceled
         return;

@@ -2,21 +2,36 @@
 
 using namespace q2d;
 
-// NOTE upon creation of a Ducument, an empty Model and Schematic is created
-Document::Document(QString name) :
+/**
+ * @brief Document::Document
+ *
+ * Upon creation of a document a empty described model
+ * and an empty schematic view are created.
+ *
+ * @param name
+ */
+Document::Document(QString name, QObject* parent) :
+    QObject(parent),
     QStandardItem(name) {
-    this->describedModel = new model::Model(name);
-    this->view = new view::Schematic();
+
+    this->setData(QVariant::fromValue(new model::Model()), DocumentRole::MODEL);
+    this->setData(QVariant::fromValue(new view::Schematic(this)), DocumentRole::SCHEMATIC);
 }
 
-// NOTE delete the Model and Schematics
-// TODO who needs to know about these deletions?
-Document::~Document(){
-    delete this->describedModel;
-    delete this->view;
+/**
+ * @brief Document::getSchematicView is a convenience function
+ * @return
+ */
+view::Schematic*
+Document::getSchematicView(){
+    return this->data(DocumentRole::SCHEMATIC).value<view::Schematic*>();
 }
 
-QString
-Document::getName(){
-    return this->name;
+/**
+ * @brief Document::getDescribedModel is a convenience function
+ * @return
+ */
+model::Model*
+Document::getDescribedModel(){
+    return this->data(DocumentRole::MODEL).value<model::Model*>();
 }

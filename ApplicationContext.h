@@ -33,6 +33,7 @@ private:
 public:
     explicit ApplicationContext(Application* parent);
 
+     Project* getCurrentProject();
      gui::MainWindow* getMainWindow();
      void setupSignalsAndSlots();
 

@@ -6,11 +6,11 @@
 namespace q2d {
 namespace view {
 
-class Schematic : public QGraphicsScene
-{
+class Schematic : public QGraphicsScene {
     Q_OBJECT
 public:
     explicit Schematic(QObject *parent = 0);
+    ~Schematic();
 
 signals:
 

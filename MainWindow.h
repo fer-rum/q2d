@@ -1,3 +1,5 @@
+// TODO move all related files to gui folder, where it belongs
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -25,7 +27,7 @@ private:
     q2d::ApplicationContext* context;
 
 
-    void addNewSchematicsTab(QString title);
+    void addNewSchematicsTab(Document* relatedDocument);
 public:
     explicit MainWindow(ApplicationContext *parent);
     ~MainWindow();
@@ -37,8 +39,9 @@ signals:
 private slots:
     void slot_updateProjectName(QString name);
     void slot_enableDocumentMenus(bool enabled = true);
-    void slot_openDocumentTab(Document* document);
+    void slot_openDocumentTab(const QModelIndex index);
 
+    void on_schematicsTabWidget_tabCloseRequested(int index);
 };
 
 } // namespace gui

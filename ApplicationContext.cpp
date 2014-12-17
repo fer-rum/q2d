@@ -38,6 +38,11 @@ ApplicationContext::createProject(QString name) {
     emit this->signal_canAddDocuments(true);
 }
 
+Project*
+ApplicationContext::getCurrentProject(){
+    return this->currentProject;
+}
+
 gui::MainWindow*
 ApplicationContext::getMainWindow(){
     return this->mainWindow;
@@ -73,7 +78,7 @@ ApplicationContext::slot_newProject(){
     QString name = QInputDialog::getText(this->mainWindow,
                                          tr("Project name required"),
                                          tr("Enter the name of the new project:"),
-                                         QLineEdit::Normal, "", &ok);
+                                         QLineEdit::Normal, "myProject", &ok);
 
     if(!ok){ // action canceled
         return;

@@ -28,6 +28,9 @@ private:
 
 public:
     Project(QString name, ApplicationContext *parent = 0);
+
+    QStandardItemModel* getDocuments();
+
     void createDocument(QString name);
 // TODO    void deleteDocument(Document &toDelete);
 

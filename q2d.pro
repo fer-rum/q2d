@@ -28,7 +28,8 @@ SOURCES +=\
     Application.cpp \
     Main.cpp \
     ApplicationContext.cpp \
-    ComponentType.cpp
+    ComponentType.cpp \
+    gui/SchematicsTab.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -44,6 +45,8 @@ HEADERS  += MainWindow.h \
     Project.h \
     Application.h \
     ApplicationContext.h \
-    ComponentType.h
+    ComponentType.h \
+    gui/SchematicsTab.h
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    gui/SchematicsTab.ui

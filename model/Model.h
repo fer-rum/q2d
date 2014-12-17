@@ -26,7 +26,7 @@ private:
     QList<Conductor*> conductors;
     QList<Port*> outsidePorts;
 public:
-    Model(QString name);
+    Model();
 };
 
 } // namespace model
