@@ -35,12 +35,16 @@ public:
 
      Project* getCurrentProject();
      gui::MainWindow* getMainWindow();
+     ComponentFactory* getComponentFactory();
+
      void setupSignalsAndSlots();
 
 signals:
      void signal_projectNameChanged(QString newName);
      void signal_canAddDocuments(bool newState);
      void signal_createDocument();
+     void signal_documentModelChanged(QStandardItemModel* model);
+     void signal_componentModelChanged(QStandardItemModel* model);
 
 public slots:
     void slot_newDocument();

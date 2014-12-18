@@ -30,22 +30,7 @@ MainWindow::setupSignalsAndSlots(){
     connect(this->ui->action_createDocument, SIGNAL(triggered()), this->context, SLOT(slot_newDocument()));
 }
 
-/**
- * @brief MainWindow::setDocumentModel
- *
- * Will be called whe a new q2d::Project is created, to link the projects
- * document model with the appropriate list view in the UI.
- * @param model
- */
-void
-MainWindow::setDocumentModel(QStandardItemModel* model){
 
-    Q_CHECK_PTR(model);
-
-    this->ui->documentListView->setModel(model);
-
-    connect(this->ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
-}
 
 void
 MainWindow::addNewSchematicsTab(Document* relatedDocument){
@@ -67,6 +52,23 @@ MainWindow::slot_enableDocumentMenus(bool enabled){
     this->ui->action_createDocument->setEnabled(enabled);
 }
 
+/**
+ * @brief MainWindow::setDocumentModel
+ *
+ * Will be called whe a new q2d::Project is created, to link the projects
+ * document model with the appropriate list view in the UI.
+ * @param model
+ */
+void
+MainWindow::slot_setDocumentModel(QStandardItemModel* model){
+
+    Q_CHECK_PTR(model);
+
+    this->ui->documentListView->setModel(model);
+
+    connect(this->ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
+}
+
 void
 MainWindow::slot_openDocumentTab(const QModelIndex index){
 
@@ -81,6 +83,51 @@ MainWindow::slot_openDocumentTab(const QModelIndex index){
     this->addNewSchematicsTab(document);
 }
 
+void
+MainWindow::slot_setComponentModel(QStandardItemModel* model){
+    this->ui->componentTreeView->setModel(model);
+}
+
 void q2d::gui::MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
     this->ui->schematicsTabWidget->removeTab(index);
+}
+
+void q2d::gui::MainWindow::on_addTypeButton_clicked()
+{
+    // TODO
+}
+
+void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
+
+    Q_CHECK_PTR(this->ui->componentTreeView->model());
+
+    ComponentFactory* componentFactory = this->context->getComponentFactory();
+
+    // get the currently selected entry as parent (if eligible)
+    QModelIndex currentIndex = ui->componentTreeView->currentIndex();
+    ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
+
+    // get the name for the new category
+    bool ok;
+    QString name = QInputDialog::getText(this,
+                                         tr("Category name required"),
+                                         tr("Enter the name of the new component category:"),
+                                         QLineEdit::Normal, "myCategory", &ok);
+
+    if(!ok){ // action canceled
+        return;
+    }
+
+    // validate name
+    if(name.isEmpty()){
+        QMessageBox::critical(this,
+                              tr("Error: Category name was empty"),
+                              tr("The categories name must not be empty."),
+                              QMessageBox::Ok);
+        return;
+    }
+
+    // add a new category
+    // TODO via signals
+    componentFactory->addCategory(name, parent);
 }

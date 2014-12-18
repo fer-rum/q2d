@@ -14,6 +14,14 @@ ApplicationContext::ApplicationContext(Application *parent)
     this->mainWindow->setupSignalsAndSlots();
     this->mainWindow->show();
 
+    this->setupSignalsAndSlots();
+
+    QStandardItemModel* componentHierarchy = this->componentFactory.getComponentHierarchy();
+
+    Q_CHECK_PTR(componentHierarchy);
+
+    emit this->signal_componentModelChanged(componentHierarchy);
+
 }
 
 /**
@@ -36,6 +44,7 @@ ApplicationContext::createProject(QString name) {
     emit this->signal_projectNameChanged(name);
     // enable document menus
     emit this->signal_canAddDocuments(true);
+    emit this->signal_documentModelChanged(newProject->getDocuments());
 }
 
 Project*
@@ -48,6 +57,11 @@ ApplicationContext::getMainWindow(){
     return this->mainWindow;
 }
 
+ComponentFactory*
+ApplicationContext::getComponentFactory() {
+    return &(this->componentFactory);
+}
+
 void
 ApplicationContext::setupSignalsAndSlots(){
     Q_CHECK_PTR(this->mainWindow);
@@ -56,6 +70,11 @@ ApplicationContext::setupSignalsAndSlots(){
             this->mainWindow, SLOT(slot_updateProjectName(QString)));
     connect(this, SIGNAL(signal_canAddDocuments(bool)),
             this->mainWindow, SLOT(slot_enableDocumentMenus(bool)));
+    connect(this, SIGNAL(signal_documentModelChanged(QStandardItemModel*)),
+            this->mainWindow, SLOT(slot_setDocumentModel(QStandardItemModel*)));
+    connect(this, SIGNAL(signal_componentModelChanged(QStandardItemModel*)),
+            this->mainWindow, SLOT(slot_setComponentModel(QStandardItemModel*)));
+
 }
 
 /**

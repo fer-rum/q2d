@@ -74,10 +74,10 @@
         <item>
          <widget class="QPushButton" name="addCategoryButton">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
-           <string>+Component</string>
+           <string>+Category</string>
           </property>
          </widget>
         </item>

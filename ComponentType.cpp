@@ -2,6 +2,10 @@
 
 using namespace q2d;
 
+ComponentDescriptor::ComponentDescriptor(QString name, QObject* parent) :
+    QObject(parent), // TODO rethink this
+    QStandardItem(name){}
+
 /**
  * @brief ComponentType::ComponentType
  * If the symbol is null, no icon will be set.
@@ -11,31 +15,32 @@ using namespace q2d;
  *
  * Assumption: name is not empty
  */
-ComponentType::ComponentType(QString name, QGraphicsSvgItem* symbol) :
-    QStandardItem(name) {
+ComponentType::ComponentType(QString name, QObject* parent) :
+    ComponentDescriptor(name, parent) {
 
-    Q_ASSERT(!name.isEmpty());
-    // FIXME: allowing the symbol to be null is only for testing purposes
+    // TODO build and set icon somewhere
+//    Q_ASSERT(!name.isEmpty());
+//    // FIXME: allowing the symbol to be null is only for testing purposes
 
-    this->symbol = symbol;
+//    this->symbol = symbol;
 
-    // TODO see if this works
-    // Create Icon for UI from Svg
+//    // TODO see if this works
+//    // Create Icon for UI from Svg
 
-    if(symbol != nullptr){
-        QSvgRenderer svgRenderer(symbol);
-        QPixmap* iconPixmap = new QPixmap(svgRenderer.defaultSize());
-        QPainter* pixmapPainter = new QPainter(iconPixmap);
-        svgRenderer.render(pixmapPainter);
-        QIcon icon(*iconPixmap);
-        this->setIcon(icon);
-        // TODO possible memory leak
-        // find all above objects that are no longer referenced after setting the icon
-    }
+//    if(symbol != nullptr){
+//        QSvgRenderer svgRenderer(symbol);
+//        QPixmap* iconPixmap = new QPixmap(svgRenderer.defaultSize());
+//        QPainter* pixmapPainter = new QPainter(iconPixmap);
+//        svgRenderer.render(pixmapPainter);
+//        QIcon icon(*iconPixmap);
+//        this->setIcon(icon);
+//        // TODO possible memory leak
+//        // find all above objects that are no longer referenced after setting the icon
+//    }
 }
 
-ComponentCategory::ComponentCategory(QString name) :
-    QStandardItem(name) {}
+ComponentCategory::ComponentCategory(QString name, QObject* parent) :
+    ComponentDescriptor(name, parent) {}
 
 ComponentCategory::~ComponentCategory (){
     // TODO check if sub-items get destroyed properly
@@ -107,4 +112,48 @@ ComponentFactory::addType(QString name, ComponentCategory* parent){
     } else {
         parent->addSubCategory(newCategory);
     }
+}
+
+/**
+ * @brief ComponentFactory::getCategoryForIndex attempts to get the ComponentCategory
+ * for the given index.
+ *
+ * If the index is invalid or the indexed element is not a ComponentCategory, a nullptr will be returned.
+ *
+ * @param index
+ * @return ; May return null
+ */
+ComponentCategory*
+ComponentFactory::getCategoryForIndex(const QModelIndex &index){
+    if(!index.isValid()){
+        return nullptr;
+    }
+
+    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
+    return static_cast<ComponentCategory*>(item);
+}
+
+/**
+ * @brief ComponentFactory::getTypeForIndex attempts to get the ComponentType
+ * for the given index.
+ *
+ * If the index is invalid or the indexed element is not a ComponentType, a nullptr will be returned.
+ *
+ * @param index
+ * @return ; May return null
+ */
+ComponentType*
+ComponentFactory::getTypeForIndex(const QModelIndex &index){
+
+    if(!index.isValid()){
+        return nullptr;
+    }
+
+    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
+    return static_cast<ComponentType*>(item);
+}
+
+QStandardItemModel*
+ComponentFactory::getComponentHierarchy(){
+    return &(this->componentHierarchy);
 }

@@ -15,7 +15,9 @@ namespace q2d {
     class ApplicationContext;
 
 // TODO documentation
-// TODO implementation
+// TODO saving
+// TODO loading
+// TODO the project should not know about the main window or any UI
 class Project : public QObject {
     Q_OBJECT
 private:
@@ -23,8 +25,6 @@ private:
     QString name;
     QStandardItemModel documents;
     QSettings projectSettings;
-
-
 
 public:
     Project(QString name, ApplicationContext *parent = 0);

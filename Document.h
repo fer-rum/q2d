@@ -19,6 +19,8 @@ enum DocumentRole {
 //     - controller in MVC
 // TODO referenced Documents?
 // TODO description text
+// TODO saving
+// TODO loading
 
 class Document :
         public QObject,

@@ -11,11 +11,6 @@ Project::Project(QString name, ApplicationContext* parent) : QObject(parent) {
 
     this->applicationContext = parent;
     this->name = name;
-
-    // set the current document model as the model
-    // for the document view in the main window.
-
-    parent->getMainWindow()->setDocumentModel(&(this->documents));
 }
 
 void
@@ -55,6 +50,8 @@ Project::createDocument(QString name){
 
 void
 Project::slot_newDocument(){
+
+    // TODO move the gui stuff into the main window
 
     gui::MainWindow* mainWindow = this->applicationContext->getMainWindow();
 

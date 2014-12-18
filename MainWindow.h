@@ -33,15 +33,18 @@ public:
     ~MainWindow();
 
     void setupSignalsAndSlots();
-    void setDocumentModel(QStandardItemModel* model);
 
 signals:
 private slots:
     void slot_updateProjectName(QString name);
     void slot_enableDocumentMenus(bool enabled = true);
+    void slot_setDocumentModel(QStandardItemModel* model);
     void slot_openDocumentTab(const QModelIndex index);
+    void slot_setComponentModel(QStandardItemModel* model);
 
     void on_schematicsTabWidget_tabCloseRequested(int index);
+    void on_addTypeButton_clicked();
+    void on_addCategoryButton_clicked();
 };
 
 } // namespace gui

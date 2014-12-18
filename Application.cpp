@@ -10,8 +10,6 @@ Application::Application(int &argc, char **argv[]) : QApplication(argc, *argv) {
 
     this->context = new ApplicationContext(this);
     Q_CHECK_PTR(this->context);
-
-    this->context->setupSignalsAndSlots();
 }
 
 Application::~Application() {
