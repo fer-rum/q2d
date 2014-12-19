@@ -24,28 +24,8 @@ ApplicationContext::ApplicationContext(Application *parent)
 
 }
 
-/**
- * @brief ApplicationContext::createProject
- * @param name
- *
- * Assumption: Name is not empty
- * Assumption: There is no current project
- */
-void
-ApplicationContext::createProject(QString name) {
-    Q_ASSERT(!name.isEmpty());
-    Q_ASSERT(this->currentProject == nullptr);
 
-    Project* newProject = new Project(name, this);
-    Q_CHECK_PTR(newProject);
 
-    this->currentProject = newProject;
-    newProject->setupSignalsAndSlots();
-    emit this->signal_projectNameChanged(name);
-    // enable document menus
-    emit this->signal_canAddDocuments(true);
-    emit this->signal_documentModelChanged(newProject->getDocuments());
-}
 
 Project*
 ApplicationContext::getCurrentProject(){
@@ -82,39 +62,40 @@ ApplicationContext::setupSignalsAndSlots(){
  * a new document to the project.
  */
 void
-ApplicationContext::slot_newDocument(){
+ApplicationContext::slot_newDocument(QString name){
 
     Q_CHECK_PTR(this->currentProject);
 
-    emit this->signal_createDocument();
+    emit this->signal_createDocument(name);
 }
 
+/**
+ * @brief ApplicationContext::createProject
+ * @param name
+ *
+ * Assumption: Name is not empty
+ * Assumption: There is no current project
+ */
 void
-ApplicationContext::slot_newProject(){
+ApplicationContext::slot_newProject(QString name){
 
-    // get name
-    bool ok;
-    QString name = QInputDialog::getText(this->mainWindow,
-                                         tr("Project name required"),
-                                         tr("Enter the name of the new project:"),
-                                         QLineEdit::Normal, "myProject", &ok);
-
-    if(!ok){ // action canceled
-        return;
-    }
-
-    // validate name
-    if(name.isEmpty()){
-        QMessageBox::critical(this->mainWindow,
-                              tr("Error: Project name was empty"),
-                              tr("The projects name must not be empty."),
-                              QMessageBox::Ok);
-        return;
-    }
     // TODO unload current project
     // TODO unload unused component libraries
+
     // create new empty project
-    this->createProject(name);
+
+    Q_ASSERT(!name.isEmpty());
+    Q_ASSERT(this->currentProject == nullptr);
+
+    Project* newProject = new Project(name, this);
+    Q_CHECK_PTR(newProject);
+
+    this->currentProject = newProject;
+    newProject->setupSignalsAndSlots();
+    emit this->signal_projectNameChanged(name);
+    // enable document menus
+    emit this->signal_canAddDocuments(true);
+    emit this->signal_documentModelChanged(newProject->getDocuments());
 }
 
 /**

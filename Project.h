@@ -41,7 +41,7 @@ signals:
     void signal_nameChanged(QString newName);
 
 public slots:
-    void slot_newDocument();
+    void slot_newDocument(QString name);
 
 };
 

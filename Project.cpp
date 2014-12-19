@@ -19,7 +19,7 @@ Project::setupSignalsAndSlots(){
     // application context
     // TODO revisit nessecity
     connect(this, SIGNAL(signal_nameChanged(QString)), this->parent(), SLOT(slot_projectNameChanged(QString)));
-    connect(this->applicationContext, SIGNAL(signal_createDocument()), this, SLOT(slot_newDocument()));
+    connect(this->applicationContext, SIGNAL(signal_createDocument(QString)), this, SLOT(slot_newDocument(QString)));
 }
 
 QStandardItemModel*
@@ -28,7 +28,7 @@ Project::getDocuments(){
 }
 
 /**
- * @brief Project::createDocument
+ * @brief Project::slot_newDocument
  *
  * This is seperated so the UI can use be directed here as well as loading functions.
  *
@@ -37,7 +37,7 @@ Project::getDocuments(){
  * Assumption: name is not empty
  */
 void
-Project::createDocument(QString name){
+Project::slot_newDocument(QString name){
 
     Q_ASSERT(!name.isEmpty());
 
@@ -46,34 +46,4 @@ Project::createDocument(QString name){
     this->documents.appendRow(newDocument);
 
     // TODO select and show new document
-}
-
-void
-Project::slot_newDocument(){
-
-    // TODO move the gui stuff into the main window
-
-    gui::MainWindow* mainWindow = this->applicationContext->getMainWindow();
-
-    // get name
-    bool ok;
-    QString name = QInputDialog::getText(mainWindow,
-                                         tr("Document name required"),
-                                         tr("Enter the name of the new document:"),
-                                         QLineEdit::Normal, "myDocument", &ok);
-
-    if(!ok){ // action canceled
-        return;
-    }
-
-    // validate name
-    if(name.isEmpty()){
-        QMessageBox::critical(mainWindow,
-                              tr("Error: Document name was empty"),
-                              tr("The documents name must not be empty."),
-                              QMessageBox::Ok);
-        return;
-    }
-
-    this->createDocument(name);
 }

@@ -26,8 +26,12 @@ MainWindow::setupSignalsAndSlots(){
 
     // Menus
     connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));
-    connect(this->ui->action_createProject, SIGNAL(triggered()), this->context, SLOT(slot_newProject()));
-    connect(this->ui->action_createDocument, SIGNAL(triggered()), this->context, SLOT(slot_newDocument()));
+    connect(this->ui->action_createProject, SIGNAL(triggered()), this, SLOT(slot_createProject()));
+    connect(this->ui->action_createDocument, SIGNAL(triggered()), this, SLOT(slot_createDocument()));
+
+    // connections to the application context
+    connect(this, SIGNAL(signal_createProjectRequested(QString)), this->context, SLOT(slot_newProject(QString)));
+    connect(this, SIGNAL(signal_createDocumentRequested(QString)), this->context, SLOT(slot_newDocument(QString)));
 }
 
 
@@ -40,6 +44,62 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument){
     this->ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
     // TODO connect signals and slots
+}
+
+void
+MainWindow::slot_createProject(){
+
+    // get name
+    bool ok;
+    QString name = QInputDialog::getText(this,
+                                         tr("Project name required"),
+                                         tr("Enter the name of the new project:"),
+                                         QLineEdit::Normal, "myProject", &ok);
+
+    if(!ok){ // action canceled
+        return;
+    }
+
+    // validate name
+    if(name.isEmpty()){
+        QMessageBox::critical(this,
+                              tr("Error: Project name was empty"),
+                              tr("The projects name must not be empty."),
+                              QMessageBox::Ok);
+        return;
+    }
+
+    emit this->signal_createProjectRequested(name);
+}
+
+void
+MainWindow::slot_createDocument(){
+
+    // make sure the model is set up properly
+    // so we can enter the documents
+    Q_CHECK_PTR(this->ui->documentListView->model());
+
+    // get name
+    bool ok;
+    QString name = QInputDialog::getText(this,
+                                         tr("Document name required"),
+                                         tr("Enter the name of the new document:"),
+                                         QLineEdit::Normal, "myDocument", &ok);
+
+    if(!ok){ // action canceled
+        return;
+    }
+
+    // validate name
+    if(name.isEmpty()){
+        QMessageBox::critical(this,
+                              tr("Error: Document name was empty"),
+                              tr("The documents name must not be empty."),
+                              QMessageBox::Ok);
+        return;
+    }
+
+    emit this->signal_createDocumentRequested(name);
 }
 
 void

@@ -35,13 +35,20 @@ public:
     void setupSignalsAndSlots();
 
 signals:
+
+    void signal_createProjectRequested(QString name);
+    void signal_createDocumentRequested(QString name);
+
 private slots:
+    void slot_createProject();
     void slot_updateProjectName(QString name);
     void slot_enableDocumentMenus(bool enabled = true);
     void slot_setDocumentModel(QStandardItemModel* model);
+    void slot_createDocument();
     void slot_openDocumentTab(const QModelIndex index);
     void slot_setComponentModel(QStandardItemModel* model);
 
+    // created by the Qt Designer
     void on_schematicsTabWidget_tabCloseRequested(int index);
     void on_addTypeButton_clicked();
     void on_addCategoryButton_clicked();

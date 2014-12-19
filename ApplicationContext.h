@@ -28,8 +28,6 @@ private:
     gui::MainWindow* mainWindow;
     ComponentFactory componentFactory;
 
-     void createProject(QString name);
-
 public:
     explicit ApplicationContext(Application* parent);
 
@@ -42,13 +40,13 @@ public:
 signals:
      void signal_projectNameChanged(QString newName);
      void signal_canAddDocuments(bool newState);
-     void signal_createDocument();
+     void signal_createDocument(QString name);
      void signal_documentModelChanged(QStandardItemModel* model);
      void signal_componentModelChanged(QStandardItemModel* model);
 
 public slots:
-    void slot_newDocument();
-    void slot_newProject();
+    void slot_newDocument(QString name);
+    void slot_newProject(QString name);
     void slot_projectNameChanged(QString newName);
 };
 
