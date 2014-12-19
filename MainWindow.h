@@ -46,6 +46,7 @@ private slots:
     void slot_setDocumentModel(QStandardItemModel* model);
     void slot_createDocument();
     void slot_openDocumentTab(const QModelIndex index);
+    void slot_openDocumentTab(Document* document);
     void slot_setComponentModel(QStandardItemModel* model);
 
     // created by the Qt Designer

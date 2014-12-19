@@ -18,8 +18,12 @@ Project::setupSignalsAndSlots(){
     // propagate changes of the project name if they happened without involvement of the
     // application context
     // TODO revisit nessecity
-    connect(this, SIGNAL(signal_nameChanged(QString)), this->parent(), SLOT(slot_projectNameChanged(QString)));
-    connect(this->applicationContext, SIGNAL(signal_createDocument(QString)), this, SLOT(slot_newDocument(QString)));
+    connect(this, SIGNAL(signal_nameChanged(QString)),
+            this->parent(), SLOT(slot_projectNameChanged(QString)));
+    connect(this->applicationContext, SIGNAL(signal_createDocument(QString)),
+            this, SLOT(slot_newDocument(QString)));
+    connect(this, SIGNAL(signal_showDocument(Document*)),
+            this->applicationContext->getMainWindow(), SLOT(slot_openDocumentTab(Document*)));
 }
 
 QStandardItemModel*
@@ -45,5 +49,5 @@ Project::slot_newDocument(QString name){
     Q_CHECK_PTR(newDocument);
     this->documents.appendRow(newDocument);
 
-    // TODO select and show new document
+    emit this->signal_showDocument(newDocument);
 }

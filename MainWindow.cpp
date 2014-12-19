@@ -40,6 +40,8 @@ void
 MainWindow::addNewSchematicsTab(Document* relatedDocument){
     Q_CHECK_PTR(relatedDocument);
 
+    // TODO check if there is already a tab opened for the document
+
     SchematicsTab* newTab = new SchematicsTab(this->ui->schematicsTabWidget, relatedDocument);
     this->ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
@@ -132,14 +134,16 @@ MainWindow::slot_setDocumentModel(QStandardItemModel* model){
 void
 MainWindow::slot_openDocumentTab(const QModelIndex index){
 
-    Project* currentProject = this->context->getCurrentProject();
-    Q_CHECK_PTR(currentProject);
-    QStandardItem* item = currentProject->getDocuments()->itemFromIndex(index);
-    Document* document = static_cast<Document*>(item);
+    const QStandardItemModel* model = static_cast<const QStandardItemModel*>(index.model());
+    Q_CHECK_PTR(model);
+    Document* document = static_cast<Document*>(model->itemFromIndex(index));
     Q_CHECK_PTR(document);
 
-    // TODO check if there is already a tab opened for the document
+    this->addNewSchematicsTab(document);
+}
 
+void
+MainWindow::slot_openDocumentTab(Document* document){
     this->addNewSchematicsTab(document);
 }
 
