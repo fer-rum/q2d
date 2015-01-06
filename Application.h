@@ -2,17 +2,12 @@
 #define APPLICATION_H
 
 #include "ApplicationContext.h"
-#include "MainWindow.h"
+#include "Constants.h"
 
 #include <QApplication>
 #include <QSettings>
 
 namespace q2d {
-
-    // forward declaration
-    namespace gui {
-        class MainWindow;
-    }
 
 class Application : public QApplication {
     Q_OBJECT
@@ -20,11 +15,16 @@ private:
     QSettings* applicationSettings;
     ApplicationContext* context;
 
+    void defaultSetting(QString name, QVariant defaultValue);
+    void checkSettings();
+
 public:
+
     explicit Application(int &argc, char **argv[]);
-    ~Application();
+    virtual ~Application();
 
     ApplicationContext* getContext();
+    QVariant getSetting(QString key);
 signals:
 
 public slots:

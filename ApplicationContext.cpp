@@ -1,14 +1,18 @@
 #include "ApplicationContext.h"
 
-#include <QInputDialog>
-#include <QMessageBox>
+#include "Application.h"
+#include "ComponentFactory.h"
+#include "MainWindow.h"
+#include "Project.h"
 
 using namespace q2d;
+using MainWindow = q2d::gui::MainWindow;
 
 ApplicationContext::ApplicationContext(Application *parent)
     : QObject(parent) {
-    this->currentProject = nullptr;
     // TODO load basic libraries
+    this->componentFactory = new ComponentFactory(this);
+
     // create the main window
     this->mainWindow = new gui::MainWindow(this);
     this->mainWindow->setupSignalsAndSlots();
@@ -16,16 +20,16 @@ ApplicationContext::ApplicationContext(Application *parent)
 
     this->setupSignalsAndSlots();
 
-    QStandardItemModel* componentHierarchy = this->componentFactory.getComponentHierarchy();
-
+    QStandardItemModel* componentHierarchy = this->componentFactory->getComponentHierarchy();
     Q_CHECK_PTR(componentHierarchy);
-
     emit this->signal_componentModelChanged(componentHierarchy);
-
 }
 
-
-
+ApplicationContext::~ApplicationContext(){
+    // TODO save project
+    // TODO uninitialize and close mainWindow
+    delete this->componentFactory;
+}
 
 Project*
 ApplicationContext::getCurrentProject(){
@@ -39,21 +43,31 @@ ApplicationContext::getMainWindow(){
 
 ComponentFactory*
 ApplicationContext::getComponentFactory() {
-    return &(this->componentFactory);
+    return this->componentFactory;
 }
 
+//TODO: Convert to new Signal/Slot Syntax
 void
 ApplicationContext::setupSignalsAndSlots(){
     Q_CHECK_PTR(this->mainWindow);
 
-    connect(this, SIGNAL(signal_projectNameChanged(QString)),
-            this->mainWindow, SLOT(slot_updateProjectName(QString)));
-    connect(this, SIGNAL(signal_canAddDocuments(bool)),
-            this->mainWindow, SLOT(slot_enableDocumentMenus(bool)));
-    connect(this, SIGNAL(signal_documentModelChanged(QStandardItemModel*)),
-            this->mainWindow, SLOT(slot_setDocumentModel(QStandardItemModel*)));
-    connect(this, SIGNAL(signal_componentModelChanged(QStandardItemModel*)),
-            this->mainWindow, SLOT(slot_setComponentModel(QStandardItemModel*)));
+    // ApplicationContext -> MainWindow
+    connect(this, &ApplicationContext::signal_projectNameChanged,
+            this->mainWindow, &MainWindow::slot_updateProjectName);
+    connect(this, &ApplicationContext::signal_canAddDocuments,
+            this->mainWindow, &MainWindow::slot_enableDocumentMenus);
+    connect(this, &ApplicationContext::signal_documentModelChanged,
+            this->mainWindow, &MainWindow::slot_setDocumentModel);
+    connect(this, &ApplicationContext::signal_componentModelChanged,
+            this->mainWindow, &MainWindow::slot_setComponentModel);
+
+    // MainWindow -> ComponentFactory
+    connect(this->mainWindow, &MainWindow::signal_createCategory,
+            this->componentFactory, &ComponentFactory::slot_addCategory);
+    connect(this->mainWindow, &MainWindow::signal_loadType,
+            this->componentFactory, &ComponentFactory::slot_loadType);
+
+
 
 }
 
@@ -83,7 +97,6 @@ ApplicationContext::slot_newProject(QString name){
     // TODO unload unused component libraries
 
     // create new empty project
-
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(this->currentProject == nullptr);
 
@@ -98,6 +111,8 @@ ApplicationContext::slot_newProject(QString name){
     emit this->signal_documentModelChanged(newProject->getDocuments());
 }
 
+
+// TODO is this still useful?
 /**
  * @brief ApplicationContext::slot_projectNameChanged
  * Propagates forward a change in the current projects name.

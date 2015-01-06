@@ -1,7 +1,7 @@
 #include "Project.h"
-#include "MainWindow.h"
 
-#include <QMessageBox>
+#include "ApplicationContext.h"
+#include "MainWindow.h"
 
 using namespace q2d;
 
@@ -27,7 +27,7 @@ Project::setupSignalsAndSlots(){
 }
 
 QStandardItemModel*
-Project::getDocuments(){
+Project::getDocuments() {
     return &(this->documents);
 }
 

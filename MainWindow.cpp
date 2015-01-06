@@ -1,9 +1,17 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "ComponentCategory.h"
+#include "ComponentFactory.h"
+#include "Constants.h"
 #include "gui/SchematicsTab.h"
 
+#include <QFileDialog>
+#include <QInputDialog>
 #include <QGraphicsView>
+#include <QMessageBox>
+
+#include <QtDebug>
 
 using namespace q2d::gui;
 
@@ -24,6 +32,9 @@ void
 MainWindow::setupSignalsAndSlots(){
     Q_CHECK_PTR(this->context);
 
+    // TODO new style connections
+    // TODO move to ApplicationContext?
+
     // Menus
     connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));
     connect(this->ui->action_createProject, SIGNAL(triggered()), this, SLOT(slot_createProject()));
@@ -33,8 +44,6 @@ MainWindow::setupSignalsAndSlots(){
     connect(this, SIGNAL(signal_createProjectRequested(QString)), this->context, SLOT(slot_newProject(QString)));
     connect(this, SIGNAL(signal_createDocumentRequested(QString)), this->context, SLOT(slot_newDocument(QString)));
 }
-
-
 
 void
 MainWindow::addNewSchematicsTab(Document* relatedDocument){
@@ -156,9 +165,34 @@ void q2d::gui::MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
     this->ui->schematicsTabWidget->removeTab(index);
 }
 
-void q2d::gui::MainWindow::on_addTypeButton_clicked()
-{
-    // TODO
+void q2d::gui::MainWindow::on_addTypeButton_clicked() {
+
+
+    Q_CHECK_PTR(this->ui->componentTreeView->model());
+
+    ComponentFactory* componentFactory = this->context->getComponentFactory();
+
+    // get the currently selected entry as parent (if eligible)
+    QModelIndex currentIndex = ui->componentTreeView->currentIndex();
+    ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
+
+    QString fileName;
+
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setNameFilter(tr("Component Descriptions (*.json)"));
+    dialog.setDirectory(this->application->getSetting(constants::KEY_COMPONENTS_DIR).toString());
+
+    int userAction = dialog.exec();
+    if(userAction == QDialog::Rejected){
+        return;
+    }
+
+    fileName = dialog.selectedFiles().first();
+    qDebug() << "Selected " << fileName;
+
+    emit this->signal_loadType(fileName, parent);
 }
 
 void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
@@ -192,6 +226,5 @@ void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
     }
 
     // add a new category
-    // TODO via signals
-    componentFactory->addCategory(name, parent);
+    emit this->signal_createCategory(name, parent);
 }

@@ -15,7 +15,7 @@ public:
     Observable(){}
     virtual ~Observable(){}
     void attachObserver(Observer<T> &observer);
-    void detachObserver(Observer<T> &observer);
+    void detachObserver(const Observer<T>& observer);
     void notifyObservers();
 };
 

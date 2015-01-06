@@ -1,7 +1,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "ApplicationContext.h"
+
 #include "Document.h"
 
 #include <QList>
@@ -17,7 +17,6 @@ namespace q2d {
 // TODO documentation
 // TODO saving
 // TODO loading
-// TODO the project should not know about the main window or any UI
 class Project : public QObject {
     Q_OBJECT
 private:

@@ -5,6 +5,7 @@
 
 
 #include "Application.h"
+#include "ComponentCategory.h"
 #include "Document.h"
 
 #include "ui_MainWindow.h"
@@ -39,7 +40,11 @@ signals:
     void signal_createProjectRequested(QString name);
     void signal_createDocumentRequested(QString name);
 
-private slots:
+    void signal_createCategory(QString name, ComponentCategory* parent = 0);
+    void signal_loadType(QString fileName, ComponentCategory* parent = 0);
+
+    // TODO check visibility
+public slots:
     void slot_createProject();
     void slot_updateProjectName(QString name);
     void slot_enableDocumentMenus(bool enabled = true);

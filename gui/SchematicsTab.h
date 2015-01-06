@@ -20,7 +20,7 @@ class SchematicsTab :
 
 public:
     explicit SchematicsTab(QWidget *parent, Document* relatedDocument);
-    ~SchematicsTab();
+    virtual ~SchematicsTab();
 
 private:
     Ui::SchematicsTab *ui;

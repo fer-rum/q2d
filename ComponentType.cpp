@@ -1,159 +1,100 @@
 #include "ComponentType.h"
 
+#include "ComponentCategory.h"
+
+#include <QFile>
+#include <QFileInfo>
+#include <QJsonDocument>
+#include <QtDebug>
+#include <qt5/QtSvg/QtSvg>
+
 using namespace q2d;
 
-ComponentDescriptor::ComponentDescriptor(QString name, QObject* parent) :
-    QObject(parent), // TODO rethink this
-    QStandardItem(name){}
-
+// TODO outsouce some of the calls
 /**
  * @brief ComponentType::ComponentType
- * If the symbol is null, no icon will be set.
+ * If the symbol is not found, no icon will be set.
+ * The actual name is set from the file.
  *
- * @param name
+ * @param descriptionFile
  * @param symbol ; May be null
  *
  * Assumption: name is not empty
  */
-ComponentType::ComponentType(QString name, QObject* parent) :
-    ComponentDescriptor(name, parent) {
+ComponentType::ComponentType(QString descriptionFileName, ComponentCategory* parent) :
+    ComponentDescriptor("unnamed component", parent) {
 
-    // TODO build and set icon somewhere
-//    Q_ASSERT(!name.isEmpty());
-//    // FIXME: allowing the symbol to be null is only for testing purposes
+    Q_ASSERT(!descriptionFileName.isEmpty());
 
-//    this->symbol = symbol;
+    QFile* descriptionFile = new QFile(descriptionFileName);
+    // make sure the file exists and can be read
+    Q_ASSERT(descriptionFile->exists());
 
-//    // TODO see if this works
-//    // Create Icon for UI from Svg
+    QJsonDocument jsonDocument;
 
-//    if(symbol != nullptr){
-//        QSvgRenderer svgRenderer(symbol);
-//        QPixmap* iconPixmap = new QPixmap(svgRenderer.defaultSize());
-//        QPainter* pixmapPainter = new QPainter(iconPixmap);
-//        svgRenderer.render(pixmapPainter);
-//        QIcon icon(*iconPixmap);
-//        this->setIcon(icon);
-//        // TODO possible memory leak
-//        // find all above objects that are no longer referenced after setting the icon
+    // read the description file
+    bool ok = descriptionFile->open(QIODevice::ReadOnly | QIODevice::Text);
+    if(!ok){
+        qWarning() << "On instantiating component type: Could not open file "
+                   << descriptionFile->fileName();
+    } else {
+        QByteArray binaryData = descriptionFile->readAll();
+        jsonDocument = QJsonDocument::fromJson(binaryData);
+        descriptionFile->close();
+    }
+
+    Q_ASSERT(!jsonDocument.isNull());
+
+    // set the name appropriately
+    QJsonObject jsonObject = jsonDocument.object();
+    QJsonValue nameValue = jsonObject.value("name");
+    if(nameValue != QJsonValue::Undefined && nameValue.isString()){
+        this->setText(nameValue.toString());
+    }
+
+    // TODO read all the other stuff that might come in handy
+
+    // load the symbol file
+    QJsonValue symbolPathValue = jsonObject.value("symbolFile");
+    if(symbolPathValue != QJsonValue::Undefined && symbolPathValue.isString()){
+        QFileInfo descriptionFileInfo = QFileInfo(*descriptionFile);
+        QString symbolFilePath = descriptionFileInfo.absolutePath() + "/" + symbolPathValue.toString();
+
+        this->loadCircuitSymbol(symbolFilePath);
+    }
+}
+
+/**
+ * @brief ComponentType::setCircuitSymbol sets the circuit symbol from a given svg file
+ * and derives an icon from it
+ * @param symbolFilePath
+ */
+void
+ComponentType::loadCircuitSymbol(QString symbolFilePath){
+
+    if(symbolFilePath == nullptr){
+        // TODO error message
+        return;
+    }
+
+    QGraphicsSvgItem* symbol = new QGraphicsSvgItem(symbolFilePath);
+    if(symbol == nullptr){
+        // TODO error message
+        return;
+    }
+
+    this->setSymbol(symbol);
+
+    // Create Icon for UI from Svg
+    // TODO support seperate Icon files as determined by json
+    QIcon* icon = new QIcon(symbolFilePath);
+    this->setIcon(*icon);
+    // TODO possible memory leak
+    // find all above objects that are no longer referenced after setting the icon
 //    }
 }
 
-ComponentCategory::ComponentCategory(QString name, QObject* parent) :
-    ComponentDescriptor(name, parent) {}
-
-ComponentCategory::~ComponentCategory (){
-    // TODO check if sub-items get destroyed properly
-}
-
 void
-ComponentCategory::addSubCategory (ComponentCategory *toAdd){
-
-    Q_CHECK_PTR(toAdd);
-
-    this->appendRow (toAdd);
-}
-
-void
-ComponentCategory::addComponentType (ComponentType *toAdd){
-
-    Q_CHECK_PTR(toAdd);
-
-    this->appendRow (toAdd);
-}
-
-ComponentFactory::ComponentFactory(){}
-
-ComponentFactory::~ComponentFactory (){}
-
-/**
- * @brief ComponentFactory::addCategory creates a new category and adds it to
- * the component hierarchy.
- * If the parent category is null, the item will be sorted directly below the
- * root.
- *
- * @param name
- * @param parent the parent category; May be null
- */
-void
-ComponentFactory::addCategory(QString name, ComponentCategory* parent){
-    // TODO ensure update signals are fired upon adding a category
-
-    Q_ASSERT(!name.isEmpty ());
-
-    ComponentCategory* newCategory = new ComponentCategory(name);
-
-    if(parent == nullptr){
-        this->componentHierarchy.invisibleRootItem()->appendRow(newCategory);
-    } else {
-        parent->addSubCategory(newCategory);
-    }
-}
-
-/**
- * @brief ComponentFactory::addType creates a new component type and adds it to
- * the component hierarchy.
- * If the parent category is null, the item will be sorted directly below the
- * root.
- *
- * @param name
- * @param parent the parent category; May be null
- */
-void
-ComponentFactory::addType(QString name, ComponentCategory* parent){
-    // TODO ensure update signals are fired upon adding a category
-
-    Q_ASSERT(!name.isEmpty ());
-
-    ComponentCategory* newCategory = new ComponentCategory(name);
-
-    if(parent == nullptr){
-        this->componentHierarchy.invisibleRootItem()->appendRow(newCategory);
-    } else {
-        parent->addSubCategory(newCategory);
-    }
-}
-
-/**
- * @brief ComponentFactory::getCategoryForIndex attempts to get the ComponentCategory
- * for the given index.
- *
- * If the index is invalid or the indexed element is not a ComponentCategory, a nullptr will be returned.
- *
- * @param index
- * @return ; May return null
- */
-ComponentCategory*
-ComponentFactory::getCategoryForIndex(const QModelIndex &index){
-    if(!index.isValid()){
-        return nullptr;
-    }
-
-    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
-    return static_cast<ComponentCategory*>(item);
-}
-
-/**
- * @brief ComponentFactory::getTypeForIndex attempts to get the ComponentType
- * for the given index.
- *
- * If the index is invalid or the indexed element is not a ComponentType, a nullptr will be returned.
- *
- * @param index
- * @return ; May return null
- */
-ComponentType*
-ComponentFactory::getTypeForIndex(const QModelIndex &index){
-
-    if(!index.isValid()){
-        return nullptr;
-    }
-
-    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
-    return static_cast<ComponentType*>(item);
-}
-
-QStandardItemModel*
-ComponentFactory::getComponentHierarchy(){
-    return &(this->componentHierarchy);
+ComponentType::setSymbol(QGraphicsSvgItem *symbol){
+    this->setData(QVariant::fromValue(symbol), ComponentDescriptorRole::CIRCUIT_SYMBOL);
 }

@@ -1,35 +1,34 @@
 #ifndef APPLICATIONCONTEXT_H
 #define APPLICATIONCONTEXT_H
 
-#include "Application.h"
-#include "ComponentType.h"
-#include "MainWindow.h"
-#include "Project.h"
-
 #include <QObject>
+#include <QStandardItemModel>
 
 namespace q2d {
 
     // forward declaration
     class Application;
-    class Project;
-    class ComponentFactory;
 
     namespace gui {
         class MainWindow;
     }
 
+    class ComponentFactory;
+    class Project;
+
 
 // TODO documentation
+    // TODO close projects
 class ApplicationContext : public QObject {
     Q_OBJECT
 private:
-    Project* currentProject;
+    Project* currentProject = nullptr;
     gui::MainWindow* mainWindow;
-    ComponentFactory componentFactory;
+    ComponentFactory* componentFactory;
 
 public:
     explicit ApplicationContext(Application* parent);
+    virtual ~ApplicationContext();
 
      Project* getCurrentProject();
      gui::MainWindow* getMainWindow();

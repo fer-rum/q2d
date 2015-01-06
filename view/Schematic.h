@@ -10,7 +10,7 @@ class Schematic : public QGraphicsScene {
     Q_OBJECT
 public:
     explicit Schematic(QObject *parent = 0);
-    ~Schematic();
+    virtual ~Schematic();
 
 signals:
 

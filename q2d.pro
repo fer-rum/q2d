@@ -9,6 +9,7 @@ QT       += core gui svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
+QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
 
 TARGET = q2d
 TEMPLATE = app
@@ -29,7 +30,11 @@ SOURCES +=\
     Main.cpp \
     ApplicationContext.cpp \
     ComponentType.cpp \
-    gui/SchematicsTab.cpp
+    gui/SchematicsTab.cpp \
+    ComponentDescriptor.cpp \
+    ComponentCategory.cpp \
+    ComponentFactory.cpp \
+    Constants.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -46,7 +51,11 @@ HEADERS  += MainWindow.h \
     Application.h \
     ApplicationContext.h \
     ComponentType.h \
-    gui/SchematicsTab.h
+    gui/SchematicsTab.h \
+    ComponentDescriptor.h \
+    ComponentCategory.h \
+    ComponentFactory.h \
+    Constants.h
 
 FORMS    += MainWindow.ui \
     gui/SchematicsTab.ui

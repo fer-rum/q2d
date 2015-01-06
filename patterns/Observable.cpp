@@ -3,6 +3,8 @@
 
 using namespace q2d::patterns;
 
+// TODO this belongs into a header
+
 template <class T>
 void
 Observable<T>::attachObserver(Observer<T> &observer){
@@ -13,7 +15,7 @@ Observable<T>::attachObserver(Observer<T> &observer){
 
 template <class T>
 void
-Observable<T>::detachObserver(Observer<T> &observer){
+Observable<T>::detachObserver(Observer<T> const& observer) {
     this->observers.removeAll(observer);
 }
 

@@ -54,6 +54,12 @@
       </item>
       <item>
        <widget class="QTreeView" name="componentTreeView">
+        <property name="iconSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
         <attribute name="headerVisible">
          <bool>false</bool>
         </attribute>
@@ -64,7 +70,7 @@
         <item>
          <widget class="QPushButton" name="addTypeButton">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>+Type</string>
