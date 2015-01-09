@@ -36,7 +36,8 @@ SOURCES +=\
     Constants.cpp \
     gui/SchematicsView.cpp \
     gui/SchematicsScene.cpp \
-    gui/ComponentTreeView.cpp
+    gui/ComponentTreeView.cpp \
+    model/PortDirection.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \

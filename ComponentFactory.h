@@ -2,6 +2,7 @@
 #define COMPONENTFACTORY_H
 
 #include <QFile>
+#include <QJsonDocument>
 #include <QObject>
 #include <QStandardItemModel>
 
@@ -17,6 +18,10 @@ class ComponentFactory : public QObject {
 
 private:
     QStandardItemModel componentHierarchy;
+
+    ComponentType* createTypeFronJson(const QJsonDocument jsonSource,
+            const QString basePath,
+            ComponentCategory* parent);
 
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
