@@ -83,7 +83,7 @@ ComponentType::loadCircuitSymbol(QString symbolFilePath){
         return;
     }
 
-    this->setSymbol(symbol);
+    this->setSymbolPath(symbolFilePath);
 
     // Create Icon for UI from Svg
     // TODO support seperate Icon files as determined by json
@@ -95,6 +95,8 @@ ComponentType::loadCircuitSymbol(QString symbolFilePath){
 }
 
 void
-ComponentType::setSymbol(QGraphicsSvgItem *symbol){
-    this->setData(QVariant::fromValue(symbol), ComponentDescriptorRole::CIRCUIT_SYMBOL);
+ComponentType::setSymbolPath(QString symbolPath){
+    // TODO instead of setting the pointer (evil segfault)
+    // one should set either the SVG source or the file path
+    this->setData(QVariant::fromValue(symbolPath), ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
 }

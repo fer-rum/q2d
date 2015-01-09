@@ -4,6 +4,8 @@
 #include "ModelElement.h"
 #include "PortDirection.h"
 
+#include <QList>
+
 namespace q2d {
 namespace model {
 
@@ -12,7 +14,7 @@ namespace model {
 // TODO implementation
 class Node : public ModelElement {
 private:
-    QList<ModelElement *> drivenElements;
+    QList<ModelElement*> drivenElements;
     ModelElement* driver;
 public:
     Node(QString name = "");

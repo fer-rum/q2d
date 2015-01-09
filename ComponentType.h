@@ -18,7 +18,7 @@ namespace q2d {
 class ComponentType : public ComponentDescriptor {
         // TODO signals and slots
 private:
-    void setSymbol(QGraphicsSvgItem* symbol);
+    void setSymbolPath(QString symbolPath);
     void loadCircuitSymbol(QString symbolFilePath);
     // TODO setPortInformation
 

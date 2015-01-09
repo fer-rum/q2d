@@ -12,7 +12,9 @@ SchematicsTab::SchematicsTab(QWidget *parent, Document* relatedDocument) :
 
     this->relatedDocument = relatedDocument;
     ui->setupUi(this);
-    ui->schematicsView->setScene(relatedDocument->getSchematicView());
+    ui->schematicsView->setScene(relatedDocument->getSchematic());
+    QSize viewSize = ui->schematicsView->size();
+    relatedDocument->getSchematic()->setSceneRect(QRectF(QPoint(0,0), viewSize));
     ui->schematicsView->update();
 
 

@@ -1,5 +1,7 @@
 #include "Document.h"
 
+#include "gui/SchematicsScene.h"
+
 using namespace q2d;
 
 /**
@@ -15,16 +17,16 @@ Document::Document(QString name, QObject* parent) :
     QStandardItem(name) {
 
     this->setData(QVariant::fromValue(new model::Model()), DocumentRole::MODEL);
-    this->setData(QVariant::fromValue(new view::Schematic(this)), DocumentRole::SCHEMATIC);
+    this->setData(QVariant::fromValue(new gui::SchematicsScene(this)), DocumentRole::SCHEMATIC);
 }
 
 /**
  * @brief Document::getSchematicView is a convenience function
  * @return
  */
-view::Schematic*
-Document::getSchematicView(){
-    return this->data(DocumentRole::SCHEMATIC).value<view::Schematic*>();
+gui::SchematicsScene*
+Document::getSchematic(){
+    return this->data(DocumentRole::SCHEMATIC).value<gui::SchematicsScene*>();
 }
 
 /**

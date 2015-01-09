@@ -53,7 +53,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QTreeView" name="componentTreeView">
+       <widget class="q2d::gui::ComponentTreeView" name="componentTreeView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditKeyPressed</set>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
         <property name="iconSize">
          <size>
           <width>48</width>
@@ -202,6 +208,13 @@ Edit your description for the current document here</string>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>q2d::gui::ComponentTreeView</class>
+   <extends>QTreeView</extends>
+   <header>gui/ComponentTreeView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

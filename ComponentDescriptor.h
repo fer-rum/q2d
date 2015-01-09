@@ -14,7 +14,7 @@ namespace q2d {
  * @brief The ComponentDescriptorRole enum lists all roles, that can be fulfilled in describing an ComponentType.
  */
 enum ComponentDescriptorRole {
-    CIRCUIT_SYMBOL = Qt::UserRole + 2000,
+    CIRCUIT_SYMBOL_FILE = Qt::UserRole + 2000,
     PORT_INFORMATION
     // TODO custom parameters
     // TODO boolean function

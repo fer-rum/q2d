@@ -24,7 +24,6 @@ SOURCES +=\
     model/Component.cpp \
     model/Model.cpp \
     Document.cpp \
-    view/Schematic.cpp \
     Project.cpp \
     Application.cpp \
     Main.cpp \
@@ -34,7 +33,10 @@ SOURCES +=\
     ComponentDescriptor.cpp \
     ComponentCategory.cpp \
     ComponentFactory.cpp \
-    Constants.cpp
+    Constants.cpp \
+    gui/SchematicsView.cpp \
+    gui/SchematicsScene.cpp \
+    gui/ComponentTreeView.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -46,7 +48,6 @@ HEADERS  += MainWindow.h \
     model/Component.h \
     model/Model.h \
     Document.h \
-    view/Schematic.h \
     Project.h \
     Application.h \
     ApplicationContext.h \
@@ -55,7 +56,10 @@ HEADERS  += MainWindow.h \
     ComponentDescriptor.h \
     ComponentCategory.h \
     ComponentFactory.h \
-    Constants.h
+    Constants.h \
+    gui/SchematicsView.h \
+    gui/SchematicsScene.h \
+    gui/ComponentTreeView.h
 
 FORMS    += MainWindow.ui \
     gui/SchematicsTab.ui

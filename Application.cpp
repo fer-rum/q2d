@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include <QDir>
+#include <qt5/QtSvg/QGraphicsSvgItem>
 
 // TODO constants for setting names
 
@@ -10,6 +11,9 @@ Application::Application(int &argc, char **argv[]) : QApplication(argc, *argv) {
 
     this->setApplicationName("q2d");
     this->setOrganizationName("Fredo Erxleben");
+
+    // register metatypes
+    qRegisterMetaType<QGraphicsSvgItem*>();
 
     // TODO load settings
     this->applicationSettings = new QSettings();

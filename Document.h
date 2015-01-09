@@ -2,7 +2,7 @@
 #define DOCUMENT_H
 
 #include "model/Model.h"
-#include "view/Schematic.h"
+#include "gui/SchematicsScene.h"
 
 #include <QObject>
 #include <QStandardItem>
@@ -31,7 +31,7 @@ private:
 public:
     explicit Document(QString name, QObject* parent = 0);
 
-    view::Schematic* getSchematicView();
+    gui::SchematicsScene* getSchematic();
     model::Model* getDescribedModel();
 };
 
@@ -40,6 +40,6 @@ public:
 // metatype declaration for the contents of the document
 // so these things can be used as data
 Q_DECLARE_METATYPE(q2d::model::Model*)
-Q_DECLARE_METATYPE(q2d::view::Schematic*)
+Q_DECLARE_METATYPE(q2d::gui::SchematicsScene*)
 
 #endif // DOCUMENT_H
