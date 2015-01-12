@@ -36,6 +36,15 @@ ComponentType::loadCircuitSymbol(QString symbolFilePath){
     this->setIcon(*icon);
 }
 
+/**
+ * @brief ComponentType::symbolPath is a getter for convenience.
+ * @return the path to the symbol file
+ */
+QString
+ComponentType::symbolPath(){
+    return this->data(ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
+}
+
 void
 ComponentType::setSymbolPath(QString symbolPath){
     Q_ASSERT(!(symbolPath.isEmpty()));

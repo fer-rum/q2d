@@ -1,5 +1,7 @@
 #include "SchematicsScene.h"
 
+#include "../Document.h"
+
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
 #include <QPainter>
@@ -8,7 +10,7 @@
 
 using namespace q2d::gui;
 
-SchematicsScene::SchematicsScene(QObject* parent)
+SchematicsScene::SchematicsScene(Document* parent)
     : QGraphicsScene(parent) {
 
     this->addLine(0, -100, 0, 100);
@@ -70,13 +72,9 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event){
     if(mimeData->hasText()){
 
         QString path = mimeData->text();
+        QPoint dropPosition = event->scenePos().toPoint();
 
-        QGraphicsSvgItem* image = new QGraphicsSvgItem(path);
-        QPointF dropPosition = event->scenePos();
-        image->setPos(dropPosition);
-        image->setFlag(QGraphicsItem::ItemIsMovable);
-
-        this->addItem(image);
+        dynamic_cast<Document*>(this->parent())->addComponent(path, dropPosition);
         this->update(); // TODO better emit this->changed?
     } else {
         QGraphicsScene::dropEvent(event);

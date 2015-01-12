@@ -15,7 +15,8 @@ namespace q2d {
  */
 enum ComponentDescriptorRole {
     CIRCUIT_SYMBOL_FILE = Qt::UserRole + 2000,
-    PORT_INFORMATION
+    PORT_INFORMATION,
+    HIERARCHY_NAME
     // TODO custom parameters
     // TODO boolean function
 };
@@ -26,6 +27,8 @@ class ComponentDescriptor :
     Q_OBJECT
 public:
     explicit ComponentDescriptor(QString name, ComponentCategory* parent = 0);
+
+    QString hierarchyName();
 };
 
 } // namespace q2d

@@ -1,10 +1,16 @@
 #ifndef SCHEMATICSSCENE_H
 #define SCHEMATICSSCENE_H
 
+#include "../ComponentFactory.h"
+
 #include <QGraphicsScene>
 #include <QObject>
 
 namespace q2d {
+
+    // forward declaration
+    class Document;
+
 namespace gui {
 
 
@@ -13,9 +19,10 @@ class SchematicsScene
     Q_OBJECT
 private:
     bool dragOver = false;
-    int gridSize = 20;
+    int gridSize = 20; // TODO read from Settings
+
 public:
-    explicit SchematicsScene(QObject* parent = 0);
+    explicit SchematicsScene(Document* parent = 0);
 //    virtual ~SchematicsScene();
 
     // cosmetic overrides

@@ -3,12 +3,17 @@
 
 #include "model/Model.h"
 #include "gui/SchematicsScene.h"
+#include "ComponentType.h"
 
 #include <QObject>
 #include <QStandardItem>
 #include <QString>
 
 namespace q2d {
+
+    // forward declaration
+    class ComponentFactory;
+    class Project;
 
 enum DocumentRole {
     MODEL = Qt::UserRole + 1000,
@@ -28,11 +33,15 @@ class Document :
     Q_OBJECT
 private:
 
+        ComponentFactory* componentFactory;
+
 public:
-    explicit Document(QString name, QObject* parent = 0);
+    explicit Document(QString name, Project* parent);
 
     gui::SchematicsScene* getSchematic();
     model::Model* getDescribedModel();
+
+    void addComponent(QString path, QPoint position);
 };
 
 } // namespace q2d

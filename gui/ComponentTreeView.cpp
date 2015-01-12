@@ -1,6 +1,7 @@
 #include "ComponentTreeView.h"
 
 #include "../ComponentDescriptor.h"
+#include "../ComponentType.h"
 
 #include <QApplication>
 #include <QDrag>
@@ -21,6 +22,7 @@ void ComponentTreeView::mousePressEvent(QMouseEvent *event){
 }
 
 void ComponentTreeView::mouseMoveEvent(QMouseEvent *event) {
+    // check if we are dragging something
     if (!(event->buttons() & Qt::LeftButton)) {
              return;
     }
@@ -29,17 +31,22 @@ void ComponentTreeView::mouseMoveEvent(QMouseEvent *event) {
              return;
     }
 
-    Q_ASSERT(!this->selectedIndexes().isEmpty());
+    // we should only be able to drag exactly one item
+    Q_ASSERT(this->selectedIndexes().count() == 1);
 
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
 
+    // create the payload
     QModelIndex selected = this->selectedIndexes().first();
-    QString symbolPath = selected.data(ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
+    QString payloadText = selected.data(ComponentDescriptorRole::HIERARCHY_NAME)
+                          .toString();
+
+    // create the pixmap for the drag operation
     QIcon icon = qvariant_cast<QIcon>(selected.data(Qt::DecorationRole));
     QPixmap iconPixmap = icon.pixmap(100);
 
-    mimeData->setText(symbolPath);
+    mimeData->setText(payloadText);
     drag->setMimeData(mimeData);
     drag->setPixmap(iconPixmap);
 

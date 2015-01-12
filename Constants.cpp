@@ -3,6 +3,8 @@
 namespace q2d {
 namespace constants {
 
+QString HIERARCHY_PATH_SEPERATOR    = "/";
+
 QString KEY_COMPONENTS_DIR  = "paths/componentsFolder";
 QString KEY_PROJECTS_DIR    = "paths/projectsFolder";
 

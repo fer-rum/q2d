@@ -45,7 +45,7 @@ Project::slot_newDocument(QString name){
 
     Q_ASSERT(!name.isEmpty());
 
-    Document* newDocument = new Document(name);
+    Document* newDocument = new Document(name, this);
     Q_CHECK_PTR(newDocument);
     this->documents.appendRow(newDocument);
 

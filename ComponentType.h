@@ -27,6 +27,7 @@ private:
 public:
     explicit ComponentType(QString name, ComponentCategory* parent = 0);
 
+    QString symbolPath();
     void setSymbolPath(QString symbolPath);
     void addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction);
 };

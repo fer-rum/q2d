@@ -186,6 +186,30 @@ ComponentFactory::getTypeForIndex(const QModelIndex &index){
     return static_cast<ComponentType*>(item);
 }
 
+ComponentType*
+ComponentFactory::getTypeForHierarchyName(QString hierarchyName){
+    QStringList hierarchy = hierarchyName.split(HIERARCHY_PATH_SEPERATOR,
+                                                QString::SkipEmptyParts);
+    // traverse the hierarchy and find the component
+    // TODO use a more effective approach here, this is really a hack
+
+    QStandardItem* currentItem = this->componentHierarchy.invisibleRootItem();
+
+    while(!hierarchy.isEmpty()){
+        // iterate over the current hierarcy level
+        for(int index = 0; index < currentItem->rowCount(); ++index){
+            QStandardItem* child = currentItem->child(index);
+            if(child->text() == hierarchy.first()){
+                currentItem = child;
+                hierarchy.removeFirst(); // down to the next level
+                break;
+            }
+        }
+    }
+
+    return dynamic_cast<ComponentType*>(currentItem);
+}
+
 QStandardItemModel*
 ComponentFactory::getComponentHierarchy(){
     return &(this->componentHierarchy);

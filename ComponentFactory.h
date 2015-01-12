@@ -29,6 +29,7 @@ public:
     QStandardItemModel* getComponentHierarchy();
     ComponentCategory* getCategoryForIndex(const QModelIndex &index);
     ComponentType* getTypeForIndex(const QModelIndex &index);
+    ComponentType* getTypeForHierarchyName(QString hierarchyName);
 
 public slots:
     void slot_loadType(QString fileName, ComponentCategory* parent);

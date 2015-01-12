@@ -6,6 +6,12 @@
 namespace q2d {
 namespace constants {
 
+// internally used constants
+/**
+ * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names of ComponentDescriptors to split the seperate levels of the hierarchy.
+ */
+extern QString HIERARCHY_PATH_SEPERATOR;
+
 // Keys for QSettings (application wide)
 extern QString KEY_COMPONENTS_DIR;
 extern QString KEY_PROJECTS_DIR;
