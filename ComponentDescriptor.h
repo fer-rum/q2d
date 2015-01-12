@@ -15,7 +15,8 @@ namespace q2d {
  */
 enum ComponentDescriptorRole {
     CIRCUIT_SYMBOL_FILE = Qt::UserRole + 2000,
-    PORT_INFORMATION,
+    PORT_DIRECTION,
+    PORT_POSITION,
     HIERARCHY_NAME
     // TODO custom parameters
     // TODO boolean function
@@ -35,5 +36,6 @@ public:
 
 // Metatype declaration
 Q_DECLARE_METATYPE(QGraphicsSvgItem*) // for circuit symbols
+// TODO is this still used?
 
 #endif // COMPONENTDESCRIPTOR_H

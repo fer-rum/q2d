@@ -1,6 +1,7 @@
 #include "ComponentType.h"
 
 #include "ComponentCategory.h"
+#include "PortDescriptor.h"
 
 #include <QtDebug>
 #include <qt5/QtSvg/QtSvg>
@@ -55,6 +56,12 @@ ComponentType::setSymbolPath(QString symbolPath){
 
 void
 ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction){
-    // TODO implement
-    qDebug() << "Creating Port " << name << " at" << relativePosition << " with direction " << direction;
+
+    qDebug() << "Creating Port " << name
+             << " at" << relativePosition
+             << " with direction " << direction;
+
+    PortDescriptor* portDescriptor
+            = new PortDescriptor(name, direction, relativePosition, this);
+    this->appendRow(portDescriptor);
 }

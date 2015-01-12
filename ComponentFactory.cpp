@@ -116,12 +116,15 @@ ComponentFactory::createTypeFronJson(
     // load the symbol file
     // defaults to basePath/unknown.svg
     QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
-    QString symbolFilePath =  basePath + "/" + symbolPathValue.toString("unknown.svg");
+    QString symbolFilePath =  basePath + "/" +
+                              symbolPathValue.toString("unknown.svg");
     result->setSymbolPath(symbolFilePath);
 
     // read ports
     // defaults to an empty port array
-    QJsonArray portArray = jsonObject.value(JSON_PORTS).toArray(QJsonArray());
+    QJsonArray portArray =
+            jsonObject.value(JSON_PORTS).toArray(QJsonArray());
+
     for(int index = 0; index < portArray.count(); ++index){
         QJsonValue currentValue = portArray[index];
         if(currentValue.isUndefined()) continue;
@@ -130,14 +133,17 @@ ComponentFactory::createTypeFronJson(
         QString portName = portObject.value(JSON_PORT_NAME)
                            .toString(tr("Unnamed"));
         // port position
-        QJsonObject posObject = portObject.value(JSON_PORT_POSITION).toObject();
+        QJsonObject posObject =
+                portObject.value(JSON_PORT_POSITION).toObject();
         int x = posObject.value(JSON_PORT_POSITION_X).toInt();
         int y = posObject.value(JSON_PORT_POSITION_Y).toInt();
         QPoint portPosition = QPoint(x, y);
 
         // port direction
-        QString dirString = portObject.value(JSON_PORT_DIRECTION).toString("undef");
-        model::PortDirection portDirection = model::portDirectionFromQString(dirString);
+        QString dirString = portObject.value(JSON_PORT_DIRECTION)
+                            .toString("undef");
+        model::PortDirection portDirection =
+                model::portDirectionFromQString(dirString);
 
         result->addPort(portName, portPosition, portDirection);
     }

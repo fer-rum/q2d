@@ -37,7 +37,8 @@ SOURCES +=\
     gui/SchematicsView.cpp \
     gui/SchematicsScene.cpp \
     gui/ComponentTreeView.cpp \
-    model/PortDirection.cpp
+    model/PortDirection.cpp \
+    PortDescriptor.cpp
 
 HEADERS  += MainWindow.h \
     model/ModelElement.h \
@@ -60,7 +61,8 @@ HEADERS  += MainWindow.h \
     Constants.h \
     gui/SchematicsView.h \
     gui/SchematicsScene.h \
-    gui/ComponentTreeView.h
+    gui/ComponentTreeView.h \
+    PortDescriptor.h
 
 FORMS    += MainWindow.ui \
     gui/SchematicsTab.ui

@@ -16,6 +16,10 @@ extern QString HIERARCHY_PATH_SEPERATOR;
 extern QString KEY_COMPONENTS_DIR;
 extern QString KEY_PROJECTS_DIR;
 
+extern QString KEY_PORT_IN_FILE;
+extern QString KEY_PORT_OUT_FILE;
+extern QString KEY_PORT_INOUT_FILE;
+
 // JSON keywords
 extern QString JSON_COMPONENT_NAME;
 extern QString JSON_PORTS;

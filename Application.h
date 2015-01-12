@@ -25,6 +25,8 @@ public:
 
     ApplicationContext* getContext();
     QVariant getSetting(QString key);
+
+    static Application* instance();
 signals:
 
 public slots:
