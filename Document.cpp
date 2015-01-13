@@ -1,9 +1,13 @@
 #include "Document.h"
 
 #include "gui/SchematicsScene.h"
+#include "gui/PortGraphicsItem.h"
 #include "ApplicationContext.h"
 #include "ComponentFactory.h"
+#include "PortDescriptor.h"
 #include "Project.h"
+
+#include <QGraphicsEllipseItem>
 
 using namespace q2d;
 
@@ -64,14 +68,31 @@ Document::addComponent(QString path, QPoint position){
 
     // get needed information from the ComponentFactory
     ComponentType* type = this->componentFactory->getTypeForHierarchyName(path);
+    Q_CHECK_PTR(type);
 
-    // add graphics to Schematic
+    // add component graphics to Schematic
     QGraphicsSvgItem* image = new QGraphicsSvgItem(type->symbolPath());
 
     image->setPos(position);
     image->setFlag(QGraphicsItem::ItemIsMovable);
 
     this->getSchematic()->addItem(image);
+
+    // add port graphics to schematic
+    for(QObject* child : type->children()){
+
+        PortDescriptor* descriptor = dynamic_cast<PortDescriptor*>(child);
+        if(descriptor == nullptr){
+            continue;
+        }
+        gui::PortGraphicsItem* portItem = new gui::PortGraphicsItem(
+                                              descriptor->position(),
+                                              descriptor->direction(),
+                                              image);
+        this->getSchematic()->addItem(portItem);
+        // TODO add interactivity
+
+    }
 
     // TODO add Component to model
 }

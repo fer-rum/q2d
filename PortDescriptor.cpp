@@ -41,3 +41,22 @@ PortDescriptor::PortDescriptor(QString name,
         this->setIcon(icon);
     }
 }
+
+/**
+ * @brief PortDescriptor::position is a convenience getter.
+ * @return
+ */
+QPoint
+PortDescriptor::position(){
+    return this->data(ComponentDescriptorRole::PORT_POSITION).toPoint();
+}
+
+/**
+ * @brief PortDescriptor::direction is a convenience getter.
+ * @return
+ */
+model::PortDirection
+PortDescriptor::direction(){
+    return static_cast<model::PortDirection>(
+                this->data(ComponentDescriptorRole::PORT_DIRECTION).toInt());
+}

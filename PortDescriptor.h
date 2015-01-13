@@ -21,6 +21,9 @@ public:
                             model::PortDirection direction,
                             QPoint position,
                             ComponentType* parent);
+
+    QPoint position();
+    model::PortDirection direction();
 };
 
 } // namespace q2d

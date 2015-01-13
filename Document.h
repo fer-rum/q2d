@@ -41,6 +41,7 @@ public:
     gui::SchematicsScene* getSchematic();
     model::Model* getDescribedModel();
 
+    // TODO rename: instantiateComponent
     void addComponent(QString path, QPoint position);
 };
 
