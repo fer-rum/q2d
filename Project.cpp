@@ -1,7 +1,7 @@
 #include "Project.h"
 
 #include "ApplicationContext.h"
-#include "MainWindow.h"
+#include "gui/MainWindow.h"
 
 using namespace q2d;
 

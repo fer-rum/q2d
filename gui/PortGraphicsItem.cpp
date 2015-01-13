@@ -4,7 +4,7 @@
 
 using namespace q2d::gui;
 
-int PortGraphicsItem::DIAMETER = 6;
+int PortGraphicsItem::DIAMETER = 8;
 int PortGraphicsItem::RADIUS = DIAMETER / 2;
 
 QPen PortGraphicsItem::INPUT_PORT_PEN  = QPen(Qt::darkGreen);

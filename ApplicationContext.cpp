@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "ComponentFactory.h"
-#include "MainWindow.h"
+#include "gui/MainWindow.h"
 #include "Project.h"
 
 using namespace q2d;

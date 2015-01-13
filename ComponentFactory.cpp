@@ -1,8 +1,8 @@
 #include "ComponentFactory.h"
 
 #include "ApplicationContext.h"
-#include "ComponentCategory.h"
-#include "ComponentType.h"
+#include "metamodel/ComponentCategory.h"
+#include "metamodel/ComponentType.h"
 #include "Constants.h"
 
 #include <QFileInfo>

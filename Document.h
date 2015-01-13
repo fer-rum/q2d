@@ -3,7 +3,7 @@
 
 #include "model/Model.h"
 #include "gui/SchematicsScene.h"
-#include "ComponentType.h"
+#include "metamodel/ComponentType.h"
 
 #include <QObject>
 #include <QStandardItem>

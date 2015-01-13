@@ -16,7 +16,7 @@ TEMPLATE = app
 
 
 SOURCES +=\
-        MainWindow.cpp \
+    gui/MainWindow.cpp \
     model/ModelElement.cpp \
     patterns/Observable.cpp \
     model/Node.cpp \
@@ -28,20 +28,21 @@ SOURCES +=\
     Application.cpp \
     Main.cpp \
     ApplicationContext.cpp \
-    ComponentType.cpp \
+    metamodel/ComponentType.cpp \
     gui/SchematicsTab.cpp \
-    ComponentDescriptor.cpp \
-    ComponentCategory.cpp \
+    metamodel/ComponentDescriptor.cpp \
+    metamodel/ComponentCategory.cpp \
     ComponentFactory.cpp \
     Constants.cpp \
     gui/SchematicsView.cpp \
     gui/SchematicsScene.cpp \
     gui/ComponentTreeView.cpp \
     model/PortDirection.cpp \
-    PortDescriptor.cpp \
+    metamodel/PortDescriptor.cpp \
     gui/PortGraphicsItem.cpp
 
-HEADERS  += MainWindow.h \
+HEADERS  +=\
+    gui/MainWindow.h \
     model/ModelElement.h \
     patterns/Observable.h \
     patterns/Observer.h \
@@ -54,17 +55,18 @@ HEADERS  += MainWindow.h \
     Project.h \
     Application.h \
     ApplicationContext.h \
-    ComponentType.h \
+    metamodel/ComponentType.h \
     gui/SchematicsTab.h \
-    ComponentDescriptor.h \
-    ComponentCategory.h \
+    metamodel/ComponentDescriptor.h \
+    metamodel/ComponentCategory.h \
     ComponentFactory.h \
     Constants.h \
     gui/SchematicsView.h \
     gui/SchematicsScene.h \
     gui/ComponentTreeView.h \
-    PortDescriptor.h \
+    metamodel/PortDescriptor.h \
     gui/PortGraphicsItem.h
 
-FORMS    += MainWindow.ui \
+FORMS    +=\
+    gui/MainWindow.ui \
     gui/SchematicsTab.ui

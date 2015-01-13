@@ -4,7 +4,7 @@
 #include "gui/PortGraphicsItem.h"
 #include "ApplicationContext.h"
 #include "ComponentFactory.h"
-#include "PortDescriptor.h"
+#include "metamodel/PortDescriptor.h"
 #include "Project.h"
 
 #include <QGraphicsEllipseItem>
@@ -66,6 +66,8 @@ Document::getDescribedModel(){
 void
 Document::addComponent(QString path, QPoint position){
 
+    // TODO maybe leave all the drawing stuff to the schematic directly?
+
     // get needed information from the ComponentFactory
     ComponentType* type = this->componentFactory->getTypeForHierarchyName(path);
     Q_CHECK_PTR(type);
@@ -90,8 +92,6 @@ Document::addComponent(QString path, QPoint position){
                                               descriptor->direction(),
                                               image);
         this->getSchematic()->addItem(portItem);
-        // TODO add interactivity
-
     }
 
     // TODO add Component to model

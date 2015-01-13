@@ -5,7 +5,7 @@
 
 
 #include "Application.h"
-#include "ComponentCategory.h"
+#include "metamodel/ComponentCategory.h"
 #include "Document.h"
 
 #include "ui_MainWindow.h"

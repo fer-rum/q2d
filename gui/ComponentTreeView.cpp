@@ -1,7 +1,7 @@
 #include "ComponentTreeView.h"
 
-#include "../ComponentDescriptor.h"
-#include "../ComponentType.h"
+#include "../metamodel/ComponentDescriptor.h"
+#include "../metamodel/ComponentType.h"
 
 #include <QApplication>
 #include <QDrag>

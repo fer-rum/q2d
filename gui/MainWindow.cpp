@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include "ComponentCategory.h"
+#include "metamodel/ComponentCategory.h"
 #include "ComponentFactory.h"
 #include "Constants.h"
 #include "gui/SchematicsTab.h"
