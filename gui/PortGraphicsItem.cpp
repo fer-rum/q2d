@@ -21,10 +21,12 @@ QBrush PortGraphicsItem::UNDEFINED_PORT_BRUSH = QBrush(Qt::gray);
 QBrush PortGraphicsItem::HOVER_PORT_BRUSH = QBrush(Qt::cyan);
 
 PortGraphicsItem::PortGraphicsItem(
+        QString text,
         QPoint relativeCenterPosition,
         model::PortDirection direction,
         QGraphicsItem *parent) :
     QGraphicsEllipseItem(parent) {
+    this->setToolTip(text);
     this->setRect(relativeCenterPosition.x() - RADIUS,
                   relativeCenterPosition.y() - RADIUS,
                   DIAMETER, DIAMETER);

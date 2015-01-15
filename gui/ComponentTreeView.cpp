@@ -9,8 +9,13 @@
 
 using namespace q2d::gui;
 
+QSize ComponentTreeView::ICON_SIZE = QSize(48, 48);
+
 ComponentTreeView::ComponentTreeView(QWidget* parent) :
-    QTreeView(parent) {}
+    QTreeView(parent) {
+
+    // this->setIconSize();
+}
 
 void ComponentTreeView::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
@@ -44,7 +49,10 @@ void ComponentTreeView::mouseMoveEvent(QMouseEvent *event) {
 
     // create the pixmap for the drag operation
     QIcon icon = qvariant_cast<QIcon>(selected.data(Qt::DecorationRole));
-    QPixmap iconPixmap = icon.pixmap(100);
+
+    // getting the size is a hack for now
+    // there should be a more proper way to implement it better
+    QPixmap iconPixmap = icon.pixmap(ICON_SIZE);
 
     mimeData->setText(payloadText);
     drag->setMimeData(mimeData);

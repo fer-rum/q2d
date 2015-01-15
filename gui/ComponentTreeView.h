@@ -3,6 +3,7 @@
 
 #include <QMouseEvent>
 #include <QPoint>
+#include <QSize>
 #include <QTreeView>
 
 namespace q2d {
@@ -10,7 +11,11 @@ namespace gui {
 
 class ComponentTreeView : public QTreeView {
 private:
+    // TODO make changeable via settings
+    static QSize ICON_SIZE;
+
     QPoint dragStartPosition;
+
 public:
     explicit ComponentTreeView(QWidget *parent = 0);
 

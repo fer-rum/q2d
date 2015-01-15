@@ -40,6 +40,9 @@ MainWindow::setupSignalsAndSlots(){
     connect(this->ui->action_createProject, SIGNAL(triggered()), this, SLOT(slot_createProject()));
     connect(this->ui->action_createDocument, SIGNAL(triggered()), this, SLOT(slot_createDocument()));
 
+    // buttons
+    connect(this->ui->newProjectButton, SIGNAL(clicked()), this, SLOT(slot_createProject()));
+
     // connections to the application context
     connect(this, SIGNAL(signal_createProjectRequested(QString)), this->context, SLOT(slot_newProject(QString)));
     connect(this, SIGNAL(signal_createDocumentRequested(QString)), this->context, SLOT(slot_newDocument(QString)));

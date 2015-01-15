@@ -33,7 +33,7 @@ Document::Document(QString name, Project* parent) :
     Q_CHECK_PTR(context);
     this->componentFactory = context->getComponentFactory();
 
-    this->setData(QVariant::fromValue(new model::Model()), DocumentRole::MODEL);
+    this->setData(QVariant::fromValue(new model::Model(this)), DocumentRole::MODEL);
     this->setData(QVariant::fromValue(new gui::SchematicsScene(this)), DocumentRole::SCHEMATIC);
 }
 
@@ -88,6 +88,7 @@ Document::addComponent(QString path, QPoint position){
             continue;
         }
         gui::PortGraphicsItem* portItem = new gui::PortGraphicsItem(
+                                              descriptor->text(),
                                               descriptor->position(),
                                               descriptor->direction(),
                                               image);

@@ -5,13 +5,19 @@
 #include "Conductor.h"
 #include "Node.h"
 
-#include <QString>
 #include <QList>
+#include <QObject>
+#include <QString>
+
 
 namespace q2d {
+
+    // forward declaration
+    class Document;
+
 namespace model {
 
-    // ahead declaration
+    // forward declaration
     class Component;
     class Conductor;
     class Port;
@@ -19,14 +25,19 @@ namespace model {
 // TODO documentation
 // TODO visitor-pattern
 // TODO utility functions
-class Model {
+class Model : public QObject {
+    Q_OBJECT
+
 private:
     QString name;
     QList<Component*> components;
     QList<Conductor*> conductors;
     QList<Port*> outsidePorts;
 public:
-    Model();
+    Model(Document* parent);
+
+    void addComponent(Component* toAdd);
+    void connect(Node* start, Node* end);
 };
 
 } // namespace model

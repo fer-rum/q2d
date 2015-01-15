@@ -58,6 +58,7 @@ public slots:
     void on_schematicsTabWidget_tabCloseRequested(int index);
     void on_addTypeButton_clicked();
     void on_addCategoryButton_clicked();
+private slots:
 };
 
 } // namespace gui

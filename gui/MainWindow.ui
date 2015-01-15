@@ -14,36 +14,44 @@
    <string>q2d</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,5" columnstretch="0,1,0,4">
-    <item row="0" column="1">
-     <layout class="QHBoxLayout" name="projectNameLayout">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,5,0" columnstretch="1,4,0,0,0,0" rowminimumheight="0,0,0" columnminimumwidth="0,0,0,0,0,0">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="projectLayout">
       <item>
-       <widget class="QLabel" name="currentProjectLabel">
-        <property name="text">
-         <string>Current Project:</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="projectNameLayout">
+        <item>
+         <widget class="QLabel" name="currentProjectLabel">
+          <property name="text">
+           <string>Current Project:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="projectNameLabel">
+          <property name="text">
+           <string>(none)</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLabel" name="projectNameLabel">
-        <property name="text">
-         <string>(none)</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="buttonLayout">
+        <item>
+         <widget class="QPushButton" name="newProjectButton">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new empty project and make it the current project&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>new</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
-    <item row="2" column="3">
-     <widget class="QTabWidget" name="schematicsTabWidget">
-      <property name="currentIndex">
-       <number>-1</number>
-      </property>
-      <property name="tabsClosable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
+    <item row="1" column="0">
      <layout class="QVBoxLayout" name="componentTreeLayout" stretch="0,0,0">
       <item>
        <widget class="QLabel" name="componentTreeLabel">
@@ -97,7 +105,7 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="3">
+    <item row="0" column="1">
      <layout class="QGridLayout" name="documentLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="documentListLabel">
@@ -135,6 +143,16 @@ Edit your description for the current document here</string>
        </widget>
       </item>
      </layout>
+    </item>
+    <item row="1" column="1">
+     <widget class="QTabWidget" name="schematicsTabWidget">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

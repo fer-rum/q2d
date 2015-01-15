@@ -15,7 +15,7 @@ namespace gui {
 class PortGraphicsItem
         : public QGraphicsEllipseItem {
 private:
-    // TODO make this changeable
+    // TODO make this changeable via the settings
     static int DIAMETER;
     static int RADIUS;
 
@@ -35,7 +35,8 @@ private:
     QBrush defaultBrush;
 
 public:
-    explicit PortGraphicsItem(QPoint relativeCenterPosition,
+    explicit PortGraphicsItem(QString text,
+                              QPoint relativeCenterPosition,
                               model::PortDirection direction,
                               QGraphicsItem* parent = 0);
 

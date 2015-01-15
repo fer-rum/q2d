@@ -13,10 +13,12 @@ namespace model {
 // TODO implementation
 class Conductor : public ModelElement {
 private:
+    static int DEFAULT_NAME_INDEX;
+
     Node* start;
     Node* end;
 public:
-    Conductor(Node *start, Node* end, QString name = "");
+    Conductor(Node *start, Node* end);
 };
 
 } // namespace model

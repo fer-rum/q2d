@@ -22,6 +22,8 @@ private:
     Model* internalModel;
 public:
     Component(QString name, Model* internalModel = nullptr);
+
+    Port* createPort(QString name, PortDirection direction);
 };
 
 } // namespace model

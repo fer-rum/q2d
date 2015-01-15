@@ -3,6 +3,7 @@
 #include "ApplicationContext.h"
 #include "metamodel/ComponentCategory.h"
 #include "metamodel/ComponentType.h"
+#include "model/Component.h"
 #include "Constants.h"
 
 #include <QFileInfo>
@@ -28,7 +29,6 @@ ComponentFactory::ComponentFactory(ApplicationContext* parent)
 void
 ComponentFactory::slot_addCategory(QString name, ComponentCategory* parent){
     // TODO ensure update signals are fired upon adding a category
-
     Q_ASSERT(!name.isEmpty ());
 
     ComponentCategory* newCategory = new ComponentCategory(name);
@@ -219,4 +219,14 @@ ComponentFactory::getTypeForHierarchyName(QString hierarchyName){
 QStandardItemModel*
 ComponentFactory::getComponentHierarchy(){
     return &(this->componentHierarchy);
+}
+
+model::Component*
+ComponentFactory::instantiateComponent(ComponentType* type){
+    Q_CHECK_PTR(type);
+
+    model::Component* newComponent = new model::Component(type->text());
+    //TODO implement further
+
+    return newComponent;
 }

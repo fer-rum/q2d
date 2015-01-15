@@ -14,10 +14,16 @@ namespace model {
 // TODO implementation
 class Node : public ModelElement {
 private:
+    static int DEFAULT_NAME_INDEX;
+
     QList<ModelElement*> drivenElements;
     ModelElement* driver;
 public:
-    Node(QString name = "");
+    Node();
+    Node(QString name);
+
+    void addDriver(ModelElement* driver);
+    void addDrivenElement(ModelElement* drivenElement);
 };
 
 // TODO visitor-pattern
@@ -26,7 +32,7 @@ class Port : public Node {
 private:
     PortDirection direction;
 public:
-    Port(PortDirection = UNSPECIFIED, QString name = "");
+    Port(QString name, PortDirection direction = UNSPECIFIED);
 };
 
 // TODO documentation

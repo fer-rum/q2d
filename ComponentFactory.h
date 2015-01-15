@@ -13,6 +13,10 @@ namespace q2d {
     class ComponentCategory;
     class ComponentType;
 
+    namespace model {
+    class Component;
+    }
+
 class ComponentFactory : public QObject {
     Q_OBJECT
 
@@ -30,6 +34,7 @@ public:
     ComponentCategory* getCategoryForIndex(const QModelIndex &index);
     ComponentType* getTypeForIndex(const QModelIndex &index);
     ComponentType* getTypeForHierarchyName(QString hierarchyName);
+    model::Component* instantiateComponent(ComponentType* type);
 
 public slots:
     void slot_loadType(QString fileName, ComponentCategory* parent);
