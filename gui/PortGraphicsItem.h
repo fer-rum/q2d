@@ -12,6 +12,9 @@
 namespace q2d {
 namespace gui {
 
+    // forward declaration
+    class ComponentGraphicsItem;
+
 class PortGraphicsItem
         : public QGraphicsEllipseItem {
 private:
@@ -38,7 +41,7 @@ public:
     explicit PortGraphicsItem(QString text,
                               QPoint relativeCenterPosition,
                               model::PortDirection direction,
-                              QGraphicsItem* parent = 0);
+                              ComponentGraphicsItem* parent = 0);
 
     // cosmetic overrides
     void hoverEnterEvent(QGraphicsSceneHoverEvent* event);

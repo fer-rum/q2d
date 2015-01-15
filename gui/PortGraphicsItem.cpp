@@ -1,5 +1,7 @@
 #include "PortGraphicsItem.h"
 
+#include "ComponentGraphicsItem.h"
+
 #include <QCursor>
 
 using namespace q2d::gui;
@@ -24,7 +26,7 @@ PortGraphicsItem::PortGraphicsItem(
         QString text,
         QPoint relativeCenterPosition,
         model::PortDirection direction,
-        QGraphicsItem *parent) :
+        ComponentGraphicsItem *parent) :
     QGraphicsEllipseItem(parent) {
     this->setToolTip(text);
     this->setRect(relativeCenterPosition.x() - RADIUS,

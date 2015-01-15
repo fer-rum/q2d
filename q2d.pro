@@ -39,7 +39,8 @@ SOURCES +=\
     gui/ComponentTreeView.cpp \
     model/PortDirection.cpp \
     metamodel/PortDescriptor.cpp \
-    gui/PortGraphicsItem.cpp
+    gui/PortGraphicsItem.cpp \
+    gui/ComponentGraphicsItem.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -65,7 +66,8 @@ HEADERS  +=\
     gui/SchematicsScene.h \
     gui/ComponentTreeView.h \
     metamodel/PortDescriptor.h \
-    gui/PortGraphicsItem.h
+    gui/PortGraphicsItem.h \
+    gui/ComponentGraphicsItem.h
 
 FORMS    +=\
     gui/MainWindow.ui \

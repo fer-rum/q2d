@@ -1,5 +1,6 @@
 #include "Document.h"
 
+#include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicsScene.h"
 #include "gui/PortGraphicsItem.h"
 #include "ApplicationContext.h"
@@ -73,10 +74,10 @@ Document::addComponent(QString path, QPoint position){
     Q_CHECK_PTR(type);
 
     // add component graphics to Schematic
-    QGraphicsSvgItem* image = new QGraphicsSvgItem(type->symbolPath());
-
-    image->setPos(position);
-    image->setFlag(QGraphicsItem::ItemIsMovable);
+    gui::ComponentGraphicsItem* image = new gui::ComponentGraphicsItem(
+                                            type->symbolPath(),
+                                            this->getSchematic(),
+                                            position);
 
     this->getSchematic()->addItem(image);
 
