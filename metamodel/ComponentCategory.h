@@ -4,6 +4,7 @@
 #include "ComponentDescriptor.h"
 
 namespace q2d {
+namespace metamodel {
 
 class ComponentCategory : public ComponentDescriptor {
     // TODO signals and slots
@@ -15,6 +16,7 @@ public:
     void addSubItem(ComponentDescriptor *toAdd);
 };
 
+} // namespace metamodel
 } // namespace q2d
 
 #endif // COMPONENTCATEGORY_H

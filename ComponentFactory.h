@@ -10,11 +10,15 @@ namespace q2d {
 
     // forward declaration
     class ApplicationContext;
+
+    namespace metamodel {
     class ComponentCategory;
     class ComponentType;
+    }
 
     namespace model {
     class Component;
+    class Model;
     }
 
 class ComponentFactory : public QObject {
@@ -23,22 +27,22 @@ class ComponentFactory : public QObject {
 private:
     QStandardItemModel componentHierarchy;
 
-    ComponentType* createTypeFronJson(const QJsonDocument jsonSource,
+    metamodel::ComponentType* createTypeFronJson(const QJsonDocument jsonSource,
             const QString basePath,
-            ComponentCategory* parent);
+            metamodel::ComponentCategory* parent);
 
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
 
     QStandardItemModel* getComponentHierarchy();
-    ComponentCategory* getCategoryForIndex(const QModelIndex &index);
-    ComponentType* getTypeForIndex(const QModelIndex &index);
-    ComponentType* getTypeForHierarchyName(QString hierarchyName);
-    model::Component* instantiateComponent(ComponentType* type);
+    metamodel::ComponentCategory* getCategoryForIndex(const QModelIndex &index);
+    metamodel::ComponentType* getTypeForIndex(const QModelIndex &index);
+    metamodel::ComponentType* getTypeForHierarchyName(QString hierarchyName);
+    model::Component* instantiateComponent(metamodel::ComponentType* type, model::Model* model);
 
 public slots:
-    void slot_loadType(QString fileName, ComponentCategory* parent);
-    void slot_addCategory(QString name, ComponentCategory* parent);
+    void slot_loadType(QString fileName, metamodel::ComponentCategory* parent);
+    void slot_addCategory(QString name, metamodel::ComponentCategory* parent);
 
 };
 

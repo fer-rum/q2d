@@ -8,6 +8,11 @@
 #include <QList>
 
 namespace q2d {
+
+namespace metamodel {
+class ComponentType;
+}
+
 namespace model {
 
     // ahead declaration
@@ -18,12 +23,13 @@ namespace model {
 // TODO a component should observe its internal model to be informed of changes
 class Component : public ModelElement {
 private:
-    QList<Port*> ports;
-    Model* internalModel;
+    metamodel::ComponentType* m_type;
+    QList<Port*> m_ports;
+    Model* m_internalModel;
 public:
-    Component(QString name, Model* internalModel = nullptr);
+    Component(metamodel::ComponentType* type, Model* model, Model* internalModel = nullptr);
 
-    Port* createPort(QString name, PortDirection direction);
+    Port* createPort(PortDirection direction);
 };
 
 } // namespace model

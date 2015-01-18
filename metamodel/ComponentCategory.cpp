@@ -1,6 +1,6 @@
 #include "ComponentCategory.h"
 
-using namespace q2d;
+using namespace q2d::metamodel;
 
 ComponentCategory::ComponentCategory(QString name, ComponentCategory* parent) :
     ComponentDescriptor(name, parent) {}

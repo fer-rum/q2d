@@ -6,19 +6,25 @@
 #include <QBrush>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 #include <QObject>
 #include <QPen>
+#include <QPointF>
 
 namespace q2d {
 namespace gui {
 
     // forward declaration
     class ComponentGraphicsItem;
+    class SchematicsScene;
 
 class PortGraphicsItem
-        : public QGraphicsEllipseItem {
+        : public QObject,
+        public QGraphicsEllipseItem {
+    Q_OBJECT
+
 private:
-    // TODO make this changeable via the settings
+    // TODO make these changeable via the settings
     static int DIAMETER;
     static int RADIUS;
 
@@ -34,8 +40,13 @@ private:
     static QBrush UNDEFINED_PORT_BRUSH;
     static QBrush HOVER_PORT_BRUSH;
 
-    QPen defaultPen;
-    QBrush defaultBrush;
+    QPen    m_defaultPen;
+    QBrush  m_defaultBrush;
+    QPointF m_dragStartPosition;
+    bool    m_dragOver;
+    SchematicsScene*    m_scene;
+
+    void performDrag();
 
 public:
     explicit PortGraphicsItem(QString text,
@@ -43,9 +54,18 @@ public:
                               model::PortDirection direction,
                               ComponentGraphicsItem* parent = 0);
 
+    // ovverride for custom dragging
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
+    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
+    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent* event);
+
     // cosmetic overrides
-    void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
 signals:
 

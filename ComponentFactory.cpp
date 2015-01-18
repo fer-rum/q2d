@@ -13,6 +13,7 @@
 
 using namespace q2d;
 using namespace q2d::constants;
+using namespace q2d::metamodel;
 
 ComponentFactory::ComponentFactory(ApplicationContext* parent)
     : QObject(parent){}
@@ -194,7 +195,7 @@ ComponentFactory::getTypeForIndex(const QModelIndex &index){
 
 ComponentType*
 ComponentFactory::getTypeForHierarchyName(QString hierarchyName){
-    QStringList hierarchy = hierarchyName.split(HIERARCHY_PATH_SEPERATOR,
+    QStringList hierarchy = hierarchyName.split(HIERARCHY_SEPERATOR,
                                                 QString::SkipEmptyParts);
     // traverse the hierarchy and find the component
     // TODO use a more effective approach here, this is really a hack
@@ -222,11 +223,13 @@ ComponentFactory::getComponentHierarchy(){
 }
 
 model::Component*
-ComponentFactory::instantiateComponent(ComponentType* type){
+ComponentFactory::instantiateComponent(ComponentType* type, model::Model* model){
     Q_CHECK_PTR(type);
+    Q_CHECK_PTR(model);
 
-    model::Component* newComponent = new model::Component(type->text());
-    //TODO implement further
+    // TODO get the internal model from the type
+    model::Component* newComponent = new model::Component(type, nullptr, model);
+    Q_CHECK_PTR(newComponent);
 
     return newComponent;
 }

@@ -4,7 +4,10 @@
 
 using namespace q2d::model;
 
-ModelElement::ModelElement(QString name, Model* parent)
-    : QObject(parent){
-    this->name = name;
+ModelElement::ModelElement(Model* parent)
+    : QObject(parent){}
+
+Model*
+ModelElement::model() const {
+    return qobject_cast<Model*>(this->parent());
 }

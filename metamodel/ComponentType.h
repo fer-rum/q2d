@@ -8,6 +8,7 @@
 #include <QIcon>
 
 namespace q2d {
+namespace metamodel {
 
     class ComponentCategory;
 
@@ -19,19 +20,27 @@ namespace q2d {
 */
 class ComponentType : public ComponentDescriptor {
     // TODO signals and slots
-    // TODO port information
 private:
+    /**
+     * @brief m_instanceIndex counts how often a component of this type has been
+     * instantiated so far to be able to generate unique names.
+     * The counting is done via tracking calls of generateId().
+     */
+    int m_instanceIndex;
+
     void loadCircuitSymbol(QString symbolFilePath);
-    // TODO setPortInformation
 
 public:
     explicit ComponentType(QString name, ComponentCategory* parent = 0);
 
     QString symbolPath();
     void setSymbolPath(QString symbolPath);
-    void addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction);
+    void addPort(QString name, QPoint relativePosition, model::PortDirection direction);
+
+    QString generateId();
 };
 
+} // namespace metamodel
 } // namespace q2d
 
 #endif // COMPONENTTYPE_H

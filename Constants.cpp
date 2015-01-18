@@ -3,7 +3,7 @@
 namespace q2d {
 namespace constants {
 
-QString HIERARCHY_PATH_SEPERATOR    = "/";
+QString HIERARCHY_SEPERATOR    = "/";
 
 QString KEY_COMPONENTS_DIR  = "paths/componentsFolder";
 QString KEY_PROJECTS_DIR    = "paths/projectsFolder";
@@ -21,5 +21,7 @@ QString JSON_PORT_POSITION_X    = "x";
 QString JSON_PORT_POSITION_Y    = "y";
 QString JSON_SYMBOL_PATH    = "symbolFile";
 
+QString MIME_COMPONENT_TYPE = "application/component-type";
+QString MIME_WIRE_START_POS = "application/wire-start-pos";
 } // namespace constants
 } // namespace q2d

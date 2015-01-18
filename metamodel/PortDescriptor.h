@@ -8,6 +8,7 @@
 #include <QObject>
 
 namespace q2d {
+namespace metamodel {
 
     // forward declaration
     class ComponentType;
@@ -26,5 +27,6 @@ public:
     model::PortDirection direction();
 };
 
+} // namespace metamodel
 } // namespace q2d
 #endif // PORTDESCRIPTOR_H

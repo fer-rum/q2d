@@ -32,7 +32,7 @@ Model::connect(Node* start, Node* end){
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
 
-    Conductor* toAdd = new Conductor(start, end);
+    Conductor* toAdd = new Conductor(start, end, this);
     start->addDrivenElement(toAdd);
     end->addDriver(toAdd);
 

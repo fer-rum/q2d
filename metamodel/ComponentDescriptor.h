@@ -6,6 +6,7 @@
 #include <QStandardItem>
 
 namespace q2d {
+namespace metamodel {
 
     // forward declaration
     class ComponentCategory;
@@ -32,6 +33,7 @@ public:
     QString hierarchyName();
 };
 
+} // namespace metamodel
 } // namespace q2d
 
 // Metatype declaration

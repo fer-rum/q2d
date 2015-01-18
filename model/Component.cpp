@@ -1,9 +1,16 @@
 #include "Component.h"
 
-using namespace q2d::model;
+#include "metamodel/ComponentType.h"
 
-Component::Component(QString name, Model* internalModel) : ModelElement(name) {
-    this->internalModel = internalModel;
+using namespace q2d::model;
+using namespace q2d::metamodel;
+
+Component::Component(ComponentType* type, Model* model, Model* internalModel)
+    : ModelElement(model) {
+    Q_CHECK_PTR(type);
+
+    m_internalModel = internalModel;
+    m_type = type;
 }
 
 /**
@@ -15,8 +22,8 @@ Component::Component(QString name, Model* internalModel) : ModelElement(name) {
  * @return the newly created port
  */
 Port*
-Component::createPort(QString name, PortDirection direction){
-    Port* newPort = new Port(name, direction);
-    this->ports.append(newPort);
+Component::createPort(PortDirection direction){
+    Port* newPort = new Port(direction,this, this->model());
+    m_ports.append(newPort);
     return newPort;
 }

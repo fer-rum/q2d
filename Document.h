@@ -1,6 +1,7 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
+#include "DocumentEntry.h"
 #include "model/Model.h"
 #include "gui/SchematicsScene.h"
 #include "metamodel/ComponentType.h"
@@ -15,6 +16,10 @@ namespace q2d {
     class ComponentFactory;
     class Project;
 
+    namespace gui {
+    class ComponentGraphicsItem;
+    }
+
 enum DocumentRole {
     MODEL = Qt::UserRole + 1000,
     SCHEMATIC = Qt::UserRole + 1001
@@ -26,6 +31,7 @@ enum DocumentRole {
 // TODO description text
 // TODO saving
 // TODO loading
+// TODO association between Schematic and Model elements
 
 class Document :
         public QObject,
@@ -33,13 +39,31 @@ class Document :
     Q_OBJECT
 private:
 
-        ComponentFactory* componentFactory;
+    /**
+     * @brief componentFactory is a cached pointer to the ComponentFactory instance.
+     */
+    ComponentFactory* componentFactory;
+
+    /**
+     * @brief m_entries keeps all the relations between model and schematic elements.
+     */
+    QList<DocumentEntry*> m_entries;
+
+    void addComponentPorts(metamodel::ComponentType* type,
+                           QString componentId,
+                           model::Component* modelComponent,
+                           q2d::gui::ComponentGraphicsItem* schematicComponent);
+
+    // access helpers
+    DocumentEntry* entry(QString id) const;
+    DocumentEntry* entry(QGraphicsItem* schematicElement) const;
+    DocumentEntry* entry(model::ModelElement* modelElement) const;
 
 public:
     explicit Document(QString name, Project* parent);
 
-    gui::SchematicsScene* getSchematic();
-    model::Model* getDescribedModel();
+    gui::SchematicsScene* schematic();
+    model::Model* model();
 
     // TODO rename: instantiateComponent?
     void addComponent(QString path, QPoint position);

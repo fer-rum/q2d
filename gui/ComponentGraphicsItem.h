@@ -4,6 +4,11 @@
 #include <QGraphicsSvgItem>
 
 namespace q2d {
+
+namespace metamodel {
+class ComponentType;
+}
+
 namespace gui {
 
     // forward declaration
@@ -14,10 +19,12 @@ class ComponentGraphicsItem : public QGraphicsSvgItem
     Q_OBJECT
 
 private:
-    SchematicsScene* scene;
+    SchematicsScene* parentScene;
 
 public:
-    explicit ComponentGraphicsItem(QString file, SchematicsScene *scene, QPoint position);
+    explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene *scene, QPoint position);
+
+    SchematicsScene* scene() const;
 
 signals:
 

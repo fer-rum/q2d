@@ -7,10 +7,17 @@
 
 #include <QSettings>
 
-using namespace q2d;
+using namespace q2d::metamodel;
 using namespace q2d::constants;
 using namespace q2d::model;
 
+/**
+ * @brief PortDescriptor::PortDescriptor
+ * @param name is ithe pure port name without any hierarchy information attached.
+ * @param direction
+ * @param position
+ * @param parent is the ComponentType this PortDescriptor belongs to.
+ */
 PortDescriptor::PortDescriptor(QString name,
                         PortDirection direction,
                         QPoint position,
@@ -21,7 +28,6 @@ PortDescriptor::PortDescriptor(QString name,
     this->setData(position, ComponentDescriptorRole::PORT_POSITION);
 
     // find and set the icon
-
     QString setting;
     switch(direction){
     case IN :
@@ -55,7 +61,7 @@ PortDescriptor::position(){
  * @brief PortDescriptor::direction is a convenience getter.
  * @return
  */
-model::PortDirection
+PortDirection
 PortDescriptor::direction(){
     return static_cast<model::PortDirection>(
                 this->data(ComponentDescriptorRole::PORT_DIRECTION).toInt());

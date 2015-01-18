@@ -1,19 +1,27 @@
 #include "Node.h"
 
+#include "Component.h"
+
 using namespace q2d::model;
 
-int Node::DEFAULT_NAME_INDEX = 0;
-
-Node::Node() : Node("node " + DEFAULT_NAME_INDEX) {}
-
-Node::Node(QString name) : ModelElement(name){
+Node::Node(Model* parent) : ModelElement(parent){
     this->driver = nullptr;
     this->drivenElements = QList<ModelElement*>();
-    ++DEFAULT_NAME_INDEX;
 }
 
-Port::Port(QString name, PortDirection direction) : Node(name) {
+Port::Port(PortDirection direction, Component* topLevel, Model* parent) : Node(parent) {
+    Q_CHECK_PTR(topLevel);
+    Q_CHECK_PTR(parent);
+
     this->direction = direction;
+
+    if(direction == IN){
+        this->addDrivenElement(topLevel);
+    } else if(direction == OUT){
+        this->addDriver(topLevel);
+    }
+
+    // TODO how to handle INOUT?
 }
 
 

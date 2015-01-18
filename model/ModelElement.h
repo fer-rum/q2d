@@ -15,9 +15,10 @@ namespace model {
 class ModelElement : public QObject {
     Q_OBJECT
 private:
-    QString name;
 public:
-    ModelElement(QString name, Model* parent = nullptr);
+    ModelElement(Model* parent);
+
+    Model* model() const;
 };
 
 } // namespace model

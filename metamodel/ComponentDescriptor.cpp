@@ -3,7 +3,7 @@
 #include "ComponentCategory.h"
 #include "Constants.h"
 
-using namespace q2d;
+using namespace q2d::metamodel;
 using namespace q2d::constants;
 
 /**
@@ -25,7 +25,7 @@ ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent
     if(parent == nullptr){
         hierarchyName =  this->text();
     } else {
-        hierarchyName = parent->hierarchyName() + HIERARCHY_PATH_SEPERATOR + this->text();
+        hierarchyName = parent->hierarchyName() + HIERARCHY_SEPERATOR + this->text();
     }
 
     this->setData(hierarchyName, ComponentDescriptorRole::HIERARCHY_NAME);

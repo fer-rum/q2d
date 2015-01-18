@@ -9,18 +9,18 @@
 namespace q2d {
 namespace model {
 
+    // forward declaration
+    class Component;
+
 // TODO documentation
 // TODO visitor pattern
 // TODO implementation
 class Node : public ModelElement {
 private:
-    static int DEFAULT_NAME_INDEX;
-
     QList<ModelElement*> drivenElements;
     ModelElement* driver;
 public:
-    Node();
-    Node(QString name);
+    Node(Model* parent);
 
     void addDriver(ModelElement* driver);
     void addDrivenElement(ModelElement* drivenElement);
@@ -32,14 +32,14 @@ class Port : public Node {
 private:
     PortDirection direction;
 public:
-    Port(QString name, PortDirection direction = UNSPECIFIED);
+    Port(PortDirection direction, Component* topLevel, Model* parent);
 };
 
 // TODO documentation
 // TODO visitors
 class ConductorNode : public Node {
 public:
-    ConductorNode(QString name = "");
+    ConductorNode();
 };
 
 } // namespace model

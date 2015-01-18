@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "Application.h"
+#include "Document.h"
 #include "metamodel/ComponentCategory.h"
 #include "ComponentFactory.h"
 #include "Constants.h"
@@ -14,6 +16,7 @@
 #include <QtDebug>
 
 using namespace q2d::gui;
+using namespace q2d::metamodel;
 
 MainWindow::MainWindow(ApplicationContext* parent) :
     QMainWindow(), ui(new Ui::MainWindow){

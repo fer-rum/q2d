@@ -3,13 +3,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
-#include "Application.h"
-#include "metamodel/ComponentCategory.h"
-#include "Document.h"
-
 #include "ui_MainWindow.h"
 
+#include "metamodel/ComponentCategory.h"
+
+#include <QStandardItemModel>
 #include <QWindow>
 
 namespace q2d {
@@ -17,6 +15,9 @@ namespace q2d {
     class Application;
     class ApplicationContext;
     class Document;
+    namespace metamodel {
+    class ComponentCategory;
+    }
 
 namespace gui {
 
@@ -40,8 +41,8 @@ signals:
     void signal_createProjectRequested(QString name);
     void signal_createDocumentRequested(QString name);
 
-    void signal_createCategory(QString name, ComponentCategory* parent = 0);
-    void signal_loadType(QString fileName, ComponentCategory* parent = 0);
+    void signal_createCategory(QString name, metamodel::ComponentCategory* parent = 0);
+    void signal_loadType(QString fileName, metamodel::ComponentCategory* parent = 0);
 
     // TODO check visibility
 public slots:

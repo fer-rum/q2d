@@ -8,9 +8,12 @@ namespace constants {
 
 // internally used constants
 /**
- * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names of ComponentDescriptors to split the seperate levels of the hierarchy.
+ * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names
+ * of ComponentDescriptors to split th seperate levels of the hierarchy.
+ * It also is applied when seperating the ids of port instances
+ * from their component parents.
  */
-extern QString HIERARCHY_PATH_SEPERATOR;
+extern QString HIERARCHY_SEPERATOR;
 
 // Keys for QSettings (application wide)
 extern QString KEY_COMPONENTS_DIR;
@@ -29,6 +32,10 @@ extern QString JSON_PORT_POSITION;
 extern QString JSON_PORT_POSITION_X;
 extern QString JSON_PORT_POSITION_Y;
 extern QString JSON_SYMBOL_PATH;
+
+// custom MIME types
+extern QString MIME_COMPONENT_TYPE;
+extern QString MIME_WIRE_START_POS;
 
 } // namespace constants
 } // namespace q2d

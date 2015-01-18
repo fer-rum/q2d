@@ -6,7 +6,7 @@
 #include <QtDebug>
 #include <qt5/QtSvg/QtSvg>
 
-using namespace q2d;
+using namespace q2d::metamodel;
 
 // TODO outsouce some of the calls
 /**
@@ -18,7 +18,9 @@ using namespace q2d;
  * Assumption: name is not empty
  */
 ComponentType::ComponentType(QString name, ComponentCategory* parent) :
-    ComponentDescriptor(name, parent) {}
+    ComponentDescriptor(name, parent) {
+    m_instanceIndex = 0;
+}
 
 /**
  * @brief ComponentType::setCircuitSymbol sets the circuit symbol from a given svg file
@@ -64,4 +66,11 @@ ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDi
     PortDescriptor* portDescriptor
             = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
+}
+
+QString
+ComponentType::generateId(){
+    QString id = this->text() + " " + m_instanceIndex;
+    ++m_instanceIndex;
+    return id;
 }
