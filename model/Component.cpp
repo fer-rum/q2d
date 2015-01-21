@@ -11,6 +11,7 @@ Component::Component(ComponentType* type, Model* model, Model* internalModel)
 
     m_internalModel = internalModel;
     m_type = type;
+    m_ports = QList<Port*>();
 }
 
 /**

@@ -5,6 +5,7 @@
 
 #include <QGraphicsSceneDragDropEvent>
 #include <QMimeData>
+#include <QLineF>
 #include <QPainter>
 #include <QtDebug>
 #include <qt5/QtSvg/QGraphicsSvgItem>
@@ -18,6 +19,11 @@ SchematicsScene::SchematicsScene(Document* parent)
 // for debug purposes
 //    this->addLine(0, -100, 0, 100);
 //    this->addLine(-100, 0, 100, 0);
+}
+
+q2d::Document*
+SchematicsScene::document() const {
+    return qobject_cast<Document*>(parent());
 }
 
 void
@@ -43,7 +49,7 @@ SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
     QMimeData const * mimeData = event->mimeData();
 
     if(mimeData->hasFormat(MIME_COMPONENT_TYPE)){
-        this->m_dragOver = true;
+        m_dragOver = true;
         event->accept();
     } else {
         QGraphicsScene::dragEnterEvent(event);
@@ -52,11 +58,7 @@ SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
 
 void
 SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event){
-    if(this->m_dragOver){
-        if(this->wireDrawingMode()){
-            this->m_wireDrawingLine->line().setP2(event->scenePos());
-            qDebug() << "Relocated wire end";
-        }
+    if(m_dragOver){
         event->accept();
     } else {
         QGraphicsScene::dragMoveEvent(event);
@@ -68,56 +70,31 @@ SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
 
     if(m_dragOver){
         this->m_dragOver = false;
+        event->accept();
+    } else {
+        QGraphicsScene::dragLeaveEvent(event);
     }
-
-    QGraphicsScene::dragLeaveEvent(event);
 }
 
 void
 SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event){
-
-    if(!m_dragOver){
-        QGraphicsScene::dropEvent(event);
-        return;
-    }
     // TODO find a proper way to scale the scene and the viewport when adding items
 
-    this->m_dragOver = false;
-
-    if(this->m_wireDrawingMode){
-        QGraphicsScene::dropEvent(event);
-        return;
-    }
-
     QMimeData const * mimeData = event->mimeData();
-    if(mimeData->hasFormat(MIME_COMPONENT_TYPE)){
-        event->setAccepted(true);
-
+    if(m_dragOver){
         QString path = mimeData->text();
         QPoint dropPosition = event->scenePos().toPoint();
 
         dynamic_cast<Document*>(this->parent())->addComponent(path, dropPosition);
+        event->accept();
         this->update(); // TODO better emit this->changed?
     } else {
         QGraphicsScene::dropEvent(event);
     }
-}
-
-bool
-SchematicsScene::wireDrawingMode() const {
-    return this->m_wireDrawingMode;
+    this->m_dragOver = false;
 }
 
 void
-SchematicsScene::setWireDrawingMode(bool mode, QPointF* origin){
-    this->m_wireDrawingMode = mode;
-    if(mode){
-        this->m_wireDrawingLine = new QGraphicsLineItem(QLine());
-        this->m_wireDrawingLine->line().setP1(*origin);
-        this->addItem(this->m_wireDrawingLine);
-        this->m_wireDrawingLine->setVisible(true);
-    } else {
-        this->removeItem(this->m_wireDrawingLine);
-        delete this->m_wireDrawingLine;
-    }
+SchematicsScene::addItem(QGraphicsItem* item){
+    QGraphicsScene::addItem(item);
 }

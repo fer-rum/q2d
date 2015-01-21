@@ -70,7 +70,7 @@ ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDi
 
 QString
 ComponentType::generateId(){
-    QString id = this->text() + " " + m_instanceIndex;
+    QString id = this->text() + " " + QString::number(m_instanceIndex);
     ++m_instanceIndex;
     return id;
 }

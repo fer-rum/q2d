@@ -11,9 +11,9 @@ DocumentEntry::DocumentEntry(QString id, model::ModelElement* modelElement,
 
     Q_ASSERT(!id.isEmpty());
     if(parent != nullptr){
-        this->m_id = parent->id() + HIERARCHY_SEPERATOR + id;
+        m_id = parent->id() + HIERARCHY_SEPERATOR + id;
     } else {
-        this->m_id = id;
+        m_id = id;
     }
 
     Q_CHECK_PTR(modelElement);

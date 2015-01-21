@@ -1,30 +1,25 @@
 #ifndef COMPONENTGRAPHICSITEM_H
 #define COMPONENTGRAPHICSITEM_H
 
+#include "SchematicsSceneChild.h"
 #include <QGraphicsSvgItem>
 
 namespace q2d {
 
+// forward declaration
 namespace metamodel {
 class ComponentType;
 }
 
 namespace gui {
 
-    // forward declaration
-    class SchematicsScene;
-
-class ComponentGraphicsItem : public QGraphicsSvgItem
+class ComponentGraphicsItem :
+        public QGraphicsSvgItem,
+        public SchematicsSceneChild
 {
     Q_OBJECT
-
-private:
-    SchematicsScene* parentScene;
-
 public:
     explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene *scene, QPoint position);
-
-    SchematicsScene* scene() const;
 
 signals:
 

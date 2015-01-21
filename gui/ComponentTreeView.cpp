@@ -8,6 +8,8 @@
 #include <QDrag>
 #include <QMimeData>
 
+#include <QtDebug>
+
 using namespace q2d::gui;
 using namespace q2d::constants;
 
@@ -58,16 +60,13 @@ ComponentTreeView::performDrag() {
 void
 ComponentTreeView::mouseMoveEvent(QMouseEvent *event) {
     // check if we are dragging something
-    if (!(event->buttons() & Qt::LeftButton)) {
-             return;
-    }
-    if ((event->pos() - dragStartPosition).manhattanLength()
-              < QApplication::startDragDistance()) {
-             return;
-    }
+    if (event->buttons() & Qt::LeftButton) {
 
-    this->performDrag();
-
-    // propagate event to superclass
-    QTreeView::mouseMoveEvent(event);
+        if ((event->pos() - dragStartPosition).manhattanLength()
+                >= QApplication::startDragDistance()) {
+            this->performDrag();
+        }
+    } else { // propagate event to superclass
+        QTreeView::mouseMoveEvent(event);
+    }
 }

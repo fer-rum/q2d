@@ -2,6 +2,7 @@
 #define PORTGRAPHICSITEM_H
 
 #include "../model/PortDirection.h"
+#include "SchematicsSceneChild.h"
 
 #include <QBrush>
 #include <QGraphicsEllipseItem>
@@ -16,11 +17,11 @@ namespace gui {
 
     // forward declaration
     class ComponentGraphicsItem;
-    class SchematicsScene;
 
-class PortGraphicsItem
-        : public QObject,
-        public QGraphicsEllipseItem {
+class PortGraphicsItem :
+        public QObject,
+        public QGraphicsEllipseItem,
+        public SchematicsSceneChild {
     Q_OBJECT
 
 private:
@@ -43,16 +44,20 @@ private:
     QPen    m_defaultPen;
     QBrush  m_defaultBrush;
     QPointF m_dragStartPosition;
+
     bool    m_dragOver;
-    SchematicsScene*    m_scene;
+    static bool    m_wireDrawingMode;
+    static QGraphicsLineItem*  m_wireDrawingLineItem;
+    static QPointF m_wireDrawingStart;
+    static QPointF m_wireDrawingEnd;
+    static QLineF* m_wireDrawingLine;
 
     void performDrag();
 
 public:
-    explicit PortGraphicsItem(QString text,
-                              QPoint relativeCenterPosition,
+    explicit PortGraphicsItem(QPoint relativeCenterPosition,
                               model::PortDirection direction,
-                              ComponentGraphicsItem* parent = 0);
+                              ComponentGraphicsItem* parent);
 
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
@@ -67,6 +72,10 @@ public:
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event);
 
+    static bool wireDrawingMode();
+    static void setWireDrawingMode(bool mode, QPointF* origin = nullptr);
+
+    QString id() const;
 signals:
 
 public slots:

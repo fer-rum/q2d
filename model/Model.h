@@ -37,7 +37,7 @@ public:
     Model(Document* parent);
 
     void addComponent(Component* toAdd);
-    void connect(Node* start, Node* end);
+    Conductor* connect(Node* start, Node* end);
 };
 
 } // namespace model

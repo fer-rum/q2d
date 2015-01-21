@@ -27,7 +27,7 @@ Model::addComponent(Component* toAdd){
     this->components.append(toAdd);
 }
 
-void
+Conductor*
 Model::connect(Node* start, Node* end){
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
@@ -37,4 +37,5 @@ Model::connect(Node* start, Node* end){
     end->addDriver(toAdd);
 
     this->conductors.append(toAdd);
+    return toAdd;
 }

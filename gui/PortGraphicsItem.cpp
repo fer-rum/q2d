@@ -1,6 +1,7 @@
 #include "PortGraphicsItem.h"
 
 #include "../Constants.h"
+#include "../Document.h"
 #include "ComponentGraphicsItem.h"
 #include "SchematicsScene.h"
 
@@ -29,6 +30,12 @@ QBrush PortGraphicsItem::OUTPUT_PORT_BRUSH = QBrush(Qt::red);
 QBrush PortGraphicsItem::UNDEFINED_PORT_BRUSH = QBrush(Qt::gray);
 QBrush PortGraphicsItem::HOVER_PORT_BRUSH = QBrush(Qt::cyan);
 
+bool PortGraphicsItem::m_wireDrawingMode = false;
+QGraphicsLineItem*  PortGraphicsItem::m_wireDrawingLineItem = nullptr;
+QPointF PortGraphicsItem::m_wireDrawingStart = QPoint();
+QPointF PortGraphicsItem::m_wireDrawingEnd = QPoint();
+QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
+
 /**
  * @brief PortGraphicsItem::PortGraphicsItem
  * The item will automatically be added to the scene, its parent belongs to.
@@ -40,17 +47,16 @@ QBrush PortGraphicsItem::HOVER_PORT_BRUSH = QBrush(Qt::cyan);
  * @param parent
  */
 PortGraphicsItem::PortGraphicsItem(
-        QString text,
         QPoint relativeCenterPosition,
         model::PortDirection direction,
         ComponentGraphicsItem *parent)
-    : QObject(parent), QGraphicsEllipseItem(parent) {
+    : QObject(parent),
+      QGraphicsEllipseItem(parent),
+      SchematicsSceneChild(parent->SchematicsSceneChild::scene()) {
 
     Q_CHECK_PTR(parent);
-    Q_CHECK_PTR(parent->scene());
-    this->m_scene = parent->scene();
+    Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
 
-    this->setToolTip(text);
     this->setRect(relativeCenterPosition.x() - RADIUS,
                   relativeCenterPosition.y() - RADIUS,
                   DIAMETER, DIAMETER);
@@ -102,7 +108,7 @@ PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
 void
 PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
-             this->m_dragStartPosition = event->pos();
+        m_dragStartPosition = event->scenePos();
         event->setAccepted(true);
     } else {
         // propagate event to superclass
@@ -127,6 +133,17 @@ PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsEllipseItem::mouseMoveEvent(event);
 }
 
+/**
+ * @brief PortGraphicsItem::id is a convenience function
+ * @return
+ */
+QString
+PortGraphicsItem::id() const {
+    // TODO asserts
+    Document* container = m_scene->document();
+    return container->entry(this)->id();
+}
+
 void
 PortGraphicsItem::performDrag() {
 
@@ -134,16 +151,21 @@ PortGraphicsItem::performDrag() {
     QMimeData *mimeData = new QMimeData();
 
     // create the payload
-    QString payloadText = ""; /* TODO */
+
+    QString payloadText = this->id();
 
     mimeData->setData(MIME_WIRE_START_POS, payloadText.toUtf8());
 
     drag->setMimeData(mimeData);
 
-    this->m_scene->setWireDrawingMode(true, &(this->m_dragStartPosition));
-    qDebug() << "Start dragging line from Port";
+    m_wireDrawingMode = true;
+    m_wireDrawingEnd = QPointF();
+    m_wireDrawingLine = new QLineF(QPointF(), m_wireDrawingEnd);
+    m_wireDrawingLineItem = m_scene->addLine(*m_wireDrawingLine);
+    m_wireDrawingLineItem->setPos(this->mapToScene(RADIUS, RADIUS));
+    m_wireDrawingLineItem->setVisible(true);
 
-    // TODO the returned Action should be LINK
+    // TODO the returned Action should be LINK?
     drag->exec();
 }
 
@@ -152,9 +174,9 @@ PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
     QMimeData const * mimeData = event->mimeData();
 
     if(mimeData->hasFormat(MIME_WIRE_START_POS)){
+        this->setCursor(QCursor(Qt::CrossCursor));
         this->m_dragOver = true;
         event->accept();
-        qDebug() << "Port drag enter event";
     } else {
         QGraphicsEllipseItem::dragEnterEvent(event);
     }
@@ -163,11 +185,15 @@ PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
 void
 PortGraphicsItem::dragMoveEvent(QGraphicsSceneDragDropEvent* event){
 
-    if(this->m_dragOver){
-        qDebug() << "Port drag move event";
-        event->accept();
-    } else {
-        QGraphicsEllipseItem::dragMoveEvent(event);
+    if(m_dragOver && m_wireDrawingMode){
+            Q_CHECK_PTR(m_wireDrawingLine);
+            Q_CHECK_PTR(m_wireDrawingLineItem);
+            QPointF itemCoordinate =
+                    m_wireDrawingLineItem->mapFromScene(event->scenePos());
+            m_wireDrawingLine->setP2(itemCoordinate);
+            m_wireDrawingLineItem->setLine(*m_wireDrawingLine);
+            event->accept();
+            emit m_scene->sceneRectChanged(m_wireDrawingLineItem->boundingRect());
     }
 }
 
@@ -175,7 +201,6 @@ void
 PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
 
     if(m_dragOver){
-        qDebug() << "Port drag leave event";
         event->accept();
         this->m_dragOver = false;
     } else {
@@ -190,12 +215,17 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event){
     // make sure target is not source
     // inform the document about the happenings via signal/slot
 
-    qDebug() << "Port received drop event";
+    if(m_dragOver && m_wireDrawingMode){
+        m_dragOver = false;
 
-    this->m_dragOver = false;
-    this->m_scene->setWireDrawingMode(false);
+        QString senderId = QString::fromUtf8(event->mimeData()->data(MIME_WIRE_START_POS));
+        m_scene->document()->addWire(senderId, this->id());
 
+        event->accept();
+        this->update(); // TODO better emit this->changed?
+    } else {
+        QGraphicsEllipseItem::dropEvent(event);
+    }
 
-    this->update(); // TODO better emit this->changed?
-    QGraphicsEllipseItem::dropEvent(event);
+    m_wireDrawingMode = false;
 }

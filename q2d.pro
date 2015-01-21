@@ -41,7 +41,9 @@ SOURCES +=\
     metamodel/PortDescriptor.cpp \
     gui/PortGraphicsItem.cpp \
     gui/ComponentGraphicsItem.cpp \
-    DocumentEntry.cpp
+    DocumentEntry.cpp \
+    gui/WireGraphicsItem.cpp \
+    gui/SchematicsSceneChild.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -69,7 +71,9 @@ HEADERS  +=\
     metamodel/PortDescriptor.h \
     gui/PortGraphicsItem.h \
     gui/ComponentGraphicsItem.h \
-    DocumentEntry.h
+    DocumentEntry.h \
+    gui/WireGraphicsItem.h \
+    gui/SchematicsSceneChild.h
 
 FORMS    +=\
     gui/MainWindow.ui \

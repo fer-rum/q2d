@@ -20,16 +20,12 @@ class SchematicsScene
     Q_OBJECT
 private:
     bool    m_dragOver          = false;
-    bool    m_wireDrawingMode   = false;
-    QGraphicsLineItem*  m_wireDrawingLine;
+
     int     m_gridSize          = 20; // TODO read from Settings
 
 public:
     explicit SchematicsScene(Document* parent);
-//    virtual ~SchematicsScene();
-
-    bool wireDrawingMode() const;
-    void setWireDrawingMode(bool mode, QPointF* origin = nullptr);
+    Document* document() const;
 
     // cosmetic overrides
     void drawBackground(QPainter *painter, const QRectF &rect);
@@ -39,6 +35,9 @@ public:
     virtual void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
     virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent* event);
     virtual void dropEvent(QGraphicsSceneDragDropEvent* event);
+
+    // debug hook
+    virtual void addItem(QGraphicsItem* item);
 };
 
 } // namespace gui

@@ -3,6 +3,7 @@
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicsScene.h"
 #include "gui/PortGraphicsItem.h"
+#include "gui/WireGraphicsItem.h"
 #include "metamodel/ComponentType.h"
 #include "metamodel/PortDescriptor.h"
 #include "model/Node.h"
@@ -94,6 +95,7 @@ Document::addComponent(QString path, QPoint position){
     // connect model and component element
     DocumentEntry* entry = new DocumentEntry(id, modelComponent, schematicComponent);
     m_entries.append(entry);
+    schematicComponent->setToolTip(entry->id());
 
     // also add the ports
     this->addComponentPorts(type, id, modelComponent, schematicComponent);
@@ -107,32 +109,40 @@ Document::addComponentPorts(ComponentType* type,
 
     for(QObject* child : type->children()){
 
-    PortDescriptor* descriptor = dynamic_cast<PortDescriptor*>(child);
-    if(descriptor == nullptr){continue;}
+        PortDescriptor* descriptor = dynamic_cast<PortDescriptor*>(child);
+        if(descriptor == nullptr){continue;}
 
-    // build the unique id
-    QString id = componentId + HIERARCHY_SEPERATOR + descriptor->text();
+        // build the unique id
+        QString id = componentId + HIERARCHY_SEPERATOR + descriptor->text();
 
-    // add port graphics to schematic
-    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
-                  descriptor->text(), descriptor->position(), descriptor->direction(),
-                  schematicComponent);
-    this->schematic()->addItem(schematicPort);
+        // add port graphics to schematic
+        gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
+                                                   descriptor->position(),
+                                                   descriptor->direction(),
+                                                   schematicComponent);
+        // no need to add this to the scene, since the parent already is
+        // in the scene and the child inherits this
+        schematicPort->setToolTip(id);
 
-    // add port to model
-    model::Port* modelPort = new model::Port(descriptor->direction(),
-                                             modelComponent,
-                                             this->model());
-    m_entries.append(new DocumentEntry(id, modelPort, schematicPort));
-    // since the ports are linked to the component,
-    // they are implicitly added to the model by adding the component
+        // add port to model
+        model::Port* modelPort = new model::Port(
+                                     descriptor->direction(),
+                                     modelComponent,
+                                     this->model());
+        // create and add the document entry
+        DocumentEntry* entry = new DocumentEntry(id, modelPort, schematicPort);
+        m_entries.append(entry);
+        // since the ports are linked to the component,
+        // they are implicitly added to the model by adding the component
     }
 
 
 }
 
 DocumentEntry*
-Document::entry(QString id) const{
+Document::entry(const QString id) const{
+    Q_ASSERT(!id.isEmpty());
+
     for(DocumentEntry* entry : m_entries){
        if(entry->id() == id){
            return entry;
@@ -142,7 +152,7 @@ Document::entry(QString id) const{
 }
 
 DocumentEntry*
-Document::entry(QGraphicsItem* schematicElement) const {
+Document::entry(const QGraphicsItem* schematicElement) const {
     for(DocumentEntry* entry : m_entries){
         if(entry->schematicElement() == schematicElement){
             return entry;
@@ -152,11 +162,42 @@ Document::entry(QGraphicsItem* schematicElement) const {
 }
 
 DocumentEntry*
-Document::entry(model::ModelElement* modelElement) const {
+Document::entry(const model::ModelElement* modelElement) const {
     for(DocumentEntry* entry : m_entries){
         if(entry->modelElement() == modelElement){
             return entry;
         }
     }
     return nullptr;
+}
+
+void
+Document::addWire(QString senderNodeId, QString receiverNodeId){
+    DocumentEntry* sender = this->entry(senderNodeId);
+    DocumentEntry* receiver = this->entry(receiverNodeId);
+
+    Q_CHECK_PTR(sender);
+    Q_CHECK_PTR(receiver);
+
+    QString id = "wire from " + senderNodeId + " to " + receiverNodeId;
+
+    // create the wire graphics
+    gui::WireGraphicsItem* schematicWire = new gui::WireGraphicsItem(
+                                               sender->schematicElement()->pos(),
+                                               receiver->schematicElement()->pos(),
+                                               this->schematic());
+    this->schematic()->addItem(schematicWire);
+
+    // connect the nodes in the model
+    model::Node* startNode = dynamic_cast<model::Node*>(sender->modelElement());
+    model::Node* endNode = dynamic_cast<model::Node*>(receiver->modelElement());
+
+    Q_CHECK_PTR(startNode);
+    Q_CHECK_PTR(endNode);
+
+    model::Conductor* modelWire = this->model()->connect(startNode, endNode);
+
+    // add the document entry
+    DocumentEntry* entry = new DocumentEntry(id, modelWire, schematicWire);
+    m_entries.append(entry);
 }

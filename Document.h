@@ -38,7 +38,6 @@ class Document :
         public QStandardItem {
     Q_OBJECT
 private:
-
     /**
      * @brief componentFactory is a cached pointer to the ComponentFactory instance.
      */
@@ -54,10 +53,7 @@ private:
                            model::Component* modelComponent,
                            q2d::gui::ComponentGraphicsItem* schematicComponent);
 
-    // access helpers
-    DocumentEntry* entry(QString id) const;
-    DocumentEntry* entry(QGraphicsItem* schematicElement) const;
-    DocumentEntry* entry(model::ModelElement* modelElement) const;
+
 
 public:
     explicit Document(QString name, Project* parent);
@@ -67,6 +63,12 @@ public:
 
     // TODO rename: instantiateComponent?
     void addComponent(QString path, QPoint position);
+    void addWire(QString senderNodeId, QString receiverNodeId);
+
+    // access helpers
+    DocumentEntry* entry(const QString id) const;
+    DocumentEntry* entry(const QGraphicsItem* schematicElement) const;
+    DocumentEntry* entry(const model::ModelElement* modelElement) const;
 };
 
 } // namespace q2d
