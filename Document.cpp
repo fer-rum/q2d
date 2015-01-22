@@ -32,16 +32,18 @@ using namespace q2d::metamodel;
 Document::Document(QString name, Project* parent) :
     QObject(parent),
     QStandardItem(name) {
-
         Q_CHECK_PTR(parent);
 
     // obtain the component factory
-    ApplicationContext* context = dynamic_cast<ApplicationContext*>(parent->parent());
+    ApplicationContext* context =
+            dynamic_cast<ApplicationContext*>(parent->parent());
     Q_CHECK_PTR(context);
     this->componentFactory = context->getComponentFactory();
 
-    this->setData(QVariant::fromValue(new model::Model(this)), DocumentRole::MODEL);
-    this->setData(QVariant::fromValue(new gui::SchematicsScene(this)), DocumentRole::SCHEMATIC);
+    this->setData(QVariant::fromValue(new model::Model(this)),
+                  DocumentRole::MODEL);
+    this->setData(QVariant::fromValue(new gui::SchematicsScene(this)),
+                  DocumentRole::SCHEMATIC);
 }
 
 /**
@@ -84,8 +86,8 @@ Document::addComponent(QString path, QPoint position){
     QString id = type->generateId();
 
     // add component graphics to Schematic
-    gui::ComponentGraphicsItem* schematicComponent = new gui::ComponentGraphicsItem(
-                                            type, this->schematic(), position);
+    gui::ComponentGraphicsItem* schematicComponent =
+            new gui::ComponentGraphicsItem(type, this->schematic(), position);
     this->schematic()->addItem(schematicComponent);
 
     // add the component to the model
@@ -93,19 +95,30 @@ Document::addComponent(QString path, QPoint position){
     this->model()->addComponent(modelComponent);
 
     // connect model and component element
-    DocumentEntry* entry = new DocumentEntry(id, modelComponent, schematicComponent);
+    DocumentEntry* entry =
+            new DocumentEntry(id, modelComponent, schematicComponent);
     m_entries.append(entry);
     schematicComponent->setToolTip(entry->id());
 
     // also add the ports
-    this->addComponentPorts(type, id, modelComponent, schematicComponent);
+    this->addComponentPorts(type, entry);
 }
 
 void
-Document::addComponentPorts(ComponentType* type,
-                            QString componentId,
-                            model::Component* modelComponent,
-                            gui::ComponentGraphicsItem* schematicComponent){
+Document::addComponentPorts(ComponentType* type, DocumentEntry* parentEntry){
+    Q_CHECK_PTR(type);
+    Q_CHECK_PTR(parentEntry);
+
+    QString componentId =
+            parentEntry->id();
+    model::Component* modelComponent =
+            dynamic_cast<model::Component*>(parentEntry->modelElement());
+    gui::ComponentGraphicsItem* schematicComponent =
+            dynamic_cast<gui::ComponentGraphicsItem*>
+            (parentEntry->schematicElement());
+
+    Q_CHECK_PTR(modelComponent);
+    Q_CHECK_PTR(schematicComponent);
 
     for(QObject* child : type->children()){
 
@@ -130,7 +143,8 @@ Document::addComponentPorts(ComponentType* type,
                                      modelComponent,
                                      this->model());
         // create and add the document entry
-        DocumentEntry* entry = new DocumentEntry(id, modelPort, schematicPort);
+        DocumentEntry* entry =
+                new DocumentEntry(id, modelPort, schematicPort, parentEntry);
         m_entries.append(entry);
         // since the ports are linked to the component,
         // they are implicitly added to the model by adding the component
@@ -182,10 +196,15 @@ Document::addWire(QString senderNodeId, QString receiverNodeId){
     QString id = "wire from " + senderNodeId + " to " + receiverNodeId;
 
     // create the wire graphics
-    gui::WireGraphicsItem* schematicWire = new gui::WireGraphicsItem(
-                                               sender->schematicElement()->pos(),
-                                               receiver->schematicElement()->pos(),
-                                               this->schematic());
+    gui::PortGraphicsItem* senderItem =
+            dynamic_cast<gui::PortGraphicsItem*>(sender->schematicElement());
+    gui::PortGraphicsItem* receiverItem =
+            dynamic_cast<gui::PortGraphicsItem*>(receiver->schematicElement());
+
+    gui::WireGraphicsItem* schematicWire =
+            new gui::WireGraphicsItem(
+                senderItem,
+                receiverItem);
     this->schematic()->addItem(schematicWire);
 
     // connect the nodes in the model

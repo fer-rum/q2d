@@ -3,6 +3,8 @@
 #include "Constants.h"
 #include "model/ModelElement.h"
 
+#include <QtDebug>
+
 using namespace q2d;
 using namespace q2d::constants;
 
@@ -23,6 +25,9 @@ DocumentEntry::DocumentEntry(QString id, model::ModelElement* modelElement,
     this->m_schematicElement = schematicElement;
 
     this->m_parent = parent;
+
+    qDebug() << "DocumentEntry " << id << " at " << schematicElement->scenePos()
+                << " with parent " << (parent == nullptr? "null" : parent->id());
 }
 
 QString

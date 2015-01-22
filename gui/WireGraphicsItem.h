@@ -4,22 +4,32 @@
 #include "SchematicsSceneChild.h"
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
+#include <QPointF>
 
 namespace q2d {
 namespace gui {
 
+class PortGraphicsItem;
+
+/**
+ * @brief The WireGraphicsItem class
+ * The start is always (0, 0) in local coordinates.
+ */
 class WireGraphicsItem :
         public QGraphicsItem,
         public SchematicsSceneChild {
 private:
-    QPointF m_startPoint;
+    static const QPointF m_startPoint;
     QPointF m_endPoint;
 
-    QList<QLineF> m_children;
+    QList<QGraphicsLineItem*> m_children;
 
-    void clear();
+    // routing algorithms
+    void routeLeftToRight();
+    void routeStraight();
 public:
-    explicit WireGraphicsItem(QPointF start, QPointF end, SchematicsScene* scene);
+    WireGraphicsItem(QPointF start, QPointF end, SchematicsScene* scene);
+    WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end);
 
     // overrides
     virtual QRectF boundingRect() const;

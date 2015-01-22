@@ -26,12 +26,10 @@ enum DocumentRole {
 };
 
 // TODO documentation
-//     - controller in MVC
 // TODO referenced Documents?
 // TODO description text
 // TODO saving
 // TODO loading
-// TODO association between Schematic and Model elements
 
 class Document :
         public QObject,
@@ -39,19 +37,19 @@ class Document :
     Q_OBJECT
 private:
     /**
-     * @brief componentFactory is a cached pointer to the ComponentFactory instance.
+     * @brief componentFactory is a cached pointer to the
+     * ComponentFactory instance.
      */
     ComponentFactory* componentFactory;
 
     /**
-     * @brief m_entries keeps all the relations between model and schematic elements.
+     * @brief m_entries keeps all the relations between model and
+     * schematic elements.
      */
     QList<DocumentEntry*> m_entries;
 
     void addComponentPorts(metamodel::ComponentType* type,
-                           QString componentId,
-                           model::Component* modelComponent,
-                           q2d::gui::ComponentGraphicsItem* schematicComponent);
+                           DocumentEntry* parentEntry);
 
 
 

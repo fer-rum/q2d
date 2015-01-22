@@ -16,6 +16,7 @@ using namespace q2d::constants;
 
 int PortGraphicsItem::DIAMETER = 8;
 int PortGraphicsItem::RADIUS = DIAMETER / 2;
+QPointF PortGraphicsItem::CENTER_OFFSET = QPointF(RADIUS, RADIUS);
 
 QPen PortGraphicsItem::INPUT_PORT_PEN  = QPen(Qt::darkGreen);
 QPen PortGraphicsItem::IN_OUT_PORT_PEN = QPen(Qt::darkYellow);
@@ -57,9 +58,10 @@ PortGraphicsItem::PortGraphicsItem(
     Q_CHECK_PTR(parent);
     Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
 
-    this->setRect(relativeCenterPosition.x() - RADIUS,
-                  relativeCenterPosition.y() - RADIUS,
-                  DIAMETER, DIAMETER);
+    this->setPos(relativeCenterPosition.x() - RADIUS,
+                  relativeCenterPosition.y() - RADIUS);
+    this->setRect(0, 0, DIAMETER, DIAMETER);
+
 
     // select the Pen based on the Port direction
     switch(direction){
@@ -218,7 +220,8 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event){
     if(m_dragOver && m_wireDrawingMode){
         m_dragOver = false;
 
-        QString senderId = QString::fromUtf8(event->mimeData()->data(MIME_WIRE_START_POS));
+        QString senderId = QString::fromUtf8(
+                               event->mimeData()->data(MIME_WIRE_START_POS));
         m_scene->document()->addWire(senderId, this->id());
 
         event->accept();
@@ -228,4 +231,5 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event){
     }
 
     m_wireDrawingMode = false;
+    this->QGraphicsItem::scene()->removeItem(m_wireDrawingLineItem);
 }

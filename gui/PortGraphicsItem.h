@@ -28,6 +28,9 @@ private:
     // TODO make these changeable via the settings
     static int DIAMETER;
     static int RADIUS;
+    static QPointF CENTER_OFFSET;
+
+
 
     static QPen INPUT_PORT_PEN;
     static QPen IN_OUT_PORT_PEN;
@@ -55,6 +58,9 @@ private:
     void performDrag();
 
 public:
+
+    static QPointF centerOffset() { return CENTER_OFFSET; }
+
     explicit PortGraphicsItem(QPoint relativeCenterPosition,
                               model::PortDirection direction,
                               ComponentGraphicsItem* parent);
