@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include <QDir>
-#include <qt5/QtSvg/QGraphicsSvgItem>
+#include <QtSvg/QGraphicsSvgItem>
 
 // TODO constants for setting names
 

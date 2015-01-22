@@ -8,7 +8,7 @@
 #include <QLineF>
 #include <QPainter>
 #include <QtDebug>
-#include <qt5/QtSvg/QGraphicsSvgItem>
+#include <QtSvg/QGraphicsSvgItem>
 
 using namespace q2d::gui;
 using namespace q2d::constants;

@@ -4,7 +4,7 @@
 #include "PortDescriptor.h"
 
 #include <QtDebug>
-#include <qt5/QtSvg/QtSvg>
+#include <QtSvg/QtSvg>
 
 using namespace q2d::metamodel;
 
