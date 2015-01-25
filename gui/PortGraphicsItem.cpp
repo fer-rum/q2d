@@ -18,18 +18,18 @@ int PortGraphicsItem::DIAMETER = 8;
 int PortGraphicsItem::RADIUS = DIAMETER / 2;
 QPointF PortGraphicsItem::CENTER_OFFSET = QPointF(RADIUS, RADIUS);
 
-QPen PortGraphicsItem::INPUT_PORT_PEN  = QPen(Qt::darkGreen);
-QPen PortGraphicsItem::IN_OUT_PORT_PEN = QPen(Qt::darkYellow);
-QPen PortGraphicsItem::OUTPUT_PORT_PEN = QPen(Qt::darkRed);
-QPen PortGraphicsItem::UNDEFINED_PORT_PEN = QPen(Qt::darkGray);
-QPen PortGraphicsItem::HOVER_PORT_PEN = QPen(Qt::darkCyan);
+QPen PortGraphicsItem::PEN_INPUT_PORT  = QPen(Qt::darkGreen);
+QPen PortGraphicsItem::PEN_IN_OUT_PORT = QPen(Qt::darkYellow);
+QPen PortGraphicsItem::PEN_OUTPUT_PORT = QPen(Qt::darkRed);
+QPen PortGraphicsItem::PEN_UNDEFINED_PORT = QPen(Qt::darkGray);
+QPen PortGraphicsItem::PEN_HOVER_PORT = QPen(Qt::darkCyan);
 
 
-QBrush PortGraphicsItem::INPUT_PORT_BRUSH  = QBrush(Qt::green);
-QBrush PortGraphicsItem::IN_OUT_PORT_BRUSH = QBrush(Qt::yellow);
-QBrush PortGraphicsItem::OUTPUT_PORT_BRUSH = QBrush(Qt::red);
-QBrush PortGraphicsItem::UNDEFINED_PORT_BRUSH = QBrush(Qt::gray);
-QBrush PortGraphicsItem::HOVER_PORT_BRUSH = QBrush(Qt::cyan);
+QBrush PortGraphicsItem::BRUSH_INPUT_PORT  = QBrush(Qt::green);
+QBrush PortGraphicsItem::BRUSH_IN_OUT_PORT = QBrush(Qt::yellow);
+QBrush PortGraphicsItem::BRUSH_OUTPUT_PORT = QBrush(Qt::red);
+QBrush PortGraphicsItem::BRUSH_UNDEFINED_PORT = QBrush(Qt::gray);
+QBrush PortGraphicsItem::BRUSH_HOVER_PORT = QBrush(Qt::cyan);
 
 bool PortGraphicsItem::m_wireDrawingMode = false;
 QGraphicsLineItem*  PortGraphicsItem::m_wireDrawingLineItem = nullptr;
@@ -51,70 +51,76 @@ PortGraphicsItem::PortGraphicsItem(
         QPoint relativeCenterPosition,
         model::PortDirection direction,
         ComponentGraphicsItem *parent)
-    : QObject(parent),
-      QGraphicsEllipseItem(parent),
-      SchematicsSceneChild(parent->SchematicsSceneChild::scene()) {
+    : SchematicsSceneChild(parent->SchematicsSceneChild::scene(),
+                           parent) {
+    /* TODO: known quasi-bug
+     * Passing an anonymous new QGraphicsEllipseItem directly into the constructor
+     * of the SchematicsSceneChild leads to a SIGSEGV.
+     *
+     * I have as for now no idea why…
+     */
 
     Q_CHECK_PTR(parent);
     Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
 
-    this->setPos(relativeCenterPosition.x() - RADIUS,
-                  relativeCenterPosition.y() - RADIUS);
-    this->setRect(0, 0, DIAMETER, DIAMETER);
+    QAbstractGraphicsShapeItem* newActual = new QGraphicsEllipseItem(0, 0, DIAMETER, DIAMETER, this);
+    Q_CHECK_PTR(newActual);
 
-
-    // select the Pen based on the Port direction
+    // select the Pen and Brush based on the Port direction
     switch(direction){
     case model::PortDirection::IN:
-        this->m_defaultPen = INPUT_PORT_PEN;
-        this->m_defaultBrush = INPUT_PORT_BRUSH;
+        this->m_defaultPen = PEN_INPUT_PORT;
+        this->m_defaultBrush = BRUSH_INPUT_PORT;
         break;
     case model::PortDirection::IN_OUT:
-        this->m_defaultPen = IN_OUT_PORT_PEN;
-        this->m_defaultBrush = IN_OUT_PORT_BRUSH;
+        this->m_defaultPen = PEN_IN_OUT_PORT;
+        this->m_defaultBrush = BRUSH_IN_OUT_PORT;
         break;
     case model::PortDirection::OUT:
-        this->m_defaultPen = OUTPUT_PORT_PEN;
-        this->m_defaultBrush = OUTPUT_PORT_BRUSH;
+        this->m_defaultPen = PEN_OUTPUT_PORT;
+        this->m_defaultBrush = BRUSH_OUTPUT_PORT;
         break;
     default:
-        this->m_defaultPen = UNDEFINED_PORT_PEN;
-        this->m_defaultBrush = UNDEFINED_PORT_BRUSH;
+        this->m_defaultPen = PEN_UNDEFINED_PORT;
+        this->m_defaultBrush = BRUSH_UNDEFINED_PORT;
         break;
     }
 
-    this->setPen(this->m_defaultPen);
-    this->setBrush(this->m_defaultBrush);
+    newActual->setPen(this->m_defaultPen);
+    newActual->setBrush(this->m_defaultBrush);
+
+    this->addActual(newActual);
+
+    this->setPos(relativeCenterPosition.x() - RADIUS,
+                  relativeCenterPosition.y() - RADIUS);
 
     this->setAcceptHoverEvents(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
     this->setAcceptDrops(true);
+    Q_ASSERT(this->actual()->isVisible());
 }
 
 void
 PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
-    this->setPen(HOVER_PORT_PEN);
-    this->setBrush(HOVER_PORT_BRUSH);
-    QGraphicsEllipseItem::hoverEnterEvent(event);
+    this->actual()->setPen(PEN_HOVER_PORT);
+    this->actual()->setBrush(BRUSH_HOVER_PORT);
     this->setCursor(QCursor(Qt::CrossCursor));
+    event->accept();
 }
 
 void
 PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
-    this->setPen(this->m_defaultPen);
-    this->setBrush(this->m_defaultBrush);
+    this->actual()->setPen(this->m_defaultPen);
+    this->actual()->setBrush(this->m_defaultBrush);
     this->setCursor(QCursor(Qt::ArrowCursor));
-    QGraphicsEllipseItem::hoverEnterEvent(event);
+    event->accept();
 }
 
 void
 PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
     if (event->button() == Qt::LeftButton) {
         m_dragStartPosition = event->scenePos();
-        event->setAccepted(true);
-    } else {
-        // propagate event to superclass
-        QGraphicsEllipseItem::mousePressEvent(event);
+        event->accept();
     }
 }
 
@@ -124,15 +130,15 @@ PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     if (!(event->buttons() & Qt::LeftButton)) {
              return;
     }
+
     if ((event->pos() - m_dragStartPosition).manhattanLength()
               < QApplication::startDragDistance()) {
              return;
     }
 
+    // we indeed are dragging
     this->performDrag();
-
-    // propagate event to superclass
-    QGraphicsEllipseItem::mouseMoveEvent(event);
+    event->accept();
 }
 
 /**
@@ -146,6 +152,9 @@ PortGraphicsItem::id() const {
     return container->entry(this)->id();
 }
 
+/**
+ * @brief PortGraphicsItem::performDrag initializes and performs a QDrag.
+ */
 void
 PortGraphicsItem::performDrag() {
 
@@ -179,8 +188,6 @@ PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
         this->setCursor(QCursor(Qt::CrossCursor));
         this->m_dragOver = true;
         event->accept();
-    } else {
-        QGraphicsEllipseItem::dragEnterEvent(event);
     }
 }
 
@@ -203,10 +210,8 @@ void
 PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
 
     if(m_dragOver){
+        m_dragOver = false;
         event->accept();
-        this->m_dragOver = false;
-    } else {
-        QGraphicsEllipseItem::dragLeaveEvent(event);
     }
 }
 
@@ -226,10 +231,8 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event){
 
         event->accept();
         this->update(); // TODO better emit this->changed?
-    } else {
-        QGraphicsEllipseItem::dropEvent(event);
     }
 
     m_wireDrawingMode = false;
-    this->QGraphicsItem::scene()->removeItem(m_wireDrawingLineItem);
+    this->scene()->removeItem(m_wireDrawingLineItem);
 }

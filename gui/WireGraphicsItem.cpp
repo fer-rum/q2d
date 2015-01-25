@@ -8,6 +8,9 @@
 
 using namespace q2d::gui;
 
+QPen WireGraphicsItem::PEN_DEFAULT = QPen(Qt::black, 0);
+QPen WireGraphicsItem::PEN_HOVER = QPen(Qt::darkRed, 4);
+
 const QPointF WireGraphicsItem::m_startPoint = QPointF(0, 0);
 
 /**
@@ -20,7 +23,6 @@ const QPointF WireGraphicsItem::m_startPoint = QPointF(0, 0);
  */
 WireGraphicsItem::WireGraphicsItem(
         QPointF start, QPointF end, SchematicsScene* scene) :
-    QGraphicsItem(),
     SchematicsSceneChild(scene){
     qDebug() << "Wire Constructor: start = " << start
                 << " end = " << end;
@@ -29,7 +31,6 @@ WireGraphicsItem::WireGraphicsItem(
     m_endPoint = this->mapFromScene(end);
     this->route();
     this->setVisible(true);
-    this->setFlag(QGraphicsItem::ItemIsSelectable);
     // move this to the background to be overdrawn by the ports
     this->setZValue(-1);
 }
@@ -39,6 +40,20 @@ WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* en
           start->scenePos() + PortGraphicsItem::centerOffset(),
           end->scenePos() + PortGraphicsItem::centerOffset(),
           start->SchematicsSceneChild::scene()){}
+
+/**
+ * @brief WireGraphicsItem::addChild is a convenience method
+ * for adding child lines and setting them up properly.
+ *
+ * @param start in item coordinates
+ * @param end in item coordinates
+ */
+void
+WireGraphicsItem::addChild(QPointF start, QPointF end){
+
+    QGraphicsLineItem* newLine = new WireGraphicsLineItem(start, end, this);
+    this->addActual(newLine);
+}
 
 /**
  * @brief WireGraphicsItem::route (re-)creates the wire routing
@@ -60,43 +75,71 @@ WireGraphicsItem::route(){
 void
 WireGraphicsItem:: routeStraight(){
 
-    m_children.clear();
-    m_children.append(
-              new QGraphicsLineItem(QLineF(m_startPoint, m_endPoint), this));
-    Q_ASSERT(m_children.count() == 1);
+    this->clearActuals();
+   this->addChild(m_startPoint, m_endPoint);
+    Q_ASSERT(this->countActuals() == 1);
 }
 
 void
 WireGraphicsItem::routeLeftToRight(){
 
-    m_children.clear();
+    this->clearActuals();
 
     qreal intermediateX = (m_startPoint.x() + m_endPoint.x()) / 2;
     QPointF routingPoint0 = QPointF(intermediateX, m_startPoint.y());
     QPointF routingPoint1 = QPointF(intermediateX, m_endPoint.y());
 
-    m_children.append(
-              new QGraphicsLineItem(QLineF(m_startPoint, routingPoint0), this));
-    m_children.append(
-               new QGraphicsLineItem(QLineF(routingPoint0, routingPoint1), this));
-    m_children.append(
-               new QGraphicsLineItem(QLineF(routingPoint1, m_endPoint), this));
+    this->addChild(m_startPoint, routingPoint0);
+    this->addChild(routingPoint0, routingPoint1);
+    this->addChild(routingPoint1, m_endPoint);
 
-    Q_ASSERT(m_children.count() == 3);
+    Q_ASSERT(this->countActuals() == 3);
 
 }
 
+/**
+ * @brief WireGraphicsItem::slot_setHovered should be called if any child is hovered.
+ * This will cause all children of this item to change its appearence according to the parameter.
+ * @param isHovered
+ */
+void
+WireGraphicsItem::slot_setHovered(bool isHovered){
 
-QRectF
-WireGraphicsItem::boundingRect() const {
-    return QRectF(m_startPoint, m_endPoint);
+    if(isHovered){
+        for(QGraphicsItem* actual : this->actuals()){
+            QGraphicsLineItem* lineActual =
+                    dynamic_cast<QGraphicsLineItem*>(actual);
+            Q_CHECK_PTR(lineActual);
+            lineActual->setPen(PEN_HOVER);
+        }
+    } else {
+        for(QGraphicsItem* actual : this->actuals()){
+            QGraphicsLineItem* lineActual =
+                    dynamic_cast<QGraphicsLineItem*>(actual);
+            Q_CHECK_PTR(lineActual);
+            lineActual->setPen(PEN_DEFAULT);
+        }
+    }
+}
+
+WireGraphicsLineItem::WireGraphicsLineItem(
+        QPointF start, QPointF end, WireGraphicsItem* parent) :
+    QGraphicsLineItem(QLineF(start, end), parent){
+
+    Q_CHECK_PTR(parent);
+    m_parent = parent;
+
+    this->setAcceptHoverEvents(true);
 }
 
 void
-WireGraphicsItem::paint(QPainter *painter,
-                   const QStyleOptionGraphicsItem *option,
-                   QWidget *widget){
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-    Q_UNUSED(painter);
+WireGraphicsLineItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event){
+    m_parent->slot_setHovered(true);
+    event->accept();
+}
+
+void
+WireGraphicsLineItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event){
+    m_parent->slot_setHovered(false);
+    event->accept();
 }

@@ -8,9 +8,11 @@
 using namespace q2d::gui;
 using namespace q2d::metamodel;
 
-ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type, SchematicsScene* scene, QPoint position) :
-    QGraphicsSvgItem(type->symbolPath()),
-    SchematicsSceneChild(scene){
+ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
+                                             SchematicsScene* scene,
+                                             QPoint position)
+    : SchematicsSceneChild(scene,
+                           new QGraphicsSvgItem(type->symbolPath())){
     this->setPos(position);
     this->setFlag(QGraphicsItem::ItemIsMovable);
     this->setFlag(QGraphicsItem::ItemIsSelectable);

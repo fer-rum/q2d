@@ -18,11 +18,13 @@ namespace gui {
     // forward declaration
     class ComponentGraphicsItem;
 
-class PortGraphicsItem :
-        public QObject,
-        public QGraphicsEllipseItem,
-        public SchematicsSceneChild {
-    Q_OBJECT
+/**
+ * @brief The PortGraphicsItem class
+ * It has a QGraphicsEllipseItem as child to avoid inheritance conflicts
+ * between QGraphicsItem and QObject and keep the code flexible, should one
+ * decide, that an ellipse is not enough.
+ */
+class PortGraphicsItem : public SchematicsSceneChild {
 
 private:
     // TODO make these changeable via the settings
@@ -32,17 +34,17 @@ private:
 
 
 
-    static QPen INPUT_PORT_PEN;
-    static QPen IN_OUT_PORT_PEN;
-    static QPen OUTPUT_PORT_PEN;
-    static QPen UNDEFINED_PORT_PEN;
-    static QPen HOVER_PORT_PEN;
+    static QPen PEN_INPUT_PORT;
+    static QPen PEN_IN_OUT_PORT;
+    static QPen PEN_OUTPUT_PORT;
+    static QPen PEN_UNDEFINED_PORT;
+    static QPen PEN_HOVER_PORT;
 
-    static QBrush INPUT_PORT_BRUSH;
-    static QBrush IN_OUT_PORT_BRUSH;
-    static QBrush OUTPUT_PORT_BRUSH;
-    static QBrush UNDEFINED_PORT_BRUSH;
-    static QBrush HOVER_PORT_BRUSH;
+    static QBrush BRUSH_INPUT_PORT;
+    static QBrush BRUSH_IN_OUT_PORT;
+    static QBrush BRUSH_OUTPUT_PORT;
+    static QBrush BRUSH_UNDEFINED_PORT;
+    static QBrush BRUSH_HOVER_PORT;
 
     QPen    m_defaultPen;
     QBrush  m_defaultBrush;

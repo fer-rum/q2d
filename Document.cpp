@@ -128,6 +128,8 @@ Document::addComponentPorts(ComponentType* type, DocumentEntry* parentEntry){
         // build the unique id
         QString id = componentId + HIERARCHY_SEPERATOR + descriptor->text();
 
+        Q_ASSERT(!descriptor->position().isNull());
+
         // add port graphics to schematic
         gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
                                                    descriptor->position(),

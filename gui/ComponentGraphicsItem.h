@@ -13,11 +13,11 @@ class ComponentType;
 
 namespace gui {
 
-class ComponentGraphicsItem :
-        public QGraphicsSvgItem,
-        public SchematicsSceneChild
-{
+class ComponentGraphicsItem : public SchematicsSceneChild {
     Q_OBJECT
+private:
+    QGraphicsSvgItem* m_actuals; // the actually item that gets displayed
+
 public:
     explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene *scene, QPoint position);
 
