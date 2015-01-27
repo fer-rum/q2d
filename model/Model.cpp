@@ -2,6 +2,8 @@
 
 #include "../Document.h"
 
+#include <QtDebug>
+
 using namespace q2d::model;
 
 /**
@@ -15,16 +17,20 @@ Model::Model(Document* parent)
 
     Q_CHECK_PTR(parent);
 
-    this->name = parent->text();
-    this->components = QList<Component*>();
-    this->conductors = QList<Conductor*>();
-    this->outsidePorts = QList<Port*>();
+    m_name = parent->text();
+    m_components = QList<Component*>();
+    m_conductors = QList<Conductor*>();
+    m_outsidePorts = QList<Port*>();
+
+    qDebug() << "Model: creating new model " << m_name << "";
 }
 
 void
 Model::addComponent(Component* toAdd){
     Q_CHECK_PTR(toAdd);
-    this->components.append(toAdd);
+    this->m_components.append(toAdd);
+
+    qDebug() << "Model: Added component of type \"" << toAdd->type()->text() << "\"";
 }
 
 Conductor*
@@ -36,6 +42,6 @@ Model::connect(Node* start, Node* end){
     start->addDrivenElement(toAdd);
     end->addDriver(toAdd);
 
-    this->conductors.append(toAdd);
+    this->m_conductors.append(toAdd);
     return toAdd;
 }

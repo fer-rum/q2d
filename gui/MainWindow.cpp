@@ -19,12 +19,12 @@ using namespace q2d::gui;
 using namespace q2d::metamodel;
 
 MainWindow::MainWindow(ApplicationContext* parent) :
-    QMainWindow(), ui(new Ui::MainWindow){
+    QMainWindow(), m_ui(new Ui::MainWindow){
 
     Q_CHECK_PTR(parent);
     this->context = parent;
 
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     this->application = qobject_cast<Application*>(Application::instance());
 }
@@ -39,12 +39,17 @@ MainWindow::setupSignalsAndSlots(){
     // TODO move to ApplicationContext?
 
     // Menus
-    connect(this->ui->actionExit, SIGNAL(triggered()), this->application, SLOT(quit()));
-    connect(this->ui->action_createProject, SIGNAL(triggered()), this, SLOT(slot_createProject()));
-    connect(this->ui->action_createDocument, SIGNAL(triggered()), this, SLOT(slot_createDocument()));
+    connect(m_ui->actionExit, &QAction::triggered,
+            application, &Application::quit);
+    connect(m_ui->action_createProject, &QAction::triggered,
+            this, &MainWindow::slot_createProject);
+    connect(m_ui->action_createDocument, &QAction::triggered,
+            this, &MainWindow::slot_createDocument);
+    connect(m_ui->action_saveProject, &QAction::triggered,
+            context, &ApplicationContext::signal_saveProject);
 
     // buttons
-    connect(this->ui->newProjectButton, SIGNAL(clicked()), this, SLOT(slot_createProject()));
+    connect(this->m_ui->newProjectButton, SIGNAL(clicked()), this, SLOT(slot_createProject()));
 
     // connections to the application context
     connect(this, SIGNAL(signal_createProjectRequested(QString)), this->context, SLOT(slot_newProject(QString)));
@@ -57,8 +62,8 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument){
 
     // TODO check if there is already a tab opened for the document
 
-    SchematicsTab* newTab = new SchematicsTab(this->ui->schematicsTabWidget, relatedDocument);
-    this->ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
+    SchematicsTab* newTab = new SchematicsTab(this->m_ui->schematicsTabWidget, relatedDocument);
+    this->m_ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
     // TODO connect signals and slots
 }
@@ -94,7 +99,7 @@ MainWindow::slot_createDocument(){
 
     // make sure the model is set up properly
     // so we can enter the documents
-    Q_CHECK_PTR(this->ui->documentListView->model());
+    Q_CHECK_PTR(this->m_ui->documentListView->model());
 
     // get name
     bool ok;
@@ -121,12 +126,17 @@ MainWindow::slot_createDocument(){
 
 void
 MainWindow::slot_updateProjectName(QString name){
-    this->ui->projectNameLabel->setText(name);
+    this->m_ui->projectNameLabel->setText(name);
+}
+
+void
+MainWindow::slot_enableProjectSaving(bool enabled){
+    this->m_ui->action_saveProject->setEnabled(enabled);
 }
 
 void
 MainWindow::slot_enableDocumentMenus(bool enabled){
-    this->ui->action_createDocument->setEnabled(enabled);
+    this->m_ui->action_createDocument->setEnabled(enabled);
 }
 
 /**
@@ -141,9 +151,9 @@ MainWindow::slot_setDocumentModel(QStandardItemModel* model){
 
     Q_CHECK_PTR(model);
 
-    this->ui->documentListView->setModel(model);
+    this->m_ui->documentListView->setModel(model);
 
-    connect(this->ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
+    connect(this->m_ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
 }
 
 void
@@ -164,22 +174,22 @@ MainWindow::slot_openDocumentTab(Document* document){
 
 void
 MainWindow::slot_setComponentModel(QStandardItemModel* model){
-    this->ui->componentTreeView->setModel(model);
+    this->m_ui->componentTreeView->setModel(model);
 }
 
 void q2d::gui::MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
-    this->ui->schematicsTabWidget->removeTab(index);
+    this->m_ui->schematicsTabWidget->removeTab(index);
 }
 
 void q2d::gui::MainWindow::on_addTypeButton_clicked() {
 
 
-    Q_CHECK_PTR(this->ui->componentTreeView->model());
+    Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
     ComponentFactory* componentFactory = this->context->getComponentFactory();
 
     // get the currently selected entry as parent (if eligible)
-    QModelIndex currentIndex = ui->componentTreeView->currentIndex();
+    QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
     ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
 
     QString fileName;
@@ -203,12 +213,12 @@ void q2d::gui::MainWindow::on_addTypeButton_clicked() {
 
 void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
 
-    Q_CHECK_PTR(this->ui->componentTreeView->model());
+    Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
     ComponentFactory* componentFactory = this->context->getComponentFactory();
 
     // get the currently selected entry as parent (if eligible)
-    QModelIndex currentIndex = ui->componentTreeView->currentIndex();
+    QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
     ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
 
     // get the name for the new category

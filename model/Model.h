@@ -29,10 +29,10 @@ class Model : public QObject {
     Q_OBJECT
 
 private:
-    QString name;
-    QList<Component*> components;
-    QList<Conductor*> conductors;
-    QList<Port*> outsidePorts;
+    QString m_name;
+    QList<Component*> m_components;
+    QList<Conductor*> m_conductors;
+    QList<Port*> m_outsidePorts;
 public:
     Model(Document* parent);
 

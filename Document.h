@@ -6,6 +6,7 @@
 #include "gui/SchematicsScene.h"
 #include "metamodel/ComponentType.h"
 
+#include <QDir>
 #include <QObject>
 #include <QStandardItem>
 #include <QString>
@@ -65,8 +66,10 @@ public:
 
     // access helpers
     DocumentEntry* entry(const QString id) const;
-    DocumentEntry* entry(const QGraphicsItem* schematicElement) const;
+    DocumentEntry* entry(const gui::SchematicsSceneChild* schematicElement) const;
     DocumentEntry* entry(const model::ModelElement* modelElement) const;
+
+    void save(QDir saveDir);
 };
 
 } // namespace q2d

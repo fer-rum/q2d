@@ -14,7 +14,7 @@
    <string>q2d</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout" rowstretch="1,5,0" columnstretch="1,4,0,0,0,0" rowminimumheight="0,0,0" columnminimumwidth="0,0,0,0,0,0">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="1,5" columnstretch="1,4" rowminimumheight="0,0" columnminimumwidth="0,0">
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="projectLayout">
       <item>
@@ -162,7 +162,7 @@ Edit your description for the current document here</string>
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>27</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -179,11 +179,16 @@ Edit your description for the current document here</string>
     <addaction name="action_loadProject"/>
     <addaction name="action_saveProject"/>
     <addaction name="action_closeProject"/>
-    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuDocument">
+    <property name="title">
+     <string>Document</string>
+    </property>
     <addaction name="action_createDocument"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProject"/>
+   <addaction name="menuDocument"/>
   </widget>
   <action name="actionExit">
    <property name="text">
@@ -204,6 +209,9 @@ Edit your description for the current document here</string>
    </property>
   </action>
   <action name="action_saveProject">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save Project</string>
    </property>
@@ -214,9 +222,6 @@ Edit your description for the current document here</string>
    </property>
   </action>
   <action name="action_createDocument">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Create Document</string>
    </property>

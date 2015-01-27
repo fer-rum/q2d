@@ -1,6 +1,7 @@
 #ifndef COMPONENTGRAPHICSITEM_H
 #define COMPONENTGRAPHICSITEM_H
 
+#include "Constants.h"
 #include "SchematicsSceneChild.h"
 #include <QGraphicsSvgItem>
 
@@ -17,6 +18,10 @@ class ComponentGraphicsItem : public SchematicsSceneChild {
     Q_OBJECT
 private:
     QGraphicsSvgItem* m_actuals; // the actually item that gets displayed
+    metamodel::ComponentType* m_type;
+
+protected:
+    virtual QString specificType();
 
 public:
     explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene *scene, QPoint position);

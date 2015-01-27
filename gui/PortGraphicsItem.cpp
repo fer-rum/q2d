@@ -66,6 +66,7 @@ PortGraphicsItem::PortGraphicsItem(
     QAbstractGraphicsShapeItem* newActual = new QGraphicsEllipseItem(0, 0, DIAMETER, DIAMETER, this);
     Q_CHECK_PTR(newActual);
 
+    m_direction = direction;
     // select the Pen and Brush based on the Port direction
     switch(direction){
     case model::PortDirection::IN:
@@ -98,6 +99,11 @@ PortGraphicsItem::PortGraphicsItem(
     this->setAcceptedMouseButtons(Qt::LeftButton);
     this->setAcceptDrops(true);
     Q_ASSERT(this->actual()->isVisible());
+}
+
+QString
+PortGraphicsItem::specificType(){
+    return q2d::model::portDirectionToQString(m_direction);
 }
 
 void

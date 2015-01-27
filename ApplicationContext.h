@@ -15,6 +15,7 @@ namespace q2d {
 
     class ComponentFactory;
     class Project;
+    class Document;
 
 
 // TODO documentation
@@ -38,10 +39,15 @@ public:
 
 signals:
      void signal_projectNameChanged(QString newName);
+     void signal_canSaveProjects(bool newState);
      void signal_canAddDocuments(bool newState);
      void signal_createDocument(QString name);
      void signal_documentModelChanged(QStandardItemModel* model);
      void signal_componentModelChanged(QStandardItemModel* model);
+     void signal_saveProject();
+
+     // forwarding signal to MainWindow
+     void signal_showDocument(Document* document);
 
 public slots:
     void slot_newDocument(QString name);

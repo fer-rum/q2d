@@ -4,6 +4,7 @@
 
 #include "Document.h"
 
+#include <QDir>
 #include <QList>
 #include <QObject>
 #include <QSettings>
@@ -20,17 +21,18 @@ namespace q2d {
 class Project : public QObject {
     Q_OBJECT
 private:
-    ApplicationContext* applicationContext;
-    QString name;
-    QStandardItemModel documents;
-    QSettings projectSettings;
+    ApplicationContext* m_applicationContext;
+    QString             m_name;
+    QStandardItemModel  m_documents;
+    QSettings           m_projectSettings;
 
+    void save(QDir projectDirectory);
 public:
-    Project(QString name, ApplicationContext *parent = 0);
+    Project(QString name, ApplicationContext *parent = nullptr);
 
     QStandardItemModel* getDocuments();
 
-    void createDocument(QString name);
+    void createDocument(QString m_name);
 // TODO    void deleteDocument(Document &toDelete);
 
     void setupSignalsAndSlots();
@@ -40,7 +42,8 @@ signals:
     void signal_nameChanged(QString newName);
 
 public slots:
-    void slot_newDocument(QString name);
+    void slot_newDocument(QString m_name);
+    void slot_save();
 
 };
 

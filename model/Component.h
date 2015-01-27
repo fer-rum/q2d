@@ -30,6 +30,8 @@ public:
     Component(metamodel::ComponentType* type, Model* model, Model* internalModel = nullptr);
 
     Port* createPort(PortDirection direction);
+
+    metamodel::ComponentType* type() const;
 };
 
 } // namespace model

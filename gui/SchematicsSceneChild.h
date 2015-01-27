@@ -4,6 +4,7 @@
 #include <QAbstractGraphicsShapeItem>
 #include <QGraphicsObject>
 #include <QGraphicsSvgItem>
+#include <QJsonObject>
 #include <QList>
 
 namespace q2d {
@@ -24,8 +25,20 @@ class SchematicsScene;
  *
  * Per default paint calls are directed to this actual and the boundingRect is
  * derived from it.
+ *
+ * JSON generation:
+ * Some methods needed for generation JSON have to be overridden by the subclass.
+ * <ul>
+ * <li>specificType() is more detailed wit regard to port direction,
+ * component type etc. Also see the concrete implementations documentation.</li>
+ * <li>additionalJson() may be overridden if there are some more specific settings
+ * to be stored while saving.</li>
+ * </ul>
  */
 class SchematicsSceneChild : public QGraphicsObject {
+
+    // TODO maybe cache and update the generated Json,
+    // it may also be used as better dragging text or as tooltip?
 
 private:
     QList<QGraphicsItem*> m_actuals;
@@ -46,17 +59,17 @@ protected:
 
     void addActual(QGraphicsItem* actual);
 
-    void clearActuals()
-    { m_actuals.clear(); }
-
-    int countActuals() const
-    { return m_actuals.count(); }
-
+    void clearActuals(){ m_actuals.clear(); }
+    int countActuals() const { return m_actuals.count(); }
     QAbstractGraphicsShapeItem* actual() const;
-
-    QList<QGraphicsItem*> actuals() const
-    { return m_actuals; }
+    QList<QGraphicsItem*> actuals() const { return m_actuals; }
     // TODO add overrides as needed
+
+    // for JSON generation
+    // you must/may want to override these.
+    virtual QString specificType() = 0;
+    virtual QJsonObject* additionalJson()
+    { return nullptr; }
 
 public:
     SchematicsSceneChild(SchematicsScene* scene,
@@ -74,6 +87,7 @@ public:
     virtual void paint(QPainter* painter,
                        const QStyleOptionGraphicsItem* option,
                        QWidget* widget = nullptr);
+    virtual QJsonObject* toJson();
 };
 
 } // namespace gui

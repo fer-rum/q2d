@@ -136,15 +136,15 @@ ComponentFactory::createTypeFronJson(
         // port position
         QJsonObject posObject =
                 portObject.value(JSON_PORT_POSITION).toObject();
-        int x = posObject.value(JSON_PORT_POSITION_X).toInt();
-        int y = posObject.value(JSON_PORT_POSITION_Y).toInt();
+        int x = posObject.value(JSON_POSITION_X).toInt();
+        int y = posObject.value(JSON_POSITION_Y).toInt();
         QPoint portPosition = QPoint(x, y);
 
         // port direction
         QString dirString = portObject.value(JSON_PORT_DIRECTION)
                             .toString("undef");
         model::PortDirection portDirection =
-                model::portDirectionFromQString(dirString);
+                model::qStringToPortDirection(dirString);
 
         result->addPort(portName, portPosition, portDirection);
     }

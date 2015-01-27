@@ -1,7 +1,10 @@
 #include "SchematicsSceneChild.h"
 #include "SchematicsScene.h"
+#include "Constants.h"
+#include "JsonHelpers.h"
 
 using namespace q2d::gui;
+using namespace q2d::constants;
 
 SchematicsSceneChild::SchematicsSceneChild(SchematicsScene *scene, SchematicsSceneChild* parent)
     : QGraphicsObject(parent) {
@@ -31,9 +34,16 @@ SchematicsSceneChild::addActual(QGraphicsItem *actual){
     this->recalculateBoundingRect();
 }
 
+/**
+ * @brief SchematicsSceneChild::actual gives the actual element
+ * under the assumption that there is only exactly one item
+ * in the list of actuals.
+ * @return
+ */
 QAbstractGraphicsShapeItem*
 SchematicsSceneChild::actual() const {
     Q_ASSERT(!m_actuals.isEmpty());
+    Q_ASSERT(m_actuals.count() == 1);
     QAbstractGraphicsShapeItem* result =
             dynamic_cast<QAbstractGraphicsShapeItem*>(m_actuals.first());
     Q_CHECK_PTR(result);
@@ -95,4 +105,20 @@ SchematicsSceneChild::paint(QPainter* painter,
     for(QGraphicsItem* actual : m_actuals){
         actual->paint(painter, option, widget);
     }
+}
+
+QJsonObject*
+SchematicsSceneChild::toJson(){
+
+    QJsonObject* result = new QJsonObject();
+
+    result->insert(JSON_DOCENTRY_TYPE, QJsonValue(this->specificType()));
+    result->insert(JSON_SCHEMATIC_POSITION, PointToJson(this->scenePos()));
+
+    QJsonObject* additionalInfo = this->additionalJson();
+    if(additionalInfo != nullptr){
+        result->insert(JSON_SCHEMATIC_ADDITIONAL, QJsonValue(*(additionalInfo)));
+    }
+
+    return result;
 }

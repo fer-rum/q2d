@@ -21,10 +21,12 @@ namespace q2d {
 
 namespace gui {
 
+// TODO decide: who sets up signal slots between gui elements?
+// the UI designer or the code?
 class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
-    Ui::MainWindow* ui;
+    Ui::MainWindow* m_ui;
     q2d::Application* application;
     q2d::ApplicationContext* context;
 
@@ -48,6 +50,7 @@ signals:
 public slots:
     void slot_createProject();
     void slot_updateProjectName(QString name);
+    void slot_enableProjectSaving(bool enabled = true);
     void slot_enableDocumentMenus(bool enabled = true);
     void slot_setDocumentModel(QStandardItemModel* model);
     void slot_createDocument();
@@ -59,7 +62,7 @@ public slots:
     void on_schematicsTabWidget_tabCloseRequested(int index);
     void on_addTypeButton_clicked();
     void on_addCategoryButton_clicked();
-private slots:
+
 };
 
 } // namespace gui

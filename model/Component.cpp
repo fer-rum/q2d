@@ -28,3 +28,8 @@ Component::createPort(PortDirection direction){
     m_ports.append(newPort);
     return newPort;
 }
+
+ComponentType*
+Component::type() const {
+    return m_type;
+}

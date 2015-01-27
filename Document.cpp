@@ -2,6 +2,7 @@
 
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicsScene.h"
+#include "gui/SchematicsSceneChild.h"
 #include "gui/PortGraphicsItem.h"
 #include "gui/WireGraphicsItem.h"
 #include "metamodel/ComponentType.h"
@@ -12,7 +13,12 @@
 #include "Constants.h"
 #include "Project.h"
 
+#include <QFile>
 #include <QGraphicsEllipseItem>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QtDebug>
 
 using namespace q2d;
 using namespace q2d::constants;
@@ -33,6 +39,8 @@ Document::Document(QString name, Project* parent) :
     QObject(parent),
     QStandardItem(name) {
         Q_CHECK_PTR(parent);
+    Q_ASSERT(this->text() == name);
+    qDebug() << "Create document with name" << name;
 
     // obtain the component factory
     ApplicationContext* context =
@@ -95,8 +103,8 @@ Document::addComponent(QString path, QPoint position){
     this->model()->addComponent(modelComponent);
 
     // connect model and component element
-    DocumentEntry* entry =
-            new DocumentEntry(id, modelComponent, schematicComponent);
+    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::COMPONENT,
+                                             modelComponent, schematicComponent);
     m_entries.append(entry);
     schematicComponent->setToolTip(entry->id());
 
@@ -145,8 +153,8 @@ Document::addComponentPorts(ComponentType* type, DocumentEntry* parentEntry){
                                      modelComponent,
                                      this->model());
         // create and add the document entry
-        DocumentEntry* entry =
-                new DocumentEntry(id, modelPort, schematicPort, parentEntry);
+        DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT,
+                                                 modelPort, schematicPort, parentEntry);
         m_entries.append(entry);
         // since the ports are linked to the component,
         // they are implicitly added to the model by adding the component
@@ -168,7 +176,7 @@ Document::entry(const QString id) const{
 }
 
 DocumentEntry*
-Document::entry(const QGraphicsItem* schematicElement) const {
+Document::entry(const gui::SchematicsSceneChild* schematicElement) const {
     for(DocumentEntry* entry : m_entries){
         if(entry->schematicElement() == schematicElement){
             return entry;
@@ -219,6 +227,39 @@ Document::addWire(QString senderNodeId, QString receiverNodeId){
     model::Conductor* modelWire = this->model()->connect(startNode, endNode);
 
     // add the document entry
-    DocumentEntry* entry = new DocumentEntry(id, modelWire, schematicWire);
+    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::WIRE,
+                                             modelWire, schematicWire);
     m_entries.append(entry);
+}
+
+void
+Document::save(QDir saveDir){
+    Q_ASSERT(saveDir.exists());
+    qDebug() << "Saving Document" << this->text();
+
+    // create the JSON document
+    // the name is implicitly in the file name
+    // TODO: should this be written in the JSON too?
+    // TODO: should the component Factories state be saved?
+    // maybe in project…
+    QJsonDocument jsonDocument = QJsonDocument();
+    QJsonArray* entriesArray = new QJsonArray();
+
+    // Write the entries
+    for(DocumentEntry* entry : m_entries){
+        entriesArray->append(QJsonValue(*(entry->toJson())));
+    }
+
+    QJsonObject entriesWrapper = QJsonObject();
+    entriesWrapper.insert(JSON_DOCENTRY, *entriesArray);
+    jsonDocument.setObject(entriesWrapper);
+
+    // write the file to disk
+    QFile* file = new QFile(saveDir.absolutePath() + "/"
+                       + this->text() + EXTENSION_DOCFILE);
+    file->open(QIODevice::WriteOnly | QIODevice::Text);
+    file->write(jsonDocument.toJson());
+    file->close();
+    delete file;
+    delete entriesArray;
 }

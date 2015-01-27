@@ -35,6 +35,8 @@ private:
     // routing algorithms
     void routeLeftToRight();
     void routeStraight();
+protected:
+    virtual QString specificType();
 public:
     WireGraphicsItem(QPointF start, QPointF end, SchematicsScene* scene);
     WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end);

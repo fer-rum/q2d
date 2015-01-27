@@ -13,7 +13,8 @@ enum PortDirection {
     UNSPECIFIED
 };
 
-PortDirection portDirectionFromQString(const QString string);
+PortDirection qStringToPortDirection(const QString string);
+QString portDirectionToQString(const PortDirection direction);
 
 } // namespace model
 } // namespce q2d

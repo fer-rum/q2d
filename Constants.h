@@ -7,6 +7,15 @@ namespace q2d {
 namespace constants {
 
 // internally used constants
+
+
+// File extensions for saving and loading
+extern QString EXTENSION_DOCFILE;
+
+extern QString GENERAL_TYPE_COMPONENT;
+extern QString GENERAL_TYPE_PORT;
+extern QString GENERAL_TYPE_WIRE;
+
 /**
  * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names
  * of ComponentDescriptors to split th seperate levels of the hierarchy.
@@ -15,6 +24,31 @@ namespace constants {
  */
 extern QString HIERARCHY_SEPERATOR;
 
+// JSON keywords
+extern QString JSON_COMPONENT_NAME;
+
+// Im-/Export of Document entries
+extern QString JSON_DOCENTRY;
+extern QString JSON_DOCENTRY_ID;
+extern QString JSON_DOCENTRY_MODEL_ELEMENT;
+extern QString JSON_DOCENTRY_SCHEMATIC_ELEMENT;
+extern QString JSON_DOCENTRY_TYPE;
+
+extern QString JSON_PORTS;
+extern QString JSON_PORT_DIRECTION;
+extern QString JSON_PORT_NAME;
+extern QString JSON_PORT_POSITION;
+
+extern QString JSON_POSITION_X;
+extern QString JSON_POSITION_Y;
+
+// Im-/Export of SchematicsSceneChild enrties
+extern QString JSON_SCHEMATIC_TYPE_GENERAL;
+extern QString JSON_SCHEMATIC_ADDITIONAL;
+extern QString JSON_SCHEMATIC_POSITION;
+
+extern QString JSON_SYMBOL_PATH;
+
 // Keys for QSettings (application wide)
 extern QString KEY_COMPONENTS_DIR;
 extern QString KEY_PROJECTS_DIR;
@@ -22,16 +56,6 @@ extern QString KEY_PROJECTS_DIR;
 extern QString KEY_PORT_IN_FILE;
 extern QString KEY_PORT_OUT_FILE;
 extern QString KEY_PORT_INOUT_FILE;
-
-// JSON keywords
-extern QString JSON_COMPONENT_NAME;
-extern QString JSON_PORTS;
-extern QString JSON_PORT_DIRECTION;
-extern QString JSON_PORT_NAME;
-extern QString JSON_PORT_POSITION;
-extern QString JSON_PORT_POSITION_X;
-extern QString JSON_PORT_POSITION_Y;
-extern QString JSON_SYMBOL_PATH;
 
 // custom MIME types
 extern QString MIME_COMPONENT_TYPE;

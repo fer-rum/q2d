@@ -43,7 +43,8 @@ SOURCES +=\
     gui/ComponentGraphicsItem.cpp \
     DocumentEntry.cpp \
     gui/WireGraphicsItem.cpp \
-    gui/SchematicsSceneChild.cpp
+    gui/SchematicsSceneChild.cpp \
+    JsonHelpers.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -73,7 +74,8 @@ HEADERS  +=\
     gui/ComponentGraphicsItem.h \
     DocumentEntry.h \
     gui/WireGraphicsItem.h \
-    gui/SchematicsSceneChild.h
+    gui/SchematicsSceneChild.h \
+    JsonHelpers.h
 
 FORMS    +=\
     gui/MainWindow.ui \

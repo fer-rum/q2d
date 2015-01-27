@@ -32,8 +32,6 @@ private:
     static int RADIUS;
     static QPointF CENTER_OFFSET;
 
-
-
     static QPen PEN_INPUT_PORT;
     static QPen PEN_IN_OUT_PORT;
     static QPen PEN_OUTPUT_PORT;
@@ -50,6 +48,9 @@ private:
     QBrush  m_defaultBrush;
     QPointF m_dragStartPosition;
 
+    q2d::model::PortDirection m_direction;
+
+    // for drag and drop
     bool    m_dragOver;
     static bool    m_wireDrawingMode;
     static QGraphicsLineItem*  m_wireDrawingLineItem;
@@ -58,6 +59,9 @@ private:
     static QLineF* m_wireDrawingLine;
 
     void performDrag();
+
+protected:
+    virtual QString specificType();
 
 public:
 

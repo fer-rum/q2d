@@ -1,5 +1,6 @@
 #include "WireGraphicsItem.h"
 
+#include "Constants.h"
 #include "PortGraphicsItem.h"
 
 #include <QLineF>
@@ -7,6 +8,7 @@
 #include <QtDebug>
 
 using namespace q2d::gui;
+using namespace q2d::constants;
 
 QPen WireGraphicsItem::PEN_DEFAULT = QPen(Qt::black, 0);
 QPen WireGraphicsItem::PEN_HOVER = QPen(Qt::darkRed, 4);
@@ -40,6 +42,12 @@ WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* en
           start->scenePos() + PortGraphicsItem::centerOffset(),
           end->scenePos() + PortGraphicsItem::centerOffset(),
           start->SchematicsSceneChild::scene()){}
+
+QString
+WireGraphicsItem::specificType(){
+    return "none";
+    // TODO this might be used to indicate multi-bit busses…
+}
 
 /**
  * @brief WireGraphicsItem::addChild is a convenience method

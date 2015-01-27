@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "ComponentFactory.h"
+#include "Document.h"
 #include "gui/MainWindow.h"
 #include "Project.h"
 
@@ -54,12 +55,18 @@ ApplicationContext::setupSignalsAndSlots(){
     // ApplicationContext -> MainWindow
     connect(this, &ApplicationContext::signal_projectNameChanged,
             this->mainWindow, &MainWindow::slot_updateProjectName);
+    connect(this, &ApplicationContext::signal_canSaveProjects,
+            this->mainWindow, &MainWindow::slot_enableProjectSaving);
     connect(this, &ApplicationContext::signal_canAddDocuments,
             this->mainWindow, &MainWindow::slot_enableDocumentMenus);
     connect(this, &ApplicationContext::signal_documentModelChanged,
             this->mainWindow, &MainWindow::slot_setDocumentModel);
     connect(this, &ApplicationContext::signal_componentModelChanged,
             this->mainWindow, &MainWindow::slot_setComponentModel);
+    connect(this, &ApplicationContext::signal_showDocument,
+            this->mainWindow, static_cast<void (MainWindow::*)(Document*)>
+            (&MainWindow::slot_openDocumentTab)); // ship around overloaded function
+    // saving signal has to be set up by project
 
     // MainWindow -> ComponentFactory
     connect(this->mainWindow, &MainWindow::signal_createCategory,
@@ -105,7 +112,10 @@ ApplicationContext::slot_newProject(QString name){
 
     this->currentProject = newProject;
     newProject->setupSignalsAndSlots();
+
+    // inform other objects about changes
     emit this->signal_projectNameChanged(name);
+    emit this->signal_canSaveProjects(true);
     // enable document menus
     emit this->signal_canAddDocuments(true);
     emit this->signal_documentModelChanged(newProject->getDocuments());
