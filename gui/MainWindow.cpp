@@ -46,7 +46,9 @@ MainWindow::setupSignalsAndSlots(){
             m_context, &ApplicationContext::signal_saveProject);
 
 
-    // buttons without actions
+    // buttons
+    connect(m_ui->newProjectButton, &QPushButton::clicked,
+            this, &MainWindow::slot_createProject);
     connect(m_ui->clearHierarchyButton, &QPushButton::clicked,
             this, &MainWindow::signal_clearComponentTypes);
 
