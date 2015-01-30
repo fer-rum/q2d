@@ -1,6 +1,7 @@
 #ifndef PORTDESCRIPTOR_H
 #define PORTDESCRIPTOR_H
 
+#include "Enumerations.h"
 #include "model/PortDirection.h"
 
 #include <QStandardItem>
@@ -25,6 +26,9 @@ public:
 
     QPoint position();
     model::PortDirection direction();
+
+    virtual int type() const
+    { return ComponentDescriptorType::PORT_DESCRIPTOR; }
 };
 
 } // namespace metamodel

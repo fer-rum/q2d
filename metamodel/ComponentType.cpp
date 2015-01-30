@@ -8,16 +8,8 @@
 
 using namespace q2d::metamodel;
 
-// TODO outsouce some of the calls
-/**
- * @brief ComponentType::ComponentType
- *
- * @param descriptionFile
- * @param symbol ; May be null
- *
- * Assumption: name is not empty
- */
-ComponentType::ComponentType(QString name, ComponentCategory* parent) :
+ComponentType::ComponentType(QString name,
+                             ComponentCategory* parent) :
     ComponentDescriptor(name, parent) {
     m_instanceIndex = 0;
 }
@@ -54,6 +46,21 @@ ComponentType::setSymbolPath(QString symbolPath){
 
     this->setData(QVariant::fromValue(symbolPath), ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
     this->loadCircuitSymbol(symbolPath); // update the circuit symbol
+}
+
+/**
+ * @brief ComponentType::descriptorPath fetches the absolute path at which the type descriptor file resides.
+ * @return
+ */
+QString
+ComponentType::descriptorPath() const{
+    return this->data(ComponentDescriptorRole::DESCRIPTOR_FILE).toString();
+}
+
+void
+ComponentType::setDescriptorPath(const QString path){
+    Q_ASSERT(!path.isEmpty());
+    this->setData(QVariant::fromValue(path), ComponentDescriptorRole::DESCRIPTOR_FILE);
 }
 
 void

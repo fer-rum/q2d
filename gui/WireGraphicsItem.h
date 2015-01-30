@@ -30,6 +30,10 @@ private:
     static const QPointF m_startPoint;
     QPointF m_endPoint;
 
+    // caches additional Info as JSON
+    // maybe not so memory efficient
+    QJsonObject m_additionalInfo;
+
     void addChild(QPointF start, QPointF end);
 
     // routing algorithms
@@ -37,6 +41,7 @@ private:
     void routeStraight();
 protected:
     virtual QString specificType();
+    virtual QJsonObject additionalJson();
 public:
     WireGraphicsItem(QPointF start, QPointF end, SchematicsScene* scene);
     WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end);

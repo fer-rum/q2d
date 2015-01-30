@@ -50,6 +50,8 @@ private:
     QRectF m_boundingRect;
 
 protected:
+    static const QJsonObject EMPTY_JSON;
+
     SchematicsScene* m_scene;
 
     void setBoundingRect(QRectF rect)
@@ -65,12 +67,6 @@ protected:
     QList<QGraphicsItem*> actuals() const { return m_actuals; }
     // TODO add overrides as needed
 
-    // for JSON generation
-    // you must/may want to override these.
-    virtual QString specificType() = 0;
-    virtual QJsonObject* additionalJson()
-    { return nullptr; }
-
 public:
     SchematicsSceneChild(SchematicsScene* scene,
                          QGraphicsItem* actual,
@@ -79,6 +75,11 @@ public:
                          SchematicsSceneChild* parent = nullptr);
 
     SchematicsScene* scene() const;
+    // for JSON generation
+    // you must/may want to override these.
+    virtual QString specificType() = 0;
+    virtual QJsonObject additionalJson()
+    { return EMPTY_JSON; }
 
     // necessary overrides
     virtual QRectF boundingRect() const
@@ -87,7 +88,6 @@ public:
     virtual void paint(QPainter* painter,
                        const QStyleOptionGraphicsItem* option,
                        QWidget* widget = nullptr);
-    virtual QJsonObject* toJson();
 };
 
 } // namespace gui

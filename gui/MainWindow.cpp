@@ -186,7 +186,7 @@ void q2d::gui::MainWindow::on_addTypeButton_clicked() {
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->context->getComponentFactory();
+    ComponentFactory* componentFactory = this->context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
@@ -215,7 +215,7 @@ void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->context->getComponentFactory();
+    ComponentFactory* componentFactory = this->context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();

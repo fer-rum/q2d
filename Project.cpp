@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ApplicationContext.h"
 #include "Constants.h"
+#include "JsonHelpers.h"
 #include "gui/MainWindow.h"
 
 #include <QtDebug>
@@ -55,7 +56,15 @@ Project::save(QDir projectDirectory){
     bool ok = projectDirectory.cd(m_name);
     Q_ASSERT(ok);
 
-    // Save the project settings
+    // TODO Save the project settings
+
+    // make sure the component tree in use is saved
+    WriteJsonFile(
+                projectDirectory.absolutePath() + "/components"
+                + EXTENSION_COMPONENT_TREE,
+                m_applicationContext->componentFactory()->exportHierarchy());
+
+    // TODO make sure the component tree is rebuild before loading documents
 
     // For each Document:
     // Create a save file (folder?)
@@ -65,13 +74,12 @@ Project::save(QDir projectDirectory){
         document->save(projectDirectory);
     }
 
-
 }
 
 /**
  * @brief Project::slot_newDocument
  *
- * This is seperated so the UI can use be directed here as well as loading functions.
+ * This is seperated so the UI can be directed here as well as can loading functions.
  *
  * @param name
  *
@@ -79,7 +87,6 @@ Project::save(QDir projectDirectory){
  */
 void
 Project::slot_newDocument(QString name){
-
     Q_ASSERT(!name.isEmpty());
 
     Document* newDocument = new Document(name, this);
@@ -91,7 +98,8 @@ Project::slot_newDocument(QString name){
 
 void
 Project::slot_save(){
-    QString savePath = Application::instance()->getSetting(KEY_PROJECTS_DIR).toString();
+    QString savePath =
+            Application::instance()->getSetting(KEY_PROJECTS_DIR).toString();
     QDir projectsDirectory = QDir(savePath);
     Q_ASSERT(projectsDirectory.exists());
     this->save(projectsDirectory);

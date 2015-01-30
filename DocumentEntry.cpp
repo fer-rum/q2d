@@ -1,4 +1,5 @@
 #include "DocumentEntry.h"
+#include "Document.h"
 #include "Constants.h"
 #include "model/ModelElement.h"
 
@@ -8,15 +9,36 @@ using namespace q2d;
 using namespace q2d::constants;
 using namespace q2d::gui;
 
-DocumentEntry::DocumentEntry(QString id, DocumentEntryType type, model::ModelElement* modelElement,
-              SchematicsSceneChild* schematicElement, DocumentEntry* parent){
+QString
+q2d::DocumentEntryTypeToString(DocumentEntryType type){
+
+    switch(type){
+    case COMPONENT : return GENERAL_TYPE_COMPONENT;
+    case PORT : return GENERAL_TYPE_PORT;
+    case WIRE : return GENERAL_TYPE_WIRE;
+    default : return GENERAL_TYPE_UNDEFINED;
+    }
+}
+
+DocumentEntryType
+q2d::StringToDocumentEntryType(QString string){
+
+    string = string.trimmed().toLower();
+
+    if(string == GENERAL_TYPE_COMPONENT) return DocumentEntryType::COMPONENT;
+    if(string == GENERAL_TYPE_PORT) return DocumentEntryType::PORT;
+    if(string == GENERAL_TYPE_WIRE) return DocumentEntryType::WIRE;
+
+    return DocumentEntryType::UNDEFINED;
+}
+
+DocumentEntry::DocumentEntry(QString id, DocumentEntryType type,
+                             model::ModelElement* modelElement,
+                             SchematicsSceneChild* schematicElement,
+                             DocumentEntry* parent){
 
     Q_ASSERT(!id.isEmpty());
-    if(parent != nullptr){
-        m_id = parent->id() + HIERARCHY_SEPERATOR + id;
-    } else {
-        m_id = id;
-    }
+    m_id = id;
 
     m_type = type;
 
@@ -37,6 +59,12 @@ DocumentEntry::id() const {
     return m_id;
 }
 
+
+DocumentEntryType
+DocumentEntry::type(){
+    return m_type;
+}
+
 model::ModelElement*
 DocumentEntry::modelElement() const {
     return m_modelElement;
@@ -50,34 +78,4 @@ DocumentEntry::schematicElement() const {
 DocumentEntry*
 DocumentEntry::parent() const {
     return m_parent;
-}
-
-QJsonObject*
-DocumentEntry::toJson(){
-
-    QJsonObject* result = new QJsonObject();
-
-    // contain ID, ModelElement, SchematicItem
-    // parent is implicitly given by the JSON document, this object will be passed into.
-
-    result->insert(JSON_DOCENTRY_ID, QJsonValue(m_id));
-    result->insert(JSON_DOCENTRY_SCHEMATIC_ELEMENT, QJsonValue(*(m_schematicElement->toJson())));
-
-    // general type
-    switch(m_type){
-    case COMPONENT :
-        result->insert(JSON_SCHEMATIC_TYPE_GENERAL, QJsonValue(GENERAL_TYPE_COMPONENT));
-        break;
-    case PORT :
-        result->insert(JSON_SCHEMATIC_TYPE_GENERAL, QJsonValue(GENERAL_TYPE_PORT));
-        break;
-    case WIRE :
-        result->insert(JSON_SCHEMATIC_TYPE_GENERAL, QJsonValue(GENERAL_TYPE_WIRE));
-        break;
-    default: break;
-    }
-
-    // TODO continue
-
-    return result;
 }

@@ -10,11 +10,14 @@ namespace constants {
 
 
 // File extensions for saving and loading
+
+extern QString EXTENSION_COMPONENT_TREE;
 extern QString EXTENSION_DOCFILE;
 
 extern QString GENERAL_TYPE_COMPONENT;
 extern QString GENERAL_TYPE_PORT;
 extern QString GENERAL_TYPE_WIRE;
+extern QString GENERAL_TYPE_UNDEFINED;
 
 /**
  * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names
@@ -31,6 +34,7 @@ extern QString JSON_COMPONENT_NAME;
 extern QString JSON_DOCENTRY;
 extern QString JSON_DOCENTRY_ID;
 extern QString JSON_DOCENTRY_MODEL_ELEMENT;
+extern QString JSON_DOCENTRY_PARENT;
 extern QString JSON_DOCENTRY_SCHEMATIC_ELEMENT;
 extern QString JSON_DOCENTRY_TYPE;
 
@@ -43,11 +47,20 @@ extern QString JSON_POSITION_X;
 extern QString JSON_POSITION_Y;
 
 // Im-/Export of SchematicsSceneChild enrties
-extern QString JSON_SCHEMATIC_TYPE_GENERAL;
+extern QString JSON_DOCENTRY_TYPE;
+
+extern QString JSON_HIERARCHY_CATEGORY;
+extern QString JSON_HIERARCHY_CHILD;
+extern QString JSON_HIERARCHY_SOURCE;
+
+extern QString JSON_SCHEMATIC_SUB_TYPE;
 extern QString JSON_SCHEMATIC_ADDITIONAL;
 extern QString JSON_SCHEMATIC_POSITION;
 
 extern QString JSON_SYMBOL_PATH;
+
+extern QString JSON_WIRE_START;
+extern QString JSON_WIRE_END;
 
 // Keys for QSettings (application wide)
 extern QString KEY_COMPONENTS_DIR;

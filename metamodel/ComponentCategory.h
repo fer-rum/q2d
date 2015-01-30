@@ -14,6 +14,9 @@ public:
     explicit ComponentCategory(QString name, ComponentCategory* parent = 0);
 
     void addSubItem(ComponentDescriptor *toAdd);
+
+    virtual int type() const
+    { return ComponentDescriptorType::COMPONENT_CATEGORY; }
 };
 
 } // namespace metamodel

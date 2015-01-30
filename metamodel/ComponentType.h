@@ -35,9 +35,16 @@ public:
 
     QString symbolPath();
     void setSymbolPath(QString symbolPath);
+
+    QString descriptorPath() const;
+    void setDescriptorPath(const QString path);
+
     void addPort(QString name, QPoint relativePosition, model::PortDirection direction);
 
     QString generateId();
+
+    virtual int type() const
+    { return ComponentDescriptorType::COMPONENT_TYPE; }
 };
 
 } // namespace metamodel

@@ -6,6 +6,9 @@
 using namespace q2d::gui;
 using namespace q2d::constants;
 
+const QJsonObject SchematicsSceneChild::EMPTY_JSON = QJsonObject();
+
+
 SchematicsSceneChild::SchematicsSceneChild(SchematicsScene *scene, SchematicsSceneChild* parent)
     : QGraphicsObject(parent) {
     Q_CHECK_PTR(scene);
@@ -105,20 +108,4 @@ SchematicsSceneChild::paint(QPainter* painter,
     for(QGraphicsItem* actual : m_actuals){
         actual->paint(painter, option, widget);
     }
-}
-
-QJsonObject*
-SchematicsSceneChild::toJson(){
-
-    QJsonObject* result = new QJsonObject();
-
-    result->insert(JSON_DOCENTRY_TYPE, QJsonValue(this->specificType()));
-    result->insert(JSON_SCHEMATIC_POSITION, PointToJson(this->scenePos()));
-
-    QJsonObject* additionalInfo = this->additionalJson();
-    if(additionalInfo != nullptr){
-        result->insert(JSON_SCHEMATIC_ADDITIONAL, QJsonValue(*(additionalInfo)));
-    }
-
-    return result;
 }

@@ -10,7 +10,7 @@ using namespace q2d::metamodel;
 
 ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
                                              SchematicsScene* scene,
-                                             QPoint position)
+                                             QPointF position)
     : SchematicsSceneChild(scene,
                            new QGraphicsSvgItem(type->symbolPath())){
     Q_CHECK_PTR(type);

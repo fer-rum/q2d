@@ -25,7 +25,7 @@ class ApplicationContext : public QObject {
 private:
     Project* currentProject = nullptr;
     gui::MainWindow* mainWindow;
-    ComponentFactory* componentFactory;
+    ComponentFactory* m_componentFactory;
 
 public:
     explicit ApplicationContext(Application* parent);
@@ -33,7 +33,7 @@ public:
 
      Project* getCurrentProject();
      gui::MainWindow* getMainWindow();
-     ComponentFactory* getComponentFactory();
+     ComponentFactory* componentFactory();
 
      void setupSignalsAndSlots();
 

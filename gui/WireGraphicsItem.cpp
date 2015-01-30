@@ -41,12 +41,22 @@ WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* en
     : WireGraphicsItem(
           start->scenePos() + PortGraphicsItem::centerOffset(),
           end->scenePos() + PortGraphicsItem::centerOffset(),
-          start->SchematicsSceneChild::scene()){}
+          start->SchematicsSceneChild::scene()){
+
+    m_additionalInfo = QJsonObject();
+    m_additionalInfo.insert(JSON_WIRE_START, QJsonValue(start->id()));
+    m_additionalInfo.insert(JSON_WIRE_END, QJsonValue(end->id()));
+}
 
 QString
 WireGraphicsItem::specificType(){
     return "none";
     // TODO this might be used to indicate multi-bit busses…
+}
+
+QJsonObject
+WireGraphicsItem::additionalJson(){
+    return m_additionalInfo;
 }
 
 /**

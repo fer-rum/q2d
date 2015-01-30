@@ -67,7 +67,7 @@ public:
 
     static QPointF centerOffset() { return CENTER_OFFSET; }
 
-    explicit PortGraphicsItem(QPoint relativeCenterPosition,
+    explicit PortGraphicsItem(QPointF relativeCenterPosition,
                               model::PortDirection direction,
                               ComponentGraphicsItem* parent);
 

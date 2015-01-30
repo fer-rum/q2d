@@ -3,7 +3,7 @@
 using namespace q2d::model;
 
 PortDirection
-q2d::model::qStringToPortDirection(const QString string) {
+q2d::model::StringToPortDirection(const QString string) {
     QString copy(string);
 
     copy = copy.trimmed().toLower();
@@ -15,7 +15,7 @@ q2d::model::qStringToPortDirection(const QString string) {
 
 
 QString
-q2d::model::portDirectionToQString(const PortDirection direction){
+q2d::model::PortDirectionToString(const PortDirection direction){
     switch (direction) {
     case IN :       return "in";
     case OUT :      return "out";

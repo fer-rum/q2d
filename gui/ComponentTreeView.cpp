@@ -1,6 +1,7 @@
 #include "ComponentTreeView.h"
 
 #include "Constants.h"
+#include "Enumerations.h"
 #include "../metamodel/ComponentDescriptor.h"
 #include "../metamodel/ComponentType.h"
 
@@ -39,7 +40,7 @@ ComponentTreeView::performDrag() {
 
     // create the payload
     QModelIndex selected = this->selectedIndexes().first();
-    QString payloadText = selected.data(metamodel::ComponentDescriptorRole::HIERARCHY_NAME)
+    QString payloadText = selected.data(ComponentDescriptorRole::HIERARCHY_NAME)
                           .toString();
 
     // create the pixmap for the drag operation

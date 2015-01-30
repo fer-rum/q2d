@@ -47,8 +47,7 @@ QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
  * @param direction
  * @param parent
  */
-PortGraphicsItem::PortGraphicsItem(
-        QPoint relativeCenterPosition,
+PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
         model::PortDirection direction,
         ComponentGraphicsItem *parent)
     : SchematicsSceneChild(parent->SchematicsSceneChild::scene(),
@@ -101,9 +100,14 @@ PortGraphicsItem::PortGraphicsItem(
     Q_ASSERT(this->actual()->isVisible());
 }
 
+/**
+ * @brief PortGraphicsItem::specificType
+ * The specific sub-type of a port is its direction.
+ * @return The PortDirection as string.
+ */
 QString
 PortGraphicsItem::specificType(){
-    return q2d::model::portDirectionToQString(m_direction);
+    return q2d::model::PortDirectionToString(m_direction);
 }
 
 void
@@ -154,6 +158,7 @@ PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 QString
 PortGraphicsItem::id() const {
     // TODO asserts
+    // TODO this is a solution by spiraling in…
     Document* container = m_scene->document();
     return container->entry(this)->id();
 }

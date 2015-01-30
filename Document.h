@@ -41,7 +41,7 @@ private:
      * @brief componentFactory is a cached pointer to the
      * ComponentFactory instance.
      */
-    ComponentFactory* componentFactory;
+    ComponentFactory* m_componentFactory;
 
     /**
      * @brief m_entries keeps all the relations between model and
@@ -59,15 +59,21 @@ public:
 
     gui::SchematicsScene* schematic();
     model::Model* model();
+    ComponentFactory* componentFactory() const;
 
     // TODO rename: instantiateComponent?
-    void addComponent(QString path, QPoint position);
+    void addComponent(QString typeId, QPoint position);
     void addWire(QString senderNodeId, QString receiverNodeId);
+
+    // intended for loading a document from Json
+    void addEntry(DocumentEntry* entry);
 
     // access helpers
     DocumentEntry* entry(const QString id) const;
     DocumentEntry* entry(const gui::SchematicsSceneChild* schematicElement) const;
     DocumentEntry* entry(const model::ModelElement* modelElement) const;
+
+    QList<DocumentEntry*> entries() const;
 
     void save(QDir saveDir);
 };

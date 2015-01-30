@@ -75,7 +75,8 @@ HEADERS  +=\
     DocumentEntry.h \
     gui/WireGraphicsItem.h \
     gui/SchematicsSceneChild.h \
-    JsonHelpers.h
+    JsonHelpers.h \
+    Enumerations.h
 
 FORMS    +=\
     gui/MainWindow.ui \

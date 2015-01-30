@@ -11,6 +11,8 @@
 namespace q2d {
 
 // forward declaration
+    class Document;
+
 namespace model {
     class ModelElement;
 }
@@ -21,6 +23,9 @@ enum DocumentEntryType{
     WIRE,
     UNDEFINED
 };
+
+QString DocumentEntryTypeToString(DocumentEntryType type);
+DocumentEntryType StringToDocumentEntryType(QString string);
 
 /**
  * @brief The DocumentEntry class keeps a mapping between model and schematic elements
@@ -42,13 +47,10 @@ public:
                   gui::SchematicsSceneChild* schematicElement,
                   DocumentEntry* parent = nullptr);
     QString id() const;
+    DocumentEntryType type();
     model::ModelElement* modelElement() const;
     gui::SchematicsSceneChild* schematicElement() const;
     DocumentEntry* parent() const;
-
-    // epxort functions
-    QJsonObject* toJson();
-
 };
 
 } // namespace q2d

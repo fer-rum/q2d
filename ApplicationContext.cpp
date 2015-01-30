@@ -12,7 +12,7 @@ using MainWindow = q2d::gui::MainWindow;
 ApplicationContext::ApplicationContext(Application *parent)
     : QObject(parent) {
     // TODO load basic libraries
-    this->componentFactory = new ComponentFactory(this);
+    this->m_componentFactory = new ComponentFactory(this);
 
     // create the main window
     this->mainWindow = new gui::MainWindow(this);
@@ -21,7 +21,7 @@ ApplicationContext::ApplicationContext(Application *parent)
 
     this->setupSignalsAndSlots();
 
-    QStandardItemModel* componentHierarchy = this->componentFactory->getComponentHierarchy();
+    QStandardItemModel* componentHierarchy = this->m_componentFactory->getComponentHierarchy();
     Q_CHECK_PTR(componentHierarchy);
     emit this->signal_componentModelChanged(componentHierarchy);
 }
@@ -29,7 +29,7 @@ ApplicationContext::ApplicationContext(Application *parent)
 ApplicationContext::~ApplicationContext(){
     // TODO save project
     // TODO uninitialize and close mainWindow
-    delete this->componentFactory;
+    delete this->m_componentFactory;
 }
 
 Project*
@@ -43,8 +43,8 @@ ApplicationContext::getMainWindow(){
 }
 
 ComponentFactory*
-ApplicationContext::getComponentFactory() {
-    return this->componentFactory;
+ApplicationContext::componentFactory() {
+    return this->m_componentFactory;
 }
 
 //TODO: Convert to new Signal/Slot Syntax
@@ -70,9 +70,9 @@ ApplicationContext::setupSignalsAndSlots(){
 
     // MainWindow -> ComponentFactory
     connect(this->mainWindow, &MainWindow::signal_createCategory,
-            this->componentFactory, &ComponentFactory::slot_addCategory);
+            this->m_componentFactory, &ComponentFactory::slot_addCategory);
     connect(this->mainWindow, &MainWindow::signal_loadType,
-            this->componentFactory, &ComponentFactory::slot_loadType);
+            this->m_componentFactory, &ComponentFactory::slot_loadType);
 
 
 
