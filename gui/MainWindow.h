@@ -26,9 +26,9 @@ namespace gui {
 class MainWindow : public QMainWindow {
     Q_OBJECT
 private:
-    Ui::MainWindow* m_ui;
-    q2d::Application* application;
-    q2d::ApplicationContext* context;
+    Ui::MainWindow*             m_ui;
+    q2d::Application*           m_application;
+    q2d::ApplicationContext*    m_context;
 
 
     void addNewSchematicsTab(Document* relatedDocument);
@@ -45,6 +45,7 @@ signals:
 
     void signal_createCategory(QString name, metamodel::ComponentCategory* parent = 0);
     void signal_loadType(QString fileName, metamodel::ComponentCategory* parent = 0);
+    void signal_clearComponentTypes();
 
     // TODO check visibility
 public slots:

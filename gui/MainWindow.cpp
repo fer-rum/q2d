@@ -22,38 +22,40 @@ MainWindow::MainWindow(ApplicationContext* parent) :
     QMainWindow(), m_ui(new Ui::MainWindow){
 
     Q_CHECK_PTR(parent);
-    this->context = parent;
+    this->m_context = parent;
 
     m_ui->setupUi(this);
 
-    this->application = qobject_cast<Application*>(Application::instance());
+    this->m_application = qobject_cast<Application*>(Application::instance());
 }
 
 MainWindow::~MainWindow() {}
 
 void
 MainWindow::setupSignalsAndSlots(){
-    Q_CHECK_PTR(this->context);
-
-    // TODO new style connections
-    // TODO move to ApplicationContext?
+    Q_CHECK_PTR(m_context);
 
     // Menus
-    connect(m_ui->actionExit, &QAction::triggered,
-            application, &Application::quit);
+    connect(m_ui->action_Exit, &QAction::triggered,
+            m_application, &Application::quit);
     connect(m_ui->action_createProject, &QAction::triggered,
             this, &MainWindow::slot_createProject);
     connect(m_ui->action_createDocument, &QAction::triggered,
             this, &MainWindow::slot_createDocument);
     connect(m_ui->action_saveProject, &QAction::triggered,
-            context, &ApplicationContext::signal_saveProject);
+            m_context, &ApplicationContext::signal_saveProject);
 
-    // buttons
-    connect(this->m_ui->newProjectButton, SIGNAL(clicked()), this, SLOT(slot_createProject()));
+
+    // buttons without actions
+    connect(m_ui->clearHierarchyButton, &QPushButton::clicked,
+            this, &MainWindow::signal_clearComponentTypes);
 
     // connections to the application context
-    connect(this, SIGNAL(signal_createProjectRequested(QString)), this->context, SLOT(slot_newProject(QString)));
-    connect(this, SIGNAL(signal_createDocumentRequested(QString)), this->context, SLOT(slot_newDocument(QString)));
+    // TODO move to applicationContext
+    connect(this, &MainWindow::signal_createProjectRequested,
+            m_context, &ApplicationContext::slot_newProject);
+    connect(this, &MainWindow::signal_createDocumentRequested,
+            m_context, &ApplicationContext::slot_newDocument);
 }
 
 void
@@ -186,7 +188,7 @@ void q2d::gui::MainWindow::on_addTypeButton_clicked() {
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->context->componentFactory();
+    ComponentFactory* componentFactory = this->m_context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
@@ -198,7 +200,7 @@ void q2d::gui::MainWindow::on_addTypeButton_clicked() {
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setNameFilter(tr("Component Descriptions (*.json)"));
-    dialog.setDirectory(this->application->getSetting(constants::KEY_COMPONENTS_DIR).toString());
+    dialog.setDirectory(this->m_application->getSetting(constants::KEY_COMPONENTS_DIR).toString());
 
     int userAction = dialog.exec();
     if(userAction == QDialog::Rejected){
@@ -215,7 +217,7 @@ void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->context->componentFactory();
+    ComponentFactory* componentFactory = this->m_context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();

@@ -15,9 +15,9 @@ ApplicationContext::ApplicationContext(Application *parent)
     this->m_componentFactory = new ComponentFactory(this);
 
     // create the main window
-    this->mainWindow = new gui::MainWindow(this);
-    this->mainWindow->setupSignalsAndSlots();
-    this->mainWindow->show();
+    this->m_mainWindow = new gui::MainWindow(this);
+    this->m_mainWindow->setupSignalsAndSlots();
+    this->m_mainWindow->show();
 
     this->setupSignalsAndSlots();
 
@@ -39,7 +39,7 @@ ApplicationContext::getCurrentProject(){
 
 gui::MainWindow*
 ApplicationContext::getMainWindow(){
-    return this->mainWindow;
+    return this->m_mainWindow;
 }
 
 ComponentFactory*
@@ -50,29 +50,31 @@ ApplicationContext::componentFactory() {
 //TODO: Convert to new Signal/Slot Syntax
 void
 ApplicationContext::setupSignalsAndSlots(){
-    Q_CHECK_PTR(this->mainWindow);
+    Q_CHECK_PTR(this->m_mainWindow);
 
     // ApplicationContext -> MainWindow
     connect(this, &ApplicationContext::signal_projectNameChanged,
-            this->mainWindow, &MainWindow::slot_updateProjectName);
+            m_mainWindow, &MainWindow::slot_updateProjectName);
     connect(this, &ApplicationContext::signal_canSaveProjects,
-            this->mainWindow, &MainWindow::slot_enableProjectSaving);
+            m_mainWindow, &MainWindow::slot_enableProjectSaving);
     connect(this, &ApplicationContext::signal_canAddDocuments,
-            this->mainWindow, &MainWindow::slot_enableDocumentMenus);
+            m_mainWindow, &MainWindow::slot_enableDocumentMenus);
     connect(this, &ApplicationContext::signal_documentModelChanged,
-            this->mainWindow, &MainWindow::slot_setDocumentModel);
+            m_mainWindow, &MainWindow::slot_setDocumentModel);
     connect(this, &ApplicationContext::signal_componentModelChanged,
-            this->mainWindow, &MainWindow::slot_setComponentModel);
+            m_mainWindow, &MainWindow::slot_setComponentModel);
     connect(this, &ApplicationContext::signal_showDocument,
-            this->mainWindow, static_cast<void (MainWindow::*)(Document*)>
+            m_mainWindow, static_cast<void (MainWindow::*)(Document*)>
             (&MainWindow::slot_openDocumentTab)); // ship around overloaded function
     // saving signal has to be set up by project
 
     // MainWindow -> ComponentFactory
-    connect(this->mainWindow, &MainWindow::signal_createCategory,
-            this->m_componentFactory, &ComponentFactory::slot_addCategory);
-    connect(this->mainWindow, &MainWindow::signal_loadType,
-            this->m_componentFactory, &ComponentFactory::slot_loadType);
+    connect(m_mainWindow, &MainWindow::signal_createCategory,
+            m_componentFactory, &ComponentFactory::slot_addCategory);
+    connect(m_mainWindow, &MainWindow::signal_loadType,
+            m_componentFactory, &ComponentFactory::slot_loadType);
+    connect(m_mainWindow, &MainWindow::signal_clearComponentTypes,
+            m_componentFactory, &ComponentFactory::slot_clearHierarchy);
 
 
 

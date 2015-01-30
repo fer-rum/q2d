@@ -24,7 +24,7 @@ class ApplicationContext : public QObject {
     Q_OBJECT
 private:
     Project* currentProject = nullptr;
-    gui::MainWindow* mainWindow;
+    gui::MainWindow* m_mainWindow;
     ComponentFactory* m_componentFactory;
 
 public:

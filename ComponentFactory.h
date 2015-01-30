@@ -68,6 +68,7 @@ public:
 public slots:
     void slot_loadType(QString fileName, metamodel::ComponentCategory* parent);
     void slot_addCategory(QString name, metamodel::ComponentCategory* parent);
+    void slot_clearHierarchy();
 
 };
 
