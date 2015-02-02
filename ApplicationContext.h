@@ -1,6 +1,7 @@
 #ifndef APPLICATIONCONTEXT_H
 #define APPLICATIONCONTEXT_H
 
+#include <QDir>
 #include <QObject>
 #include <QStandardItemModel>
 
@@ -23,17 +24,26 @@ namespace q2d {
 class ApplicationContext : public QObject {
     Q_OBJECT
 private:
-    Project* currentProject = nullptr;
+    Project* m_currentProject = nullptr;
     gui::MainWindow* m_mainWindow;
     ComponentFactory* m_componentFactory;
+
+    // TODO
+    // utility functions to delegate to,
+    // that do all the little works
+    void createProject(QString name);
+    void/*?*/ unloadProject(/*…*/);
+    void/*?*/ loadProject(/*…*/);
+
 
 public:
     explicit ApplicationContext(Application* parent);
     virtual ~ApplicationContext();
 
-     Project* getCurrentProject();
-     gui::MainWindow* getMainWindow();
-     ComponentFactory* componentFactory();
+    bool hasCurrentProject(); // TODO const
+     Project* getCurrentProject(); // TODO const
+     gui::MainWindow* getMainWindow(); // TODO const
+     ComponentFactory* componentFactory(); // TODO const
 
      void setupSignalsAndSlots();
 
@@ -53,6 +63,8 @@ public slots:
     void slot_newDocument(QString name);
     void slot_newProject(QString name);
     void slot_projectNameChanged(QString newName);
+    void slot_loadProject(QDir projectDir);
+    void slot_unloadProject();
 };
 
 }

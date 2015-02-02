@@ -43,7 +43,7 @@ QString GENERAL_TYPE_UNDEFINED  = "undefined";
 QString MIME_COMPONENT_TYPE = "application/component-type";
 QString MIME_WIRE_START_POS = "application/wire-start-pos";
 
-QString EXTENSION_COMPONENT_TREE    = "q2tree";
+QString FILE_COMPONENT_TREE    = "/component.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
 } // namespace constants
 } // namespace q2d

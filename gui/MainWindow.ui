@@ -20,14 +20,14 @@
       <item>
        <layout class="QHBoxLayout" name="projectNameLayout">
         <item>
-         <widget class="QLabel" name="currentProjectLabel">
+         <widget class="QLabel" name="lbl_currentProject">
           <property name="text">
            <string>Current Project:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="projectNameLabel">
+         <widget class="QLabel" name="lbl_projectName">
           <property name="text">
            <string>(none)</string>
           </property>
@@ -38,12 +38,26 @@
       <item>
        <layout class="QHBoxLayout" name="buttonLayout">
         <item>
-         <widget class="QPushButton" name="newProjectButton">
+         <widget class="QPushButton" name="btn_newProject">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Create a new empty project and make it the current project&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>new</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_unloadProject">
+          <property name="text">
+           <string>dicard</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_loadProject">
+          <property name="text">
+           <string>load</string>
           </property>
          </widget>
         </item>
@@ -54,7 +68,7 @@
     <item row="1" column="0">
      <layout class="QVBoxLayout" name="componentTreeLayout" stretch="0,0,0">
       <item>
-       <widget class="QLabel" name="componentTreeLabel">
+       <widget class="QLabel" name="lbl_componentTree">
         <property name="text">
          <string>Loaded Components</string>
         </property>
@@ -82,7 +96,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="addTypeButton">
+         <widget class="QPushButton" name="btn_addType">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -92,7 +106,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="addCategoryButton">
+         <widget class="QPushButton" name="btn_addCategory">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -102,7 +116,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="clearHierarchyButton">
+         <widget class="QPushButton" name="btn_clearHierarchy">
           <property name="text">
            <string>Clear</string>
           </property>
@@ -115,7 +129,7 @@
     <item row="0" column="1">
      <layout class="QGridLayout" name="documentLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="documentListLabel">
+       <widget class="QLabel" name="lbl_availableDocuments">
         <property name="text">
          <string>Available Documents</string>
         </property>
@@ -129,7 +143,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLabel" name="documentDescriptionLabel">
+       <widget class="QLabel" name="lbl_documentDescription">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -169,7 +183,7 @@ Edit your description for the current document here</string>
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -197,6 +211,7 @@ Edit your description for the current document here</string>
    <addaction name="menuProject"/>
    <addaction name="menuDocument"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Exit">
    <property name="text">
     <string>Exit</string>

@@ -44,13 +44,17 @@ MainWindow::setupSignalsAndSlots(){
             this, &MainWindow::slot_createDocument);
     connect(m_ui->action_saveProject, &QAction::triggered,
             m_context, &ApplicationContext::signal_saveProject);
+    connect(m_ui->action_loadProject, &QAction::triggered,
+            this, &MainWindow::slot_loadProject);
 
 
     // buttons
-    connect(m_ui->newProjectButton, &QPushButton::clicked,
+    connect(m_ui->btn_newProject, &QPushButton::clicked,
             this, &MainWindow::slot_createProject);
-    connect(m_ui->clearHierarchyButton, &QPushButton::clicked,
+    connect(m_ui->btn_clearHierarchy, &QPushButton::clicked,
             this, &MainWindow::signal_clearComponentTypes);
+    connect(m_ui->btn_unloadProject, &QPushButton::clicked,
+            this, &MainWindow::signal_unloadProjectRequested);
 
     // connections to the application context
     // TODO move to applicationContext
@@ -58,6 +62,10 @@ MainWindow::setupSignalsAndSlots(){
             m_context, &ApplicationContext::slot_newProject);
     connect(this, &MainWindow::signal_createDocumentRequested,
             m_context, &ApplicationContext::slot_newDocument);
+    connect(this, &MainWindow::signal_loadProjectRequested,
+            m_context, &ApplicationContext::slot_loadProject);
+    connect(this, &MainWindow::signal_unloadProjectRequested,
+            m_context, &ApplicationContext::slot_unloadProject);
 }
 
 void
@@ -99,6 +107,29 @@ MainWindow::slot_createProject(){
 }
 
 void
+MainWindow::slot_loadProject(){
+
+    QString dirPath;
+
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::DirectoryOnly);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setDirectory(this->m_application->getSetting(constants::KEY_PROJECTS_DIR).toString());
+
+    int userAction = dialog.exec();
+    if(userAction == QDialog::Rejected){
+        return;
+    }
+
+    dirPath = dialog.selectedFiles().first();
+
+    QDir projectDir = QDir(dirPath);
+    Q_ASSERT(projectDir.exists());
+
+    emit this->signal_loadProjectRequested(projectDir);
+}
+
+void
 MainWindow::slot_createDocument(){
 
     // make sure the model is set up properly
@@ -130,7 +161,12 @@ MainWindow::slot_createDocument(){
 
 void
 MainWindow::slot_updateProjectName(QString name){
-    this->m_ui->projectNameLabel->setText(name);
+
+    if(name.isEmpty()){
+        name = "(none)";
+    }
+
+    this->m_ui->lbl_projectName->setText(name);
 }
 
 void
@@ -153,17 +189,22 @@ MainWindow::slot_enableDocumentMenus(bool enabled){
 void
 MainWindow::slot_setDocumentModel(QStandardItemModel* model){
 
-    Q_CHECK_PTR(model);
+    QItemSelectionModel* oldModel = m_ui->documentListView->selectionModel();
 
-    this->m_ui->documentListView->setModel(model);
+    m_ui->documentListView->setModel(model);
 
-    connect(this->m_ui->documentListView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slot_openDocumentTab(QModelIndex)));
+    delete oldModel;
+
+    connect(m_ui->documentListView, &QAbstractItemView::doubleClicked,
+            this, static_cast<void (MainWindow::*)(QModelIndex)>
+            (&MainWindow::slot_openDocumentTab));
 }
 
 void
 MainWindow::slot_openDocumentTab(const QModelIndex index){
 
-    const QStandardItemModel* model = static_cast<const QStandardItemModel*>(index.model());
+    const QStandardItemModel* model =
+            static_cast<const QStandardItemModel*>(index.model());
     Q_CHECK_PTR(model);
     Document* document = static_cast<Document*>(model->itemFromIndex(index));
     Q_CHECK_PTR(document);

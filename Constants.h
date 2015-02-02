@@ -11,8 +11,15 @@ namespace constants {
 
 // File extensions for saving and loading
 
-extern QString EXTENSION_COMPONENT_TREE;
 extern QString EXTENSION_DOCFILE;
+
+/**
+ * @brief FILE_COMPONENT_TREE is the file name,
+ * that will be given to files containing the component hierarchy upon saving
+ * a project.
+ * It needs to be prefixed with the path of the project folder it refers to.
+ */
+extern QString FILE_COMPONENT_TREE;
 
 extern QString GENERAL_TYPE_COMPONENT;
 extern QString GENERAL_TYPE_PORT;

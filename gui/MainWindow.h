@@ -7,6 +7,7 @@
 
 #include "metamodel/ComponentCategory.h"
 
+#include <QDir>
 #include <QStandardItemModel>
 #include <QWindow>
 
@@ -40,7 +41,12 @@ public:
 
 signals:
 
+    // project-related
     void signal_createProjectRequested(QString name);
+    void signal_loadProjectRequested(QDir projectDir);
+    void signal_unloadProjectRequested();
+
+    // document-related
     void signal_createDocumentRequested(QString name);
 
     void signal_createCategory(QString name, metamodel::ComponentCategory* parent = 0);
@@ -50,6 +56,7 @@ signals:
     // TODO check visibility
 public slots:
     void slot_createProject();
+    void slot_loadProject();
     void slot_updateProjectName(QString name);
     void slot_enableProjectSaving(bool enabled = true);
     void slot_enableDocumentMenus(bool enabled = true);

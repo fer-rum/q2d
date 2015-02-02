@@ -60,8 +60,7 @@ Project::save(QDir projectDirectory){
 
     // make sure the component tree in use is saved
     WriteJsonFile(
-                projectDirectory.absolutePath() + "/components"
-                + EXTENSION_COMPONENT_TREE,
+                projectDirectory.absolutePath() + FILE_COMPONENT_TREE,
                 m_applicationContext->componentFactory()->exportHierarchy());
 
     // TODO make sure the component tree is rebuild before loading documents
