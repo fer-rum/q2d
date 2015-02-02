@@ -10,6 +10,7 @@
 
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QListView>
 #include <QGraphicsView>
 #include <QMessageBox>
 
@@ -66,6 +67,13 @@ MainWindow::setupSignalsAndSlots(){
             m_context, &ApplicationContext::slot_loadProject);
     connect(this, &MainWindow::signal_unloadProjectRequested,
             m_context, &ApplicationContext::slot_unloadProject);
+
+    // This only needs to be called once since the sender (the ListView)
+    // remains the same, even when the model changes
+    connect(m_ui->documentListView, &QAbstractItemView::doubleClicked,
+            this, static_cast<void (MainWindow::*)(QModelIndex)>
+            (&MainWindow::slot_openDocumentTab));
+
 }
 
 void
@@ -188,20 +196,30 @@ MainWindow::slot_enableDocumentMenus(bool enabled){
  */
 void
 MainWindow::slot_setDocumentModel(QStandardItemModel* model){
+    qDebug() << "SLOT setDocumentModel(" << model << ")";
 
-    QItemSelectionModel* oldModel = m_ui->documentListView->selectionModel();
+
+    // close all tabs related to the old model
+    m_ui->schematicsTabWidget->clear();
+
+    QListView* documentView = m_ui->documentListView;
+
+    documentView->clearSelection();
+    QAbstractItemModel* oldModel = documentView->model();
 
     m_ui->documentListView->setModel(model);
 
-    delete oldModel;
-
-    connect(m_ui->documentListView, &QAbstractItemView::doubleClicked,
-            this, static_cast<void (MainWindow::*)(QModelIndex)>
-            (&MainWindow::slot_openDocumentTab));
+    oldModel->disconnect();
+    oldModel->deleteLater();
 }
 
 void
 MainWindow::slot_openDocumentTab(const QModelIndex index){
+    qDebug() << "SLOT openDocumentTab(" << index.column()
+             << ", " << index.row() << ") by " << this->sender();
+
+    // TODO check if there is already a tab open for this index
+    // switch to it, if this is the case
 
     const QStandardItemModel* model =
             static_cast<const QStandardItemModel*>(index.model());

@@ -19,12 +19,12 @@ class SchematicsTab :
     Q_OBJECT
 
 public:
-    explicit SchematicsTab(QWidget *parent, Document* relatedDocument);
+    explicit SchematicsTab(QWidget *parent, Document* m_relatedDocument);
     virtual ~SchematicsTab();
 
 private:
-    Ui::SchematicsTab *ui;
-    Document* relatedDocument;
+    Ui::SchematicsTab *m_ui;
+    Document* m_relatedDocument;
 };
 
     } // namespace gui
