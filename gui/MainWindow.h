@@ -66,11 +66,11 @@ public slots:
     void slot_openDocumentTab(Document* document);
     void slot_setComponentModel(QStandardItemModel* model);
 
+private slots:
     // created by the Qt Designer
     void on_schematicsTabWidget_tabCloseRequested(int index);
-    void on_addTypeButton_clicked();
-    void on_addCategoryButton_clicked();
-
+    void on_btn_addType_clicked();
+    void on_btn_addCategory_clicked();
 };
 
 } // namespace gui

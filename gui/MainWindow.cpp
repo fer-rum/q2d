@@ -222,11 +222,13 @@ MainWindow::slot_setComponentModel(QStandardItemModel* model){
     this->m_ui->componentTreeView->setModel(model);
 }
 
-void q2d::gui::MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
+void
+MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
     this->m_ui->schematicsTabWidget->removeTab(index);
 }
 
-void q2d::gui::MainWindow::on_addTypeButton_clicked() {
+void
+MainWindow::on_btn_addType_clicked() {
 
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
@@ -256,7 +258,8 @@ void q2d::gui::MainWindow::on_addTypeButton_clicked() {
     emit this->signal_loadType(fileName, parent);
 }
 
-void q2d::gui::MainWindow::on_addCategoryButton_clicked() {
+void
+MainWindow::on_btn_addCategory_clicked() {
 
     Q_CHECK_PTR(this->m_ui->componentTreeView->model());
 

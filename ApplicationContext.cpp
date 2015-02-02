@@ -157,12 +157,9 @@ ApplicationContext::slot_newDocument(QString name){
 void
 ApplicationContext::slot_newProject(QString name){
 
-    // TODO unload current project
     if(this->hasCurrentProject()){
         this->unloadProject();
     }
-
-    // TODO unload unused component libraries
 
     // create new empty project
     this->createProject(name);
