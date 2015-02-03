@@ -23,7 +23,7 @@ using namespace q2d::constants;
 using namespace q2d::metamodel;
 
 ComponentFactory::ComponentFactory(ApplicationContext* parent)
-    : QObject(parent){}
+    : QObject(parent) {}
 
 /**
  * @brief ComponentFactory::addCategory creates a new category and adds it to
@@ -34,18 +34,21 @@ ComponentFactory::ComponentFactory(ApplicationContext* parent)
  * @param name
  * @param parent the parent category; May be null
  */
-void
-ComponentFactory::slot_addCategory(QString name, ComponentCategory* parent){
+ComponentCategory*
+ComponentFactory::slot_addCategory(QString name, ComponentCategory* parent) {
     // TODO ensure update signals are fired upon adding a category
     Q_ASSERT(!name.isEmpty ());
+    qDebug() << "Adding category" << name << "with parent" << parent;
+
 
     ComponentCategory* newCategory = new ComponentCategory(name);
 
-    if(parent == nullptr){
+    if (parent == nullptr) {
         this->componentHierarchy.invisibleRootItem()->appendRow(newCategory);
     } else {
         parent->addSubItem(newCategory);
     }
+    return newCategory;
 }
 
 /**
@@ -58,26 +61,28 @@ ComponentFactory::slot_addCategory(QString name, ComponentCategory* parent){
  * @param parent the parent category; May be null
  */
 void
-ComponentFactory::slot_loadType(QString fileName, ComponentCategory* parent){
+ComponentFactory::slot_loadType(QString fileName, ComponentCategory* parent) {
     Q_ASSERT(!fileName.isEmpty());
 
-    QFile* descriptionFile = new QFile(fileName);
-    Q_ASSERT(descriptionFile->exists());
+    QFile descriptionFile(fileName);
+    Q_ASSERT(descriptionFile.exists());
 
     // read the description file
-    if(!descriptionFile->open(QIODevice::ReadOnly | QIODevice::Text)){
+    if (!descriptionFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "On loading component type: Could not open file "
-                   << descriptionFile->fileName();
+                   << descriptionFile.fileName();
         return;
     }
 
-    QFileInfo descriptionFileInfo = QFileInfo(*descriptionFile);
-    QByteArray binaryData = descriptionFile->readAll();
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(binaryData);
-    descriptionFile->close();
+    qDebug() << "Adding type" << fileName << "with parent" << parent;
+
+    QFileInfo descriptionFileInfo = QFileInfo(descriptionFile);
+    QByteArray rawText = descriptionFile.readAll();
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(rawText);
+    descriptionFile.close();
 
     // If the file contains invalid JSON it simply creates a null document
-    if(jsonDocument.isNull()){
+    if (jsonDocument.isNull()) {
         qDebug() << "JSON document seems to be invalid";
         return;
     }
@@ -90,7 +95,7 @@ ComponentFactory::slot_loadType(QString fileName, ComponentCategory* parent){
     newType->setDescriptorPath(descriptionFileInfo.absoluteFilePath());
 
     // TODO later disallow items w/o category
-    if(parent != nullptr){
+    if (parent != nullptr) {
         parent->addSubItem(newType);
     } else {
         this->componentHierarchy.invisibleRootItem()->appendRow(newType);
@@ -106,9 +111,9 @@ ComponentFactory::slot_loadType(QString fileName, ComponentCategory* parent){
  */
 ComponentType*
 ComponentFactory::createTypeFromJson(
-        const QJsonDocument jsonSource,
-        const QString basePath,
-        ComponentCategory* parent){
+    const QJsonDocument jsonSource,
+    const QString basePath,
+    ComponentCategory* parent) {
 
     Q_ASSERT(!jsonSource.isNull());
     QJsonObject jsonObject = jsonSource.object();
@@ -131,18 +136,20 @@ ComponentFactory::createTypeFromJson(
     // read ports
     // defaults to an empty port array
     QJsonArray portArray =
-            jsonObject.value(JSON_PORTS).toArray(QJsonArray());
+        jsonObject.value(JSON_PORTS).toArray(QJsonArray());
 
-    for(int index = 0; index < portArray.count(); ++index){
+    for (int index = 0; index < portArray.count(); ++index) {
         QJsonValue currentValue = portArray[index];
-        if(currentValue.isUndefined()) continue;
+        if (currentValue.isUndefined()) {
+            continue;
+        }
         QJsonObject portObject = currentValue.toObject();
         // port name
         QString portName = portObject.value(JSON_PORT_NAME)
                            .toString(tr("Unnamed"));
         // port position
         QJsonObject posObject =
-                portObject.value(JSON_PORT_POSITION).toObject();
+            portObject.value(JSON_PORT_POSITION).toObject();
         int x = posObject.value(JSON_POSITION_X).toInt();
         int y = posObject.value(JSON_POSITION_Y).toInt();
         QPoint portPosition = QPoint(x, y);
@@ -151,12 +158,12 @@ ComponentFactory::createTypeFromJson(
         QString dirString = portObject.value(JSON_PORT_DIRECTION)
                             .toString("undef");
         model::PortDirection portDirection =
-                model::StringToPortDirection(dirString);
+            model::StringToPortDirection(dirString);
 
         result->addPort(portName, portPosition, portDirection);
     }
 
-        // TODO read all the other stuff that might come in handy
+    // TODO read all the other stuff that might come in handy
 
     return result;
 }
@@ -171,8 +178,8 @@ ComponentFactory::createTypeFromJson(
  * @return ; May return null
  */
 ComponentCategory*
-ComponentFactory::getCategoryForIndex(const QModelIndex &index){
-    if(!index.isValid()){
+ComponentFactory::getCategoryForIndex(const QModelIndex &index) {
+    if (!index.isValid()) {
         return nullptr;
     }
 
@@ -190,9 +197,9 @@ ComponentFactory::getCategoryForIndex(const QModelIndex &index){
  * @return ; May return null
  */
 ComponentType*
-ComponentFactory::getTypeForIndex(const QModelIndex &index){
+ComponentFactory::getTypeForIndex(const QModelIndex &index) {
 
-    if(!index.isValid()){
+    if (!index.isValid()) {
         return nullptr;
     }
 
@@ -201,19 +208,19 @@ ComponentFactory::getTypeForIndex(const QModelIndex &index){
 }
 
 ComponentType*
-ComponentFactory::getTypeForHierarchyName(QString hierarchyName){
+ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
     QStringList hierarchy = hierarchyName.split(HIERARCHY_SEPERATOR,
-                                                QString::SkipEmptyParts);
+                            QString::SkipEmptyParts);
     // traverse the hierarchy and find the component
     // TODO use a more effective approach here, this is really a hack
 
     QStandardItem* currentItem = this->componentHierarchy.invisibleRootItem();
 
-    while(!hierarchy.isEmpty()){
+    while (!hierarchy.isEmpty()) {
         // iterate over the current hierarcy level
-        for(int index = 0; index < currentItem->rowCount(); ++index){
+        for (int index = 0; index < currentItem->rowCount(); ++index) {
             QStandardItem* child = currentItem->child(index);
-            if(child->text() == hierarchy.first()){
+            if (child->text() == hierarchy.first()) {
                 currentItem = child;
                 hierarchy.removeFirst(); // down to the next level
                 break;
@@ -225,12 +232,13 @@ ComponentFactory::getTypeForHierarchyName(QString hierarchyName){
 }
 
 QStandardItemModel*
-ComponentFactory::getComponentHierarchy(){
+ComponentFactory::getComponentHierarchy() {
     return &(this->componentHierarchy);
 }
 
 DocumentEntry*
-ComponentFactory::instantiateComponent(Document* document, QString typeId, QPointF scenePosition, QString id){
+ComponentFactory::instantiateComponent(Document* document, QString typeId, QPointF scenePosition,
+                                       QString id) {
     Q_CHECK_PTR(document);
 
     ComponentType* type = this->getTypeForHierarchyName(typeId);
@@ -251,13 +259,13 @@ ComponentFactory::instantiateComponent(Document* document, QString typeId, QPoin
  */
 DocumentEntry*
 ComponentFactory::instantiateComponent(Document* document,
-                                    metamodel::ComponentType* type,
-                                    QPointF scenePosition, QString id){
+                                       metamodel::ComponentType* type,
+                                       QPointF scenePosition, QString id) {
     // add component graphics to Schematic
     gui::SchematicsScene* scene = document->schematic();
     Q_CHECK_PTR(scene);
 
-    if(id.isEmpty()){
+    if (id.isEmpty()) {
         id = type->generateId();
     } else {
         // TODO check if the given ID clashes with the generic type-based naming
@@ -265,7 +273,7 @@ ComponentFactory::instantiateComponent(Document* document,
     }
 
     gui::ComponentGraphicsItem* schematicComponent =
-            new gui::ComponentGraphicsItem(type, scene, scenePosition);
+        new gui::ComponentGraphicsItem(type, scene, scenePosition);
     Q_CHECK_PTR(schematicComponent);
 
     scene->addItem(schematicComponent);
@@ -280,8 +288,8 @@ ComponentFactory::instantiateComponent(Document* document,
 
     // connect model and component element
     DocumentEntry* entry =
-            new DocumentEntry(id, DocumentEntryType::COMPONENT,
-                              modelComponent, schematicComponent);
+        new DocumentEntry(id, DocumentEntryType::COMPONENT,
+                          modelComponent, schematicComponent);
     Q_CHECK_PTR(entry);
     schematicComponent->setToolTip(entry->id());
     document->addEntry(entry);
@@ -300,25 +308,27 @@ ComponentFactory::instantiateComponent(Document* document,
 QList<DocumentEntry*>
 ComponentFactory::instantiatePorts(Document* document,
                                    ComponentType* type,
-                                   DocumentEntry* parentComponent){
+                                   DocumentEntry* parentComponent) {
     Q_CHECK_PTR(parentComponent);
     Q_CHECK_PTR(type);
 
     QList<DocumentEntry*> result = QList<DocumentEntry*>();
 
-    for(QObject* child : type->children()){
+    for (QObject * child : type->children()) {
 
         metamodel::PortDescriptor* descriptor =
-                dynamic_cast<metamodel::PortDescriptor*>(child);
-        if(descriptor == nullptr){continue;}
+            dynamic_cast<metamodel::PortDescriptor*>(child);
+        if (descriptor == nullptr) {
+            continue;
+        }
         Q_ASSERT(!descriptor->position().isNull());
 
         QString id = parentComponent->id()
                      + HIERARCHY_SEPERATOR + descriptor->text();
 
         DocumentEntry* entry = this->instantiatePort(document, parentComponent,
-                              descriptor->position(),
-                              descriptor->direction(), id);
+                               descriptor->position(),
+                               descriptor->direction(), id);
         result.append(entry);
     }
 
@@ -339,61 +349,61 @@ ComponentFactory::instantiatePort(Document* document,
                                   DocumentEntry* parentComponent,
                                   QPointF position,
                                   model::PortDirection direction,
-                                  QString id){
+                                  QString id) {
 
     gui::ComponentGraphicsItem* schematicComponent =
-            dynamic_cast<gui::ComponentGraphicsItem*>
-            (parentComponent->schematicElement());
+        dynamic_cast<gui::ComponentGraphicsItem*>
+        (parentComponent->schematicElement());
     Q_CHECK_PTR(schematicComponent);
 
     // add port graphics to schematic
     gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
-                                               position,
-                                               direction,
-                                               schematicComponent);
+        position,
+        direction,
+        schematicComponent);
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
     schematicPort->setToolTip(id);
 
     model::Component* modelComponent =
-            dynamic_cast<model::Component*>(parentComponent->modelElement());
+        dynamic_cast<model::Component*>(parentComponent->modelElement());
     Q_CHECK_PTR(modelComponent);
 
     // add port to model
     model::Port* modelPort = new model::Port(
-                                 direction,
-                                 modelComponent,
-                                 document->model());
+        direction,
+        modelComponent,
+        document->model());
 
     // create and add the document entry
     DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT,
-                                             modelPort, schematicPort,
-                                             parentComponent);
+            modelPort, schematicPort,
+            parentComponent);
     Q_CHECK_PTR(entry);
     document->addEntry(entry);
 
     return entry;
 }
 DocumentEntry*
-ComponentFactory::instantiateWire(Document *document, DocumentEntry *sender,
-                                  DocumentEntry *receiver, QString id){
+ComponentFactory::instantiateWire(Document* document, DocumentEntry* sender,
+                                  DocumentEntry* receiver, QString id) {
     Q_CHECK_PTR(sender);
     Q_CHECK_PTR(receiver);
     Q_ASSERT(!id.isEmpty());
 
     // create the wire graphics
     gui::PortGraphicsItem* senderItem =
-            dynamic_cast<gui::PortGraphicsItem*>(sender->schematicElement());
+        dynamic_cast<gui::PortGraphicsItem*>(sender->schematicElement());
     Q_CHECK_PTR(senderItem);
 
     gui::PortGraphicsItem* receiverItem =
-            dynamic_cast<gui::PortGraphicsItem*>(receiver->schematicElement());
+        dynamic_cast<gui::PortGraphicsItem*>(receiver->schematicElement());
     Q_CHECK_PTR(receiverItem);
 
     gui::WireGraphicsItem* schematicWire =
-            new gui::WireGraphicsItem(
-                senderItem,
-                receiverItem);
+        new gui::WireGraphicsItem(
+        senderItem,
+        receiverItem);
     Q_CHECK_PTR(schematicWire);
 
     document->schematic()->addItem(schematicWire);
@@ -409,73 +419,144 @@ ComponentFactory::instantiateWire(Document *document, DocumentEntry *sender,
 
     // add the document entry
     DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::WIRE,
-                                             modelWire, schematicWire);
+            modelWire, schematicWire);
     document->addEntry(entry);
 
     return entry;
 }
 
 QJsonDocument
-ComponentFactory::exportHierarchy(){
+ComponentFactory::exportHierarchy() {
     QJsonDocument result = QJsonDocument();
     QJsonArray hierarchy = QJsonArray();
 
     QStandardItem* rootItem = componentHierarchy.invisibleRootItem();
 
-    for(int rIndex = 0; rIndex < rootItem->rowCount(); ++rIndex){
-        for(int cIndex = 0; cIndex < rootItem->columnCount(); ++cIndex){
+    for (int rIndex = 0; rIndex < rootItem->rowCount(); ++rIndex) {
+        for (int cIndex = 0; cIndex < rootItem->columnCount(); ++cIndex) {
             hierarchy.append(QJsonValue(
-                              this->itemToJson(rootItem->child(rIndex, cIndex))
-                              ));
+                                 this->entryToJson(rootItem->child(rIndex, cIndex))
+                             ));
         }
     }
 
     result.setArray(hierarchy);
+    return result;
+}
 
+
+void
+ComponentFactory::importHierarchy(QJsonDocument source) {
+    Q_ASSERT(!source.isNull());
+    Q_ASSERT(source.isArray());
+
+    QJsonArray hierarchy = source.array();
+
+    for (int index = 0; index < hierarchy.count(); ++index) {
+        jsonToEntry(hierarchy[index].toObject(), nullptr);
+    }
+}
+
+void
+ComponentFactory::jsonToCategoryEntry(QJsonObject json, ComponentCategory* parent) {
+
+    QString name = json.value(JSON_HIERARCHY_CATEGORY_NAME).toString();
+    ComponentCategory* result = this->slot_addCategory(name, parent);
+
+    QJsonArray children = json.value(JSON_HIERARCHY_CHILD).toArray();
+
+    for (int index = 0; index < children.count(); ++index) {
+        jsonToEntry(children[index].toObject(), result);
+    }
+
+
+}
+
+void
+ComponentFactory::jsonToTypeEntry(QJsonObject json, ComponentCategory* parent) {
+    QString sourcePath = json.value(JSON_HIERARCHY_SOURCE).toString();
+    Q_ASSERT(!sourcePath.isEmpty());
+
+    this->slot_loadType(sourcePath, parent);
+}
+
+void
+ComponentFactory::jsonToEntry(QJsonObject json, ComponentCategory* parent) {
+    QString type = json.value(JSON_HIERARCHY_TYPE).toString();
+    if (type == JSON_HIERARCHY_TYPE_COMPONENT) {
+        jsonToTypeEntry(json, parent);
+    } else if (type == JSON_HIERARCHY_TYPE_CATEGORY) {
+        jsonToCategoryEntry(json, parent);
+    } else {
+        Q_ASSERT(false);
+    }
+}
+
+
+QJsonObject
+ComponentFactory::componentEntryToJson(QStandardItem* item) {
+    ComponentCategory* category = dynamic_cast<ComponentCategory*>(item);
+    Q_CHECK_PTR(category);
+
+    QJsonObject result = QJsonObject();
+    QJsonArray children = QJsonArray();
+    result.insert(JSON_HIERARCHY_CATEGORY_NAME, QJsonValue(category->text()));
+    // child recursion
+    for (int rIndex = 0; rIndex < item->rowCount(); ++rIndex) {
+        for (int cIndex = 0; cIndex < item->columnCount(); ++cIndex) {
+            children.append(QJsonValue(
+                                this->entryToJson(item->child(rIndex, cIndex))
+                            ));
+        }
+    }
+    result.insert(JSON_HIERARCHY_CHILD, children);
+    return result;
+}
+
+/**
+ * @brief ComponentFactory::typeEntryToJson converts a QStandardItem describing a ComponentType
+ * into a QJsonObject
+ * @param item
+ * @return
+ */
+QJsonObject
+ComponentFactory::typeEntryToJson(QStandardItem* item) {
+    QJsonObject result = QJsonObject();
+    ComponentType* componentType = dynamic_cast<ComponentType*>(item);
+    Q_CHECK_PTR(componentType);
+
+    result.insert(JSON_HIERARCHY_SOURCE,
+                  QJsonValue(componentType->descriptorPath()));
     return result;
 }
 
 QJsonObject
-ComponentFactory::itemToJson(QStandardItem* item){
+ComponentFactory::entryToJson(QStandardItem* item) {
 
-    QJsonObject result = QJsonObject();
-    // TODO write item specific stuff
+    QJsonObject result;
 
-    switch(item->type()){
-    case COMPONENT_TYPE: {
-        ComponentType* componentType = dynamic_cast<ComponentType*>(item);
-        Q_CHECK_PTR(componentType);
-        result.insert(JSON_HIERARCHY_SOURCE,
-                      QJsonValue(componentType->descriptorPath()));
-    }
+    switch (item->type()) {
+    case COMPONENT_TYPE:
+        result = typeEntryToJson(item);
+        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_COMPONENT));
         break;
-    case COMPONENT_CATEGORY: {
-        ComponentCategory* category = dynamic_cast<ComponentCategory*>(item);
-        Q_CHECK_PTR(category);
-        result.insert(JSON_HIERARCHY_CATEGORY, QJsonValue(category->text()));
-        // child recursion
-        for(int rIndex = 0; rIndex < item->rowCount(); ++rIndex){
-            for(int cIndex = 0; cIndex < item->columnCount(); ++cIndex){
-                result.insert(JSON_HIERARCHY_CHILD, QJsonValue(
-                                  this->itemToJson(item->child(rIndex, cIndex))
-                                  ));
-            }
-        }
-    }
-            break;
+    case COMPONENT_CATEGORY:
+        result = componentEntryToJson(item);
+        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_CATEGORY));
+        break;
     case PORT_DESCRIPTOR:
         // nothing to save, since they are bound to the component
         // this should not happen anyways
         Q_ASSERT(false);
-            break;
     default:; // nothing useful to do, we should not end up here
         Q_ASSERT(false);
+        result = QJsonObject();
     }
 
     return result;
 }
 
 void
-ComponentFactory::slot_clearHierarchy(){
+ComponentFactory::slot_clearHierarchy() {
     componentHierarchy.clear();
 }

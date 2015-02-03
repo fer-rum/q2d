@@ -7,20 +7,20 @@
 
 namespace q2d {
 
-    // forward declaration
-    class Application;
+// forward declaration
+class Application;
 
-    namespace gui {
-        class MainWindow;
-    }
+namespace gui {
+class MainWindow;
+}
 
-    class ComponentFactory;
-    class Project;
-    class Document;
+class ComponentFactory;
+class Project;
+class Document;
 
 
 // TODO documentation
-    // TODO close projects
+// TODO close projects
 class ApplicationContext : public QObject {
     Q_OBJECT
 private:
@@ -41,29 +41,29 @@ public:
     virtual ~ApplicationContext();
 
     bool hasCurrentProject(); // TODO const
-     Project* getCurrentProject(); // TODO const
-     gui::MainWindow* getMainWindow(); // TODO const
-     ComponentFactory* componentFactory(); // TODO const
+    Project* getCurrentProject(); // TODO const
+    gui::MainWindow* getMainWindow(); // TODO const
+    ComponentFactory* componentFactory(); // TODO const
 
-     void setupSignalsAndSlots();
+    void setupSignalsAndSlots();
 
 signals:
-     void signal_projectNameChanged(QString newName);
-     void signal_canSaveProjects(bool newState);
-     void signal_canAddDocuments(bool newState);
-     void signal_createDocument(QString name);
-     void signal_documentModelChanged(QStandardItemModel* model);
-     void signal_componentModelChanged(QStandardItemModel* model);
-     void signal_saveProject();
+    void signal_projectNameChanged(QString newName);
+    void signal_canSaveProjects(bool newState);
+    void signal_canAddDocuments(bool newState);
+    void signal_createDocument(QString name);
+    void signal_documentModelChanged(QStandardItemModel* model);
+    void signal_componentModelChanged(QStandardItemModel* model);
+    void signal_saveProject();
 
-     // forwarding signal to MainWindow
-     void signal_showDocument(Document* document);
+    // forwarding signal to MainWindow
+    void signal_showDocument(Document* document);
 
 public slots:
     void slot_newDocument(QString name);
     void slot_newProject(QString name);
     void slot_projectNameChanged(QString newName);
-    void slot_loadProject(QDir projectDir);
+    void slot_loadProject(QString projectDirPath);
     void slot_unloadProject();
 };
 

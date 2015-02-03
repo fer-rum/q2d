@@ -7,8 +7,8 @@
 namespace q2d {
 namespace model {
 
-    // forward declaration
-    class Model;
+// forward declaration
+class Model;
 
 // TODO documentation
 // TODO visitor-Pattern

@@ -11,12 +11,12 @@
 namespace q2d {
 namespace metamodel {
 
-    // forward declaration
-    class ComponentType;
+// forward declaration
+class ComponentType;
 
 class PortDescriptor :
-        public QObject,
-        public QStandardItem {
+    public QObject,
+    public QStandardItem {
     Q_OBJECT
 public:
     explicit PortDescriptor(QString name,
@@ -27,8 +27,9 @@ public:
     QPoint position();
     model::PortDirection direction();
 
-    virtual int type() const
-    { return ComponentDescriptorType::PORT_DESCRIPTOR; }
+    virtual int type() const {
+        return ComponentDescriptorType::PORT_DESCRIPTOR;
+    }
 };
 
 } // namespace metamodel

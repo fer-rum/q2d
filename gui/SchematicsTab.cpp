@@ -3,7 +3,7 @@
 
 using namespace q2d::gui;
 
-SchematicsTab::SchematicsTab(QWidget *parent, Document* relatedDocument) :
+SchematicsTab::SchematicsTab(QWidget* parent, Document* relatedDocument) :
     QWidget(parent),
     m_ui(new Ui::SchematicsTab) {
 
@@ -14,13 +14,13 @@ SchematicsTab::SchematicsTab(QWidget *parent, Document* relatedDocument) :
     m_ui->setupUi(this);
     m_ui->schematicsView->setScene(relatedDocument->schematic());
     QSize viewSize = m_ui->schematicsView->size();
-    relatedDocument->schematic()->setSceneRect(QRectF(QPoint(0,0), viewSize));
+    relatedDocument->schematic()->setSceneRect(QRectF(QPoint(0, 0), viewSize));
     m_ui->schematicsView->update();
 
 
 }
 
-SchematicsTab::~SchematicsTab(){
+SchematicsTab::~SchematicsTab() {
     delete m_ui;
     // do not delete the document…
 }

@@ -23,8 +23,8 @@ Component::Component(ComponentType* type, Model* model, Model* internalModel)
  * @return the newly created port
  */
 Port*
-Component::createPort(PortDirection direction){
-    Port* newPort = new Port(direction,this, this->model());
+Component::createPort(PortDirection direction) {
+    Port* newPort = new Port(direction, this, this->model());
     m_ports.append(newPort);
     return newPort;
 }

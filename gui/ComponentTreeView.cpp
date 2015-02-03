@@ -21,9 +21,9 @@ ComponentTreeView::ComponentTreeView(QWidget* parent) :
     QTreeView(parent) {}
 
 void
-ComponentTreeView::mousePressEvent(QMouseEvent *event){
+ComponentTreeView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
-             this->dragStartPosition = event->pos();
+        this->dragStartPosition = event->pos();
     }
 
     // propagate event to superclass
@@ -35,8 +35,8 @@ ComponentTreeView::performDrag() {
     // we should only be able to drag exactly one item
     Q_ASSERT(this->selectedIndexes().count() == 1);
 
-    QDrag *drag = new QDrag(this);
-    QMimeData *mimeData = new QMimeData();
+    QDrag* drag = new QDrag(this);
+    QMimeData* mimeData = new QMimeData();
 
     // create the payload
     QModelIndex selected = this->selectedIndexes().first();
@@ -59,7 +59,7 @@ ComponentTreeView::performDrag() {
 }
 
 void
-ComponentTreeView::mouseMoveEvent(QMouseEvent *event) {
+ComponentTreeView::mouseMoveEvent(QMouseEvent* event) {
     // check if we are dragging something
     if (event->buttons() & Qt::LeftButton) {
 

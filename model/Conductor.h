@@ -16,7 +16,7 @@ private:
     Node* start;
     Node* end;
 public:
-    Conductor(Node *start, Node* end, Model* model);
+    Conductor(Node* start, Node* end, Model* model);
 };
 
 } // namespace model

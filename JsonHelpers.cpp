@@ -15,7 +15,7 @@
 using namespace q2d::constants;
 
 void
-q2d::WriteJsonFile(QString path, QJsonDocument doc){
+q2d::WriteJsonFile(QString path, QJsonDocument doc) {
 
     QFile file(path);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -24,7 +24,7 @@ q2d::WriteJsonFile(QString path, QJsonDocument doc){
 }
 
 QJsonObject
-q2d::PointToJson(QPointF point){
+q2d::PointToJson(QPointF point) {
     Q_ASSERT(!point.isNull());
 
     QJsonObject result = QJsonObject();
@@ -35,7 +35,7 @@ q2d::PointToJson(QPointF point){
     return result;
 }
 
-QPointF q2d::JsonToPoint(QJsonObject json){
+QPointF q2d::JsonToPoint(QJsonObject json) {
     Q_ASSERT(json.contains(JSON_POSITION_X));
     Q_ASSERT(json.contains(JSON_POSITION_Y));
 
@@ -46,12 +46,12 @@ QPointF q2d::JsonToPoint(QJsonObject json){
 }
 
 QJsonObject
-q2d::DocumentToJson(Document* doc){
+q2d::DocumentToJson(Document* doc) {
 
     QJsonArray entriesArray = QJsonArray();
 
     // Write the entries
-    for(DocumentEntry* entry : doc->entries()){
+    for (DocumentEntry * entry : doc->entries()) {
         entriesArray.append(QJsonValue(DocumentEntryToJson(entry)));
     }
 
@@ -62,7 +62,7 @@ q2d::DocumentToJson(Document* doc){
 }
 
 q2d::Document*
-q2d::JsonToDocument(QJsonObject json, QString name, Project* parent){
+q2d::JsonToDocument(QJsonObject json, QString name, Project* parent) {
     Q_CHECK_PTR(parent);
     Q_ASSERT(!name.isEmpty());
 
@@ -71,7 +71,7 @@ q2d::JsonToDocument(QJsonObject json, QString name, Project* parent){
     QJsonArray entries = json.value(JSON_DOCENTRY).toArray();
 
     // Read the entries
-    for(QJsonValue jsonEntry : entries){
+    for (QJsonValue jsonEntry : entries) {
         parseDocumentEntry(jsonEntry.toObject(), doc);
     }
 
@@ -79,7 +79,7 @@ q2d::JsonToDocument(QJsonObject json, QString name, Project* parent){
 }
 
 QJsonObject
-q2d::DocumentEntryToJson(DocumentEntry* entry){
+q2d::DocumentEntryToJson(DocumentEntry* entry) {
     Q_CHECK_PTR(entry);
 
     QJsonObject result = QJsonObject();
@@ -97,7 +97,7 @@ q2d::DocumentEntryToJson(DocumentEntry* entry){
     result.insert(JSON_DOCENTRY_TYPE,
                   QJsonValue(DocumentEntryTypeToString(entry->type())));
     // the parent id, if there is one
-    if(entry->parent() != nullptr){
+    if (entry->parent() != nullptr) {
         result.insert(JSON_DOCENTRY_PARENT, QJsonValue(entry->parent()->id()));
     } else {
         result.insert(JSON_DOCENTRY_PARENT, QJsonValue::Null);
@@ -115,7 +115,7 @@ q2d::DocumentEntryToJson(DocumentEntry* entry){
  * @param document
  */
 void
-q2d::parseDocumentEntry(QJsonObject json, Document* document){
+q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     Q_ASSERT(json.contains(JSON_DOCENTRY_ID));
 
 
@@ -125,34 +125,32 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document){
 
     // TODO reconstruct the schematics element
     QJsonObject schematicJson =
-            json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
+        json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
     QString typeId = schematicJson.value(JSON_DOCENTRY_TYPE).toString();
     QPointF position = JsonToPoint(
-                          schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
+                           schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
 
     // reconstruct the parent
     QJsonValue parentValue = json.value(JSON_DOCENTRY_PARENT);
     DocumentEntry* parent;
-    if(parentValue.isNull()){
+    if (parentValue.isNull()) {
         parent = nullptr;
     } else {
         parent = document->entry(parentValue.toString());
     }
 
-    switch(type){
+    switch (type) {
     case COMPONENT :
         document->componentFactory()->instantiateComponent(
-                    document, typeId, position, id);
+            document, typeId, position, id);
         break;
-    case PORT :
-    {
+    case PORT : {
         QString directionString = json.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         document->componentFactory()->instantiatePort(
-                    document, parent, position, model::StringToPortDirection(directionString), id);
+            document, parent, position, model::StringToPortDirection(directionString), id);
     }
-        break;
-    case WIRE :
-    {
+    break;
+    case WIRE : {
         QJsonObject additional = json.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
         Q_ASSERT(!additional.isEmpty());
 
@@ -164,8 +162,9 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document){
 
         document->componentFactory()->instantiateWire(document, sender, receiver, id);
     }
-        break;
-    default:;
+    break;
+    default:
+        ;
         // ignore everything else for now
     }
 
@@ -173,14 +172,14 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document){
 }
 
 QJsonObject
-q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc){
+q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
     QJsonObject result = QJsonObject();
 
     result.insert(JSON_SCHEMATIC_SUB_TYPE, QJsonValue(ssc->specificType()));
     result.insert(JSON_SCHEMATIC_POSITION, PointToJson(ssc->pos()));
 
     QJsonObject additionalInfo = ssc->additionalJson();
-    if(!additionalInfo.isEmpty()){
+    if (!additionalInfo.isEmpty()) {
         result.insert(JSON_SCHEMATIC_ADDITIONAL, QJsonValue(additionalInfo));
     }
 

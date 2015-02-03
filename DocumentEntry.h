@@ -11,13 +11,13 @@
 namespace q2d {
 
 // forward declaration
-    class Document;
+class Document;
 
 namespace model {
-    class ModelElement;
+class ModelElement;
 }
 
-enum DocumentEntryType{
+enum DocumentEntryType {
     COMPONENT,
     PORT,
     WIRE,

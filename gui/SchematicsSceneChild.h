@@ -54,17 +54,24 @@ protected:
 
     SchematicsScene* m_scene;
 
-    void setBoundingRect(QRectF rect)
-    { m_boundingRect = rect; }
+    void setBoundingRect(QRectF rect) {
+        m_boundingRect = rect;
+    }
 
     virtual void recalculateBoundingRect();
 
     void addActual(QGraphicsItem* actual);
 
-    void clearActuals(){ m_actuals.clear(); }
-    int countActuals() const { return m_actuals.count(); }
+    void clearActuals() {
+        m_actuals.clear();
+    }
+    int countActuals() const {
+        return m_actuals.count();
+    }
     QAbstractGraphicsShapeItem* actual() const;
-    QList<QGraphicsItem*> actuals() const { return m_actuals; }
+    QList<QGraphicsItem*> actuals() const {
+        return m_actuals;
+    }
     // TODO add overrides as needed
 
 public:
@@ -78,12 +85,14 @@ public:
     // for JSON generation
     // you must/may want to override these.
     virtual QString specificType() = 0;
-    virtual QJsonObject additionalJson()
-    { return EMPTY_JSON; }
+    virtual QJsonObject additionalJson() {
+        return EMPTY_JSON;
+    }
 
     // necessary overrides
-    virtual QRectF boundingRect() const
-    { return m_boundingRect; }
+    virtual QRectF boundingRect() const {
+        return m_boundingRect;
+    }
 
     virtual void paint(QPainter* painter,
                        const QStyleOptionGraphicsItem* option,

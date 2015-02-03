@@ -24,7 +24,8 @@ protected:
     virtual QString specificType();
 
 public:
-    explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene *scene, QPointF position);
+    explicit ComponentGraphicsItem(metamodel::ComponentType* type, SchematicsScene* scene,
+                                   QPointF position);
 
 signals:
 

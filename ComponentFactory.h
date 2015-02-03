@@ -10,20 +10,21 @@
 
 namespace q2d {
 
-    // forward declaration
-    class ApplicationContext;
-    class Document;
-    class DocumentEntry;
+// forward declaration
+class ApplicationContext;
+class Document;
+class DocumentEntry;
 
-    namespace metamodel {
-    class ComponentCategory;
-    class ComponentType;
-    }
+namespace metamodel {
+class ComponentCategory;
+class ComponentDescriptor;
+class ComponentType;
+}
 
-    namespace model {
-    class Component;
-    class Model;
-    }
+namespace model {
+class Component;
+class Model;
+}
 
 class ComponentFactory : public QObject {
     Q_OBJECT
@@ -35,7 +36,13 @@ private:
             const QString basePath,
             metamodel::ComponentCategory* parent);
 
-    QJsonObject itemToJson(QStandardItem* item);
+    QJsonObject entryToJson(QStandardItem* item);
+    QJsonObject componentEntryToJson(QStandardItem* item);
+    QJsonObject typeEntryToJson(QStandardItem* item);
+
+    void jsonToCategoryEntry(QJsonObject json, metamodel::ComponentCategory* parent = nullptr);
+    void jsonToTypeEntry(QJsonObject json, metamodel::ComponentCategory* parent);
+    void jsonToEntry(QJsonObject json, metamodel::ComponentCategory* parent);
 
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
@@ -46,7 +53,7 @@ public:
     metamodel::ComponentType* getTypeForHierarchyName(QString hierarchyName);
 
     DocumentEntry* instantiateComponent(Document* document, QString typeId,
-                              QPointF scenePosition, QString id = "");
+                                        QPointF scenePosition, QString id = "");
     DocumentEntry* instantiateComponent(Document* document,
                                         metamodel::ComponentType* type,
                                         QPointF scenePosition,
@@ -64,10 +71,12 @@ public:
                                    DocumentEntry* receiver,
                                    QString id);
     QJsonDocument exportHierarchy();
+    void importHierarchy(QJsonDocument source);
+
 
 public slots:
     void slot_loadType(QString fileName, metamodel::ComponentCategory* parent);
-    void slot_addCategory(QString name, metamodel::ComponentCategory* parent);
+    metamodel::ComponentCategory* slot_addCategory(QString name, metamodel::ComponentCategory* parent);
     void slot_clearHierarchy();
 
 };

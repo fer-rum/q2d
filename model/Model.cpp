@@ -26,7 +26,7 @@ Model::Model(Document* parent)
 }
 
 void
-Model::addComponent(Component* toAdd){
+Model::addComponent(Component* toAdd) {
     Q_CHECK_PTR(toAdd);
     this->m_components.append(toAdd);
 
@@ -34,7 +34,7 @@ Model::addComponent(Component* toAdd){
 }
 
 Conductor*
-Model::connect(Node* start, Node* end){
+Model::connect(Node* start, Node* end) {
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
 

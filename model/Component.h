@@ -15,8 +15,8 @@ class ComponentType;
 
 namespace model {
 
-    // ahead declaration
-    class Model;
+// ahead declaration
+class Model;
 
 // TODO documentation
 // TODO visitor-pattern

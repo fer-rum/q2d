@@ -9,17 +9,17 @@ using namespace q2d::constants;
 const QJsonObject SchematicsSceneChild::EMPTY_JSON = QJsonObject();
 
 
-SchematicsSceneChild::SchematicsSceneChild(SchematicsScene *scene, SchematicsSceneChild* parent)
+SchematicsSceneChild::SchematicsSceneChild(SchematicsScene* scene, SchematicsSceneChild* parent)
     : QGraphicsObject(parent) {
     Q_CHECK_PTR(scene);
     m_scene = scene;
     m_actuals = QList<QGraphicsItem*>();
-    m_boundingRect = QRectF(0,0,0,0);
+    m_boundingRect = QRectF(0, 0, 0, 0);
 }
 
-SchematicsSceneChild::SchematicsSceneChild(SchematicsScene *scene,
-                                           QGraphicsItem* actual,
-                                           SchematicsSceneChild* parent)
+SchematicsSceneChild::SchematicsSceneChild(SchematicsScene* scene,
+        QGraphicsItem* actual,
+        SchematicsSceneChild* parent)
     : SchematicsSceneChild(scene, parent) {
     Q_CHECK_PTR(actual);
     this->addActual(actual);
@@ -32,7 +32,7 @@ SchematicsSceneChild::scene() const {
 }
 
 void
-SchematicsSceneChild::addActual(QGraphicsItem *actual){
+SchematicsSceneChild::addActual(QGraphicsItem* actual) {
     m_actuals.append(actual);
     this->recalculateBoundingRect();
 }
@@ -48,7 +48,7 @@ SchematicsSceneChild::actual() const {
     Q_ASSERT(!m_actuals.isEmpty());
     Q_ASSERT(m_actuals.count() == 1);
     QAbstractGraphicsShapeItem* result =
-            dynamic_cast<QAbstractGraphicsShapeItem*>(m_actuals.first());
+        dynamic_cast<QAbstractGraphicsShapeItem*>(m_actuals.first());
     Q_CHECK_PTR(result);
     return result;
 }
@@ -62,10 +62,12 @@ SchematicsSceneChild::actual() const {
  * in m_boundingRect and can be aquired via boundingRect().
  */
 void
-SchematicsSceneChild::recalculateBoundingRect(){
+SchematicsSceneChild::recalculateBoundingRect() {
 
     // the trivial case
-    if(m_actuals.isEmpty()){ this->setBoundingRect(QRect(0,0,0,0)); }
+    if (m_actuals.isEmpty()) {
+        this->setBoundingRect(QRect(0, 0, 0, 0));
+    }
 
     qreal minX, maxX, minY, maxY;
 
@@ -79,7 +81,7 @@ SchematicsSceneChild::recalculateBoundingRect(){
     maxX = minX + currentRect.width();
     maxY = minY + currentRect.height();
 
-    for(QGraphicsItem* actual : m_actuals){
+    for (QGraphicsItem * actual : m_actuals) {
         currentRect = actual->boundingRect();
 
         qreal tempMinX = currentRect.x();
@@ -101,11 +103,13 @@ SchematicsSceneChild::recalculateBoundingRect(){
 void
 SchematicsSceneChild::paint(QPainter* painter,
                             const QStyleOptionGraphicsItem* option,
-                            QWidget* widget){
+                            QWidget* widget) {
 
-    if(m_actuals.isEmpty()){ return; }
+    if (m_actuals.isEmpty()) {
+        return;
+    }
 
-    for(QGraphicsItem* actual : m_actuals){
+    for (QGraphicsItem * actual : m_actuals) {
         actual->paint(painter, option, widget);
     }
 }

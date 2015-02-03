@@ -12,15 +12,15 @@ namespace q2d {
 class Application : public QApplication {
     Q_OBJECT
 private:
-    QSettings* applicationSettings;
-    ApplicationContext* context;
+    QSettings* m_appSettings;
+    ApplicationContext* m_context;
 
     void defaultSetting(QString name, QVariant defaultValue);
     void checkSettings();
 
 public:
 
-    explicit Application(int &argc, char **argv[]);
+    explicit Application(int &argc, char** argv[]);
     virtual ~Application();
 
     ApplicationContext* getContext();

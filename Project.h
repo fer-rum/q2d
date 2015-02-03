@@ -12,8 +12,8 @@
 
 namespace q2d {
 
-    // forward declaration
-    class ApplicationContext;
+// forward declaration
+class ApplicationContext;
 
 // TODO documentation
 // TODO saving
@@ -28,7 +28,7 @@ private:
 
     void save(QDir projectDirectory);
 public:
-    Project(QString name, ApplicationContext *parent = nullptr);
+    Project(QString name, ApplicationContext* parent = nullptr);
 
     QStandardItemModel* getDocuments();
 

@@ -10,12 +10,12 @@
 namespace q2d {
 namespace metamodel {
 
-    // forward declaration
-    class ComponentCategory;
+// forward declaration
+class ComponentCategory;
 
 class ComponentDescriptor :
-        public QObject,
-        public QStandardItem {
+    public QObject,
+    public QStandardItem {
     Q_OBJECT
 public:
     explicit ComponentDescriptor(QString name, ComponentCategory* parent = 0);
@@ -28,7 +28,7 @@ public:
 } // namespace q2d
 
 // Metatype declaration
-Q_DECLARE_METATYPE(QGraphicsSvgItem*) // for circuit symbols
+Q_DECLARE_METATYPE(QGraphicsSvgItem*)  // for circuit symbols
 // TODO is this still used?
 
 #endif // COMPONENTDESCRIPTOR_H

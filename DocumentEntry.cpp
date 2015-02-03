@@ -10,24 +10,34 @@ using namespace q2d::constants;
 using namespace q2d::gui;
 
 QString
-q2d::DocumentEntryTypeToString(DocumentEntryType type){
+q2d::DocumentEntryTypeToString(DocumentEntryType type) {
 
-    switch(type){
-    case COMPONENT : return GENERAL_TYPE_COMPONENT;
-    case PORT : return GENERAL_TYPE_PORT;
-    case WIRE : return GENERAL_TYPE_WIRE;
-    default : return GENERAL_TYPE_UNDEFINED;
+    switch (type) {
+    case COMPONENT :
+        return GENERAL_TYPE_COMPONENT;
+    case PORT :
+        return GENERAL_TYPE_PORT;
+    case WIRE :
+        return GENERAL_TYPE_WIRE;
+    default :
+        return GENERAL_TYPE_UNDEFINED;
     }
 }
 
 DocumentEntryType
-q2d::StringToDocumentEntryType(QString string){
+q2d::StringToDocumentEntryType(QString string) {
 
     string = string.trimmed().toLower();
 
-    if(string == GENERAL_TYPE_COMPONENT) return DocumentEntryType::COMPONENT;
-    if(string == GENERAL_TYPE_PORT) return DocumentEntryType::PORT;
-    if(string == GENERAL_TYPE_WIRE) return DocumentEntryType::WIRE;
+    if (string == GENERAL_TYPE_COMPONENT) {
+        return DocumentEntryType::COMPONENT;
+    }
+    if (string == GENERAL_TYPE_PORT) {
+        return DocumentEntryType::PORT;
+    }
+    if (string == GENERAL_TYPE_WIRE) {
+        return DocumentEntryType::WIRE;
+    }
 
     return DocumentEntryType::UNDEFINED;
 }
@@ -35,7 +45,7 @@ q2d::StringToDocumentEntryType(QString string){
 DocumentEntry::DocumentEntry(QString id, DocumentEntryType type,
                              model::ModelElement* modelElement,
                              SchematicsSceneChild* schematicElement,
-                             DocumentEntry* parent){
+                             DocumentEntry* parent) {
 
     Q_ASSERT(!id.isEmpty());
     m_id = id;
@@ -51,7 +61,7 @@ DocumentEntry::DocumentEntry(QString id, DocumentEntryType type,
     this->m_parent = parent;
 
     qDebug() << "DocumentEntry " << id << " at " << schematicElement->scenePos()
-                << " with parent " << (parent == nullptr? "null" : parent->id());
+             << " with parent " << (parent == nullptr ? "null" : parent->id());
 }
 
 QString
@@ -61,7 +71,7 @@ DocumentEntry::id() const {
 
 
 DocumentEntryType
-DocumentEntry::type(){
+DocumentEntry::type() {
     return m_type;
 }
 

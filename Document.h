@@ -13,13 +13,13 @@
 
 namespace q2d {
 
-    // forward declaration
-    class ComponentFactory;
-    class Project;
+// forward declaration
+class ComponentFactory;
+class Project;
 
-    namespace gui {
-    class ComponentGraphicsItem;
-    }
+namespace gui {
+class ComponentGraphicsItem;
+}
 
 enum DocumentRole {
     MODEL = Qt::UserRole + 1000,
@@ -33,8 +33,8 @@ enum DocumentRole {
 // TODO loading
 
 class Document :
-        public QObject,
-        public QStandardItem {
+    public QObject,
+    public QStandardItem {
     Q_OBJECT
 private:
     /**

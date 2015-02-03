@@ -3,12 +3,11 @@
 #include <QDir>
 #include <QtSvg/QGraphicsSvgItem>
 
-// TODO constants for setting names
 
 using namespace q2d;
 using namespace q2d::constants;
 
-Application::Application(int &argc, char **argv[]) : QApplication(argc, *argv) {
+Application::Application(int &argc, char** argv[]) : QApplication(argc, *argv) {
 
     this->setApplicationName("q2d");
     this->setOrganizationName("Fredo Erxleben");
@@ -17,33 +16,32 @@ Application::Application(int &argc, char **argv[]) : QApplication(argc, *argv) {
     qRegisterMetaType<QGraphicsSvgItem*>();
 
     // TODO load settings
-    this->applicationSettings = new QSettings();
+    this->m_appSettings = new QSettings();
     this->checkSettings();
 
-    this->context = new ApplicationContext(this);
-    Q_CHECK_PTR(this->context);
+    m_context = new ApplicationContext(this);
+    Q_CHECK_PTR(m_context);
 }
 
 Application::~Application() {
-    delete this->context;
-    delete this->applicationSettings;
+    delete m_context;
+    delete m_appSettings;
 }
 
 ApplicationContext*
-Application::getContext(){
-    return this->context;
+Application::getContext() {
+    return m_context;
 }
 
-
 void
-Application::defaultSetting(QString name, QVariant defaultValue){
-    if(!this->applicationSettings->value(name).isValid()){
-        this->applicationSettings->setValue(name, defaultValue);
+Application::defaultSetting(QString name, QVariant defaultValue) {
+    if (!this->m_appSettings->value(name).isValid()) {
+        this->m_appSettings->setValue(name, defaultValue);
     }
 }
 
 void
-Application::checkSettings(){
+Application::checkSettings() {
 
     QString basePath = QDir::homePath() + "/q2d";
 
@@ -56,11 +54,11 @@ Application::checkSettings(){
 }
 
 QVariant
-Application::getSetting(QString key){
-    return this->applicationSettings->value(key);
+Application::getSetting(QString key) {
+    return this->m_appSettings->value(key);
 }
 
 Application*
-Application::instance(){
+Application::instance() {
     return dynamic_cast<Application*>(QApplication::instance());
 }

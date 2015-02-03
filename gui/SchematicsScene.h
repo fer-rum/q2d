@@ -9,14 +9,14 @@
 
 namespace q2d {
 
-    // forward declaration
-    class Document;
+// forward declaration
+class Document;
 
 namespace gui {
 
 
 class SchematicsScene
-    : public QGraphicsScene {
+        : public QGraphicsScene {
     Q_OBJECT
 private:
     bool    m_dragOver          = false;
@@ -28,7 +28,7 @@ public:
     Document* document() const;
 
     // cosmetic overrides
-    void drawBackground(QPainter *painter, const QRectF &rect);
+    void drawBackground(QPainter* painter, const QRectF &rect);
 
     // overrides for custom handling
     virtual void dragEnterEvent(QGraphicsSceneDragDropEvent* event);

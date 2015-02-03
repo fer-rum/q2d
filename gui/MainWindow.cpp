@@ -20,7 +20,7 @@ using namespace q2d::gui;
 using namespace q2d::metamodel;
 
 MainWindow::MainWindow(ApplicationContext* parent) :
-    QMainWindow(), m_ui(new Ui::MainWindow){
+    QMainWindow(), m_ui(new Ui::MainWindow) {
 
     Q_CHECK_PTR(parent);
     this->m_context = parent;
@@ -33,7 +33,7 @@ MainWindow::MainWindow(ApplicationContext* parent) :
 MainWindow::~MainWindow() {}
 
 void
-MainWindow::setupSignalsAndSlots(){
+MainWindow::setupSignalsAndSlots() {
     Q_CHECK_PTR(m_context);
 
     // Menus
@@ -56,6 +56,8 @@ MainWindow::setupSignalsAndSlots(){
             this, &MainWindow::signal_clearComponentTypes);
     connect(m_ui->btn_unloadProject, &QPushButton::clicked,
             this, &MainWindow::signal_unloadProjectRequested);
+    connect(m_ui->btn_loadProject, &QPushButton::clicked,
+            this, &MainWindow::slot_loadProject);
 
     // connections to the application context
     // TODO move to applicationContext
@@ -77,7 +79,7 @@ MainWindow::setupSignalsAndSlots(){
 }
 
 void
-MainWindow::addNewSchematicsTab(Document* relatedDocument){
+MainWindow::addNewSchematicsTab(Document* relatedDocument) {
     Q_CHECK_PTR(relatedDocument);
 
     // TODO check if there is already a tab opened for the document
@@ -89,7 +91,7 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument){
 }
 
 void
-MainWindow::slot_createProject(){
+MainWindow::slot_createProject() {
 
     // get name
     bool ok;
@@ -98,12 +100,12 @@ MainWindow::slot_createProject(){
                                          tr("Enter the name of the new project:"),
                                          QLineEdit::Normal, "myProject", &ok);
 
-    if(!ok){ // action canceled
+    if (!ok) { // action canceled
         return;
     }
 
     // validate name
-    if(name.isEmpty()){
+    if (name.isEmpty()) {
         QMessageBox::critical(this,
                               tr("Error: Project name was empty"),
                               tr("The projects name must not be empty."),
@@ -115,30 +117,27 @@ MainWindow::slot_createProject(){
 }
 
 void
-MainWindow::slot_loadProject(){
+MainWindow::slot_loadProject() {
 
     QString dirPath;
 
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setDirectory(this->m_application->getSetting(constants::KEY_PROJECTS_DIR).toString());
+    dialog.setDirectory(m_application->getSetting(constants::KEY_PROJECTS_DIR).toString());
 
     int userAction = dialog.exec();
-    if(userAction == QDialog::Rejected){
+    if (userAction == QDialog::Rejected) {
         return;
     }
 
     dirPath = dialog.selectedFiles().first();
 
-    QDir projectDir = QDir(dirPath);
-    Q_ASSERT(projectDir.exists());
-
-    emit this->signal_loadProjectRequested(projectDir);
+    emit this->signal_loadProjectRequested(dirPath);
 }
 
 void
-MainWindow::slot_createDocument(){
+MainWindow::slot_createDocument() {
 
     // make sure the model is set up properly
     // so we can enter the documents
@@ -151,12 +150,12 @@ MainWindow::slot_createDocument(){
                                          tr("Enter the name of the new document:"),
                                          QLineEdit::Normal, "myDocument", &ok);
 
-    if(!ok){ // action canceled
+    if (!ok) { // action canceled
         return;
     }
 
     // validate name
-    if(name.isEmpty()){
+    if (name.isEmpty()) {
         QMessageBox::critical(this,
                               tr("Error: Document name was empty"),
                               tr("The documents name must not be empty."),
@@ -168,9 +167,9 @@ MainWindow::slot_createDocument(){
 }
 
 void
-MainWindow::slot_updateProjectName(QString name){
+MainWindow::slot_updateProjectName(QString name) {
 
-    if(name.isEmpty()){
+    if (name.isEmpty()) {
         name = "(none)";
     }
 
@@ -178,12 +177,12 @@ MainWindow::slot_updateProjectName(QString name){
 }
 
 void
-MainWindow::slot_enableProjectSaving(bool enabled){
+MainWindow::slot_enableProjectSaving(bool enabled) {
     this->m_ui->action_saveProject->setEnabled(enabled);
 }
 
 void
-MainWindow::slot_enableDocumentMenus(bool enabled){
+MainWindow::slot_enableDocumentMenus(bool enabled) {
     this->m_ui->action_createDocument->setEnabled(enabled);
 }
 
@@ -195,7 +194,7 @@ MainWindow::slot_enableDocumentMenus(bool enabled){
  * @param model
  */
 void
-MainWindow::slot_setDocumentModel(QStandardItemModel* model){
+MainWindow::slot_setDocumentModel(QStandardItemModel* model) {
     qDebug() << "SLOT setDocumentModel(" << model << ")";
 
 
@@ -209,12 +208,14 @@ MainWindow::slot_setDocumentModel(QStandardItemModel* model){
 
     m_ui->documentListView->setModel(model);
 
-    oldModel->disconnect();
-    oldModel->deleteLater();
+    if (oldModel != nullptr) {
+        oldModel->disconnect();
+        oldModel->deleteLater();
+    }
 }
 
 void
-MainWindow::slot_openDocumentTab(const QModelIndex index){
+MainWindow::slot_openDocumentTab(const QModelIndex index) {
     qDebug() << "SLOT openDocumentTab(" << index.column()
              << ", " << index.row() << ") by " << this->sender();
 
@@ -222,7 +223,7 @@ MainWindow::slot_openDocumentTab(const QModelIndex index){
     // switch to it, if this is the case
 
     const QStandardItemModel* model =
-            static_cast<const QStandardItemModel*>(index.model());
+        static_cast<const QStandardItemModel*>(index.model());
     Q_CHECK_PTR(model);
     Document* document = static_cast<Document*>(model->itemFromIndex(index));
     Q_CHECK_PTR(document);
@@ -231,12 +232,12 @@ MainWindow::slot_openDocumentTab(const QModelIndex index){
 }
 
 void
-MainWindow::slot_openDocumentTab(Document* document){
+MainWindow::slot_openDocumentTab(Document* document) {
     this->addNewSchematicsTab(document);
 }
 
 void
-MainWindow::slot_setComponentModel(QStandardItemModel* model){
+MainWindow::slot_setComponentModel(QStandardItemModel* model) {
     this->m_ui->componentTreeView->setModel(model);
 }
 
@@ -266,7 +267,7 @@ MainWindow::on_btn_addType_clicked() {
     dialog.setDirectory(this->m_application->getSetting(constants::KEY_COMPONENTS_DIR).toString());
 
     int userAction = dialog.exec();
-    if(userAction == QDialog::Rejected){
+    if (userAction == QDialog::Rejected) {
         return;
     }
 
@@ -294,12 +295,12 @@ MainWindow::on_btn_addCategory_clicked() {
                                          tr("Enter the name of the new component category:"),
                                          QLineEdit::Normal, "myCategory", &ok);
 
-    if(!ok){ // action canceled
+    if (!ok) { // action canceled
         return;
     }
 
     // validate name
-    if(name.isEmpty()){
+    if (name.isEmpty()) {
         QMessageBox::critical(this,
                               tr("Error: Category name was empty"),
                               tr("The categories name must not be empty."),

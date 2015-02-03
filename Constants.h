@@ -56,9 +56,12 @@ extern QString JSON_POSITION_Y;
 // Im-/Export of SchematicsSceneChild enrties
 extern QString JSON_DOCENTRY_TYPE;
 
-extern QString JSON_HIERARCHY_CATEGORY;
+extern QString JSON_HIERARCHY_CATEGORY_NAME;
 extern QString JSON_HIERARCHY_CHILD;
 extern QString JSON_HIERARCHY_SOURCE;
+extern QString JSON_HIERARCHY_TYPE;
+extern QString JSON_HIERARCHY_TYPE_CATEGORY;
+extern QString JSON_HIERARCHY_TYPE_COMPONENT;
 
 extern QString JSON_SCHEMATIC_SUB_TYPE;
 extern QString JSON_SCHEMATIC_ADDITIONAL;

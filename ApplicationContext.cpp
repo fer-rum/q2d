@@ -7,12 +7,13 @@
 #include "Project.h"
 
 #include <QFile>
+#include <QtDebug>
 
 using namespace q2d;
 using namespace constants;
 using MainWindow = q2d::gui::MainWindow;
 
-ApplicationContext::ApplicationContext(Application *parent)
+ApplicationContext::ApplicationContext(Application* parent)
     : QObject(parent) {
     // TODO load basic libraries
     this->m_componentFactory = new ComponentFactory(this);
@@ -29,23 +30,23 @@ ApplicationContext::ApplicationContext(Application *parent)
     emit this->signal_componentModelChanged(componentHierarchy);
 }
 
-ApplicationContext::~ApplicationContext(){
+ApplicationContext::~ApplicationContext() {
     // TODO save project
     // TODO uninitialize and close mainWindow
 }
 
 bool
-ApplicationContext::hasCurrentProject(){
+ApplicationContext::hasCurrentProject() {
     return m_currentProject != nullptr;
 }
 
 Project*
-ApplicationContext::getCurrentProject(){
+ApplicationContext::getCurrentProject() {
     return this->m_currentProject;
 }
 
 gui::MainWindow*
-ApplicationContext::getMainWindow(){
+ApplicationContext::getMainWindow() {
     return this->m_mainWindow;
 }
 
@@ -56,7 +57,7 @@ ApplicationContext::componentFactory() {
 
 //TODO: Convert to new Signal/Slot Syntax
 void
-ApplicationContext::setupSignalsAndSlots(){
+ApplicationContext::setupSignalsAndSlots() {
     Q_CHECK_PTR(this->m_mainWindow);
 
     // ApplicationContext -> MainWindow
@@ -100,7 +101,7 @@ ApplicationContext::setupSignalsAndSlots(){
  * @param name is the name of the new project
  */
 void
-ApplicationContext::createProject(QString name){
+ApplicationContext::createProject(QString name) {
 
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(!this->hasCurrentProject());
@@ -120,7 +121,7 @@ ApplicationContext::createProject(QString name){
 }
 
 void
-ApplicationContext::unloadProject(){
+ApplicationContext::unloadProject() {
 
     // TODO save (if wanted) before unloading
 
@@ -136,7 +137,7 @@ ApplicationContext::unloadProject(){
  * a new document to the project.
  */
 void
-ApplicationContext::slot_newDocument(QString name){
+ApplicationContext::slot_newDocument(QString name) {
 
     Q_CHECK_PTR(this->m_currentProject);
 
@@ -155,9 +156,9 @@ ApplicationContext::slot_newDocument(QString name){
  *
  */
 void
-ApplicationContext::slot_newProject(QString name){
+ApplicationContext::slot_newProject(QString name) {
 
-    if(this->hasCurrentProject()){
+    if (this->hasCurrentProject()) {
         this->unloadProject();
     }
 
@@ -175,31 +176,51 @@ ApplicationContext::slot_newProject(QString name){
  * @param newName
  */
 void
-ApplicationContext::slot_projectNameChanged(QString newName){
+ApplicationContext::slot_projectNameChanged(QString newName) {
     emit this->signal_projectNameChanged(newName);
 }
 
+/**
+ * @brief ApplicationContext::slot_loadProject initiates loading a project from a given path.
+ * The projects name will be inferred from the name of the project folder.
+ * @param projectDirPath is the path to the directory the project resides in
+ */
 void
-ApplicationContext::slot_loadProject(QDir projectDir){
-
+ApplicationContext::slot_loadProject(QString projectDirPath) {
+    qDebug() << "Loading project with path " << projectDirPath;
     // check, if all necessary files exist
-    QFile componentTreeFile(projectDir.absolutePath() + FILE_COMPONENT_TREE);
+    QFile componentTreeFile(projectDirPath + FILE_COMPONENT_TREE);
     Q_ASSERT(componentTreeFile.exists());
+
+    QString projectName = projectDirPath.split("/").last();
+    // extract project name from path
+
     // TODO in case of failure emit a signal
     // that makes the main window show a warning message
 
     // unload current Project, if needed
-    if(m_currentProject != nullptr){
+    if (m_currentProject != nullptr) {
         this->unloadProject();
     }
     Q_ASSERT(m_currentProject == nullptr);
+    this->createProject(projectName);
     // load component hierarchy
+    if (!componentTreeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "On loading component hierarchy: Could not open file "
+                   << componentTreeFile.fileName();
+        return;
+    }
+    QJsonDocument hierarchyJson = QJsonDocument::fromJson(componentTreeFile.readAll());
+    componentTreeFile.close();
+    m_componentFactory->importHierarchy(hierarchyJson);
     // load documents
+
+
 }
 
 void
-ApplicationContext::slot_unloadProject(){
-    if(!this->hasCurrentProject()){
+ApplicationContext::slot_unloadProject() {
+    if (!this->hasCurrentProject()) {
         return;
     }
     this->unloadProject();

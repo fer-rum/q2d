@@ -4,7 +4,7 @@
 
 using namespace q2d::model;
 
-Node::Node(Model* parent) : ModelElement(parent){
+Node::Node(Model* parent) : ModelElement(parent) {
     this->driver = nullptr;
     this->drivenElements = QList<ModelElement*>();
 }
@@ -15,9 +15,9 @@ Port::Port(PortDirection direction, Component* topLevel, Model* parent) : Node(p
 
     this->direction = direction;
 
-    if(direction == IN){
+    if (direction == IN) {
         this->addDrivenElement(topLevel);
-    } else if(direction == OUT){
+    } else if (direction == OUT) {
         this->addDriver(topLevel);
     }
 
@@ -26,7 +26,7 @@ Port::Port(PortDirection direction, Component* topLevel, Model* parent) : Node(p
 
 
 void
-Node::addDriver(ModelElement* driver){
+Node::addDriver(ModelElement* driver) {
     Q_CHECK_PTR(driver);
     Q_ASSERT(this->driver == nullptr);
     // no driver must be set yet

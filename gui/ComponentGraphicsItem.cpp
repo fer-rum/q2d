@@ -9,10 +9,10 @@ using namespace q2d::gui;
 using namespace q2d::metamodel;
 
 ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
-                                             SchematicsScene* scene,
-                                             QPointF position)
+        SchematicsScene* scene,
+        QPointF position)
     : SchematicsSceneChild(scene,
-                           new QGraphicsSvgItem(type->symbolPath())){
+                           new QGraphicsSvgItem(type->symbolPath())) {
     Q_CHECK_PTR(type);
     Q_CHECK_PTR(scene);
 
@@ -27,6 +27,6 @@ ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
  * @return the name of the type, the component was instantiated from.
  */
 QString
-ComponentGraphicsItem::specificType(){
+ComponentGraphicsItem::specificType() {
     return m_type->text();
 }

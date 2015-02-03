@@ -20,7 +20,7 @@ ComponentType::ComponentType(QString name,
  * @param symbolFilePath
  */
 void
-ComponentType::loadCircuitSymbol(QString symbolFilePath){
+ComponentType::loadCircuitSymbol(QString symbolFilePath) {
 
     QGraphicsSvgItem* symbol = new QGraphicsSvgItem(symbolFilePath);
     Q_CHECK_PTR(symbol);
@@ -36,12 +36,12 @@ ComponentType::loadCircuitSymbol(QString symbolFilePath){
  * @return the path to the symbol file
  */
 QString
-ComponentType::symbolPath(){
+ComponentType::symbolPath() {
     return this->data(ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
 }
 
 void
-ComponentType::setSymbolPath(QString symbolPath){
+ComponentType::setSymbolPath(QString symbolPath) {
     Q_ASSERT(!(symbolPath.isEmpty()));
 
     this->setData(QVariant::fromValue(symbolPath), ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
@@ -53,30 +53,30 @@ ComponentType::setSymbolPath(QString symbolPath){
  * @return
  */
 QString
-ComponentType::descriptorPath() const{
+ComponentType::descriptorPath() const {
     return this->data(ComponentDescriptorRole::DESCRIPTOR_FILE).toString();
 }
 
 void
-ComponentType::setDescriptorPath(const QString path){
+ComponentType::setDescriptorPath(const QString path) {
     Q_ASSERT(!path.isEmpty());
     this->setData(QVariant::fromValue(path), ComponentDescriptorRole::DESCRIPTOR_FILE);
 }
 
 void
-ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction){
+ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction) {
 
     qDebug() << "Creating Port " << name
              << " at" << relativePosition
              << " with direction " << direction;
 
     PortDescriptor* portDescriptor
-            = new PortDescriptor(name, direction, relativePosition, this);
+        = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
 }
 
 QString
-ComponentType::generateId(){
+ComponentType::generateId() {
     QString id = this->text() + " " + QString::number(m_instanceIndex);
     ++m_instanceIndex;
     return id;

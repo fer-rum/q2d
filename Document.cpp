@@ -39,13 +39,13 @@ using namespace q2d::metamodel;
 Document::Document(QString name, Project* parent) :
     QObject(parent),
     QStandardItem(name) {
-        Q_CHECK_PTR(parent);
+    Q_CHECK_PTR(parent);
     Q_ASSERT(this->text() == name);
     qDebug() << "Create document with name" << name;
 
     // obtain the component factory
     ApplicationContext* context =
-            dynamic_cast<ApplicationContext*>(parent->parent());
+        dynamic_cast<ApplicationContext*>(parent->parent());
     Q_CHECK_PTR(context);
     this->m_componentFactory = context->componentFactory();
 
@@ -60,7 +60,7 @@ Document::Document(QString name, Project* parent) :
  * @return
  */
 gui::SchematicsScene*
-Document::schematic(){
+Document::schematic() {
     return this->data(DocumentRole::SCHEMATIC).value<gui::SchematicsScene*>();
 }
 
@@ -69,12 +69,12 @@ Document::schematic(){
  * @return
  */
 model::Model*
-Document::model(){
+Document::model() {
     return this->data(DocumentRole::MODEL).value<model::Model*>();
 }
 
 ComponentFactory*
-Document::componentFactory() const{
+Document::componentFactory() const {
     return m_componentFactory;
 }
 
@@ -88,13 +88,13 @@ Document::componentFactory() const{
  * @param position of the component at which it is placed in the schematic.
  */
 void
-Document::addComponent(QString typeId, QPoint position){
+Document::addComponent(QString typeId, QPoint position) {
 
     ComponentType* type = m_componentFactory->getTypeForHierarchyName(typeId);
     Q_CHECK_PTR(type);
 
     DocumentEntry* entry =
-            m_componentFactory->instantiateComponent(this, type, position);
+        m_componentFactory->instantiateComponent(this, type, position);
 
     // also add the ports
     m_componentFactory->instantiatePorts(this, type, entry);
@@ -109,10 +109,10 @@ DocumentEntry*
 Document::entry(const QString id) const {
     Q_ASSERT(!id.isEmpty());
 
-    for(DocumentEntry* entry : m_entries){
-       if(entry->id() == id){
-           return entry;
-       }
+    for (DocumentEntry * entry : m_entries) {
+        if (entry->id() == id) {
+            return entry;
+        }
     }
     return nullptr;
 }
@@ -121,8 +121,8 @@ DocumentEntry*
 Document::entry(const gui::SchematicsSceneChild* schematicElement) const {
     Q_CHECK_PTR(schematicElement);
 
-    for(DocumentEntry* entry : m_entries){
-        if(entry->schematicElement() == schematicElement){
+    for (DocumentEntry * entry : m_entries) {
+        if (entry->schematicElement() == schematicElement) {
             return entry;
         }
     }
@@ -133,8 +133,8 @@ DocumentEntry*
 Document::entry(const model::ModelElement* modelElement) const {
     Q_CHECK_PTR(modelElement);
 
-    for(DocumentEntry* entry : m_entries){
-        if(entry->modelElement() == modelElement){
+    for (DocumentEntry * entry : m_entries) {
+        if (entry->modelElement() == modelElement) {
             return entry;
         }
     }
@@ -148,7 +148,7 @@ Document::entries() const {
 
 
 void
-Document::addWire(QString senderNodeId, QString receiverNodeId){
+Document::addWire(QString senderNodeId, QString receiverNodeId) {
     DocumentEntry* sender = this->entry(senderNodeId);
     DocumentEntry* receiver = this->entry(receiverNodeId);
 
@@ -158,13 +158,13 @@ Document::addWire(QString senderNodeId, QString receiverNodeId){
 }
 
 void
-Document::addEntry(DocumentEntry* entry){
+Document::addEntry(DocumentEntry* entry) {
     Q_CHECK_PTR(entry);
     m_entries.append(entry);
 }
 
 void
-Document::save(QDir saveDir){
+Document::save(QDir saveDir) {
     Q_ASSERT(saveDir.exists());
     qDebug() << "Saving Document" << this->text();
 

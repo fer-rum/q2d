@@ -12,15 +12,15 @@
 
 namespace q2d {
 
-    // forward declaration
-    class Document;
+// forward declaration
+class Document;
 
 namespace model {
 
-    // forward declaration
-    class Component;
-    class Conductor;
-    class Port;
+// forward declaration
+class Component;
+class Conductor;
+class Port;
 
 // TODO documentation
 // TODO visitor-pattern

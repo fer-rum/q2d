@@ -12,7 +12,10 @@ QString KEY_PORT_IN_FILE    = "paths/symbols/port_in";
 QString KEY_PORT_OUT_FILE   = "paths/symbols/port_out";
 QString KEY_PORT_INOUT_FILE = "paths/symbols/port_inout";
 
-QString JSON_HIERARCHY_CATEGORY = "category";
+QString JSON_HIERARCHY_TYPE_CATEGORY    = "componentCategory";
+QString JSON_HIERARCHY_TYPE_COMPONENT   = "componentType";
+QString JSON_HIERARCHY_CATEGORY_NAME    = "name";
+QString JSON_HIERARCHY_TYPE      = "hierarchy_type";
 QString JSON_HIERARCHY_CHILD    = "child";
 QString JSON_HIERARCHY_SOURCE   = "descriptorPath";
 QString JSON_COMPONENT_NAME = "name";
@@ -43,7 +46,7 @@ QString GENERAL_TYPE_UNDEFINED  = "undefined";
 QString MIME_COMPONENT_TYPE = "application/component-type";
 QString MIME_WIRE_START_POS = "application/wire-start-pos";
 
-QString FILE_COMPONENT_TREE    = "/component.q2tree";
+QString FILE_COMPONENT_TREE    = "/components.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
 } // namespace constants
 } // namespace q2d

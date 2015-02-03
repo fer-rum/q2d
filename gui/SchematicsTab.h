@@ -9,25 +9,25 @@
 
 namespace q2d {
 
-    // forward declaration
-    class Document;
+// forward declaration
+class Document;
 
 namespace gui {
 
 class SchematicsTab :
-        public QWidget {
+    public QWidget {
     Q_OBJECT
 
 public:
-    explicit SchematicsTab(QWidget *parent, Document* m_relatedDocument);
+    explicit SchematicsTab(QWidget* parent, Document* m_relatedDocument);
     virtual ~SchematicsTab();
 
 private:
-    Ui::SchematicsTab *m_ui;
+    Ui::SchematicsTab* m_ui;
     Document* m_relatedDocument;
 };
 
-    } // namespace gui
+} // namespace gui
 } // namespace q2d
 
 #endif // SCHEMATICSTAB_H

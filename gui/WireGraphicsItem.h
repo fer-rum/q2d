@@ -17,7 +17,7 @@ class PortGraphicsItem;
  * The start is always (0, 0) in local coordinates.
  */
 class WireGraphicsItem :
-        public SchematicsSceneChild {
+    public SchematicsSceneChild {
     Q_OBJECT
 private:
 
@@ -56,12 +56,12 @@ public:
 signals:
 
 public slots:
-   void slot_setHovered(bool isHovered);
+    void slot_setHovered(bool isHovered);
 
 };
 
 class WireGraphicsLineItem :
-        public QGraphicsLineItem {
+    public QGraphicsLineItem {
 private:
     WireGraphicsItem* m_parent;
 public:

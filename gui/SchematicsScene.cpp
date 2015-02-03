@@ -27,7 +27,7 @@ SchematicsScene::document() const {
 }
 
 void
-SchematicsScene::drawBackground(QPainter *painter, const QRectF &rect) {
+SchematicsScene::drawBackground(QPainter* painter, const QRectF &rect) {
 
     // TODO read behaviour from settings
     QPen pen;
@@ -36,19 +36,19 @@ SchematicsScene::drawBackground(QPainter *painter, const QRectF &rect) {
     qreal left = int(rect.left()) - (int(rect.left()) % this->m_gridSize);
     qreal top = int(rect.top()) - (int(rect.top()) % this->m_gridSize);
     QVector<QPointF> points;
-    for (qreal x = left; x < rect.right(); x += m_gridSize){
-        for (qreal y = top; y < rect.bottom(); y += m_gridSize){
-            points.append(QPointF(x,y));
+    for (qreal x = left; x < rect.right(); x += m_gridSize) {
+        for (qreal y = top; y < rect.bottom(); y += m_gridSize) {
+            points.append(QPointF(x, y));
         }
     }
     painter->drawPoints(points.data(), points.size());
 }
 
 void
-SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
-    QMimeData const * mimeData = event->mimeData();
+SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
+    QMimeData const* mimeData = event->mimeData();
 
-    if(mimeData->hasFormat(MIME_COMPONENT_TYPE)){
+    if (mimeData->hasFormat(MIME_COMPONENT_TYPE)) {
         m_dragOver = true;
         event->accept();
     } else {
@@ -57,8 +57,8 @@ SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
 }
 
 void
-SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event){
-    if(m_dragOver){
+SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event) {
+    if (m_dragOver) {
         event->accept();
     } else {
         QGraphicsScene::dragMoveEvent(event);
@@ -66,9 +66,9 @@ SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event){
 }
 
 void
-SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
+SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 
-    if(m_dragOver){
+    if (m_dragOver) {
         this->m_dragOver = false;
         event->accept();
     } else {
@@ -77,11 +77,11 @@ SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
 }
 
 void
-SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event){
+SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
     // TODO find a proper way to scale the scene and the viewport when adding items
 
-    QMimeData const * mimeData = event->mimeData();
-    if(m_dragOver){
+    QMimeData const* mimeData = event->mimeData();
+    if (m_dragOver) {
         QString path = mimeData->text();
         QPoint dropPosition = event->scenePos().toPoint();
 
@@ -95,6 +95,6 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event){
 }
 
 void
-SchematicsScene::addItem(QGraphicsItem* item){
+SchematicsScene::addItem(QGraphicsItem* item) {
     QGraphicsScene::addItem(item);
 }

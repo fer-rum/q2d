@@ -5,7 +5,7 @@
 using namespace q2d::model;
 
 ModelElement::ModelElement(Model* parent)
-    : QObject(parent){}
+    : QObject(parent) {}
 
 Model*
 ModelElement::model() const {

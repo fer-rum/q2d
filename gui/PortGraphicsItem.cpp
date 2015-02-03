@@ -48,8 +48,8 @@ QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
  * @param parent
  */
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
-        model::PortDirection direction,
-        ComponentGraphicsItem *parent)
+                                   model::PortDirection direction,
+                                   ComponentGraphicsItem* parent)
     : SchematicsSceneChild(parent->SchematicsSceneChild::scene(),
                            parent) {
     /* TODO: known quasi-bug
@@ -67,7 +67,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
 
     m_direction = direction;
     // select the Pen and Brush based on the Port direction
-    switch(direction){
+    switch (direction) {
     case model::PortDirection::IN:
         this->m_defaultPen = PEN_INPUT_PORT;
         this->m_defaultBrush = BRUSH_INPUT_PORT;
@@ -92,7 +92,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     this->addActual(newActual);
 
     this->setPos(relativeCenterPosition.x() - RADIUS,
-                  relativeCenterPosition.y() - RADIUS);
+                 relativeCenterPosition.y() - RADIUS);
 
     this->setAcceptHoverEvents(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
@@ -106,12 +106,12 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
  * @return The PortDirection as string.
  */
 QString
-PortGraphicsItem::specificType(){
+PortGraphicsItem::specificType() {
     return q2d::model::PortDirectionToString(m_direction);
 }
 
 void
-PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
+PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
     this->actual()->setPen(PEN_HOVER_PORT);
     this->actual()->setBrush(BRUSH_HOVER_PORT);
     this->setCursor(QCursor(Qt::CrossCursor));
@@ -119,7 +119,7 @@ PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
 }
 
 void
-PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
+PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
     this->actual()->setPen(this->m_defaultPen);
     this->actual()->setBrush(this->m_defaultBrush);
     this->setCursor(QCursor(Qt::ArrowCursor));
@@ -127,7 +127,7 @@ PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
 }
 
 void
-PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
+PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         m_dragStartPosition = event->scenePos();
         event->accept();
@@ -138,12 +138,12 @@ void
 PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     // check if we are dragging something
     if (!(event->buttons() & Qt::LeftButton)) {
-             return;
+        return;
     }
 
     if ((event->pos() - m_dragStartPosition).manhattanLength()
-              < QApplication::startDragDistance()) {
-             return;
+            < QApplication::startDragDistance()) {
+        return;
     }
 
     // we indeed are dragging
@@ -169,8 +169,8 @@ PortGraphicsItem::id() const {
 void
 PortGraphicsItem::performDrag() {
 
-    QDrag *drag = new QDrag(this);
-    QMimeData *mimeData = new QMimeData();
+    QDrag* drag = new QDrag(this);
+    QMimeData* mimeData = new QMimeData();
 
     // create the payload
 
@@ -192,10 +192,10 @@ PortGraphicsItem::performDrag() {
 }
 
 void
-PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
-    QMimeData const * mimeData = event->mimeData();
+PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
+    QMimeData const* mimeData = event->mimeData();
 
-    if(mimeData->hasFormat(MIME_WIRE_START_POS)){
+    if (mimeData->hasFormat(MIME_WIRE_START_POS)) {
         this->setCursor(QCursor(Qt::CrossCursor));
         this->m_dragOver = true;
         event->accept();
@@ -203,37 +203,37 @@ PortGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event){
 }
 
 void
-PortGraphicsItem::dragMoveEvent(QGraphicsSceneDragDropEvent* event){
+PortGraphicsItem::dragMoveEvent(QGraphicsSceneDragDropEvent* event) {
 
-    if(m_dragOver && m_wireDrawingMode){
-            Q_CHECK_PTR(m_wireDrawingLine);
-            Q_CHECK_PTR(m_wireDrawingLineItem);
-            QPointF itemCoordinate =
-                    m_wireDrawingLineItem->mapFromScene(event->scenePos());
-            m_wireDrawingLine->setP2(itemCoordinate);
-            m_wireDrawingLineItem->setLine(*m_wireDrawingLine);
-            event->accept();
-            emit m_scene->sceneRectChanged(m_wireDrawingLineItem->boundingRect());
+    if (m_dragOver && m_wireDrawingMode) {
+        Q_CHECK_PTR(m_wireDrawingLine);
+        Q_CHECK_PTR(m_wireDrawingLineItem);
+        QPointF itemCoordinate =
+            m_wireDrawingLineItem->mapFromScene(event->scenePos());
+        m_wireDrawingLine->setP2(itemCoordinate);
+        m_wireDrawingLineItem->setLine(*m_wireDrawingLine);
+        event->accept();
+        emit m_scene->sceneRectChanged(m_wireDrawingLineItem->boundingRect());
     }
 }
 
 void
-PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event){
+PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 
-    if(m_dragOver){
+    if (m_dragOver) {
         m_dragOver = false;
         event->accept();
     }
 }
 
 void
-PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event){
+PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
 
     // TODO
     // make sure target is not source
     // inform the document about the happenings via signal/slot
 
-    if(m_dragOver && m_wireDrawingMode){
+    if (m_dragOver && m_wireDrawingMode) {
         m_dragOver = false;
 
         QString senderId = QString::fromUtf8(

@@ -10,7 +10,7 @@ class Observer {
 public:
     Observer() {}
     virtual ~Observer() {}
-    virtual void update(T *observed)= 0;
+    virtual void update(T* observed) = 0;
 };
 
 } // namespace patterns

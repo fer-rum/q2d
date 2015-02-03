@@ -2,7 +2,7 @@
 #include "Application.h"
 
 int
-main(int argc, char *argv[]){
+main(int argc, char* argv[]) {
 
     q2d::Application* application = new q2d::Application(argc, &argv);
 

@@ -12,10 +12,10 @@ template <class T>
 class Observable {
     QList<Observer<T>*> observers;
 public:
-    Observable(){}
-    virtual ~Observable(){}
+    Observable() {}
+    virtual ~Observable() {}
     void attachObserver(Observer<T> &observer);
-    void detachObserver(const Observer<T>& observer);
+    void detachObserver(const Observer<T> &observer);
     void notifyObservers();
 };
 

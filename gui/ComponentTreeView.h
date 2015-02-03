@@ -19,11 +19,11 @@ private:
     void performDrag();
 
 public:
-    explicit ComponentTreeView(QWidget *parent = 0);
+    explicit ComponentTreeView(QWidget* parent = 0);
 
     // ovverride for custom drag event
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
 
 
 signals:

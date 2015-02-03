@@ -19,9 +19,9 @@ using namespace q2d::model;
  * @param parent is the ComponentType this PortDescriptor belongs to.
  */
 PortDescriptor::PortDescriptor(QString name,
-                        PortDirection direction,
-                        QPoint position,
-                        ComponentType* parent)
+                               PortDirection direction,
+                               QPoint position,
+                               ComponentType* parent)
     : QObject(parent), QStandardItem(name) {
 
     this->setData(direction, ComponentDescriptorRole::PORT_DIRECTION);
@@ -29,20 +29,23 @@ PortDescriptor::PortDescriptor(QString name,
 
     // find and set the icon
     QString setting;
-    switch(direction){
+    switch (direction) {
     case IN :
-        setting = KEY_PORT_IN_FILE; break;
+        setting = KEY_PORT_IN_FILE;
+        break;
     case OUT :
-        setting = KEY_PORT_OUT_FILE; break;
+        setting = KEY_PORT_OUT_FILE;
+        break;
     case IN_OUT :
-        setting = KEY_PORT_INOUT_FILE; break;
+        setting = KEY_PORT_INOUT_FILE;
+        break;
     default:
         setting = QString();
     }
 
     QString fileName = Application::instance()->getSetting(setting).toString();
 
-    if(!fileName.isEmpty()){
+    if (!fileName.isEmpty()) {
         QIcon icon = QIcon(fileName);
         this->setIcon(icon);
     }
@@ -53,7 +56,7 @@ PortDescriptor::PortDescriptor(QString name,
  * @return
  */
 QPoint
-PortDescriptor::position(){
+PortDescriptor::position() {
     return this->data(ComponentDescriptorRole::PORT_POSITION).toPoint();
 }
 
@@ -62,7 +65,7 @@ PortDescriptor::position(){
  * @return
  */
 PortDirection
-PortDescriptor::direction(){
+PortDescriptor::direction() {
     return static_cast<model::PortDirection>(
-                this->data(ComponentDescriptorRole::PORT_DIRECTION).toInt());
+               this->data(ComponentDescriptorRole::PORT_DIRECTION).toInt());
 }

@@ -19,10 +19,10 @@ using namespace q2d::constants;
  */
 ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent) :
     QObject(parent),
-    QStandardItem(name){
+    QStandardItem(name) {
 
     QString hierarchyName;
-    if(parent == nullptr){
+    if (parent == nullptr) {
         hierarchyName =  this->text();
     } else {
         hierarchyName = parent->hierarchyName() + HIERARCHY_SEPERATOR + this->text();
@@ -37,7 +37,7 @@ ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent
  * @return
  */
 QString
-ComponentDescriptor::hierarchyName(){
+ComponentDescriptor::hierarchyName() {
 
     return this->data(ComponentDescriptorRole::HIERARCHY_NAME).toString();
 }

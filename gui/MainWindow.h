@@ -12,13 +12,13 @@
 #include <QWindow>
 
 namespace q2d {
-    // forward declaration
-    class Application;
-    class ApplicationContext;
-    class Document;
-    namespace metamodel {
-    class ComponentCategory;
-    }
+// forward declaration
+class Application;
+class ApplicationContext;
+class Document;
+namespace metamodel {
+class ComponentCategory;
+}
 
 namespace gui {
 
@@ -34,7 +34,7 @@ private:
 
     void addNewSchematicsTab(Document* relatedDocument);
 public:
-    explicit MainWindow(ApplicationContext *parent);
+    explicit MainWindow(ApplicationContext* parent);
     ~MainWindow();
 
     void setupSignalsAndSlots();
@@ -43,7 +43,7 @@ signals:
 
     // project-related
     void signal_createProjectRequested(QString name);
-    void signal_loadProjectRequested(QDir projectDir);
+    void signal_loadProjectRequested(QString projectDirPath);
     void signal_unloadProjectRequested();
 
     // document-related

@@ -15,8 +15,8 @@
 namespace q2d {
 namespace gui {
 
-    // forward declaration
-    class ComponentGraphicsItem;
+// forward declaration
+class ComponentGraphicsItem;
 
 /**
  * @brief The PortGraphicsItem class
@@ -65,7 +65,9 @@ protected:
 
 public:
 
-    static QPointF centerOffset() { return CENTER_OFFSET; }
+    static QPointF centerOffset() {
+        return CENTER_OFFSET;
+    }
 
     explicit PortGraphicsItem(QPointF relativeCenterPosition,
                               model::PortDirection direction,
@@ -73,7 +75,7 @@ public:
 
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
 
     virtual void dragEnterEvent(QGraphicsSceneDragDropEvent* event);
     virtual void dragMoveEvent(QGraphicsSceneDragDropEvent* event);

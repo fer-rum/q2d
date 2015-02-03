@@ -9,8 +9,8 @@
 namespace q2d {
 namespace model {
 
-    // forward declaration
-    class Component;
+// forward declaration
+class Component;
 
 // TODO documentation
 // TODO visitor pattern

@@ -10,7 +10,7 @@
 namespace q2d {
 namespace metamodel {
 
-    class ComponentCategory;
+class ComponentCategory;
 
 // TODO support seperate Icon files as determined by json
 /**
@@ -43,8 +43,9 @@ public:
 
     QString generateId();
 
-    virtual int type() const
-    { return ComponentDescriptorType::COMPONENT_TYPE; }
+    virtual int type() const {
+        return ComponentDescriptorType::COMPONENT_TYPE;
+    }
 };
 
 } // namespace metamodel

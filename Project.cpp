@@ -21,7 +21,7 @@ Project::Project(QString name, ApplicationContext* parent)
 }
 
 void
-Project::setupSignalsAndSlots(){
+Project::setupSignalsAndSlots() {
     // propagate changes of the project name if they happened without involvement of the
     // application context
     // TODO revisit nessecity
@@ -42,13 +42,13 @@ Project::getDocuments() {
 
 
 void
-Project::save(QDir projectDirectory){
+Project::save(QDir projectDirectory) {
     Q_ASSERT(projectDirectory.exists());
     qDebug() << "Saving project";
 
     // Check if there already is a folder with the projec name present
     // If not create one.
-    if(!projectDirectory.exists(m_name)){
+    if (!projectDirectory.exists(m_name)) {
         bool ok = projectDirectory.mkdir(m_name);
         Q_ASSERT(ok);
     }
@@ -60,14 +60,14 @@ Project::save(QDir projectDirectory){
 
     // make sure the component tree in use is saved
     WriteJsonFile(
-                projectDirectory.absolutePath() + FILE_COMPONENT_TREE,
-                m_applicationContext->componentFactory()->exportHierarchy());
+        projectDirectory.absolutePath() + FILE_COMPONENT_TREE,
+        m_applicationContext->componentFactory()->exportHierarchy());
 
     // TODO make sure the component tree is rebuild before loading documents
 
     // For each Document:
     // Create a save file (folder?)
-    for(int index = 0; index < m_documents.rowCount(); ++index){
+    for (int index = 0; index < m_documents.rowCount(); ++index) {
         Document* document = dynamic_cast<Document*>(m_documents.item(index));
         Q_CHECK_PTR(document);
         document->save(projectDirectory);
@@ -85,7 +85,7 @@ Project::save(QDir projectDirectory){
  * Assumption: name is not empty
  */
 void
-Project::slot_newDocument(QString name){
+Project::slot_newDocument(QString name) {
     Q_ASSERT(!name.isEmpty());
 
     Document* newDocument = new Document(name, this);
@@ -96,9 +96,9 @@ Project::slot_newDocument(QString name){
 }
 
 void
-Project::slot_save(){
+Project::slot_save() {
     QString savePath =
-            Application::instance()->getSetting(KEY_PROJECTS_DIR).toString();
+        Application::instance()->getSetting(KEY_PROJECTS_DIR).toString();
     QDir projectsDirectory = QDir(savePath);
     Q_ASSERT(projectsDirectory.exists());
     this->save(projectsDirectory);

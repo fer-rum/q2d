@@ -24,10 +24,10 @@ const QPointF WireGraphicsItem::m_startPoint = QPointF(0, 0);
  * @param scene
  */
 WireGraphicsItem::WireGraphicsItem(
-        QPointF start, QPointF end, SchematicsScene* scene) :
-    SchematicsSceneChild(scene){
+    QPointF start, QPointF end, SchematicsScene* scene) :
+    SchematicsSceneChild(scene) {
     qDebug() << "Wire Constructor: start = " << start
-                << " end = " << end;
+             << " end = " << end;
 
     this->setPos(this->mapFromScene(start));
     m_endPoint = this->mapFromScene(end);
@@ -39,9 +39,9 @@ WireGraphicsItem::WireGraphicsItem(
 
 WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end)
     : WireGraphicsItem(
-          start->scenePos() + PortGraphicsItem::centerOffset(),
-          end->scenePos() + PortGraphicsItem::centerOffset(),
-          start->SchematicsSceneChild::scene()){
+        start->scenePos() + PortGraphicsItem::centerOffset(),
+        end->scenePos() + PortGraphicsItem::centerOffset(),
+        start->SchematicsSceneChild::scene()) {
 
     m_additionalInfo = QJsonObject();
     m_additionalInfo.insert(JSON_WIRE_START, QJsonValue(start->id()));
@@ -49,13 +49,13 @@ WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* en
 }
 
 QString
-WireGraphicsItem::specificType(){
+WireGraphicsItem::specificType() {
     return "none";
     // TODO this might be used to indicate multi-bit busses…
 }
 
 QJsonObject
-WireGraphicsItem::additionalJson(){
+WireGraphicsItem::additionalJson() {
     return m_additionalInfo;
 }
 
@@ -67,7 +67,7 @@ WireGraphicsItem::additionalJson(){
  * @param end in item coordinates
  */
 void
-WireGraphicsItem::addChild(QPointF start, QPointF end){
+WireGraphicsItem::addChild(QPointF start, QPointF end) {
 
     QGraphicsLineItem* newLine = new WireGraphicsLineItem(start, end, this);
     this->addActual(newLine);
@@ -78,11 +78,11 @@ WireGraphicsItem::addChild(QPointF start, QPointF end){
  * from the start point to the end point of the wire.
  */
 void
-WireGraphicsItem::route(){
+WireGraphicsItem::route() {
 
     this->prepareGeometryChange();
     // choose a routing algorithm
-    if(m_endPoint.x() > m_startPoint.x()){ // end point right of start)
+    if (m_endPoint.x() > m_startPoint.x()) { // end point right of start)
         this->routeLeftToRight();
         return;
     }
@@ -91,15 +91,15 @@ WireGraphicsItem::route(){
 }
 
 void
-WireGraphicsItem:: routeStraight(){
+WireGraphicsItem:: routeStraight() {
 
     this->clearActuals();
-   this->addChild(m_startPoint, m_endPoint);
+    this->addChild(m_startPoint, m_endPoint);
     Q_ASSERT(this->countActuals() == 1);
 }
 
 void
-WireGraphicsItem::routeLeftToRight(){
+WireGraphicsItem::routeLeftToRight() {
 
     this->clearActuals();
 
@@ -121,19 +121,19 @@ WireGraphicsItem::routeLeftToRight(){
  * @param isHovered
  */
 void
-WireGraphicsItem::slot_setHovered(bool isHovered){
+WireGraphicsItem::slot_setHovered(bool isHovered) {
 
-    if(isHovered){
-        for(QGraphicsItem* actual : this->actuals()){
+    if (isHovered) {
+        for (QGraphicsItem * actual : this->actuals()) {
             QGraphicsLineItem* lineActual =
-                    dynamic_cast<QGraphicsLineItem*>(actual);
+                dynamic_cast<QGraphicsLineItem*>(actual);
             Q_CHECK_PTR(lineActual);
             lineActual->setPen(PEN_HOVER);
         }
     } else {
-        for(QGraphicsItem* actual : this->actuals()){
+        for (QGraphicsItem * actual : this->actuals()) {
             QGraphicsLineItem* lineActual =
-                    dynamic_cast<QGraphicsLineItem*>(actual);
+                dynamic_cast<QGraphicsLineItem*>(actual);
             Q_CHECK_PTR(lineActual);
             lineActual->setPen(PEN_DEFAULT);
         }
@@ -141,8 +141,8 @@ WireGraphicsItem::slot_setHovered(bool isHovered){
 }
 
 WireGraphicsLineItem::WireGraphicsLineItem(
-        QPointF start, QPointF end, WireGraphicsItem* parent) :
-    QGraphicsLineItem(QLineF(start, end), parent){
+    QPointF start, QPointF end, WireGraphicsItem* parent) :
+    QGraphicsLineItem(QLineF(start, end), parent) {
 
     Q_CHECK_PTR(parent);
     m_parent = parent;
@@ -151,13 +151,13 @@ WireGraphicsLineItem::WireGraphicsLineItem(
 }
 
 void
-WireGraphicsLineItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event){
+WireGraphicsLineItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
     m_parent->slot_setHovered(true);
     event->accept();
 }
 
 void
-WireGraphicsLineItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event){
+WireGraphicsLineItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
     m_parent->slot_setHovered(false);
     event->accept();
 }
