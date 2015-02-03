@@ -91,13 +91,17 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
 
     this->addActual(newActual);
 
-    this->setPos(relativeCenterPosition.x() - RADIUS,
-                 relativeCenterPosition.y() - RADIUS);
+    this->setPos(relativeCenterPosition - CENTER_OFFSET);
 
     this->setAcceptHoverEvents(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
     this->setAcceptDrops(true);
     Q_ASSERT(this->actual()->isVisible());
+}
+
+QPointF
+PortGraphicsItem::pos() const {
+    return QGraphicsItem::pos() + CENTER_OFFSET;
 }
 
 /**

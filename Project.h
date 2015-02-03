@@ -32,7 +32,8 @@ public:
 
     QStandardItemModel* getDocuments();
 
-    void createDocument(QString m_name);
+    Document* createDocument(QString name);
+    void loadDocument(QString path);
 // TODO    void deleteDocument(Document &toDelete);
 
     void setupSignalsAndSlots();

@@ -97,6 +97,9 @@ public:
     virtual void paint(QPainter* painter,
                        const QStyleOptionGraphicsItem* option,
                        QWidget* widget = nullptr);
+    virtual QPointF pos() const {
+        return QGraphicsObject::pos();
+    }
 };
 
 } // namespace gui

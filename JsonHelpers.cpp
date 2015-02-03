@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QtDebug>
 
 using namespace q2d::constants;
 
@@ -118,15 +119,16 @@ void
 q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     Q_ASSERT(json.contains(JSON_DOCENTRY_ID));
 
-
     QString id = json.value(JSON_DOCENTRY_ID).toString();
-    DocumentEntryType type = StringToDocumentEntryType(
-                                 json.value(JSON_DOCENTRY_TYPE).toString());
+    QString typeString = json.value(JSON_DOCENTRY_TYPE).toString();
+    DocumentEntryType type = StringToDocumentEntryType(typeString);
+
+    qDebug() << "Parsing document entry" << id << "of type" << typeString;
 
     // TODO reconstruct the schematics element
     QJsonObject schematicJson =
         json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
-    QString typeId = schematicJson.value(JSON_DOCENTRY_TYPE).toString();
+    QString typeId = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
     QPointF position = JsonToPoint(
                            schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
 
@@ -145,13 +147,13 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
             document, typeId, position, id);
         break;
     case PORT : {
-        QString directionString = json.value(JSON_SCHEMATIC_SUB_TYPE).toString();
+        QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         document->componentFactory()->instantiatePort(
             document, parent, position, model::StringToPortDirection(directionString), id);
     }
     break;
     case WIRE : {
-        QJsonObject additional = json.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
+        QJsonObject additional = schematicJson.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
         Q_ASSERT(!additional.isEmpty());
 
         DocumentEntry* sender = document->entry(additional.value(JSON_WIRE_START).toString());

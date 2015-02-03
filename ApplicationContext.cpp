@@ -204,6 +204,7 @@ ApplicationContext::slot_loadProject(QString projectDirPath) {
     }
     Q_ASSERT(m_currentProject == nullptr);
     this->createProject(projectName);
+
     // load component hierarchy
     if (!componentTreeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning() << "On loading component hierarchy: Could not open file "
@@ -213,9 +214,18 @@ ApplicationContext::slot_loadProject(QString projectDirPath) {
     QJsonDocument hierarchyJson = QJsonDocument::fromJson(componentTreeFile.readAll());
     componentTreeFile.close();
     m_componentFactory->importHierarchy(hierarchyJson);
+
     // load documents
 
+    // TODO find all files with appropriate extension
+    QDir projectDir(projectDirPath);
+    projectDir.setFilter(QDir::Files | QDir::Readable);
+    projectDir.setNameFilters(QStringList("*" + EXTENSION_DOCFILE));
+    QStringList docFilePaths = projectDir.entryList();
 
+    for (QString currentPath : docFilePaths) {
+        m_currentProject->loadDocument(projectDirPath + "/" + currentPath);
+    }
 }
 
 void

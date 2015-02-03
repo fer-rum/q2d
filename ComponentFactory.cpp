@@ -41,7 +41,7 @@ ComponentFactory::slot_addCategory(QString name, ComponentCategory* parent) {
     qDebug() << "Adding category" << name << "with parent" << parent;
 
 
-    ComponentCategory* newCategory = new ComponentCategory(name);
+    ComponentCategory* newCategory = new ComponentCategory(name, parent);
 
     if (parent == nullptr) {
         this->componentHierarchy.invisibleRootItem()->appendRow(newCategory);
@@ -225,6 +225,11 @@ ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
                 hierarchy.removeFirst(); // down to the next level
                 break;
             }
+            if (index == currentItem->rowCount() - 1) {
+                // found nothing in the last element searched
+                qDebug() << hierarchyName << "not found in component hierarchy!";
+                return nullptr;
+            }
         }
     }
 
@@ -237,11 +242,12 @@ ComponentFactory::getComponentHierarchy() {
 }
 
 DocumentEntry*
-ComponentFactory::instantiateComponent(Document* document, QString typeId, QPointF scenePosition,
+ComponentFactory::instantiateComponent(Document* document, QString hierarchyName,
+                                       QPointF scenePosition,
                                        QString id) {
     Q_CHECK_PTR(document);
 
-    ComponentType* type = this->getTypeForHierarchyName(typeId);
+    ComponentType* type = this->getTypeForHierarchyName(hierarchyName);
     Q_CHECK_PTR(type);
 
     return this->instantiateComponent(document, type, scenePosition, id);
@@ -261,6 +267,8 @@ DocumentEntry*
 ComponentFactory::instantiateComponent(Document* document,
                                        metamodel::ComponentType* type,
                                        QPointF scenePosition, QString id) {
+    qDebug() << "Instantiating component" << id << "in" << document << "at" << scenePosition;
+
     // add component graphics to Schematic
     gui::SchematicsScene* scene = document->schematic();
     Q_CHECK_PTR(scene);
@@ -355,6 +363,8 @@ ComponentFactory::instantiatePort(Document* document,
         dynamic_cast<gui::ComponentGraphicsItem*>
         (parentComponent->schematicElement());
     Q_CHECK_PTR(schematicComponent);
+
+    qDebug() << "Instantiating port" << id << "at" << position << "with direction" << direction;
 
     // add port graphics to schematic
     gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
@@ -494,7 +504,7 @@ ComponentFactory::jsonToEntry(QJsonObject json, ComponentCategory* parent) {
 
 
 QJsonObject
-ComponentFactory::componentEntryToJson(QStandardItem* item) {
+ComponentFactory::categoryEntryToJson(QStandardItem* item) {
     ComponentCategory* category = dynamic_cast<ComponentCategory*>(item);
     Q_CHECK_PTR(category);
 
@@ -541,7 +551,7 @@ ComponentFactory::entryToJson(QStandardItem* item) {
         result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_COMPONENT));
         break;
     case COMPONENT_CATEGORY:
-        result = componentEntryToJson(item);
+        result = categoryEntryToJson(item);
         result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_CATEGORY));
         break;
     case PORT_DESCRIPTOR:

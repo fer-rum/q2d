@@ -24,9 +24,9 @@ ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
 
 /**
  * @brief ComponentGraphicsItem::specificType
- * @return the name of the type, the component was instantiated from.
+ * @return the hierarchy name of the type the component was instantiated from.
  */
 QString
 ComponentGraphicsItem::specificType() {
-    return m_type->text();
+    return m_type->hierarchyName();
 }

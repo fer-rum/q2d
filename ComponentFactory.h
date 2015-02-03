@@ -37,7 +37,7 @@ private:
             metamodel::ComponentCategory* parent);
 
     QJsonObject entryToJson(QStandardItem* item);
-    QJsonObject componentEntryToJson(QStandardItem* item);
+    QJsonObject categoryEntryToJson(QStandardItem* item);
     QJsonObject typeEntryToJson(QStandardItem* item);
 
     void jsonToCategoryEntry(QJsonObject json, metamodel::ComponentCategory* parent = nullptr);
@@ -52,7 +52,7 @@ public:
     metamodel::ComponentType* getTypeForIndex(const QModelIndex &index);
     metamodel::ComponentType* getTypeForHierarchyName(QString hierarchyName);
 
-    DocumentEntry* instantiateComponent(Document* document, QString typeId,
+    DocumentEntry* instantiateComponent(Document* document, QString hierarchyName,
                                         QPointF scenePosition, QString id = "");
     DocumentEntry* instantiateComponent(Document* document,
                                         metamodel::ComponentType* type,

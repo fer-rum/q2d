@@ -3,6 +3,8 @@
 #include "ComponentCategory.h"
 #include "Constants.h"
 
+#include <QtDebug>
+
 using namespace q2d::metamodel;
 using namespace q2d::constants;
 
@@ -27,6 +29,8 @@ ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent
     } else {
         hierarchyName = parent->hierarchyName() + HIERARCHY_SEPERATOR + this->text();
     }
+
+    qDebug() << "Hierarchy name =" << hierarchyName;
 
     this->setData(hierarchyName, ComponentDescriptorRole::HIERARCHY_NAME);
 }

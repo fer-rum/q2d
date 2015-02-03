@@ -69,6 +69,12 @@ public:
         return CENTER_OFFSET;
     }
 
+    // overridden.
+    // The position of a port is measured from the center
+    // In contrast to the scene position
+    // which is measured from the upper left coner
+    virtual QPointF pos() const;
+
     explicit PortGraphicsItem(QPointF relativeCenterPosition,
                               model::PortDirection direction,
                               ComponentGraphicsItem* parent);

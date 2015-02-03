@@ -75,6 +75,14 @@ Project::save(QDir projectDirectory) {
 
 }
 
+Document*
+Project::createDocument(QString name) {
+    Document* newDocument = new Document(name, this);
+    Q_CHECK_PTR(newDocument);
+    m_documents.appendRow(newDocument);
+    return newDocument;
+}
+
 /**
  * @brief Project::slot_newDocument
  *
@@ -88,9 +96,7 @@ void
 Project::slot_newDocument(QString name) {
     Q_ASSERT(!name.isEmpty());
 
-    Document* newDocument = new Document(name, this);
-    Q_CHECK_PTR(newDocument);
-    m_documents.appendRow(newDocument);
+    Document* newDocument = this->createDocument(name);
 
     emit signal_showDocument(newDocument);
 }
@@ -102,4 +108,36 @@ Project::slot_save() {
     QDir projectsDirectory = QDir(savePath);
     Q_ASSERT(projectsDirectory.exists());
     this->save(projectsDirectory);
+}
+
+/**
+ * @brief Project::loadDocument
+ * @param path the absolute path to the file
+ */
+void
+Project::loadDocument(QString path) {
+    Q_ASSERT(!path.isEmpty());
+
+    QFile documentFile(path);
+    Q_ASSERT(documentFile.exists());
+
+    // read the description file
+    if (!documentFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "On loading component type: Could not open file "
+                   << documentFile.fileName();
+        return;
+    }
+
+    qDebug() << "loading document from path" << path;
+
+    QByteArray rawText = documentFile.readAll();
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(rawText);
+    documentFile.close();
+
+    QString docName = path.split("/").last();
+    docName.chop(EXTENSION_DOCFILE.length());
+
+    Document* document = JsonToDocument(jsonDocument.object(), docName, this);
+    Q_CHECK_PTR(document);
+    m_documents.appendRow(document);
 }
