@@ -69,6 +69,8 @@ MainWindow::setupSignalsAndSlots() {
             m_context, &ApplicationContext::slot_loadProject);
     connect(this, &MainWindow::signal_unloadProjectRequested,
             m_context, &ApplicationContext::slot_unloadProject);
+    connect(this, &MainWindow::signal_createCategory,
+            m_context, &ApplicationContext::signal_clearComponentTypes);
 
     // This only needs to be called once since the sender (the ListView)
     // remains the same, even when the model changes

@@ -76,9 +76,11 @@ ApplicationContext::setupSignalsAndSlots() {
             (&MainWindow::slot_openDocumentTab)); // ship around overloaded function
     // saving signal has to be set up by project
 
+    // ApplicationContext -> ComponentFactory
+    connect(this, &ApplicationContext::signal_clearComponentTypes,
+            m_componentFactory, &ComponentFactory::slot_clearHierarchy);
+
     // MainWindow -> ComponentFactory
-    connect(m_mainWindow, &MainWindow::signal_createCategory,
-            m_componentFactory, &ComponentFactory::slot_addCategory);
     connect(m_mainWindow, &MainWindow::signal_loadType,
             m_componentFactory, &ComponentFactory::slot_loadType);
     connect(m_mainWindow, &MainWindow::signal_clearComponentTypes,
@@ -127,6 +129,7 @@ ApplicationContext::unloadProject() {
 
     delete m_currentProject;
     m_currentProject = nullptr;
+    emit this->signal_clearComponentTypes();
     emit this->signal_canAddDocuments(false);
     emit this->signal_projectNameChanged(QString());
     emit this->signal_documentModelChanged(nullptr);

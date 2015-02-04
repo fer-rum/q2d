@@ -55,6 +55,7 @@ signals:
     void signal_documentModelChanged(QStandardItemModel* model);
     void signal_componentModelChanged(QStandardItemModel* model);
     void signal_saveProject();
+    void signal_clearComponentTypes();
 
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);
