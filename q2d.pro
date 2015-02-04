@@ -44,7 +44,9 @@ SOURCES +=\
     DocumentEntry.cpp \
     gui/WireGraphicsItem.cpp \
     gui/SchematicsSceneChild.cpp \
-    JsonHelpers.cpp
+    JsonHelpers.cpp \
+    model/ConfigurationBit.cpp \
+    metamodel/ConfigurationBitDescriptor.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -76,7 +78,9 @@ HEADERS  +=\
     gui/WireGraphicsItem.h \
     gui/SchematicsSceneChild.h \
     JsonHelpers.h \
-    Enumerations.h
+    Enumerations.h \
+    model/ConfigurationBit.h \
+    metamodel/ConfigurationBitDescriptor.h
 
 FORMS    +=\
     gui/MainWindow.ui \

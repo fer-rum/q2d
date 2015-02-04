@@ -46,11 +46,12 @@ Application::checkSettings() {
     QString basePath = QDir::homePath() + "/q2d";
 
     // paths
-    this->defaultSetting(KEY_COMPONENTS_DIR,    basePath + "/components");
-    this->defaultSetting(KEY_PROJECTS_DIR,      basePath + "/projects");
-    this->defaultSetting(KEY_PORT_IN_FILE,      basePath + "/components/port_in.svg");
-    this->defaultSetting(KEY_PORT_INOUT_FILE,   basePath + "/components/port_inout.svg");
-    this->defaultSetting(KEY_PORT_OUT_FILE,     basePath + "/components/port_out.svg");
+    this->defaultSetting(KEY_DIR_COMPONENTS,    basePath + "/components");
+    this->defaultSetting(KEY_DIR_PROJECTS,      basePath + "/projects");
+    this->defaultSetting(KEY_FILE_PORT_IN,      basePath + "/icons/port_in.svg");
+    this->defaultSetting(KEY_FILE_PORT_INOUT,   basePath + "/icons/port_inout.svg");
+    this->defaultSetting(KEY_FILE_PORT_OUT,     basePath + "/icons/port_out.svg");
+    this->defaultSetting(KEY_FILE_BIT_GROUP,    basePath + "/icons/bit_group.svg");
 }
 
 QVariant

@@ -16,7 +16,7 @@ public:
     void addSubItem(ComponentDescriptor* toAdd);
 
     virtual int type() const {
-        return ComponentDescriptorType::COMPONENT_CATEGORY;
+        return (int)ComponentDescriptorType::COMPONENT_CATEGORY;
     }
 };
 

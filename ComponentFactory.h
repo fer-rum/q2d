@@ -36,6 +36,8 @@ private:
             const QString basePath,
             metamodel::ComponentCategory* parent);
 
+    // FIXME deprecated functions, move to json namespace
+    // and create proper calling
     QJsonObject entryToJson(QStandardItem* item);
     QJsonObject categoryEntryToJson(QStandardItem* item);
     QJsonObject typeEntryToJson(QStandardItem* item);

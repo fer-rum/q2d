@@ -37,8 +37,13 @@ extern QString HIERARCHY_SEPERATOR;
 // JSON keywords
 extern QString JSON_COMPONENT_NAME;
 
+// Configuration bit group details
+extern QString JSON_CONFIG_BIT_GROUP_NAME;
+extern QString JSON_CONFIG_BIT_GROUP_SIZE;
+
 // Im-/Export of Document entries
 extern QString JSON_DOCENTRY;
+extern QString JSON_DOCENTRY_CONFIG_BITS;
 extern QString JSON_DOCENTRY_ID;
 extern QString JSON_DOCENTRY_MODEL_ELEMENT;
 extern QString JSON_DOCENTRY_PARENT;
@@ -73,12 +78,13 @@ extern QString JSON_WIRE_START;
 extern QString JSON_WIRE_END;
 
 // Keys for QSettings (application wide)
-extern QString KEY_COMPONENTS_DIR;
-extern QString KEY_PROJECTS_DIR;
+extern QString KEY_DIR_COMPONENTS;
+extern QString KEY_DIR_PROJECTS;
 
-extern QString KEY_PORT_IN_FILE;
-extern QString KEY_PORT_OUT_FILE;
-extern QString KEY_PORT_INOUT_FILE;
+extern QString KEY_FILE_BIT_GROUP;
+extern QString KEY_FILE_PORT_IN;
+extern QString KEY_FILE_PORT_INOUT;
+extern QString KEY_FILE_PORT_OUT;
 
 // custom MIME types
 extern QString MIME_COMPONENT_TYPE;

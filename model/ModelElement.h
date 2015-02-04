@@ -11,10 +11,8 @@ namespace model {
 class Model;
 
 // TODO documentation
-// TODO visitor-Pattern
 class ModelElement : public QObject {
     Q_OBJECT
-private:
 public:
     ModelElement(Model* parent);
 

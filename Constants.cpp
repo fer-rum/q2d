@@ -5,12 +5,16 @@ namespace constants {
 
 QString HIERARCHY_SEPERATOR    = "/";
 
-QString KEY_COMPONENTS_DIR  = "paths/componentsFolder";
-QString KEY_PROJECTS_DIR    = "paths/projectsFolder";
+QString KEY_DIR_COMPONENTS  = "paths/componentsFolder";
+QString KEY_DIR_PROJECTS    = "paths/projectsFolder";
 
-QString KEY_PORT_IN_FILE    = "paths/symbols/port_in";
-QString KEY_PORT_OUT_FILE   = "paths/symbols/port_out";
-QString KEY_PORT_INOUT_FILE = "paths/symbols/port_inout";
+QString KEY_FILE_BIT_GROUP  = "paths/symbols/bit_group";
+QString KEY_FILE_PORT_IN    = "paths/symbols/port_in";
+QString KEY_FILE_PORT_OUT   = "paths/symbols/port_out";
+QString KEY_FILE_PORT_INOUT = "paths/symbols/port_inout";
+
+QString JSON_CONFIG_BIT_GROUP_NAME  = "bitGroup_name";
+QString JSON_CONFIG_BIT_GROUP_SIZE = "bitGroup_size";
 
 QString JSON_HIERARCHY_TYPE_CATEGORY    = "componentCategory";
 QString JSON_HIERARCHY_TYPE_COMPONENT   = "componentType";
@@ -27,6 +31,7 @@ QString JSON_POSITION_X    = "x";
 QString JSON_POSITION_Y    = "y";
 QString JSON_SYMBOL_PATH    = "symbolFile";
 QString JSON_DOCENTRY                   = "entry";
+QString JSON_DOCENTRY_CONFIG_BITS       = "entry_configBits";
 QString JSON_DOCENTRY_ID                = "entry_id";
 QString JSON_DOCENTRY_MODEL_ELEMENT     = "entry_model";
 QString JSON_DOCENTRY_SCHEMATIC_ELEMENT = "entry_schematic";

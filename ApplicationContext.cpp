@@ -15,7 +15,6 @@ using MainWindow = q2d::gui::MainWindow;
 
 ApplicationContext::ApplicationContext(Application* parent)
     : QObject(parent) {
-    // TODO load basic libraries
     this->m_componentFactory = new ComponentFactory(this);
 
     // create the main window

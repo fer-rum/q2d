@@ -31,13 +31,13 @@ PortDescriptor::PortDescriptor(QString name,
     QString setting;
     switch (direction) {
     case IN :
-        setting = KEY_PORT_IN_FILE;
+        setting = KEY_FILE_PORT_IN;
         break;
     case OUT :
-        setting = KEY_PORT_OUT_FILE;
+        setting = KEY_FILE_PORT_OUT;
         break;
     case IN_OUT :
-        setting = KEY_PORT_INOUT_FILE;
+        setting = KEY_FILE_PORT_INOUT;
         break;
     default:
         setting = QString();

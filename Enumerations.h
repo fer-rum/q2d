@@ -27,5 +27,18 @@ enum ComponentDescriptorType {
     PORT_DESCRIPTOR
 };
 
+/**
+ * @brief The ConfigurationBitState enum
+ * Represents the state of an q2d::model::ConfigurationBit
+ *
+ * Usually, the state is NOT_SET and may be changed to TRUE or FALSE after solving the SAT-problem
+ * that is posed by the schematic, by the means of backward annotation.
+ */
+enum ConfigurationBitState {
+    FALSE,
+    TRUE,
+    NOT_SET
+};
+
 } // namespace q2d
 #endif // ENUMERATIONS_H

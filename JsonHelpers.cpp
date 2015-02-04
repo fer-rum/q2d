@@ -7,6 +7,7 @@
 #include "model/PortDirection.h"
 #include "ComponentFactory.h"
 #include "metamodel/ComponentType.h"
+#include "metamodel/ConfigurationBitDescriptor.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -25,7 +26,7 @@ q2d::WriteJsonFile(QString path, QJsonDocument doc) {
 }
 
 QJsonObject
-q2d::PointToJson(QPointF point) {
+q2d::PointFToJson(QPointF point) {
     Q_ASSERT(!point.isNull());
 
     QJsonObject result = QJsonObject();
@@ -36,7 +37,7 @@ q2d::PointToJson(QPointF point) {
     return result;
 }
 
-QPointF q2d::JsonToPoint(QJsonObject json) {
+QPointF q2d::JsonToPointF(QJsonObject json) {
     Q_ASSERT(json.contains(JSON_POSITION_X));
     Q_ASSERT(json.contains(JSON_POSITION_Y));
 
@@ -129,7 +130,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     QJsonObject schematicJson =
         json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
     QString typeId = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
-    QPointF position = JsonToPoint(
+    QPointF position = JsonToPointF(
                            schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
 
     // reconstruct the parent
@@ -178,7 +179,7 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
     QJsonObject result = QJsonObject();
 
     result.insert(JSON_SCHEMATIC_SUB_TYPE, QJsonValue(ssc->specificType()));
-    result.insert(JSON_SCHEMATIC_POSITION, PointToJson(ssc->pos()));
+    result.insert(JSON_SCHEMATIC_POSITION, PointFToJson(ssc->pos()));
 
     QJsonObject additionalInfo = ssc->additionalJson();
     if (!additionalInfo.isEmpty()) {
@@ -186,4 +187,20 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
     }
 
     return result;
+}
+
+
+q2d::metamodel::ConfigBitGroupDescriptor*
+q2d::json::toConfigBitGroupDescriptor(QJsonObject json){
+    Q_ASSERT(!json.isEmpty());
+    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_NAME));
+    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_SIZE));
+
+    QString groupName   = json.value(JSON_CONFIG_BIT_GROUP_NAME).toString();
+    int     memberCount = json.value(JSON_CONFIG_BIT_GROUP_SIZE).toInt();
+
+    Q_ASSERT(!groupName.isEmpty());
+    Q_ASSERT(memberCount > 0);
+
+    return new metamodel::ConfigBitGroupDescriptor(groupName, memberCount);
 }

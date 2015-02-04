@@ -104,7 +104,7 @@ Project::slot_newDocument(QString name) {
 void
 Project::slot_save() {
     QString savePath =
-        Application::instance()->getSetting(KEY_PROJECTS_DIR).toString();
+        Application::instance()->getSetting(KEY_DIR_PROJECTS).toString();
     QDir projectsDirectory = QDir(savePath);
     Q_ASSERT(projectsDirectory.exists());
     this->save(projectsDirectory);

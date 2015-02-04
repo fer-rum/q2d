@@ -126,7 +126,7 @@ MainWindow::slot_loadProject() {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setDirectory(m_application->getSetting(constants::KEY_PROJECTS_DIR).toString());
+    dialog.setDirectory(m_application->getSetting(constants::KEY_DIR_PROJECTS).toString());
 
     int userAction = dialog.exec();
     if (userAction == QDialog::Rejected) {
@@ -266,7 +266,7 @@ MainWindow::on_btn_addType_clicked() {
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setNameFilter(tr("Component Descriptions (*.json)"));
-    dialog.setDirectory(this->m_application->getSetting(constants::KEY_COMPONENTS_DIR).toString());
+    dialog.setDirectory(this->m_application->getSetting(constants::KEY_DIR_COMPONENTS).toString());
 
     int userAction = dialog.exec();
     if (userAction == QDialog::Rejected) {

@@ -1,6 +1,7 @@
 #include "ComponentType.h"
 
 #include "ComponentCategory.h"
+#include "ConfigurationBitDescriptor.h"
 #include "PortDescriptor.h"
 
 #include <QtDebug>
@@ -37,14 +38,14 @@ ComponentType::loadCircuitSymbol(QString symbolFilePath) {
  */
 QString
 ComponentType::symbolPath() {
-    return this->data(ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
+    return this->data((int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
 }
 
 void
 ComponentType::setSymbolPath(QString symbolPath) {
     Q_ASSERT(!(symbolPath.isEmpty()));
 
-    this->setData(QVariant::fromValue(symbolPath), ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
+    this->setData(QVariant::fromValue(symbolPath), (int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
     this->loadCircuitSymbol(symbolPath); // update the circuit symbol
 }
 
@@ -54,25 +55,35 @@ ComponentType::setSymbolPath(QString symbolPath) {
  */
 QString
 ComponentType::descriptorPath() const {
-    return this->data(ComponentDescriptorRole::DESCRIPTOR_FILE).toString();
+    return this->data((int)ComponentDescriptorRole::DESCRIPTOR_FILE).toString();
 }
 
 void
 ComponentType::setDescriptorPath(const QString path) {
     Q_ASSERT(!path.isEmpty());
-    this->setData(QVariant::fromValue(path), ComponentDescriptorRole::DESCRIPTOR_FILE);
+    this->setData(QVariant::fromValue(path), (int)ComponentDescriptorRole::DESCRIPTOR_FILE);
 }
 
 void
 ComponentType::addPort(QString name, QPoint relativePosition, q2d::model::PortDirection direction) {
 
-    qDebug() << "Creating Port " << name
-             << " at" << relativePosition
-             << " with direction " << direction;
-
-    PortDescriptor* portDescriptor
-        = new PortDescriptor(name, direction, relativePosition, this);
+    PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
+}
+
+/**
+ * @brief ComponentType::addConfigBits adds a group of configuration bit descriptors.
+ * @param groupName
+ *      must not be empty
+ * @param memberCount
+ *      must be greater then 0
+ */
+void
+ComponentType::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup){
+    Q_CHECK_PTR(configBitGroup);
+
+    configBitGroup->setParent(this);
+    this->appendRow(configBitGroup);
 }
 
 QString

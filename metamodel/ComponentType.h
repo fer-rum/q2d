@@ -11,6 +11,7 @@ namespace q2d {
 namespace metamodel {
 
 class ComponentCategory;
+class ConfigBitGroupDescriptor;
 
 // TODO support seperate Icon files as determined by json
 /**
@@ -39,12 +40,15 @@ public:
     QString descriptorPath() const;
     void setDescriptorPath(const QString path);
 
+    // TODO transform
+    // void addPort(PortDescriptor*);
     void addPort(QString name, QPoint relativePosition, model::PortDirection direction);
+    void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
 
     QString generateId();
 
     virtual int type() const {
-        return ComponentDescriptorType::COMPONENT_TYPE;
+        return (int)ComponentDescriptorType::COMPONENT_TYPE;
     }
 };
 

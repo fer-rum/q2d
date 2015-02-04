@@ -138,8 +138,9 @@ ComponentFactory::createTypeFromJson(
     QJsonArray portArray =
         jsonObject.value(JSON_PORTS).toArray(QJsonArray());
 
-    for (int index = 0; index < portArray.count(); ++index) {
-        QJsonValue currentValue = portArray[index];
+    for(QJsonValue currentValue : portArray) {
+//    for (int index = 0; index < portArray.count(); ++index) {
+//        QJsonValue currentValue = portArray[index];
         if (currentValue.isUndefined()) {
             continue;
         }

@@ -28,7 +28,7 @@ public:
     model::PortDirection direction();
 
     virtual int type() const {
-        return ComponentDescriptorType::PORT_DESCRIPTOR;
+        return (int)ComponentDescriptorType::PORT_DESCRIPTOR;
     }
 };
 
