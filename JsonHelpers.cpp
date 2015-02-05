@@ -21,7 +21,7 @@ using namespace q2d::json;
 using namespace q2d;
 
 void
-q2d::WriteJsonFile(QString path, QJsonDocument doc) {
+q2d::json::writeJsonFile(QString path, QJsonDocument doc) {
 
     QFile file(path);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
@@ -29,8 +29,42 @@ q2d::WriteJsonFile(QString path, QJsonDocument doc) {
     file.close();
 }
 
+/**
+ * @brief q2d::json::readJsonFile attempts to read a given file.
+ * If for some reason the reading fails, an empty document will be returned.
+ * The validity of the read QJsonDocument has to be checked by the caller.
+ * @param path
+ * @return
+ */
+QJsonDocument
+q2d::json::readJsonFile(QString path){
+    const QString logPrefix = "ReadJsonFile(" + path + ")";
+
+    if(path.isEmpty()){
+        qWarning() << logPrefix << "file path was empty";
+    }
+
+    QFile jsonFile(path);
+    if(!jsonFile.exists()){
+        qWarning() << logPrefix << "file does not exist";
+    }
+
+    if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << logPrefix << "could not open file";
+        return QJsonDocument();
+    }
+
+    QByteArray rawText = jsonFile.readAll();
+    QJsonDocument result = QJsonDocument::fromJson(rawText);
+    jsonFile.close();
+
+    qDebug() << logPrefix << "successfully read file";
+
+    return result;
+}
+
 QJsonObject
-q2d::PointFToJson(QPointF point) {
+q2d::json::fromPointF(QPointF point) {
     Q_ASSERT(!point.isNull());
 
     QJsonObject result = QJsonObject();
@@ -42,7 +76,7 @@ q2d::PointFToJson(QPointF point) {
 }
 
 QPointF
-q2d::JsonToPointF(QJsonObject json) {
+q2d::json::toPointF(QJsonObject json) {
     Q_ASSERT(json.contains(JSON_POSITION_X));
     Q_ASSERT(json.contains(JSON_POSITION_Y));
 
@@ -53,7 +87,7 @@ q2d::JsonToPointF(QJsonObject json) {
 }
 
 QJsonObject
-q2d::DocumentToJson(Document* doc) {
+q2d::json::fromDocument(Document* doc) {
 
     QJsonArray entriesArray = QJsonArray();
 
@@ -68,8 +102,16 @@ q2d::DocumentToJson(Document* doc) {
     return entriesWrapper;
 }
 
+/**
+ * @brief q2d::json::toDocument creates a new Document from the JSON representation.
+ * The resulting document will have no parent set, this has to be done by the caller himself.
+ * @param json
+ * @param name
+ * @param parent
+ * @return
+ */
 q2d::Document*
-q2d::JsonToDocument(QJsonObject json, QString name, Project* parent) {
+q2d::json::toDocument(QJsonObject json, QString name, Project* parent) {
     Q_CHECK_PTR(parent);
     Q_ASSERT(!name.isEmpty());
 
@@ -135,7 +177,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     QJsonObject schematicJson =
         json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
     QString typeId = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
-    QPointF position = JsonToPointF(
+    QPointF position = toPointF(
                            schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
 
     // reconstruct the parent
@@ -184,7 +226,7 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
     QJsonObject result = QJsonObject();
 
     result.insert(JSON_SCHEMATIC_SUB_TYPE, QJsonValue(ssc->specificType()));
-    result.insert(JSON_SCHEMATIC_POSITION, PointFToJson(ssc->pos()));
+    result.insert(JSON_SCHEMATIC_POSITION, fromPointF(ssc->pos()));
 
     QJsonObject additionalInfo = ssc->additionalJson();
     if (!additionalInfo.isEmpty()) {
@@ -195,17 +237,17 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
 }
 
 
-//q2d::metamodel::ConfigBitGroupDescriptor*
-//toConfigBitGroupDescriptor(QJsonObject json){
-//    Q_ASSERT(!json.isEmpty());
-//    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_NAME));
-//    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_SIZE));
+q2d::metamodel::ConfigBitGroupDescriptor*
+toConfigBitGroupDescriptor(QJsonObject json){
+    Q_ASSERT(!json.isEmpty());
+    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_NAME));
+    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_SIZE));
 
-//    QString groupName   = json.value(JSON_CONFIG_BIT_GROUP_NAME).toString();
-//    int     memberCount = json.value(JSON_CONFIG_BIT_GROUP_SIZE).toInt();
+    QString groupName   = json.value(JSON_CONFIG_BIT_GROUP_NAME).toString();
+    int     memberCount = json.value(JSON_CONFIG_BIT_GROUP_SIZE).toInt();
 
-//    Q_ASSERT(!groupName.isEmpty());
-//    Q_ASSERT(memberCount > 0);
+    Q_ASSERT(!groupName.isEmpty());
+    Q_ASSERT(memberCount > 0);
 
-//    return new metamodel::ConfigBitGroupDescriptor(groupName, memberCount);
-//}
+    return new metamodel::ConfigBitGroupDescriptor(groupName, memberCount);
+}

@@ -59,7 +59,7 @@ Project::save(QDir projectDirectory) {
     // TODO Save the project settings
 
     // make sure the component tree in use is saved
-    WriteJsonFile(
+    json::writeJsonFile(
         projectDirectory.absolutePath() + FILE_COMPONENT_TREE,
         m_applicationContext->componentFactory()->exportHierarchy());
 
@@ -116,28 +116,14 @@ Project::slot_save() {
  */
 void
 Project::loadDocument(QString path) {
-    Q_ASSERT(!path.isEmpty());
 
-    QFile documentFile(path);
-    Q_ASSERT(documentFile.exists());
-
-    // read the description file
-    if (!documentFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "On loading component type: Could not open file "
-                   << documentFile.fileName();
-        return;
-    }
-
-    qDebug() << "loading document from path" << path;
-
-    QByteArray rawText = documentFile.readAll();
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(rawText);
-    documentFile.close();
+    QJsonDocument jsonDocument = json::readJsonFile(path);
 
     QString docName = path.split("/").last();
     docName.chop(EXTENSION_DOCFILE.length());
 
-    Document* document = JsonToDocument(jsonDocument.object(), docName, this);
+    Document* document = json::toDocument(jsonDocument.object(), docName, this);
+
     Q_CHECK_PTR(document);
     m_documents.appendRow(document);
 }

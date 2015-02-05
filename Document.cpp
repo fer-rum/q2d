@@ -34,7 +34,8 @@ using namespace q2d::metamodel;
  * @param name is the name of the document and also the name of the component
  * which is described by the document.
  *
- * @param parent the Project the document belongs to; Must not be null.
+ * @param parent the Project the document belongs to; Must not be null,
+ * since the component factory is cached from it
  */
 Document::Document(QString name, Project* parent) :
     QObject(parent),
@@ -174,9 +175,9 @@ Document::save(QDir saveDir) {
     // TODO: should the component Factories state be saved?
     // maybe in project…
     QJsonDocument jsonDocument = QJsonDocument();
-    jsonDocument.setObject(DocumentToJson(this));
+    jsonDocument.setObject(json::fromDocument(this));
 
     QString path = saveDir.absolutePath() + "/"
                    + this->text() + EXTENSION_DOCFILE;
-    WriteJsonFile(path, jsonDocument);
+    json::writeJsonFile(path, jsonDocument);
 }
