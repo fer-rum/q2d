@@ -47,7 +47,8 @@ SOURCES +=\
     Enumerations.cpp \
     metamodel/Category.cpp \
     metamodel/Type.cpp \
-    metamodel/ComponentElement.cpp
+    metamodel/ComponentElement.cpp \
+    Util.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -82,7 +83,8 @@ HEADERS  +=\
     metamodel/Element.h \
     metamodel/HierarchyElement.h \
     metamodel/Type.h \
-    metamodel/ComponentElement.h
+    metamodel/ComponentElement.h \
+    Util.h
 
 FORMS    +=\
     gui/MainWindow.ui \

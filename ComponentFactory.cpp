@@ -1,17 +1,24 @@
 #include "ComponentFactory.h"
 
 #include "ApplicationContext.h"
+#include "Constants.h"
 #include "Document.h"
+#include "Enumerations.h"
+#include "JsonHelpers.h"
+#include "Util.h"
+
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicsScene.h"
 #include "gui/PortGraphicsItem.h"
 #include "gui/WireGraphicsItem.h"
+
 #include "metamodel/Category.h"
+#include "metamodel/ConfigurationBitDescriptor.h"
 #include "metamodel/Type.h"
 #include "metamodel/PortDescriptor.h"
+
 #include "model/Component.h"
 #include "model/Model.h"
-#include "Constants.h"
 
 #include <QFileInfo>
 #include <QJsonArray>
@@ -57,42 +64,24 @@ ComponentFactory::slot_addCategory(QString name, Category* parent) {
  * If the parent category is null, the item will be sorted directly below the
  * root.
  *
- * @param fileName is the name of the file that contains the component description as JSON
+ * @param filePath is the absolute path of the file that contains the component description as JSON
  * @param parent the parent category; May be null
  */
 void
-ComponentFactory::slot_loadType(QString fileName, Category* parent) {
-    Q_ASSERT(!fileName.isEmpty());
+ComponentFactory::slot_loadType(QString filePath, Category* parent) {
 
-    QFile descriptionFile(fileName);
-    Q_ASSERT(descriptionFile.exists());
+    const QString logPrefix = "Project::slot_loadType(" + filePath + ", " + util::ptrToString(parent) + ")";
 
-    // read the description file
-    if (!descriptionFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "On loading component type: Could not open file "
-                   << descriptionFile.fileName();
-        return;
-    }
+    QJsonDocument jsonDocument = json::readJsonFile(filePath);
 
-    qDebug() << "Adding type" << fileName << "with parent" << parent;
-
-    QFileInfo descriptionFileInfo = QFileInfo(descriptionFile);
-    QByteArray rawText = descriptionFile.readAll();
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(rawText);
-    descriptionFile.close();
-
-    // If the file contains invalid JSON it simply creates a null document
+    // validity check
     if (jsonDocument.isNull()) {
-        qDebug() << "JSON document seems to be invalid";
+        qWarning() << logPrefix << "json document seems to be invalid";
         return;
     }
 
-    Type* newType = this->createTypeFromJson(
-                                 jsonDocument,
-                                 descriptionFileInfo.absolutePath(),
-                                 parent);
+    Type* newType = this->createTypeFromJson(jsonDocument, filePath, parent);
     Q_CHECK_PTR(newType);
-    newType->setDescriptorPath(descriptionFileInfo.absoluteFilePath());
 
     // TODO later disallow items w/o category
     if (parent != nullptr) {
@@ -105,31 +94,38 @@ ComponentFactory::slot_loadType(QString fileName, Category* parent) {
 /**
  * @brief ComponentFactory::createTypeFronJson attempts to create a new ComponentType from its JSON-description.
  * @param jsonSource
- * @param basePath is the directory path in which the description resides. All paths in the JSON are treated as relative to this directory
+ * @param filePath is the path of the descriptor file.
+ * All paths in the JSON are treated as relative to its base directory
  * @param parent
  * @return a pointer to the newly created ComponentType; a nullptr on failure
  */
 Type*
 ComponentFactory::createTypeFromJson(
     const QJsonDocument jsonSource,
-    const QString basePath,
+    const QString filePath,
     Category* parent) {
+
+    // extract the base directory path from the file path
+    QString fileName = filePath.split(QDir::separator()).last();
+    QString baseDirPath = QString(filePath);
+    baseDirPath.chop(fileName.size());
 
     Q_ASSERT(!jsonSource.isNull());
     QJsonObject jsonObject = jsonSource.object();
 
     // parse the name
     // defaults to "Unnamed"
-    QJsonValue nameValue = jsonObject.value(JSON_COMPONENT_NAME);
+    QJsonValue nameValue = jsonObject.value(JSON_DESC_COMPONENT_NAME);
     QString componentName = nameValue.toString(tr("Unnamed"));
 
     Type* result = new Type(componentName, parent);
     Q_CHECK_PTR(result);
+    result->setDescriptorPath(filePath);
 
     // load the symbol file
     // defaults to basePath/unknown.svg
     QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
-    QString symbolFilePath =  basePath + "/" +
+    QString symbolFilePath =  baseDirPath + "/" +
                               symbolPathValue.toString("unknown.svg");
     result->setSymbolPath(symbolFilePath);
 
@@ -139,8 +135,6 @@ ComponentFactory::createTypeFromJson(
         jsonObject.value(JSON_PORTS).toArray(QJsonArray());
 
     for(QJsonValue currentValue : portArray) {
-//    for (int index = 0; index < portArray.count(); ++index) {
-//        QJsonValue currentValue = portArray[index];
         if (currentValue.isUndefined()) {
             continue;
         }
@@ -148,12 +142,8 @@ ComponentFactory::createTypeFromJson(
         // port name
         QString portName = portObject.value(JSON_PORT_NAME)
                            .toString(tr("Unnamed"));
-        // port position
-        QJsonObject posObject =
-            portObject.value(JSON_PORT_POSITION).toObject();
-        int x = posObject.value(JSON_POSITION_X).toInt();
-        int y = posObject.value(JSON_POSITION_Y).toInt();
-        QPoint portPosition = QPoint(x, y);
+
+        QPointF portPosition = json::toPointF(portObject.value(JSON_PORT_POSITION).toObject());
 
         // port direction
         QString dirString = portObject.value(JSON_PORT_DIRECTION)
@@ -163,8 +153,16 @@ ComponentFactory::createTypeFromJson(
 
         result->addPort(portName, portPosition, portDirection);
     }
-
-    // TODO read all the other stuff that might come in handy
+        // get the config bits if there are some
+    if(jsonObject.contains(JSON_DESC_CONFIG_BIT_GROUP)){
+        QJsonArray configBitsJson = jsonObject.value(JSON_DESC_CONFIG_BIT_GROUP).toArray();
+        for(QJsonValue currentGroup : configBitsJson){
+            ConfigBitGroupDescriptor* configBits = json::toConfigBitGroupDescriptor(currentGroup.toObject());
+            Q_CHECK_PTR(configBits);
+            // TODO instead print a proper warning
+            result->addConfigBitGroup(configBits);
+        }
+    }
 
     return result;
 }

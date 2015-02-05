@@ -33,7 +33,7 @@ private:
     QStandardItemModel componentHierarchy;
 
     metamodel::Type* createTypeFromJson(const QJsonDocument jsonSource,
-            const QString basePath,
+            const QString filePath,
             metamodel::Category* parent);
 
     // FIXME deprecated functions, move to json namespace
@@ -54,6 +54,9 @@ public:
     metamodel::Type* getTypeForIndex(const QModelIndex &index);
     metamodel::Type* getTypeForHierarchyName(QString hierarchyName);
 
+
+    // TODO instantiations should no longer be added to the document automatically
+    // TODO can instantiations be made independent of documents until they are added?
     DocumentEntry* instantiateComponent(Document* document, QString hierarchyName,
                                         QPointF scenePosition, QString id = "");
     DocumentEntry* instantiateComponent(Document* document,
@@ -77,7 +80,7 @@ public:
 
 
 public slots:
-    void slot_loadType(QString fileName, metamodel::Category* parent);
+    void slot_loadType(QString filePath, metamodel::Category* parent);
     metamodel::Category* slot_addCategory(QString name, metamodel::Category* parent);
     void slot_clearHierarchy();
 

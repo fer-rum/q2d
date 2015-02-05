@@ -35,15 +35,16 @@ extern QString GENERAL_TYPE_UNDEFINED;
 extern QString HIERARCHY_SEPERATOR;
 
 // JSON keywords
-extern QString JSON_COMPONENT_NAME;
+// FIXME revisit naming
 
-// Configuration bit group details
-extern QString JSON_CONFIG_BIT_GROUP_NAME;
-extern QString JSON_CONFIG_BIT_GROUP_SIZE;
+// Descriptor file entries
+extern QString JSON_DESC_COMPONENT_NAME;
+extern QString JSON_DESC_CONFIG_BIT_GROUP;
+extern QString JSON_DESC_CONFIG_BIT_GROUP_NAME;
+extern QString JSON_DESC_CONFIG_BIT_GROUP_SIZE;
 
 // Im-/Export of Document entries
 extern QString JSON_DOCENTRY;
-extern QString JSON_DOCENTRY_CONFIG_BITS;
 extern QString JSON_DOCENTRY_ID;
 extern QString JSON_DOCENTRY_MODEL_ELEMENT;
 extern QString JSON_DOCENTRY_PARENT;

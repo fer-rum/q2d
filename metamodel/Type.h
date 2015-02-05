@@ -43,7 +43,7 @@ public:
 
     // TODO transform
     // void addPort(PortDescriptor*);
-    void addPort(QString name, QPoint relativePosition, model::enums::PortDirection direction);
+    void addPort(QString name, QPointF relativePosition, model::enums::PortDirection direction);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
 
     QString generateId();

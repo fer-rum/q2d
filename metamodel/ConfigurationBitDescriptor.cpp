@@ -1,8 +1,13 @@
 #include "ConfigurationBitDescriptor.h"
 
+#include "../Application.h"
+#include "../Constants.h"
+#include "../Util.h"
 #include "Type.h"
 
+using namespace q2d::constants;
 using namespace q2d::metamodel;
+
 
 ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent) :
     QObject(parent),
@@ -20,10 +25,20 @@ ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor*
  */
 ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type *parent) :
     QObject(parent),
-    QStandardItem(groupName + "(" + memberCount + " bit)") {
+    QStandardItem(groupName + "(" + util::intToString(memberCount) + " bit)") {
 
     for(int count = 0; count < memberCount; ++count){
-        ConfigBitDescriptor* descriptor = new ConfigBitDescriptor(groupName + "_" + count, this);
+        ConfigBitDescriptor* descriptor = new ConfigBitDescriptor(groupName + "_"
+                                              + util::intToString(count, 4),
+                                              this);
         this->appendRow(descriptor);
+    }
+
+    // fetch the icon for the group
+    QString fileName = Application::instance()->getSetting(KEY_FILE_BIT_GROUP).toString();
+
+    if (!fileName.isEmpty()) {
+        QIcon icon = QIcon(fileName);
+        this->setIcon(icon);
     }
 }

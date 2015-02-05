@@ -19,7 +19,7 @@ using namespace q2d::constants;
  */
 PortDescriptor::PortDescriptor(QString name,
                                model::enums::PortDirection direction,
-                               QPoint position,
+                               QPointF position,
                                metamodel::Type* parent)
     : QObject(parent), QStandardItem(name) {
 

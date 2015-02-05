@@ -1,5 +1,7 @@
 #include "Type.h"
 
+#include "../Enumerations.h"
+
 #include "Category.h"
 #include "ConfigurationBitDescriptor.h"
 #include "PortDescriptor.h"
@@ -65,7 +67,7 @@ Type::setDescriptorPath(const QString path) {
 }
 
 void
-Type::addPort(QString name, QPoint relativePosition, q2d::model::enums::PortDirection direction) {
+Type::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDirection direction) {
 
     PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);

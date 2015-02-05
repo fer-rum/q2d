@@ -18,7 +18,6 @@
 
 using namespace q2d::constants;
 using namespace q2d::json;
-using namespace q2d;
 
 void
 q2d::json::writeJsonFile(QString path, QJsonDocument doc) {
@@ -238,13 +237,13 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
 
 
 q2d::metamodel::ConfigBitGroupDescriptor*
-toConfigBitGroupDescriptor(QJsonObject json){
+q2d::json::toConfigBitGroupDescriptor(QJsonObject json){
     Q_ASSERT(!json.isEmpty());
-    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_NAME));
-    Q_ASSERT(json.contains(JSON_CONFIG_BIT_GROUP_SIZE));
+    Q_ASSERT(json.contains(JSON_DESC_CONFIG_BIT_GROUP_NAME));
+    Q_ASSERT(json.contains(JSON_DESC_CONFIG_BIT_GROUP_SIZE));
 
-    QString groupName   = json.value(JSON_CONFIG_BIT_GROUP_NAME).toString();
-    int     memberCount = json.value(JSON_CONFIG_BIT_GROUP_SIZE).toInt();
+    QString groupName   = json.value(JSON_DESC_CONFIG_BIT_GROUP_NAME).toString();
+    int     memberCount = json.value(JSON_DESC_CONFIG_BIT_GROUP_SIZE).toInt();
 
     Q_ASSERT(!groupName.isEmpty());
     Q_ASSERT(memberCount > 0);

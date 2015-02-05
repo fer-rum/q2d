@@ -20,7 +20,7 @@ class PortDescriptor :
 public:
     explicit PortDescriptor(QString name,
                             model::enums::PortDirection direction,
-                            QPoint position,
+                            QPointF position,
                             metamodel::Type* parent);
 
     QPoint position();
