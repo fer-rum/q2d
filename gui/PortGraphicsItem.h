@@ -1,7 +1,7 @@
 #ifndef PORTGRAPHICSITEM_H
 #define PORTGRAPHICSITEM_H
 
-#include "../model/PortDirection.h"
+#include "Enumerations.h"
 #include "SchematicsSceneChild.h"
 
 #include <QBrush>
@@ -48,7 +48,7 @@ private:
     QBrush  m_defaultBrush;
     QPointF m_dragStartPosition;
 
-    q2d::model::PortDirection m_direction;
+    q2d::model::enums::PortDirection m_direction;
 
     // for drag and drop
     bool    m_dragOver;
@@ -76,7 +76,7 @@ public:
     virtual QPointF pos() const;
 
     explicit PortGraphicsItem(QPointF relativeCenterPosition,
-                              model::PortDirection direction,
+                              model::enums::PortDirection direction,
                               ComponentGraphicsItem* parent);
 
     // ovverride for custom dragging

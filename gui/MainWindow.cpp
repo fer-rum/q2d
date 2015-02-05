@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "Document.h"
-#include "metamodel/ComponentCategory.h"
+#include "metamodel/Category.h"
 #include "ComponentFactory.h"
 #include "Constants.h"
 #include "gui/SchematicsTab.h"
@@ -258,7 +258,7 @@ MainWindow::on_btn_addType_clicked() {
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
-    ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
+    Category* parent = componentFactory->getCategoryForIndex(currentIndex);
 
     QString fileName;
 
@@ -288,7 +288,7 @@ MainWindow::on_btn_addCategory_clicked() {
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
-    ComponentCategory* parent = componentFactory->getCategoryForIndex(currentIndex);
+    Category* parent = componentFactory->getCategoryForIndex(currentIndex);
 
     // get the name for the new category
     bool ok;

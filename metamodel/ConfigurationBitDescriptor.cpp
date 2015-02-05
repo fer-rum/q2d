@@ -1,6 +1,6 @@
 #include "ConfigurationBitDescriptor.h"
 
-#include "ComponentType.h"
+#include "Type.h"
 
 using namespace q2d::metamodel;
 
@@ -18,7 +18,7 @@ ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor*
  * @param memberCount
  * @param parent
  */
-ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, ComponentType *parent) :
+ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type *parent) :
     QObject(parent),
     QStandardItem(groupName + "(" + memberCount + " bit)") {
 

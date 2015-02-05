@@ -4,7 +4,7 @@
 #include "DocumentEntry.h"
 #include "model/Model.h"
 #include "gui/SchematicsScene.h"
-#include "metamodel/ComponentType.h"
+#include "metamodel/Type.h"
 
 #include <QDir>
 #include <QObject>
@@ -29,8 +29,6 @@ enum DocumentRole {
 // TODO documentation
 // TODO referenced Documents?
 // TODO description text
-// TODO saving
-// TODO loading
 
 class Document :
     public QObject,
@@ -49,10 +47,8 @@ private:
      */
     QList<DocumentEntry*> m_entries;
 
-    void addComponentPorts(metamodel::ComponentType* type,
+    void addComponentPorts(metamodel::Type* type,
                            DocumentEntry* parentEntry);
-
-
 
 public:
     explicit Document(QString name, Project* parent);

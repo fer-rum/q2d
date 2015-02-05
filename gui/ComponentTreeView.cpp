@@ -2,8 +2,8 @@
 
 #include "Constants.h"
 #include "Enumerations.h"
-#include "../metamodel/ComponentDescriptor.h"
-#include "../metamodel/ComponentType.h"
+#include "../metamodel/HierarchyElement.h"
+#include "../metamodel/Type.h"
 
 #include <QApplication>
 #include <QDrag>

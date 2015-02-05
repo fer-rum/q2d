@@ -1,7 +1,7 @@
 #ifndef COMPONENTFACTORY_H
 #define COMPONENTFACTORY_H
 
-#include "model/PortDirection.h"
+#include "Enumerations.h"
 
 #include <QFile>
 #include <QJsonDocument>
@@ -16,9 +16,9 @@ class Document;
 class DocumentEntry;
 
 namespace metamodel {
-class ComponentCategory;
-class ComponentDescriptor;
-class ComponentType;
+class Category;
+class HierarchyElement;
+class Type;
 }
 
 namespace model {
@@ -32,9 +32,9 @@ class ComponentFactory : public QObject {
 private:
     QStandardItemModel componentHierarchy;
 
-    metamodel::ComponentType* createTypeFromJson(const QJsonDocument jsonSource,
+    metamodel::Type* createTypeFromJson(const QJsonDocument jsonSource,
             const QString basePath,
-            metamodel::ComponentCategory* parent);
+            metamodel::Category* parent);
 
     // FIXME deprecated functions, move to json namespace
     // and create proper calling
@@ -42,31 +42,31 @@ private:
     QJsonObject categoryEntryToJson(QStandardItem* item);
     QJsonObject typeEntryToJson(QStandardItem* item);
 
-    void jsonToCategoryEntry(QJsonObject json, metamodel::ComponentCategory* parent = nullptr);
-    void jsonToTypeEntry(QJsonObject json, metamodel::ComponentCategory* parent);
-    void jsonToEntry(QJsonObject json, metamodel::ComponentCategory* parent);
+    void jsonToCategoryEntry(QJsonObject json, metamodel::Category* parent = nullptr);
+    void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
+    void jsonToEntry(QJsonObject json, metamodel::Category* parent);
 
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
 
     QStandardItemModel* getComponentHierarchy();
-    metamodel::ComponentCategory* getCategoryForIndex(const QModelIndex &index);
-    metamodel::ComponentType* getTypeForIndex(const QModelIndex &index);
-    metamodel::ComponentType* getTypeForHierarchyName(QString hierarchyName);
+    metamodel::Category* getCategoryForIndex(const QModelIndex &index);
+    metamodel::Type* getTypeForIndex(const QModelIndex &index);
+    metamodel::Type* getTypeForHierarchyName(QString hierarchyName);
 
     DocumentEntry* instantiateComponent(Document* document, QString hierarchyName,
                                         QPointF scenePosition, QString id = "");
     DocumentEntry* instantiateComponent(Document* document,
-                                        metamodel::ComponentType* type,
+                                        metamodel::Type* type,
                                         QPointF scenePosition,
                                         QString id = "");
     QList<DocumentEntry*> instantiatePorts(Document* document,
-                                           metamodel::ComponentType* type,
+                                           metamodel::Type* type,
                                            DocumentEntry* parentComponent);
     DocumentEntry* instantiatePort(Document* document,
                                    DocumentEntry* parentComponent,
                                    QPointF position,
-                                   model::PortDirection direction,
+                                   model::enums::PortDirection direction,
                                    QString id);
     DocumentEntry* instantiateWire(Document* document,
                                    DocumentEntry* sender,
@@ -77,8 +77,8 @@ public:
 
 
 public slots:
-    void slot_loadType(QString fileName, metamodel::ComponentCategory* parent);
-    metamodel::ComponentCategory* slot_addCategory(QString name, metamodel::ComponentCategory* parent);
+    void slot_loadType(QString fileName, metamodel::Category* parent);
+    metamodel::Category* slot_addCategory(QString name, metamodel::Category* parent);
     void slot_clearHierarchy();
 
 };

@@ -48,7 +48,7 @@ QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
  * @param parent
  */
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
-                                   model::PortDirection direction,
+                                   model::enums::PortDirection direction,
                                    ComponentGraphicsItem* parent)
     : SchematicsSceneChild(parent->SchematicsSceneChild::scene(),
                            parent) {
@@ -68,15 +68,15 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     m_direction = direction;
     // select the Pen and Brush based on the Port direction
     switch (direction) {
-    case model::PortDirection::IN:
+    case model::enums::PortDirection::IN:
         this->m_defaultPen = PEN_INPUT_PORT;
         this->m_defaultBrush = BRUSH_INPUT_PORT;
         break;
-    case model::PortDirection::IN_OUT:
+    case model::enums::PortDirection::IN_OUT:
         this->m_defaultPen = PEN_IN_OUT_PORT;
         this->m_defaultBrush = BRUSH_IN_OUT_PORT;
         break;
-    case model::PortDirection::OUT:
+    case model::enums::PortDirection::OUT:
         this->m_defaultPen = PEN_OUTPUT_PORT;
         this->m_defaultBrush = BRUSH_OUTPUT_PORT;
         break;
@@ -111,7 +111,7 @@ PortGraphicsItem::pos() const {
  */
 QString
 PortGraphicsItem::specificType() {
-    return q2d::model::PortDirectionToString(m_direction);
+    return q2d::model::enums::PortDirectionToString(m_direction);
 }
 
 void

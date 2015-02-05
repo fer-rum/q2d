@@ -1,8 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "../Enumerations.h"
 #include "ModelElement.h"
-#include "PortDirection.h"
 
 #include <QList>
 
@@ -30,9 +30,9 @@ public:
 // TODO documentation
 class Port : public Node {
 private:
-    PortDirection direction;
+    enums::PortDirection direction;
 public:
-    Port(PortDirection direction, Component* topLevel, Model* parent);
+    Port(enums::PortDirection direction, Component* topLevel, Model* parent);
 };
 
 // TODO documentation

@@ -2,13 +2,13 @@
 
 #include "PortGraphicsItem.h"
 #include "SchematicsScene.h"
-#include "metamodel/ComponentType.h"
+#include "metamodel/Type.h"
 #include "metamodel/PortDescriptor.h"
 
 using namespace q2d::gui;
 using namespace q2d::metamodel;
 
-ComponentGraphicsItem::ComponentGraphicsItem(ComponentType* type,
+ComponentGraphicsItem::ComponentGraphicsItem(metamodel::Type* type,
         SchematicsScene* scene,
         QPointF position)
     : SchematicsSceneChild(scene,

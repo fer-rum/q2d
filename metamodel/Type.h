@@ -1,8 +1,9 @@
 #ifndef COMPONENTTYPE_H
 #define COMPONENTTYPE_H
 
-#include "ComponentDescriptor.h"
-#include "model/PortDirection.h"
+
+#include "../Enumerations.h"
+#include "HierarchyElement.h"
 
 #include <QGraphicsSvgItem>
 #include <QIcon>
@@ -10,7 +11,7 @@
 namespace q2d {
 namespace metamodel {
 
-class ComponentCategory;
+class Category;
 class ConfigBitGroupDescriptor;
 
 // TODO support seperate Icon files as determined by json
@@ -19,8 +20,8 @@ class ConfigBitGroupDescriptor;
 *
 * A component type is the abstraction of component instances that share the same functionality and behaviour.
 */
-class ComponentType : public ComponentDescriptor {
-    // TODO signals and slots
+class Type :
+        public HierarchyElement {
 private:
     /**
      * @brief m_instanceIndex counts how often a component of this type has been
@@ -32,7 +33,7 @@ private:
     void loadCircuitSymbol(QString symbolFilePath);
 
 public:
-    explicit ComponentType(QString name, ComponentCategory* parent = 0);
+    explicit Type(QString name, Category* parent = nullptr);
 
     QString symbolPath();
     void setSymbolPath(QString symbolPath);
@@ -42,13 +43,13 @@ public:
 
     // TODO transform
     // void addPort(PortDescriptor*);
-    void addPort(QString name, QPoint relativePosition, model::PortDirection direction);
+    void addPort(QString name, QPoint relativePosition, model::enums::PortDirection direction);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
 
     QString generateId();
 
     virtual int type() const {
-        return (int)ComponentDescriptorType::COMPONENT_TYPE;
+        return enums::elementTypeToInt(enums::ElementType::COMPONENT);
     }
 };
 

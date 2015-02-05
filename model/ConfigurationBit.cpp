@@ -5,20 +5,20 @@
 using namespace q2d::model;
 
 ConfigurationBit::ConfigurationBit(Model* parent) :  ModelElement(parent){
-    m_state = ConfigurationBitState::NOT_SET;
+    m_state = enums::ConfigurationBitState::NOT_SET;
 }
 
-q2d::ConfigurationBitState
+enums::ConfigurationBitState
 ConfigurationBit::state() const {
     return m_state;
 }
 
 void
-ConfigurationBit::setState(ConfigurationBitState state){
+ConfigurationBit::setState(enums::ConfigurationBitState state){
     m_state = state;
 }
 
 void
 ConfigurationBit::clearState(){
-    m_state = ConfigurationBitState::NOT_SET;
+    m_state = enums::ConfigurationBitState::NOT_SET;
 }

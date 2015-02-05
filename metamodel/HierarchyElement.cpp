@@ -1,7 +1,7 @@
-#include "ComponentDescriptor.h"
+#include "HierarchyElement.h"
 
-#include "ComponentCategory.h"
-#include "Constants.h"
+#include "Category.h"
+#include "../Constants.h"
 
 #include <QtDebug>
 
@@ -19,9 +19,8 @@ using namespace q2d::constants;
  * @param name
  * @param parent
  */
-ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent) :
-    QObject(parent),
-    QStandardItem(name) {
+HierarchyElement::HierarchyElement(QString name, Category* parent) :
+    Element(name, parent) {
 
     QString hierarchyName;
     if (parent == nullptr) {
@@ -35,13 +34,23 @@ ComponentDescriptor::ComponentDescriptor(QString name, ComponentCategory* parent
     this->setData(hierarchyName, ComponentDescriptorRole::HIERARCHY_NAME);
 }
 
+HierarchyElement*
+HierarchyElement::parent() const {
+    return static_cast<HierarchyElement*>(QObject::parent());
+}
+
+void
+HierarchyElement::setParent(HierarchyElement* parent){
+    QObject::setParent(parent);
+}
+
 /**
  * @brief ComponentDescriptor::hierarchyName is a convenience getter.
  *
  * @return
  */
 QString
-ComponentDescriptor::hierarchyName() {
+HierarchyElement::hierarchyName() {
 
     return this->data(ComponentDescriptorRole::HIERARCHY_NAME).toString();
 }

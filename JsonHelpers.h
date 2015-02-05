@@ -1,18 +1,27 @@
 #ifndef JSONHELPERS_H
 #define JSONHELPERS_H
 
-#include "Document.h"
-#include "DocumentEntry.h"
+#include "metamodel/ConfigurationBitDescriptor.h"
 
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QPointF>
 
 namespace q2d {
 
 // forward declarations
+class Document;
+class DocumentEntry;
+class Project;
+
+namespace gui {
+class SchematicsSceneChild;
+}
+
 namespace metamodel {
 class ConfigBitGroupDescriptor;
 }
+
 // TODO move this to namespace json
 // TODO adapt naming
 void WriteJsonFile(QString path, QJsonDocument doc);
@@ -31,7 +40,7 @@ QJsonObject SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc);
 namespace json {
 
 // json -> *
-q2d::metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json);
+// metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json);
 
 // * -> json
 

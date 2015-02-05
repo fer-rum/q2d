@@ -7,10 +7,8 @@
 namespace q2d {
 namespace metamodel {
 
-// NOTE: in the future this might also be used to describe a whole set of config bits
-
 // forward declaration
-class ComponentType;
+class Type;
 
 class ConfigBitGroupDescriptor :
         public QObject,
@@ -18,7 +16,7 @@ class ConfigBitGroupDescriptor :
 {
     Q_OBJECT
 public:
-    explicit ConfigBitGroupDescriptor(QString groupName, int memberCount, ComponentType* parent = nullptr);
+    explicit ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type* parent = nullptr);
 };
 
 class ConfigBitDescriptor :

@@ -28,16 +28,12 @@ SOURCES +=\
     Application.cpp \
     Main.cpp \
     ApplicationContext.cpp \
-    metamodel/ComponentType.cpp \
     gui/SchematicsTab.cpp \
-    metamodel/ComponentDescriptor.cpp \
-    metamodel/ComponentCategory.cpp \
     ComponentFactory.cpp \
     Constants.cpp \
     gui/SchematicsView.cpp \
     gui/SchematicsScene.cpp \
     gui/ComponentTreeView.cpp \
-    model/PortDirection.cpp \
     metamodel/PortDescriptor.cpp \
     gui/PortGraphicsItem.cpp \
     gui/ComponentGraphicsItem.cpp \
@@ -46,7 +42,12 @@ SOURCES +=\
     gui/SchematicsSceneChild.cpp \
     JsonHelpers.cpp \
     model/ConfigurationBit.cpp \
-    metamodel/ConfigurationBitDescriptor.cpp
+    metamodel/ConfigurationBitDescriptor.cpp \
+    metamodel/HierarchyElement.cpp \
+    Enumerations.cpp \
+    metamodel/Category.cpp \
+    metamodel/Type.cpp \
+    metamodel/ComponentElement.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -55,17 +56,13 @@ HEADERS  +=\
     patterns/Observer.h \
     model/Node.h \
     model/Conductor.h \
-    model/PortDirection.h \
     model/Component.h \
     model/Model.h \
     Document.h \
     Project.h \
     Application.h \
     ApplicationContext.h \
-    metamodel/ComponentType.h \
     gui/SchematicsTab.h \
-    metamodel/ComponentDescriptor.h \
-    metamodel/ComponentCategory.h \
     ComponentFactory.h \
     Constants.h \
     gui/SchematicsView.h \
@@ -80,7 +77,12 @@ HEADERS  +=\
     JsonHelpers.h \
     Enumerations.h \
     model/ConfigurationBit.h \
-    metamodel/ConfigurationBitDescriptor.h
+    metamodel/ConfigurationBitDescriptor.h \
+    metamodel/Category.h \
+    metamodel/Element.h \
+    metamodel/HierarchyElement.h \
+    metamodel/Type.h \
+    metamodel/ComponentElement.h
 
 FORMS    +=\
     gui/MainWindow.ui \

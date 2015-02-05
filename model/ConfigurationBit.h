@@ -15,12 +15,12 @@ class ModelElement;
 class ConfigurationBit : public ModelElement
 {
 private:
-    ConfigurationBitState m_state;
+    model::enums::ConfigurationBitState m_state;
 public:
     ConfigurationBit(q2d::model::Model* parent);
 
-    ConfigurationBitState state() const;
-    void setState(ConfigurationBitState state);
+    model::enums::ConfigurationBitState state() const;
+    void setState(model::enums::ConfigurationBitState state);
     void clearState();
 };
 

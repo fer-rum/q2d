@@ -5,7 +5,7 @@
 
 #include "ui_MainWindow.h"
 
-#include "metamodel/ComponentCategory.h"
+#include "metamodel/Category.h"
 
 #include <QDir>
 #include <QStandardItemModel>
@@ -17,7 +17,7 @@ class Application;
 class ApplicationContext;
 class Document;
 namespace metamodel {
-class ComponentCategory;
+class Category;
 }
 
 namespace gui {
@@ -49,8 +49,8 @@ signals:
     // document-related
     void signal_createDocumentRequested(QString name);
 
-    void signal_createCategory(QString name, metamodel::ComponentCategory* parent = 0);
-    void signal_loadType(QString fileName, metamodel::ComponentCategory* parent = 0);
+    void signal_createCategory(QString name, metamodel::Category* parent = 0);
+    void signal_loadType(QString fileName, metamodel::Category* parent = 0);
     void signal_clearComponentTypes();
 
     // TODO check visibility

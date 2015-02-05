@@ -1,15 +1,14 @@
 #include "PortDescriptor.h"
 
 #include "Application.h"
-#include "ComponentDescriptor.h"
-#include "ComponentType.h"
 #include "Constants.h"
-
+#include "Enumerations.h"
+#include "HierarchyElement.h"
+#include "Type.h"
 #include <QSettings>
 
 using namespace q2d::metamodel;
 using namespace q2d::constants;
-using namespace q2d::model;
 
 /**
  * @brief PortDescriptor::PortDescriptor
@@ -19,24 +18,24 @@ using namespace q2d::model;
  * @param parent is the ComponentType this PortDescriptor belongs to.
  */
 PortDescriptor::PortDescriptor(QString name,
-                               PortDirection direction,
+                               model::enums::PortDirection direction,
                                QPoint position,
-                               ComponentType* parent)
+                               metamodel::Type* parent)
     : QObject(parent), QStandardItem(name) {
 
-    this->setData(direction, ComponentDescriptorRole::PORT_DIRECTION);
+    this->setData(q2d::model::enums::PortDirectionToString(direction), ComponentDescriptorRole::PORT_DIRECTION);
     this->setData(position, ComponentDescriptorRole::PORT_POSITION);
 
     // find and set the icon
     QString setting;
     switch (direction) {
-    case IN :
+    case model::enums::PortDirection::IN :
         setting = KEY_FILE_PORT_IN;
         break;
-    case OUT :
+    case model::enums::PortDirection::OUT :
         setting = KEY_FILE_PORT_OUT;
         break;
-    case IN_OUT :
+    case model::enums::PortDirection::IN_OUT :
         setting = KEY_FILE_PORT_INOUT;
         break;
     default:
@@ -64,8 +63,7 @@ PortDescriptor::position() {
  * @brief PortDescriptor::direction is a convenience getter.
  * @return
  */
-PortDirection
+q2d::model::enums::PortDirection
 PortDescriptor::direction() {
-    return static_cast<model::PortDirection>(
-               this->data(ComponentDescriptorRole::PORT_DIRECTION).toInt());
+    return q2d::model::enums::StringToPortDirection(this->data(ComponentDescriptorRole::PORT_DIRECTION).toString());
 }

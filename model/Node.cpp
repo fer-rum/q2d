@@ -9,15 +9,15 @@ Node::Node(Model* parent) : ModelElement(parent) {
     this->drivenElements = QList<ModelElement*>();
 }
 
-Port::Port(PortDirection direction, Component* topLevel, Model* parent) : Node(parent) {
+Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent) : Node(parent) {
     Q_CHECK_PTR(topLevel);
     Q_CHECK_PTR(parent);
 
     this->direction = direction;
 
-    if (direction == IN) {
+    if (direction == enums::PortDirection::IN) {
         this->addDrivenElement(topLevel);
-    } else if (direction == OUT) {
+    } else if (direction == enums::PortDirection::OUT) {
         this->addDriver(topLevel);
     }
 

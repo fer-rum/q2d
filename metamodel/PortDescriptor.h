@@ -2,7 +2,6 @@
 #define PORTDESCRIPTOR_H
 
 #include "Enumerations.h"
-#include "model/PortDirection.h"
 
 #include <QStandardItem>
 #include <QPoint>
@@ -12,7 +11,7 @@ namespace q2d {
 namespace metamodel {
 
 // forward declaration
-class ComponentType;
+class Type;
 
 class PortDescriptor :
     public QObject,
@@ -20,12 +19,12 @@ class PortDescriptor :
     Q_OBJECT
 public:
     explicit PortDescriptor(QString name,
-                            model::PortDirection direction,
+                            model::enums::PortDirection direction,
                             QPoint position,
-                            ComponentType* parent);
+                            metamodel::Type* parent);
 
     QPoint position();
-    model::PortDirection direction();
+    model::enums::PortDirection direction();
 
     virtual int type() const {
         return (int)ComponentDescriptorType::PORT_DESCRIPTOR;
