@@ -2,6 +2,7 @@
 #define COMPONENTELEMENT_H
 
 #include "Element.h"
+#include "Type.h"
 
 namespace q2d {
 namespace metamodel {
@@ -14,8 +15,8 @@ class ComponentElement :
 public:
     explicit ComponentElement(QString name, metamodel::Type* parent);
 
-    virtual ComponentElement* parent() const;
-    virtual void setParent(ComponentElement* parent);
+    virtual metamodel::Type* parent() const;
+    virtual void setParent(metamodel::Type* parent);
 
     virtual int type() const override = 0;
 };

@@ -37,6 +37,7 @@ enum class ElementType {
     CATEGORY = QStandardItem::UserType + 2000,
     COMPONENT,
     CONFIG_BIT_GROUP,
+    CONFIG_BIT,
     PORT,
     INVALID
 };

@@ -10,8 +10,9 @@ using namespace q2d::metamodel;
 
 
 ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent) :
-    QObject(parent),
-    QStandardItem(name){}
+    ComponentElement(name, parent == nullptr ?
+                         nullptr :
+                         static_cast<metamodel::Type*>(parent->parent())){}
 
 /**
  * @brief ConfigBitGroupDescriptor::ConfigBitGroupDescriptor
@@ -24,8 +25,7 @@ ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor*
  * @param parent
  */
 ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type *parent) :
-    QObject(parent),
-    QStandardItem(groupName + "(" + util::intToString(memberCount) + " bit)") {
+    ComponentElement(groupName + "(" + util::intToString(memberCount) + " bit)", parent){
 
     int maxPadding = QString::number(memberCount).size();
 
@@ -43,8 +43,4 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int member
         QIcon icon = QIcon(fileName);
         this->setIcon(icon);
     }
-
-    // set UI interactions
-    this->setSelectable(false);
-    this->setDragEnabled(false);
 }

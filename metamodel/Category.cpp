@@ -3,7 +3,10 @@
 using namespace q2d::metamodel;
 
 Category::Category(QString name, Category* parent) :
-    HierarchyElement(name, parent) {}
+    HierarchyElement(name, parent) {
+    // set UI interactions
+    this->setDragEnabled(false);
+}
 
 void
 Category::addSubItem (HierarchyElement* toAdd) {

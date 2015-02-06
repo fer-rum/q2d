@@ -1,6 +1,9 @@
 #ifndef CONFIGURATIONBITDESCRIPTOR_H
 #define CONFIGURATIONBITDESCRIPTOR_H
 
+#include "../Enumerations.h"
+#include "ComponentElement.h"
+
 #include <QObject>
 #include <QStandardItem>
 
@@ -11,21 +14,23 @@ namespace metamodel {
 class Type;
 
 class ConfigBitGroupDescriptor :
-        public QObject,
-        public QStandardItem
-{
-    Q_OBJECT
+        public ComponentElement {
 public:
-    explicit ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type* parent = nullptr);
+    explicit ConfigBitGroupDescriptor(
+            QString groupName, int memberCount, metamodel::Type* parent = nullptr);
+    virtual int type() const {
+        return enums::elementTypeToInt(enums::ElementType::CONFIG_BIT_GROUP);
+    }
 };
 
 class ConfigBitDescriptor :
-        public QObject,
-        public QStandardItem
-{
-    Q_OBJECT
+        public ComponentElement {
 public:
     explicit ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent);
+
+    virtual int type() const {
+        return enums::elementTypeToInt(enums::ElementType::CONFIG_BIT);
+    }
 };
 
 } // namespace metamodel

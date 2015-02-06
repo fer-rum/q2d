@@ -21,7 +21,7 @@ PortDescriptor::PortDescriptor(QString name,
                                model::enums::PortDirection direction,
                                QPointF position,
                                metamodel::Type* parent)
-    : QObject(parent), QStandardItem(name) {
+    : ComponentElement(name, parent) {
 
     this->setData(q2d::model::enums::PortDirectionToString(direction), ComponentDescriptorRole::PORT_DIRECTION);
     this->setData(position, ComponentDescriptorRole::PORT_POSITION);

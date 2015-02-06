@@ -33,7 +33,9 @@ ComponentTreeView::mousePressEvent(QMouseEvent* event) {
 void
 ComponentTreeView::performDrag() {
     // we should only be able to drag exactly one item
-    Q_ASSERT(this->selectedIndexes().count() == 1);
+    if(!this->selectedIndexes().count() == 1){
+        return;
+    }
 
     QDrag* drag = new QDrag(this);
     QMimeData* mimeData = new QMimeData();

@@ -1,7 +1,8 @@
 #ifndef PORTDESCRIPTOR_H
 #define PORTDESCRIPTOR_H
 
-#include "Enumerations.h"
+#include "../Enumerations.h"
+#include "ComponentElement.h"
 
 #include <QStandardItem>
 #include <QPoint>
@@ -14,9 +15,7 @@ namespace metamodel {
 class Type;
 
 class PortDescriptor :
-    public QObject,
-    public QStandardItem {
-    Q_OBJECT
+    public ComponentElement {
 public:
     explicit PortDescriptor(QString name,
                             model::enums::PortDirection direction,
