@@ -18,7 +18,7 @@ class DocumentEntry;
 namespace metamodel {
 class Category;
 class HierarchyElement;
-class Type;
+class ComponentDescriptor;
 }
 
 namespace model {
@@ -32,7 +32,7 @@ class ComponentFactory : public QObject {
 private:
     QStandardItemModel componentHierarchy;
 
-    metamodel::Type* createTypeFromJson(const QJsonDocument jsonSource,
+    metamodel::ComponentDescriptor* createTypeFromJson(const QJsonDocument jsonSource,
             const QString filePath,
             metamodel::Category* parent);
 
@@ -51,8 +51,8 @@ public:
 
     QStandardItemModel* getComponentHierarchy();
     metamodel::Category* getCategoryForIndex(const QModelIndex &index);
-    metamodel::Type* getTypeForIndex(const QModelIndex &index);
-    metamodel::Type* getTypeForHierarchyName(QString hierarchyName);
+    metamodel::ComponentDescriptor* getTypeForIndex(const QModelIndex &index);
+    metamodel::ComponentDescriptor* getTypeForHierarchyName(QString hierarchyName);
 
 
     // TODO instantiations should no longer be added to the document automatically
@@ -60,11 +60,11 @@ public:
     DocumentEntry* instantiateComponent(Document* document, QString hierarchyName,
                                         QPointF scenePosition, QString id = "");
     DocumentEntry* instantiateComponent(Document* document,
-                                        metamodel::Type* type,
+                                        metamodel::ComponentDescriptor* type,
                                         QPointF scenePosition,
                                         QString id = "");
     QList<DocumentEntry*> instantiatePorts(Document* document,
-                                           metamodel::Type* type,
+                                           metamodel::ComponentDescriptor* type,
                                            DocumentEntry* parentComponent);
     DocumentEntry* instantiatePort(Document* document,
                                    DocumentEntry* parentComponent,

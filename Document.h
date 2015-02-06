@@ -4,7 +4,7 @@
 #include "DocumentEntry.h"
 #include "model/Model.h"
 #include "gui/SchematicsScene.h"
-#include "metamodel/Type.h"
+#include "metamodel/ComponentDescriptor.h"
 
 #include <QDir>
 #include <QObject>
@@ -47,7 +47,7 @@ private:
      */
     QList<DocumentEntry*> m_entries;
 
-    void addComponentPorts(metamodel::Type* type,
+    void addComponentPorts(metamodel::ComponentDescriptor* type,
                            DocumentEntry* parentEntry);
 
 public:

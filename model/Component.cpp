@@ -1,11 +1,11 @@
 #include "Component.h"
 
-#include "metamodel/Type.h"
+#include "metamodel/ComponentDescriptor.h"
 
 using namespace q2d::model;
 using namespace q2d::metamodel;
 
-Component::Component(Type* type, Model* model, Model* internalModel)
+Component::Component(ComponentDescriptor* type, Model* model, Model* internalModel)
     : ModelElement(model) {
     Q_CHECK_PTR(type);
 
@@ -29,7 +29,7 @@ Component::createPort(enums::PortDirection direction) {
     return newPort;
 }
 
-Type*
+ComponentDescriptor*
 Component::type() const {
     return m_type;
 }

@@ -20,7 +20,7 @@ class ConfigBitGroupDescriptor;
 *
 * A component type is the abstraction of component instances that share the same functionality and behaviour.
 */
-class Type :
+class ComponentDescriptor :
         public HierarchyElement {
 private:
     /**
@@ -33,7 +33,7 @@ private:
     void loadCircuitSymbol(QString symbolFilePath);
 
 public:
-    explicit Type(QString name, Category* parent = nullptr);
+    explicit ComponentDescriptor(QString name, Category* parent = nullptr);
 
     QString symbolPath();
     void setSymbolPath(QString symbolPath);

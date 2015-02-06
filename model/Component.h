@@ -10,7 +10,7 @@
 namespace q2d {
 
 namespace metamodel {
-class Type;
+class ComponentDescriptor;
 }
 
 namespace model {
@@ -23,15 +23,15 @@ class Model;
 // TODO a component should observe its internal model to be informed of changes
 class Component : public ModelElement {
 private:
-    metamodel::Type* m_type;
+    metamodel::ComponentDescriptor* m_type;
     QList<Port*> m_ports;
     Model* m_internalModel;
 public:
-    Component(metamodel::Type* type, Model* model, Model* internalModel = nullptr);
+    Component(metamodel::ComponentDescriptor* type, Model* model, Model* internalModel = nullptr);
 
     Port* createPort(enums::PortDirection direction);
 
-    metamodel::Type* type() const;
+    metamodel::ComponentDescriptor* type() const;
 };
 
 } // namespace model

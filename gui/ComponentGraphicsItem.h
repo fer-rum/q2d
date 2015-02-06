@@ -9,7 +9,7 @@ namespace q2d {
 
 // forward declaration
 namespace metamodel {
-class Type;
+class ComponentDescriptor;
 }
 
 namespace gui {
@@ -18,13 +18,13 @@ class ComponentGraphicsItem : public SchematicsSceneChild {
     Q_OBJECT
 private:
     QGraphicsSvgItem* m_actuals; // the actually item that gets displayed
-    metamodel::Type* m_type;
+    metamodel::ComponentDescriptor* m_type;
 
 protected:
     virtual QString specificType();
 
 public:
-    explicit ComponentGraphicsItem(metamodel::Type* type, SchematicsScene* scene,
+    explicit ComponentGraphicsItem(metamodel::ComponentDescriptor* type, SchematicsScene* scene,
                                    QPointF position);
 
 signals:

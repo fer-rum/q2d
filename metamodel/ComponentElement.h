@@ -2,21 +2,21 @@
 #define COMPONENTELEMENT_H
 
 #include "Element.h"
-#include "Type.h"
+#include "ComponentDescriptor.h"
 
 namespace q2d {
 namespace metamodel {
 
 // forward declaration
-class Type;
+class ComponentDescriptor;
 
 class ComponentElement :
         public Element{
 public:
-    explicit ComponentElement(QString name, metamodel::Type* parent);
+    explicit ComponentElement(QString name, metamodel::ComponentDescriptor* parent);
 
-    virtual metamodel::Type* parent() const;
-    virtual void setParent(metamodel::Type* parent);
+    virtual metamodel::ComponentDescriptor* parent() const;
+    virtual void setParent(metamodel::ComponentDescriptor* parent);
 
     virtual int type() const override = 0;
 };

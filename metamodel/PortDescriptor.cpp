@@ -4,7 +4,7 @@
 #include "Constants.h"
 #include "Enumerations.h"
 #include "HierarchyElement.h"
-#include "Type.h"
+#include "ComponentDescriptor.h"
 #include <QSettings>
 
 using namespace q2d::metamodel;
@@ -20,7 +20,7 @@ using namespace q2d::constants;
 PortDescriptor::PortDescriptor(QString name,
                                model::enums::PortDirection direction,
                                QPointF position,
-                               metamodel::Type* parent)
+                               metamodel::ComponentDescriptor* parent)
     : ComponentElement(name, parent) {
 
     this->setData(q2d::model::enums::PortDirectionToString(direction), ComponentDescriptorRole::PORT_DIRECTION);

@@ -11,13 +11,13 @@ namespace q2d {
 namespace metamodel {
 
 // forward declaration
-class Type;
+class ComponentDescriptor;
 
 class ConfigBitGroupDescriptor :
         public ComponentElement {
 public:
     explicit ConfigBitGroupDescriptor(
-            QString groupName, int memberCount, metamodel::Type* parent = nullptr);
+            QString groupName, int memberCount, metamodel::ComponentDescriptor* parent = nullptr);
     virtual int type() const {
         return enums::elementTypeToInt(enums::ElementType::CONFIG_BIT_GROUP);
     }

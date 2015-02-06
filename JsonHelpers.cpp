@@ -8,8 +8,7 @@
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicsSceneChild.h"
 #include "model/ModelElement.h"
-
-#include "metamodel/Type.h"
+#include "metamodel/ComponentDescriptor.h"
 
 #include <QFile>
 #include <QJsonArray>

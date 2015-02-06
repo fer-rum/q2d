@@ -12,7 +12,7 @@ namespace q2d {
 namespace metamodel {
 
 // forward declaration
-class Type;
+class ComponentDescriptor;
 
 class PortDescriptor :
     public ComponentElement {
@@ -20,7 +20,7 @@ public:
     explicit PortDescriptor(QString name,
                             model::enums::PortDirection direction,
                             QPointF position,
-                            metamodel::Type* parent);
+                            metamodel::ComponentDescriptor* parent);
 
     QPoint position();
     model::enums::PortDirection direction();

@@ -14,7 +14,7 @@
 
 #include "metamodel/Category.h"
 #include "metamodel/ConfigurationBitDescriptor.h"
-#include "metamodel/Type.h"
+#include "metamodel/ComponentDescriptor.h"
 #include "metamodel/PortDescriptor.h"
 
 #include "model/Component.h"
@@ -80,7 +80,7 @@ ComponentFactory::slot_loadType(QString filePath, Category* parent) {
         return;
     }
 
-    Type* newType = this->createTypeFromJson(jsonDocument, filePath, parent);
+    ComponentDescriptor* newType = this->createTypeFromJson(jsonDocument, filePath, parent);
     Q_CHECK_PTR(newType);
 
     // TODO later disallow items w/o category
@@ -99,7 +99,7 @@ ComponentFactory::slot_loadType(QString filePath, Category* parent) {
  * @param parent
  * @return a pointer to the newly created ComponentType; a nullptr on failure
  */
-Type*
+ComponentDescriptor*
 ComponentFactory::createTypeFromJson(
     const QJsonDocument jsonSource,
     const QString filePath,
@@ -118,7 +118,7 @@ ComponentFactory::createTypeFromJson(
     QJsonValue nameValue = jsonObject.value(JSON_GENERAL_NAME);
     QString componentName = nameValue.toString(tr("Unnamed"));
 
-    Type* result = new Type(componentName, parent);
+    ComponentDescriptor* result = new ComponentDescriptor(componentName, parent);
     Q_CHECK_PTR(result);
     result->setDescriptorPath(filePath);
 
@@ -195,7 +195,7 @@ ComponentFactory::getCategoryForIndex(const QModelIndex &index) {
  * @param index
  * @return ; May return null
  */
-Type*
+ComponentDescriptor*
 ComponentFactory::getTypeForIndex(const QModelIndex &index) {
 
     if (!index.isValid()) {
@@ -203,10 +203,10 @@ ComponentFactory::getTypeForIndex(const QModelIndex &index) {
     }
 
     QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
-    return static_cast<Type*>(item);
+    return static_cast<ComponentDescriptor*>(item);
 }
 
-Type*
+ComponentDescriptor*
 ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
     QStringList hierarchy = hierarchyName.split(HIERARCHY_SEPERATOR,
                             QString::SkipEmptyParts);
@@ -232,7 +232,7 @@ ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
         }
     }
 
-    return dynamic_cast<Type*>(currentItem);
+    return dynamic_cast<ComponentDescriptor*>(currentItem);
 }
 
 QStandardItemModel*
@@ -246,7 +246,7 @@ ComponentFactory::instantiateComponent(Document* document, QString hierarchyName
                                        QString id) {
     Q_CHECK_PTR(document);
 
-    Type* type = this->getTypeForHierarchyName(hierarchyName);
+    ComponentDescriptor* type = this->getTypeForHierarchyName(hierarchyName);
     Q_CHECK_PTR(type);
 
     return this->instantiateComponent(document, type, scenePosition, id);
@@ -264,7 +264,7 @@ ComponentFactory::instantiateComponent(Document* document, QString hierarchyName
  */
 DocumentEntry*
 ComponentFactory::instantiateComponent(Document* document,
-                                       metamodel::Type* type,
+                                       metamodel::ComponentDescriptor* type,
                                        QPointF scenePosition, QString id) {
     qDebug() << "Instantiating component" << id << "in" << document << "at" << scenePosition;
 
@@ -314,7 +314,7 @@ ComponentFactory::instantiateComponent(Document* document,
  */
 QList<DocumentEntry*>
 ComponentFactory::instantiatePorts(Document* document,
-                                   Type* type,
+                                   ComponentDescriptor* type,
                                    DocumentEntry* parentComponent) {
     Q_CHECK_PTR(parentComponent);
     Q_CHECK_PTR(type);
@@ -532,7 +532,7 @@ ComponentFactory::categoryEntryToJson(QStandardItem* item) {
 QJsonObject
 ComponentFactory::typeEntryToJson(QStandardItem* item) {
     QJsonObject result = QJsonObject();
-    Type* componentType = dynamic_cast<Type*>(item);
+    ComponentDescriptor* componentType = dynamic_cast<ComponentDescriptor*>(item);
     Q_CHECK_PTR(componentType);
 
     result.insert(JSON_HIERARCHY_SOURCE,

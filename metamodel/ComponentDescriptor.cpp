@@ -1,4 +1,4 @@
-#include "Type.h"
+#include "ComponentDescriptor.h"
 
 #include "../Enumerations.h"
 
@@ -11,7 +11,7 @@
 
 using namespace q2d::metamodel;
 
-Type::Type(QString name,
+ComponentDescriptor::ComponentDescriptor(QString name,
                              Category* parent) :
     HierarchyElement(name, parent) {
     m_instanceIndex = 0;
@@ -23,7 +23,7 @@ Type::Type(QString name,
  * @param symbolFilePath
  */
 void
-Type::loadCircuitSymbol(QString symbolFilePath) {
+ComponentDescriptor::loadCircuitSymbol(QString symbolFilePath) {
 
     QGraphicsSvgItem* symbol = new QGraphicsSvgItem(symbolFilePath);
     Q_CHECK_PTR(symbol);
@@ -39,12 +39,12 @@ Type::loadCircuitSymbol(QString symbolFilePath) {
  * @return the path to the symbol file
  */
 QString
-Type::symbolPath() {
+ComponentDescriptor::symbolPath() {
     return this->data((int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE).toString();
 }
 
 void
-Type::setSymbolPath(QString symbolPath) {
+ComponentDescriptor::setSymbolPath(QString symbolPath) {
     Q_ASSERT(!(symbolPath.isEmpty()));
 
     this->setData(QVariant::fromValue(symbolPath), (int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
@@ -56,18 +56,18 @@ Type::setSymbolPath(QString symbolPath) {
  * @return
  */
 QString
-Type::descriptorPath() const {
+ComponentDescriptor::descriptorPath() const {
     return this->data((int)ComponentDescriptorRole::DESCRIPTOR_FILE).toString();
 }
 
 void
-Type::setDescriptorPath(const QString path) {
+ComponentDescriptor::setDescriptorPath(const QString path) {
     Q_ASSERT(!path.isEmpty());
     this->setData(QVariant::fromValue(path), (int)ComponentDescriptorRole::DESCRIPTOR_FILE);
 }
 
 void
-Type::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDirection direction) {
+ComponentDescriptor::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDirection direction) {
 
     PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
@@ -81,7 +81,7 @@ Type::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDir
  *      must be greater then 0
  */
 void
-Type::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup){
+ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup){
     Q_CHECK_PTR(configBitGroup);
 
     configBitGroup->setParent(this);
@@ -89,7 +89,7 @@ Type::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup){
 }
 
 QString
-Type::generateId() {
+ComponentDescriptor::generateId() {
     QString id = this->text() + " " + QString::number(m_instanceIndex);
     ++m_instanceIndex;
     return id;

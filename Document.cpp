@@ -5,7 +5,7 @@
 #include "gui/SchematicsSceneChild.h"
 #include "gui/PortGraphicsItem.h"
 #include "gui/WireGraphicsItem.h"
-#include "metamodel/Type.h"
+#include "metamodel/ComponentDescriptor.h"
 #include "metamodel/PortDescriptor.h"
 #include "model/Node.h"
 #include "ApplicationContext.h"
@@ -91,7 +91,7 @@ Document::componentFactory() const {
 void
 Document::addComponent(QString typeId, QPoint position) {
 
-    metamodel::Type* type = m_componentFactory->getTypeForHierarchyName(typeId);
+    metamodel::ComponentDescriptor* type = m_componentFactory->getTypeForHierarchyName(typeId);
     Q_CHECK_PTR(type);
 
     DocumentEntry* entry =

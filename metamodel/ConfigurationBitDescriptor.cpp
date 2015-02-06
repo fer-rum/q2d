@@ -3,7 +3,7 @@
 #include "../Application.h"
 #include "../Constants.h"
 #include "../Util.h"
-#include "Type.h"
+#include "ComponentDescriptor.h"
 
 using namespace q2d::constants;
 using namespace q2d::metamodel;
@@ -12,7 +12,7 @@ using namespace q2d::metamodel;
 ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent) :
     ComponentElement(name, parent == nullptr ?
                          nullptr :
-                         static_cast<metamodel::Type*>(parent->parent())){}
+                         static_cast<metamodel::ComponentDescriptor*>(parent->parent())){}
 
 /**
  * @brief ConfigBitGroupDescriptor::ConfigBitGroupDescriptor
@@ -24,7 +24,7 @@ ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor*
  * @param memberCount
  * @param parent
  */
-ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::Type *parent) :
+ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int memberCount, metamodel::ComponentDescriptor *parent) :
     ComponentElement(groupName + "(" + util::intToString(memberCount) + " bit)", parent){
 
     int maxPadding = QString::number(memberCount).size();
