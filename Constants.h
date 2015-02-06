@@ -38,10 +38,8 @@ extern QString HIERARCHY_SEPERATOR;
 // FIXME revisit naming
 
 // Descriptor file entries
-extern QString JSON_DESC_COMPONENT_NAME;
-extern QString JSON_DESC_CONFIG_BIT_GROUP;
-extern QString JSON_DESC_CONFIG_BIT_GROUP_NAME;
-extern QString JSON_DESC_CONFIG_BIT_GROUP_SIZE;
+
+extern QString JSON_CONFIG_BIT_GROUP;
 
 // Im-/Export of Document entries
 extern QString JSON_DOCENTRY;
@@ -51,13 +49,16 @@ extern QString JSON_DOCENTRY_PARENT;
 extern QString JSON_DOCENTRY_SCHEMATIC_ELEMENT;
 extern QString JSON_DOCENTRY_TYPE;
 
+// generally used json names
+extern QString JSON_GENERAL_NAME;
+extern QString JSON_GENERAL_POSITION;
+extern QString JSON_GENERAL_POSITION_X;
+extern QString JSON_GENERAL_POSITION_Y;
+extern QString JSON_GENERAL_SIZE;
+
 extern QString JSON_PORTS;
 extern QString JSON_PORT_DIRECTION;
 extern QString JSON_PORT_NAME;
-extern QString JSON_PORT_POSITION;
-
-extern QString JSON_POSITION_X;
-extern QString JSON_POSITION_Y;
 
 // Im-/Export of SchematicsSceneChild enrties
 extern QString JSON_DOCENTRY_TYPE;

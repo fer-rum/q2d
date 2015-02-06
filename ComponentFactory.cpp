@@ -115,7 +115,7 @@ ComponentFactory::createTypeFromJson(
 
     // parse the name
     // defaults to "Unnamed"
-    QJsonValue nameValue = jsonObject.value(JSON_DESC_COMPONENT_NAME);
+    QJsonValue nameValue = jsonObject.value(JSON_GENERAL_NAME);
     QString componentName = nameValue.toString(tr("Unnamed"));
 
     Type* result = new Type(componentName, parent);
@@ -140,10 +140,10 @@ ComponentFactory::createTypeFromJson(
         }
         QJsonObject portObject = currentValue.toObject();
         // port name
-        QString portName = portObject.value(JSON_PORT_NAME)
+        QString portName = portObject.value(JSON_GENERAL_NAME)
                            .toString(tr("Unnamed"));
 
-        QPointF portPosition = json::toPointF(portObject.value(JSON_PORT_POSITION).toObject());
+        QPointF portPosition = json::toPointF(portObject.value(JSON_GENERAL_POSITION).toObject());
 
         // port direction
         QString dirString = portObject.value(JSON_PORT_DIRECTION)
@@ -154,8 +154,8 @@ ComponentFactory::createTypeFromJson(
         result->addPort(portName, portPosition, portDirection);
     }
         // get the config bits if there are some
-    if(jsonObject.contains(JSON_DESC_CONFIG_BIT_GROUP)){
-        QJsonArray configBitsJson = jsonObject.value(JSON_DESC_CONFIG_BIT_GROUP).toArray();
+    if(jsonObject.contains(JSON_CONFIG_BIT_GROUP)){
+        QJsonArray configBitsJson = jsonObject.value(JSON_CONFIG_BIT_GROUP).toArray();
         for(QJsonValue currentGroup : configBitsJson){
             ConfigBitGroupDescriptor* configBits = json::toConfigBitGroupDescriptor(currentGroup.toObject());
             Q_CHECK_PTR(configBits);

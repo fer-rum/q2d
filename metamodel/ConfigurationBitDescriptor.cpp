@@ -27,9 +27,11 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int member
     QObject(parent),
     QStandardItem(groupName + "(" + util::intToString(memberCount) + " bit)") {
 
+    int maxPadding = QString::number(memberCount).size();
+
     for(int count = 0; count < memberCount; ++count){
         ConfigBitDescriptor* descriptor = new ConfigBitDescriptor(groupName + "_"
-                                              + util::intToString(count, 4),
+                                              + util::intToString(count, maxPadding),
                                               this);
         this->appendRow(descriptor);
     }
@@ -41,4 +43,8 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, int member
         QIcon icon = QIcon(fileName);
         this->setIcon(icon);
     }
+
+    // set UI interactions
+    this->setSelectable(false);
+    this->setDragEnabled(false);
 }

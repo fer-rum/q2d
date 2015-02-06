@@ -68,19 +68,19 @@ q2d::json::fromPointF(QPointF point) {
 
     QJsonObject result = QJsonObject();
 
-    result.insert(JSON_POSITION_X, QJsonValue(point.x()));
-    result.insert(JSON_POSITION_Y, QJsonValue(point.y()));
+    result.insert(JSON_GENERAL_POSITION_X, QJsonValue(point.x()));
+    result.insert(JSON_GENERAL_POSITION_Y, QJsonValue(point.y()));
 
     return result;
 }
 
 QPointF
 q2d::json::toPointF(QJsonObject json) {
-    Q_ASSERT(json.contains(JSON_POSITION_X));
-    Q_ASSERT(json.contains(JSON_POSITION_Y));
+    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
+    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_Y));
 
-    float x = json.value(JSON_POSITION_X).toInt();
-    float y = json.value(JSON_POSITION_Y).toInt();
+    float x = json.value(JSON_GENERAL_POSITION_X).toInt();
+    float y = json.value(JSON_GENERAL_POSITION_Y).toInt();
 
     return QPointF(x, y);
 }
@@ -239,11 +239,11 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
 q2d::metamodel::ConfigBitGroupDescriptor*
 q2d::json::toConfigBitGroupDescriptor(QJsonObject json){
     Q_ASSERT(!json.isEmpty());
-    Q_ASSERT(json.contains(JSON_DESC_CONFIG_BIT_GROUP_NAME));
-    Q_ASSERT(json.contains(JSON_DESC_CONFIG_BIT_GROUP_SIZE));
+    Q_ASSERT(json.contains(JSON_GENERAL_NAME));
+    Q_ASSERT(json.contains(JSON_GENERAL_SIZE));
 
-    QString groupName   = json.value(JSON_DESC_CONFIG_BIT_GROUP_NAME).toString();
-    int     memberCount = json.value(JSON_DESC_CONFIG_BIT_GROUP_SIZE).toInt();
+    QString groupName   = json.value(JSON_GENERAL_NAME).toString();
+    int     memberCount = json.value(JSON_GENERAL_SIZE).toInt();
 
     Q_ASSERT(!groupName.isEmpty());
     Q_ASSERT(memberCount > 0);
