@@ -23,7 +23,8 @@ PortDescriptor::PortDescriptor(QString name,
                                metamodel::ComponentDescriptor* parent)
     : ComponentElement(name, parent) {
 
-    this->setData(q2d::model::enums::PortDirectionToString(direction), ComponentDescriptorRole::PORT_DIRECTION);
+    this->setData(q2d::model::enums::PortDirectionToString(direction),
+                  ComponentDescriptorRole::PORT_DIRECTION);
     this->setData(position, ComponentDescriptorRole::PORT_POSITION);
 
     // find and set the icon
@@ -65,5 +66,6 @@ PortDescriptor::position() {
  */
 q2d::model::enums::PortDirection
 PortDescriptor::direction() {
-    return q2d::model::enums::StringToPortDirection(this->data(ComponentDescriptorRole::PORT_DIRECTION).toString());
+    return q2d::model::enums::StringToPortDirection(this->data(
+                ComponentDescriptorRole::PORT_DIRECTION).toString());
 }

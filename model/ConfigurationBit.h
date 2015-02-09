@@ -12,8 +12,7 @@ namespace model {
 class Model;
 class ModelElement;
 
-class ConfigurationBit : public ModelElement
-{
+class ConfigurationBit : public ModelElement {
 private:
     model::enums::ConfigurationBitState m_state;
 public:

@@ -13,7 +13,7 @@
 using namespace q2d::metamodel;
 
 ComponentDescriptor::ComponentDescriptor(QString name,
-                             Category* parent) :
+        Category* parent) :
     HierarchyElement(name, parent) {
     m_instanceIndex = 0;
 }
@@ -69,7 +69,8 @@ ComponentDescriptor::setDescriptorPath(const QString path) {
 
 // FIXME make sure port names are unique within a component descriptor
 void
-ComponentDescriptor::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDirection direction) {
+ComponentDescriptor::addPort(QString name, QPointF relativePosition,
+                             q2d::model::enums::PortDirection direction) {
     PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
 
@@ -85,17 +86,17 @@ ComponentDescriptor::addPort(QString name, QPointF relativePosition, q2d::model:
  *      must be greater then 0
  */
 void
-ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup){
+ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup) {
     Q_CHECK_PTR(configBitGroup);
 
     configBitGroup->setParent(this);
     this->appendRow(configBitGroup);
 
     QString groupName = configBitGroup->name();
-    for(unsigned int i = 0; i < configBitGroup->memberCount(); ++i){
+    for (unsigned int i = 0; i < configBitGroup->memberCount(); ++i) {
         QString varName = groupName + "_" + util::intToString(i);
-        if(m_variables.contains(varName)){
-         qWarning() << "Possible duplicate variable name" << varName;
+        if (m_variables.contains(varName)) {
+            qWarning() << "Possible duplicate variable name" << varName;
         } else {
             m_variables.append(varName);
         }

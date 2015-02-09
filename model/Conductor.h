@@ -13,10 +13,10 @@ namespace model {
 // TODO implementation
 class Conductor : public ModelElement {
 private:
-    Node* start;
-    Node* end;
+    Node* m_start;
+    Node* m_end;
 public:
-    Conductor(Node* start, Node* end, Model* model);
+    Conductor(Node* start, Node* end, Model* model, DocumentEntry* relatedEntry = nullptr);
 };
 
 } // namespace model

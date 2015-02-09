@@ -20,23 +20,23 @@ private:
     QList<ModelElement*> drivenElements;
     ModelElement* driver;
 public:
-    Node(Model* parent);
+    Node(Model* parent, DocumentEntry* relatedEntry);
 
     void addDriver(ModelElement* driver);
     void addDrivenElement(ModelElement* drivenElement);
 };
 
-// TODO visitor-pattern
 // TODO documentation
 class Port : public Node {
 private:
     enums::PortDirection direction;
 public:
-    Port(enums::PortDirection direction, Component* topLevel, Model* parent);
+    Port(enums::PortDirection direction, Component* topLevel, Model* parent,
+         DocumentEntry* relatedEntry = nullptr);
 };
 
 // TODO documentation
-// TODO visitors
+// NOTE currently unused
 class ConductorNode : public Node {
 public:
     ConductorNode();

@@ -5,6 +5,9 @@
 #include <QString>
 
 namespace q2d {
+
+class DocumentEntry;
+
 namespace model {
 
 // forward declaration
@@ -13,8 +16,13 @@ class Model;
 // TODO documentation
 class ModelElement : public QObject {
     Q_OBJECT
+private:
+    DocumentEntry* m_relatedEntry;
 public:
-    ModelElement(Model* parent);
+    ModelElement(Model* parent, DocumentEntry* relatedEntry = nullptr);
+
+    DocumentEntry* relatedEntry() const;
+    void setRelatedEntry(q2d::DocumentEntry* relatedEntry);
 
     Model* model() const;
 };

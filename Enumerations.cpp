@@ -9,13 +9,19 @@ metamodel::enums::elementTypeToInt(ElementType t) {
 
 metamodel::enums::ElementType
 metamodel::enums::intToElementType(int i) {
-    switch(i) {
-    case (int)ElementType::CATEGORY :           return ElementType::CATEGORY;
-    case (int)ElementType::COMPONENT :          return ElementType::COMPONENT;
-    case (int)ElementType::CONFIG_BIT_GROUP :   return ElementType::CONFIG_BIT_GROUP;
-    case (int) ElementType::CONFIG_BIT :        return ElementType::CONFIG_BIT;
-    case (int)ElementType::PORT :               return ElementType::PORT;
-    default :                                   return ElementType::INVALID;
+    switch (i) {
+    case (int)ElementType::CATEGORY :
+        return ElementType::CATEGORY;
+    case (int)ElementType::COMPONENT :
+        return ElementType::COMPONENT;
+    case (int)ElementType::CONFIG_BIT_GROUP :
+        return ElementType::CONFIG_BIT_GROUP;
+    case (int) ElementType::CONFIG_BIT :
+        return ElementType::CONFIG_BIT;
+    case (int)ElementType::PORT :
+        return ElementType::PORT;
+    default :
+        return ElementType::INVALID;
     }
 }
 

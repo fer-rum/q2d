@@ -24,6 +24,7 @@ q2d::DocumentEntryTypeToString(DocumentEntryType type) {
     }
 }
 
+// TODO constness
 DocumentEntryType
 q2d::StringToDocumentEntryType(QString string) {
 
@@ -38,7 +39,6 @@ q2d::StringToDocumentEntryType(QString string) {
     if (string == GENERAL_TYPE_WIRE) {
         return DocumentEntryType::WIRE;
     }
-
     return DocumentEntryType::UNDEFINED;
 }
 
@@ -48,17 +48,15 @@ DocumentEntry::DocumentEntry(QString id, DocumentEntryType type,
                              DocumentEntry* parent) {
 
     Q_ASSERT(!id.isEmpty());
-    m_id = id;
-
-    m_type = type;
-
     Q_CHECK_PTR(modelElement);
-    this->m_modelElement = modelElement;
-
     Q_CHECK_PTR(schematicElement);
-    this->m_schematicElement = schematicElement;
+    m_id = id;
+    m_type = type;
+    m_modelElement = modelElement;
+    m_schematicElement = schematicElement;
+    m_parent = parent;
 
-    this->m_parent = parent;
+    modelElement->setRelatedEntry(this);
 
     qDebug() << "DocumentEntry " << id << " at " << schematicElement->scenePos()
              << " with parent " << (parent == nullptr ? "null" : parent->id());

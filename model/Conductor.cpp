@@ -9,10 +9,11 @@ using namespace q2d::model;
  * @param start
  * @param end
  */
-Conductor::Conductor(Node* start, Node* end, Model* model) : ModelElement(model) {
+Conductor::Conductor(Node* start, Node* end, Model* model,
+                     DocumentEntry* relatedEntry) : ModelElement(model, relatedEntry) {
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
 
-    this->start = start;
-    this->end = end;
+    this->m_start = start;
+    this->m_end = end;
 }

@@ -3,7 +3,7 @@
 #include "Constants.h"
 #include "Enumerations.h"
 #include "../metamodel/HierarchyElement.h"
-#include "../metamodel/Type.h"
+#include "../metamodel/ComponentDescriptor.h"
 
 #include <QApplication>
 #include <QDrag>
@@ -33,7 +33,7 @@ ComponentTreeView::mousePressEvent(QMouseEvent* event) {
 void
 ComponentTreeView::performDrag() {
     // we should only be able to drag exactly one item
-    if(!this->selectedIndexes().count() == 1){
+    if (!this->selectedIndexes().count() == 1) {
         return;
     }
 

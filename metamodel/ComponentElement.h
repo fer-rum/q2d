@@ -11,7 +11,7 @@ namespace metamodel {
 class ComponentDescriptor;
 
 class ComponentElement :
-        public Element{
+    public Element {
 public:
     explicit ComponentElement(QString name, metamodel::ComponentDescriptor* parent);
 

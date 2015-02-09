@@ -8,12 +8,12 @@ namespace q2d {
 namespace metamodel {
 
 class Element :
-        public QObject,
-        public QStandardItem {
+    public QObject,
+    public QStandardItem {
     Q_OBJECT
 public:
     explicit Element(QString name, Element* parent = nullptr)
-        : QObject(parent), QStandardItem(name){}
+        : QObject(parent), QStandardItem(name) {}
 
     virtual Element* parent() const {
         return static_cast<Element*>(QObject::parent());

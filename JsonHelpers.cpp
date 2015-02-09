@@ -35,15 +35,15 @@ q2d::json::writeJsonFile(QString path, QJsonDocument doc) {
  * @return
  */
 QJsonDocument
-q2d::json::readJsonFile(QString path){
+q2d::json::readJsonFile(QString path) {
     const QString logPrefix = "ReadJsonFile(" + path + ")";
 
-    if(path.isEmpty()){
+    if (path.isEmpty()) {
         qWarning() << logPrefix << "file path was empty";
     }
 
     QFile jsonFile(path);
-    if(!jsonFile.exists()){
+    if (!jsonFile.exists()) {
         qWarning() << logPrefix << "file does not exist";
     }
 
@@ -236,7 +236,7 @@ q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
 
 
 q2d::metamodel::ConfigBitGroupDescriptor*
-q2d::json::toConfigBitGroupDescriptor(QJsonObject json){
+q2d::json::toConfigBitGroupDescriptor(QJsonObject json) {
     Q_ASSERT(!json.isEmpty());
     Q_ASSERT(json.contains(JSON_GENERAL_NAME));
     Q_ASSERT(json.contains(JSON_GENERAL_SIZE));
@@ -279,7 +279,7 @@ q2d::json::toComponentDescriptor (
     Q_ASSERT(!componentName.isEmpty());
 
     q2d::metamodel::ComponentDescriptor* result =
-            new q2d::metamodel::ComponentDescriptor(componentName, parent);
+        new q2d::metamodel::ComponentDescriptor(componentName, parent);
     Q_CHECK_PTR(result);
     result->setDescriptorPath(filePath);
 
@@ -287,13 +287,13 @@ q2d::json::toComponentDescriptor (
     // defaults to basePath/unknown.svg
     QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
     QString symbolFilePath =
-            baseDirPath + QDir::separator() + symbolPathValue.toString("unknown.svg");
+        baseDirPath + QDir::separator() + symbolPathValue.toString("unknown.svg");
     result->setSymbolPath(symbolFilePath);
 
     // read ports
     // defaults to an empty port array
     QJsonArray portArray = jsonObject.value(JSON_PORTS).toArray(QJsonArray());
-    for(QJsonValue currentValue : portArray) {
+    for (QJsonValue currentValue : portArray) {
         if (currentValue.isUndefined()) {
             continue;
         }
@@ -308,11 +308,11 @@ q2d::json::toComponentDescriptor (
     }
 
     // get the config bits if there are some
-    if(jsonObject.contains(JSON_CONFIG_BIT_GROUP)){
+    if (jsonObject.contains(JSON_CONFIG_BIT_GROUP)) {
         QJsonArray configBitsJson = jsonObject.value(JSON_CONFIG_BIT_GROUP).toArray();
-        for(QJsonValue currentGroup : configBitsJson){
+        for (QJsonValue currentGroup : configBitsJson) {
             q2d::metamodel::ConfigBitGroupDescriptor* configBits =
-                    json::toConfigBitGroupDescriptor(currentGroup.toObject());
+                json::toConfigBitGroupDescriptor(currentGroup.toObject());
             Q_CHECK_PTR(configBits);
             // TODO instead print a proper warning
             result->addConfigBitGroup(configBits);

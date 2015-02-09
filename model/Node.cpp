@@ -4,12 +4,13 @@
 
 using namespace q2d::model;
 
-Node::Node(Model* parent) : ModelElement(parent) {
+Node::Node(Model* parent, DocumentEntry* relatedEntry) : ModelElement(parent, relatedEntry) {
     this->driver = nullptr;
     this->drivenElements = QList<ModelElement*>();
 }
 
-Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent) : Node(parent) {
+Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent,
+           DocumentEntry* relatedEntry) : Node(parent, relatedEntry) {
     Q_CHECK_PTR(topLevel);
     Q_CHECK_PTR(parent);
 

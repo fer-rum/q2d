@@ -30,7 +30,7 @@ Model::addComponent(Component* toAdd) {
     Q_CHECK_PTR(toAdd);
     this->m_components.append(toAdd);
 
-    qDebug() << "Model: Added component of type \"" << toAdd->type()->text() << "\"";
+    qDebug() << "Model: Added component of type \"" << toAdd->descriptor()->text() << "\"";
 }
 
 Conductor*
@@ -42,6 +42,6 @@ Model::connect(Node* start, Node* end) {
     start->addDrivenElement(toAdd);
     end->addDriver(toAdd);
 
-    this->m_conductors.append(toAdd);
+    m_conductors.append(toAdd);
     return toAdd;
 }

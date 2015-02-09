@@ -11,7 +11,7 @@ namespace metamodel {
  * @brief The Category class is a pure container for other q2d::metamodel::HierarchyElement-objects.
  */
 class Category :
-        public HierarchyElement {
+    public HierarchyElement {
     // TODO later: mouse-over descriptions
     // TODO later: translations for names?
 public:

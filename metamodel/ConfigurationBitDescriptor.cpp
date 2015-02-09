@@ -11,8 +11,8 @@ using namespace q2d::metamodel;
 
 ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent) :
     ComponentElement(name, parent == nullptr ?
-                         nullptr :
-                         static_cast<metamodel::ComponentDescriptor*>(parent->parent())){}
+                     nullptr :
+                     static_cast<metamodel::ComponentDescriptor*>(parent->parent())) {}
 
 /**
  * @brief ConfigBitGroupDescriptor::ConfigBitGroupDescriptor
@@ -26,8 +26,9 @@ ConfigBitDescriptor::ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor*
  * @param memberCount
  * @param parent
  */
-ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned int memberCount, metamodel::ComponentDescriptor *parent) :
-    ComponentElement(groupName + "(" + util::intToString(memberCount) + " bit)", parent){
+ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned int memberCount,
+        metamodel::ComponentDescriptor* parent) :
+    ComponentElement(groupName + "(" + util::intToString(memberCount) + " bit)", parent) {
 
     Q_ASSERT(!groupName.isEmpty());
     m_name = groupName;
@@ -35,10 +36,10 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned i
 
     int maxPadding = QString::number(memberCount).size();
 
-    for(unsigned int count = 0; count < memberCount; ++count){
+    for (unsigned int count = 0; count < memberCount; ++count) {
         ConfigBitDescriptor* descriptor = new ConfigBitDescriptor(groupName + "_"
-                                              + util::intToString(count, maxPadding),
-                                              this);
+                + util::intToString(count, maxPadding),
+                this);
         this->appendRow(descriptor);
     }
 
@@ -52,11 +53,11 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned i
 }
 
 QString
-ConfigBitGroupDescriptor::name() const{
+ConfigBitGroupDescriptor::name() const {
     return m_name;
 }
 
 unsigned int
-ConfigBitGroupDescriptor::memberCount() const{
+ConfigBitGroupDescriptor::memberCount() const {
     return m_memberCount;
 }

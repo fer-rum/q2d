@@ -22,7 +22,7 @@ class ConfigBitGroupDescriptor;
 * A component type is the abstraction of component instances that share the same functionality and behaviour.
 */
 class ComponentDescriptor :
-        public HierarchyElement {
+    public HierarchyElement {
 private:
     /**
      * @brief m_instanceIndex counts how often a component of this type has been

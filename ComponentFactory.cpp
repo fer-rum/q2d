@@ -70,7 +70,8 @@ ComponentFactory::slot_addCategory(QString name, Category* parent) {
 void
 ComponentFactory::slot_loadType(QString filePath, Category* parent) {
 
-    const QString logPrefix = "Project::slot_loadType(" + filePath + ", " + util::ptrToString(parent) + ")";
+    const QString logPrefix = "Project::slot_loadType(" + filePath + ", " + util::ptrToString(
+                                  parent) + ")";
 
     QJsonDocument jsonDocument = json::readJsonFile(filePath);
 

@@ -45,9 +45,9 @@ Document* toDocument(QJsonObject json, QString name, Project* parent);
 
 // TODO fix parameters
 metamodel::ComponentDescriptor* toComponentDescriptor (
-        const QJsonDocument jsonSource,
-        const QString filePath,
-        metamodel::Category* parent);
+    const QJsonDocument jsonSource,
+    const QString filePath,
+    metamodel::Category* parent);
 
 // * -> json
 QJsonObject fromPointF(QPointF point);

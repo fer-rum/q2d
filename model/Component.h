@@ -19,19 +19,22 @@ namespace model {
 class Model;
 
 // TODO documentation
-// TODO visitor-pattern
 // TODO a component should observe its internal model to be informed of changes
 class Component : public ModelElement {
 private:
-    metamodel::ComponentDescriptor* m_type;
+    metamodel::ComponentDescriptor* m_descriptor;
     QList<Port*> m_ports;
     Model* m_internalModel;
 public:
-    Component(metamodel::ComponentDescriptor* type, Model* model, Model* internalModel = nullptr);
+    Component(metamodel::ComponentDescriptor* descriptor,
+              Model* parentModel, DocumentEntry* relatedEntry = nullptr, Model* internalModel = nullptr);
 
-    Port* createPort(enums::PortDirection direction);
+    void addPort(Port* port) {
+        Q_CHECK_PTR(port);
+        m_ports.append(port);
+    }
 
-    metamodel::ComponentDescriptor* type() const;
+    metamodel::ComponentDescriptor* descriptor() const;
 };
 
 } // namespace model

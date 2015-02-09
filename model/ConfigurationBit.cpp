@@ -4,7 +4,7 @@
 
 using namespace q2d::model;
 
-ConfigurationBit::ConfigurationBit(Model* parent) :  ModelElement(parent){
+ConfigurationBit::ConfigurationBit(Model* parent) :  ModelElement(parent) {
     m_state = enums::ConfigurationBitState::NOT_SET;
 }
 
@@ -14,11 +14,11 @@ ConfigurationBit::state() const {
 }
 
 void
-ConfigurationBit::setState(enums::ConfigurationBitState state){
+ConfigurationBit::setState(enums::ConfigurationBitState state) {
     m_state = state;
 }
 
 void
-ConfigurationBit::clearState(){
+ConfigurationBit::clearState() {
     m_state = enums::ConfigurationBitState::NOT_SET;
 }

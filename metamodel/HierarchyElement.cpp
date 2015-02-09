@@ -40,7 +40,7 @@ HierarchyElement::parent() const {
 }
 
 void
-HierarchyElement::setParent(HierarchyElement* parent){
+HierarchyElement::setParent(HierarchyElement* parent) {
     QObject::setParent(parent);
 }
 

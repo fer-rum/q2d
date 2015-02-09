@@ -14,16 +14,16 @@ namespace metamodel {
 class ComponentDescriptor;
 
 class ConfigBitGroupDescriptor :
-        public ComponentElement {
+    public ComponentElement {
 private:
     QString m_name;
     unsigned int m_memberCount;
 
 public:
     explicit ConfigBitGroupDescriptor(
-            QString groupName,
-            unsigned int memberCount,
-            metamodel::ComponentDescriptor* parent = nullptr);
+        QString groupName,
+        unsigned int memberCount,
+        metamodel::ComponentDescriptor* parent = nullptr);
 
     QString name() const;
     unsigned int memberCount() const;
@@ -34,7 +34,7 @@ public:
 };
 
 class ConfigBitDescriptor :
-        public ComponentElement {
+    public ComponentElement {
 public:
     explicit ConfigBitDescriptor(QString name, ConfigBitGroupDescriptor* parent);
 
