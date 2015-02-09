@@ -43,6 +43,12 @@ metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json
 QPointF toPointF(QJsonObject json);
 Document* toDocument(QJsonObject json, QString name, Project* parent);
 
+// TODO fix parameters
+metamodel::ComponentDescriptor* toComponentDescriptor (
+        const QJsonDocument jsonSource,
+        const QString filePath,
+        metamodel::Category* parent);
+
 // * -> json
 QJsonObject fromPointF(QPointF point);
 QJsonObject fromDocument(Document* doc);

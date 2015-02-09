@@ -32,10 +32,6 @@ class ComponentFactory : public QObject {
 private:
     QStandardItemModel componentHierarchy;
 
-    metamodel::ComponentDescriptor* createTypeFromJson(const QJsonDocument jsonSource,
-            const QString filePath,
-            metamodel::Category* parent);
-
     // FIXME deprecated functions, move to json namespace
     // and create proper calling
     QJsonObject entryToJson(QStandardItem* item);

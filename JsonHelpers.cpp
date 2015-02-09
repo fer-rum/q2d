@@ -249,3 +249,76 @@ q2d::json::toConfigBitGroupDescriptor(QJsonObject json){
 
     return new metamodel::ConfigBitGroupDescriptor(groupName, memberCount);
 }
+
+
+/**
+ * @brief ComponentFactory::createTypeFronJson attempts to create a new ComponentType from its JSON-description.
+ * @param jsonSource
+ * @param filePath is the path of the descriptor file.
+ * All paths in the JSON are treated as relative to its base directory
+ * @param parent
+ * @return a pointer to the newly created ComponentType; a nullptr on failure
+ */
+q2d::metamodel::ComponentDescriptor*
+q2d::json::toComponentDescriptor (
+    const QJsonDocument jsonSource,
+    const QString filePath,
+    q2d::metamodel::Category* parent) {
+
+    // extract the base directory path from the file path
+    QString fileName = filePath.split(QDir::separator()).last();
+    QString baseDirPath = QString(filePath);
+    baseDirPath.chop(fileName.size());
+
+    Q_ASSERT(!jsonSource.isNull());
+    QJsonObject jsonObject = jsonSource.object();
+
+    // parse the name
+    // defaults to "Unnamed"
+    QJsonValue nameValue = jsonObject.value(JSON_GENERAL_NAME);
+    QString componentName = nameValue.toString();
+    Q_ASSERT(!componentName.isEmpty());
+
+    q2d::metamodel::ComponentDescriptor* result =
+            new q2d::metamodel::ComponentDescriptor(componentName, parent);
+    Q_CHECK_PTR(result);
+    result->setDescriptorPath(filePath);
+
+    // load the symbol file
+    // defaults to basePath/unknown.svg
+    QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
+    QString symbolFilePath =
+            baseDirPath + QDir::separator() + symbolPathValue.toString("unknown.svg");
+    result->setSymbolPath(symbolFilePath);
+
+    // read ports
+    // defaults to an empty port array
+    QJsonArray portArray = jsonObject.value(JSON_PORTS).toArray(QJsonArray());
+    for(QJsonValue currentValue : portArray) {
+        if (currentValue.isUndefined()) {
+            continue;
+        }
+        QJsonObject     portObject      = currentValue.toObject();
+        QJsonObject     posObject       = portObject.value(JSON_GENERAL_POSITION).toObject();
+        QString         portName        = portObject.value(JSON_GENERAL_NAME).toString();
+        QString         dirString       = portObject.value(JSON_PORT_DIRECTION).toString();
+        QPointF         portPosition    = json::toPointF(posObject);
+        model::enums::PortDirection portDirection = model::enums::StringToPortDirection(dirString);
+
+        result->addPort(portName, portPosition, portDirection);
+    }
+
+    // get the config bits if there are some
+    if(jsonObject.contains(JSON_CONFIG_BIT_GROUP)){
+        QJsonArray configBitsJson = jsonObject.value(JSON_CONFIG_BIT_GROUP).toArray();
+        for(QJsonValue currentGroup : configBitsJson){
+            q2d::metamodel::ConfigBitGroupDescriptor* configBits =
+                    json::toConfigBitGroupDescriptor(currentGroup.toObject());
+            Q_CHECK_PTR(configBits);
+            // TODO instead print a proper warning
+            result->addConfigBitGroup(configBits);
+        }
+    }
+
+    return result;
+}
