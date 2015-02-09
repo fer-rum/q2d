@@ -274,7 +274,6 @@ q2d::json::toComponentDescriptor (
     QJsonObject jsonObject = jsonSource.object();
 
     // parse the name
-    // defaults to "Unnamed"
     QJsonValue nameValue = jsonObject.value(JSON_GENERAL_NAME);
     QString componentName = nameValue.toString();
     Q_ASSERT(!componentName.isEmpty());

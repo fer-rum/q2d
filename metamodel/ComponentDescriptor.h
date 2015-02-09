@@ -7,6 +7,7 @@
 
 #include <QGraphicsSvgItem>
 #include <QIcon>
+#include <QStringList>
 
 namespace q2d {
 namespace metamodel {
@@ -30,6 +31,12 @@ private:
      */
     int m_instanceIndex;
 
+    /**
+     * @brief m_variables contains all variable names that are valid  in the context of the described component.
+     * This is the case for ports and configuration bits.
+     */
+    QStringList m_variables;
+
     void loadCircuitSymbol(QString symbolFilePath);
 
 public:
@@ -45,6 +52,8 @@ public:
     // void addPort(PortDescriptor*);
     void addPort(QString name, QPointF relativePosition, model::enums::PortDirection direction);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
+
+    QStringList variables() const;
 
     QString generateId();
 

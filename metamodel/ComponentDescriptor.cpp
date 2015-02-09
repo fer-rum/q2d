@@ -1,6 +1,7 @@
 #include "ComponentDescriptor.h"
 
 #include "../Enumerations.h"
+#include "../Util.h"
 
 #include "Category.h"
 #include "ConfigurationBitDescriptor.h"
@@ -66,11 +67,14 @@ ComponentDescriptor::setDescriptorPath(const QString path) {
     this->setData(QVariant::fromValue(path), (int)ComponentDescriptorRole::DESCRIPTOR_FILE);
 }
 
+// FIXME make sure port names are unique within a component descriptor
 void
 ComponentDescriptor::addPort(QString name, QPointF relativePosition, q2d::model::enums::PortDirection direction) {
-
     PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
+
+    // each port name is a valid variable name
+    m_variables.append(name);
 }
 
 /**
@@ -86,6 +90,16 @@ ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup)
 
     configBitGroup->setParent(this);
     this->appendRow(configBitGroup);
+
+    QString groupName = configBitGroup->name();
+    for(unsigned int i = 0; i < configBitGroup->memberCount(); ++i){
+        QString varName = groupName + "_" + util::intToString(i);
+        if(m_variables.contains(varName)){
+         qWarning() << "Possible duplicate variable name" << varName;
+        } else {
+            m_variables.append(varName);
+        }
+    }
 }
 
 QString
@@ -93,4 +107,9 @@ ComponentDescriptor::generateId() {
     QString id = this->text() + " " + QString::number(m_instanceIndex);
     ++m_instanceIndex;
     return id;
+}
+
+QStringList
+ComponentDescriptor::variables() const {
+    return m_variables;
 }

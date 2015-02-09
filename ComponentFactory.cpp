@@ -359,6 +359,7 @@ ComponentFactory::instantiateWire(Document* document, DocumentEntry* sender,
     return entry;
 }
 
+// FIXME move this and all helpers to JsonHelpers
 QJsonDocument
 ComponentFactory::exportHierarchy() {
     QJsonDocument result = QJsonDocument();
@@ -402,8 +403,6 @@ ComponentFactory::jsonToCategoryEntry(QJsonObject json, Category* parent) {
     for (int index = 0; index < children.count(); ++index) {
         jsonToEntry(children[index].toObject(), result);
     }
-
-
 }
 
 void

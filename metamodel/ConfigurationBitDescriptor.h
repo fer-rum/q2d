@@ -15,9 +15,19 @@ class ComponentDescriptor;
 
 class ConfigBitGroupDescriptor :
         public ComponentElement {
+private:
+    QString m_name;
+    unsigned int m_memberCount;
+
 public:
     explicit ConfigBitGroupDescriptor(
-            QString groupName, int memberCount, metamodel::ComponentDescriptor* parent = nullptr);
+            QString groupName,
+            unsigned int memberCount,
+            metamodel::ComponentDescriptor* parent = nullptr);
+
+    QString name() const;
+    unsigned int memberCount() const;
+
     virtual int type() const {
         return enums::elementTypeToInt(enums::ElementType::CONFIG_BIT_GROUP);
     }
