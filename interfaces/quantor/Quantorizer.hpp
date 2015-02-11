@@ -20,7 +20,7 @@ namespace quantor {
 class Quantorizer {
   typedef unsigned YYSVal;
   class YYStack;
-#line 14 "Quantorizer.ypp"
+#line 24 "Quantorizer.ypp"
 
   Quantor *const  quantor;
   unsigned        max_var;

@@ -6,6 +6,13 @@
 namespace q2d {
   namespace quantor {
     class QIContext;
+   /**
+    * This class captures information about and the location of
+    * a parsing problem encountered by the Quantorizer and may
+    * be thrown by Quantorizer::solve().
+    *
+    * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
+    */
     class ParseException {
       std::string const  m_msg;
       QIContext   const &m_ctx;

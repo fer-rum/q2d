@@ -5,7 +5,12 @@ namespace q2d {
 namespace quantor {
 
 /**
- *  This class has been introduced for TBP-code compatibility.
+ * Java-style iterator with self-contained range semantics.
+ * Templated instances can be created from arbitrary C++
+ * forward iterators specifying the beginning and the end
+ * of a range.
+ *
+ * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
  */
 template<typename T>
 class Iterator {

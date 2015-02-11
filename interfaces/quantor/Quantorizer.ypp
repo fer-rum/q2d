@@ -11,6 +11,16 @@ extern "C" {
 #include "ParseException.h"
 }
 
+/**
+ * Quantorizer specification for the wisent parser generator.
+ * The generated Quantorizer class transforms a function circuit
+ * specification into a QBF problem and uses the QBF solver Quantor
+ * to determine an implementing circuit configuration if it exists.
+ * The only public utility method is the static Quantorizer::solve
+ * function.
+ *
+ * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
+ */
 %class q2d::quantor::Quantorizer {
   Quantor *const  quantor;
   unsigned        max_var;
