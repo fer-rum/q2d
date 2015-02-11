@@ -1,7 +1,8 @@
 #include "QIContext.h"
+#include "Iterator.h"
 
-#include "../model/ModelElement.h"
-#include "../Util.h"
+#include "../../model/ModelElement.h"
+#include "../../Util.h"
 
 #include "QtDebug"
 
@@ -86,9 +87,7 @@ QIContext::typeOf(std::string varName) const {
     }
 }
 
-Iterator<std::string>
+Iterator<QList<std::string>::const_iterator>
 QIContext::functionIterator() const {
-    const std::string* begin = m_functions.begin().operator->();
-    const std::string* end = m_functions.end().operator->();
-    return Iterator<std::string>(begin, end);
+  return  Iterator<QList<std::string>::const_iterator>(m_functions.begin(), m_functions.end());
 }

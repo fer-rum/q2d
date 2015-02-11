@@ -11,7 +11,7 @@ enum class VariableType {
     INVALID
 };
 
-} // namespace quentor
+} // namespace quantor
 } // namespace q2d
 
 #endif // VARIABLETYPE_H
