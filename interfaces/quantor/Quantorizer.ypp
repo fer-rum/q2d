@@ -72,6 +72,7 @@ private:
 //- Public Usage Interface ---------------------------------------------------
 public:
   static QuantorResult solve(Circuit const &ctx, std::vector<int> &sol);
+  static char const* resultText(QuantorResult const  res);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
@@ -203,6 +204,13 @@ QuantorResult Quantorizer::solve(Circuit const &ctx, std::vector<int> &sol) {
   return  q.solve(sol);
 }
 
+char const* Quantorizer::resultText(QuantorResult const  res) {
+  static char const *const  TEXTS[] = {
+    "UNKNOWN", "SAT", "UNSAT", "TIMEOUT", "SPACEOUT"
+  };
+  unsigned const  r = res/10;
+  return  TEXTS[r>4? 0 : r];
+}
 }
 
 %%

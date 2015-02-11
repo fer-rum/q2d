@@ -72,6 +72,7 @@ private:
 //- Public Usage Interface ---------------------------------------------------
 public:
   static QuantorResult solve(Circuit const &ctx, std::vector<int> &sol);
+  static char const* resultText(QuantorResult const  res);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
@@ -99,7 +100,7 @@ private:
     clauses.push_back(0);
   }
 
-#line 102 "Quantorizer.hpp"
+#line 103 "Quantorizer.hpp"
   void parse();
 public:
 enum {
