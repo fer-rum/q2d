@@ -49,7 +49,7 @@ private:
     context = &ctx;
     Iterator<QList<std::string>::const_iterator>  formulas = ctx.functionIterator();
     while(formulas) {
-      std::string  f = *formulas++;
+      formula = formulas++->c_str();
       parse();
     }
   }
