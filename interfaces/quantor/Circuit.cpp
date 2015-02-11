@@ -1,22 +1,24 @@
 #include "Circuit.hpp"
-#include "Context.hpp"
+#include "QIContext.h"
 
-Iterator<unsigned> Circuit::getConfigs()  const {
+using namespace q2d::quantor;
+
+Iterator<unsigned const*> Circuit::getConfigs()  const {
   static unsigned const  CFGS[] = { 1, 2, 3, 4 };
-  return  Iterator<unsigned>(CFGS, CFGS+4);
+  return  Iterator<unsigned const*>(CFGS, CFGS+4);
 }
 
-Iterator<unsigned> Circuit::getInputs()   const {
+Iterator<unsigned const*> Circuit::getInputs()   const {
   static unsigned const  INS[] = { 5, 6 };
-  return  Iterator<unsigned>(INS, INS+2);
+  return  Iterator<unsigned const*>(INS, INS+2);
 }
 
-Iterator<unsigned> Circuit::getNodes()    const {
+Iterator<unsigned const*> Circuit::getNodes()    const {
   static unsigned const  NODES[] = { 7 };
-  return  Iterator<unsigned>(NODES, NODES+1);
+  return  Iterator<unsigned const*>(NODES, NODES+1);
 }
 
-Iterator<Context>  Circuit::getContexts() const {
-  static Context  ctx;
-  return  Iterator<Context>(&ctx, &ctx+1);
+Iterator<QIContext const*>  Circuit::getContexts() const {
+  static QIContext  ctx("Test", 0, 0);
+  return  Iterator<QIContext const*>(&ctx, &ctx+1);
 }
