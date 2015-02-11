@@ -1,10 +1,6 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "Component.h"
-#include "Conductor.h"
-#include "Node.h"
-
 #include <QList>
 #include <QObject>
 #include <QString>
@@ -20,11 +16,10 @@ namespace model {
 // forward declaration
 class Component;
 class Conductor;
+class Node;
 class Port;
 
 // TODO documentation
-// TODO visitor-pattern
-// TODO utility functions
 class Model : public QObject {
     Q_OBJECT
 
@@ -38,6 +33,10 @@ public:
 
     void addComponent(Component* toAdd);
     Conductor* connect(Node* start, Node* end);
+
+    QList<Component*> components() const {
+        return m_components;
+    }
 };
 
 } // namespace model

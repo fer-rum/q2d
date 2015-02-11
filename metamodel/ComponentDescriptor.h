@@ -35,7 +35,8 @@ private:
      * @brief m_variables contains all variable names that are valid  in the context of the described component.
      * This is the case for ports and configuration bits.
      */
-    QStringList m_variables;
+    QStringList m_configVariables;
+    QStringList m_functions;
 
     void loadCircuitSymbol(QString symbolFilePath);
 
@@ -53,7 +54,8 @@ public:
     void addPort(QString name, QPointF relativePosition, model::enums::PortDirection direction);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
 
-    QStringList variables() const;
+    QStringList configVariables() const;
+    QStringList functions() const;
 
     QString generateId();
 

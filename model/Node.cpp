@@ -1,5 +1,6 @@
-#include "Node.h"
 
+#include "../DocumentEntry.h"
+#include "Node.h"
 #include "Component.h"
 
 using namespace q2d::model;
@@ -40,4 +41,9 @@ void
 Node::addDrivenElement(ModelElement* drivenElement) {
     Q_CHECK_PTR(drivenElement);
     this->drivenElements.append(drivenElement);
+}
+
+QStringList
+Port::nodeVariables() const {
+    return QStringList(this->relatedEntry()->id());
 }

@@ -67,7 +67,6 @@ DocumentEntry::id() const {
     return m_id;
 }
 
-
 DocumentEntryType
 DocumentEntry::type() {
     return m_type;

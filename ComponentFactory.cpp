@@ -18,6 +18,7 @@
 #include "metamodel/PortDescriptor.h"
 
 #include "model/Component.h"
+#include "model/Conductor.h"
 #include "model/Model.h"
 
 #include <QFileInfo>

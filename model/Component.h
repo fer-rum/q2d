@@ -34,6 +34,10 @@ public:
         m_ports.append(port);
     }
 
+    QStringList nodeVariables() const override;
+    QStringList configVariables() const override;
+    QStringList functions() const override;
+
     metamodel::ComponentDescriptor* descriptor() const;
 };
 

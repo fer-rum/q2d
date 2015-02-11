@@ -17,6 +17,10 @@ private:
     Node* m_end;
 public:
     Conductor(Node* start, Node* end, Model* model, DocumentEntry* relatedEntry = nullptr);
+
+    virtual QStringList nodeVariables() const override;
+    virtual QStringList functions() const override;
+
 };
 
 } // namespace model

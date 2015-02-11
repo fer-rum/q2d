@@ -5,6 +5,7 @@
 #include "ModelElement.h"
 
 #include <QList>
+#include <QStringList>
 
 namespace q2d {
 namespace model {
@@ -33,6 +34,8 @@ private:
 public:
     Port(enums::PortDirection direction, Component* topLevel, Model* parent,
          DocumentEntry* relatedEntry = nullptr);
+
+    virtual QStringList nodeVariables() const override;
 };
 
 // TODO documentation

@@ -75,7 +75,7 @@ ComponentDescriptor::addPort(QString name, QPointF relativePosition,
     this->appendRow(portDescriptor);
 
     // each port name is a valid variable name
-    m_variables.append(name);
+    m_configVariables.append(name);
 }
 
 /**
@@ -95,10 +95,10 @@ ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup)
     QString groupName = configBitGroup->name();
     for (unsigned int i = 0; i < configBitGroup->memberCount(); ++i) {
         QString varName = groupName + "_" + util::intToString(i);
-        if (m_variables.contains(varName)) {
+        if (m_configVariables.contains(varName)) {
             qWarning() << "Possible duplicate variable name" << varName;
         } else {
-            m_variables.append(varName);
+            m_configVariables.append(varName);
         }
     }
 }
@@ -111,6 +111,11 @@ ComponentDescriptor::generateId() {
 }
 
 QStringList
-ComponentDescriptor::variables() const {
-    return m_variables;
+ComponentDescriptor::configVariables() const {
+    return m_configVariables;
+}
+
+QStringList
+ComponentDescriptor::functions() const {
+    return m_functions;
 }

@@ -48,7 +48,9 @@ SOURCES +=\
     metamodel/Category.cpp \
     metamodel/ComponentElement.cpp \
     Util.cpp \
-    metamodel/ComponentDescriptor.cpp
+    metamodel/ComponentDescriptor.cpp \
+    interfaces/Quantor.cpp \
+    interfaces/QIContext.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -84,7 +86,11 @@ HEADERS  +=\
     metamodel/HierarchyElement.h \
     metamodel/ComponentElement.h \
     Util.h \
-    metamodel/ComponentDescriptor.h
+    metamodel/ComponentDescriptor.h \
+    interfaces/Quantor.h \
+    interfaces/QIContext.h \
+    interfaces/Iterator.h \
+    interfaces/VariableType.h
 
 FORMS    +=\
     gui/MainWindow.ui \

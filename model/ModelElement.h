@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QStringList>
 
 namespace q2d {
 
@@ -25,6 +26,16 @@ public:
     void setRelatedEntry(q2d::DocumentEntry* relatedEntry);
 
     Model* model() const;
+
+    virtual QStringList nodeVariables()     const {
+        return QStringList();
+    }
+    virtual QStringList configVariables()   const {
+        return QStringList();
+    }
+    virtual QStringList functions()         const {
+        return QStringList();
+    }
 };
 
 } // namespace model
