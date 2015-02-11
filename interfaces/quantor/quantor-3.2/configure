@@ -18,7 +18,7 @@ sigref=no
 stats=yes
 statslevel=undefined
 stmtcoverage=no
-solver=undefined
+solver=picosat
 if true
 then
   static=no
@@ -37,7 +37,7 @@ limmatdir=""
 nanosatdir=""
 compsatdir=""
 booleforcedir=""
-picosatdir=""
+picosatdir="../picosat-960"
 #*------------------------------------------------------------------------*#
 tmp=/tmp/quantor-configure-$$
 mkdir $tmp || exit 1
