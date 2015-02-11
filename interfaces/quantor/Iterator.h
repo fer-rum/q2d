@@ -27,6 +27,13 @@ public:
   auto operator*() -> decltype(*m_cur) {
     return *m_cur;
   }
+  auto operator->() -> decltype(&*m_cur) {
+    return &*m_cur;
+  }
+  Iterator<T> operator++() {
+    m_cur++;
+    return *this;
+  }
   Iterator<T> operator++(int) {
     Iterator<T> const  old = *this;
     m_cur++;
