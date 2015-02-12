@@ -1,11 +1,12 @@
-#ifndef QICONTEXT_H
-#define QICONTEXT_H
+#ifndef Q2D_QUANTOR_QICONTEXT_H
+#define Q2D_QUANTOR_QICONTEXT_H
 
 #include "Iterator.h"
 #include "VariableType.h"
 
 #include <QString>
 #include <QStringList>
+#include <QMap>
 
 namespace q2d {
 
@@ -52,7 +53,7 @@ public:
      * @brief functionIterator
      * @return an iterator over all available function strings in the context
      */
-    Iterator<std::string> functionIterator() const; // TBP-compat
+    Iterator<QList<std::string>::const_iterator> functionIterator() const; // TBP-compat
 };
 
 } // namespace quantor
