@@ -50,7 +50,8 @@ SOURCES +=\
     Util.cpp \
     metamodel/ComponentDescriptor.cpp \
     interfaces/Quantor.cpp \
-    interfaces/QIContext.cpp
+    interfaces/QIContext.cpp \
+    interfaces/QICircuit.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -90,7 +91,8 @@ HEADERS  +=\
     interfaces/Quantor.h \
     interfaces/QIContext.h \
     interfaces/Iterator.h \
-    interfaces/VariableType.h
+    interfaces/VariableType.h \
+    interfaces/QICircuit.h
 
 FORMS    +=\
     gui/MainWindow.ui \

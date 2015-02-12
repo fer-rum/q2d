@@ -7,34 +7,6 @@
 
 using namespace q2d::quantor;
 
-
-Iterator<unsigned int> QuantorInterface::configVars() {
-    return this->varsForType(VariableType::CONFIG, &m_configVars);
-}
-
-Iterator<unsigned int> QuantorInterface::inputVars() {
-    return this->varsForType(VariableType::INPUT, &m_inputVars);
-}
-
-Iterator<unsigned int> QuantorInterface::nodeVars() {
-    return this->varsForType(VariableType::NODE, &m_nodeVars);
-}
-
-
-Iterator<unsigned int>
-QuantorInterface::varsForType(VariableType requestedType, QList<unsigned int> *container) {
-
-    for (QIContext context : m_contexts.values()) {
-        for (QString varName : context.varNames()) {
-            unsigned int var = context[varName.toStdString()];
-            if (context.typeOf(var) == requestedType) {
-                container->append(var);
-            }
-        }
-    }
-
-}
-
 void
 QuantorInterface::buildContexts(const q2d::model::Model* contextSource) {
     // build contexts from components
