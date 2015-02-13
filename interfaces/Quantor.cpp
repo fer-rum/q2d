@@ -3,7 +3,6 @@
 #include "../model/Model.h"
 #include "../model/Component.h"
 #include "Quantor.h"
-#include "QIContext.h"
 
 using namespace q2d::quantor;
 

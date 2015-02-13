@@ -140,25 +140,25 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
       unsigned  res = 0;
       switch(len) {
       case 2:
-	if(strncasecmp(formula, "OR", 2) == 0)  res = OR;
-	break;
+    if(strncasecmp(formula, "OR", 2) == 0)  res = OR;
+    break;
       case 3:
-	if     (strncasecmp(formula, "AND", 3) == 0)  res = AND;
-	else if(strncasecmp(formula, "XOR", 3) == 0)  res = XOR;
-	else if(strncasecmp(formula, "NOR", 3) == 0)  res = NOR;
-	else if(strncasecmp(formula, "NOT", 3) == 0)  res = NOT;
-	break;
+    if     (strncasecmp(formula, "AND", 3) == 0)  res = AND;
+    else if(strncasecmp(formula, "XOR", 3) == 0)  res = XOR;
+    else if(strncasecmp(formula, "NOR", 3) == 0)  res = NOR;
+    else if(strncasecmp(formula, "NOT", 3) == 0)  res = NOT;
+    break;
       case 4:
-	if     (strncasecmp(formula, "NAND", 4) == 0)  res = NAND;
-	else if(strncasecmp(formula, "XNOR", 4) == 0)  res = XNOR;
-	break;
+    if     (strncasecmp(formula, "NAND", 4) == 0)  res = NAND;
+    else if(strncasecmp(formula, "XNOR", 4) == 0)  res = XNOR;
+    break;
       }
       if(res == 0) {
-	unsigned const  var = (*context)[std::string(formula, len)];
-	assert(var > 0);
-	assert(var <= max_named);
-	sval = var;
-	res  = IDENT;
+    unsigned const  var = (*context)[std::string(formula, len)];
+    assert(var > 0);
+    assert(var <= max_named);
+    sval = var;
+    res  = IDENT;
       }
       formula = p;
       return  res;
@@ -220,59 +220,59 @@ char const* Quantorizer::resultText(QuantorResult const  res) {
 %start spec
 %%
 spec    : expr '=' expr {
-	    addClause( $1, -$3);
-	    addClause(-$1,  $3);
+        addClause( $1, -$3);
+        addClause(-$1,  $3);
           }
 expr    : expr AND  expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause( res, -$1, -$3);
-	    addClause(-res,  $1);
-	    addClause(-res,  $3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause( res, -$1, -$3);
+        addClause(-res,  $1);
+        addClause(-res,  $3);
+        $$ = res;
           }
         | expr OR   expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause(-res,  $1, $3);
-	    addClause( res, -$1);
-	    addClause( res, -$3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause(-res,  $1, $3);
+        addClause( res, -$1);
+        addClause( res, -$3);
+        $$ = res;
           }
         | expr XOR  expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause(-res, -$1, -$3);
-	    addClause(-res,  $1,  $3);
-	    addClause( res, -$1,  $3);
-	    addClause( res,  $1, -$3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause(-res, -$1, -$3);
+        addClause(-res,  $1,  $3);
+        addClause( res, -$1,  $3);
+        addClause( res,  $1, -$3);
+        $$ = res;
           }
         | expr NAND expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause(-res, -$1, -$3);
-	    addClause( res,  $1);
-	    addClause( res,  $3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause(-res, -$1, -$3);
+        addClause( res,  $1);
+        addClause( res,  $3);
+        $$ = res;
           }
         | expr NOR  expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause( res,  $1, $3);
-	    addClause(-res, -$1);
-	    addClause(-res, -$3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause( res,  $1, $3);
+        addClause(-res, -$1);
+        addClause(-res, -$3);
+        $$ = res;
           }
         | expr XNOR expr {
-	    unsigned const  res = makeAuxiliary();
-	    addClause( res, -$1, -$3);
-	    addClause( res,  $1,  $3);
-	    addClause(-res, -$1,  $3);
-	    addClause(-res,  $1, -$3);
-	    $$ = res;
+        unsigned const  res = makeAuxiliary();
+        addClause( res, -$1, -$3);
+        addClause( res,  $1,  $3);
+        addClause(-res, -$1,  $3);
+        addClause(-res,  $1, -$3);
+        $$ = res;
           }
         | prim           { $$ = $1; }
 prim    : IDENT          { $$ = $1; }
-	| '(' expr ')'   { $$ = $2; }
-	| NOT prim {
-	    unsigned const  res = makeAuxiliary();
-	    addClause( res,  $2);
-	    addClause(-res, -$2);
-	    $$ = res;
-	  }
+    | '(' expr ')'   { $$ = $2; }
+    | NOT prim {
+        unsigned const  res = makeAuxiliary();
+        addClause( res,  $2);
+        addClause(-res, -$2);
+        $$ = res;
+      }

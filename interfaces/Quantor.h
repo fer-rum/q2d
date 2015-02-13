@@ -1,8 +1,8 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "Iterator.h"
-#include "QIContext.h"
+#include "quantor/Iterator.h"
+#include "quantor/QIContext.h"
 
 #include <vector>
 #include <string>

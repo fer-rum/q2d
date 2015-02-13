@@ -4,6 +4,24 @@
 #
 #-------------------------------------------------
 
+message(Base output directory is $$OUT_PWD)
+# paths to seperately build parts
+picosatDir = "$$OUT_PWD/picosat-960"
+quantorDir = "$$OUT_PWD/quantor-3.2"
+
+!exists($$picosatDir){
+    message(No picosat directory)
+} {
+    message(picosat directory is $$picosatDir)
+}
+
+
+!exists($$quantorDir){
+    message(No quantor directory)
+} {
+    message(quantor directory is $$quantorDir)
+}
+
 QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -50,8 +68,14 @@ SOURCES +=\
     Util.cpp \
     metamodel/ComponentDescriptor.cpp \
     interfaces/Quantor.cpp \
-    interfaces/QIContext.cpp \
-    interfaces/QICircuit.cpp
+    interfaces/quantor/Circuit.cpp \
+    interfaces/quantor/QIContext.cpp \
+    interfaces/quantor/Quantorizer.cpp \
+# including relevant picosat foles
+    $$picosatDir/picosat.c \
+    $$picosatDir/version.c \
+#including relevant quantor files
+    $$quantorDir/quantor.c
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -89,11 +113,29 @@ HEADERS  +=\
     Util.h \
     metamodel/ComponentDescriptor.h \
     interfaces/Quantor.h \
-    interfaces/QIContext.h \
-    interfaces/Iterator.h \
     interfaces/VariableType.h \
-    interfaces/QICircuit.h
+    interfaces/quantor/Circuit.hpp \
+    interfaces/quantor/Iterator.h \
+    interfaces/quantor/ParseException.h \
+    interfaces/quantor/QIContext.h \
+    interfaces/quantor/Quantorizer.hpp \
+    interfaces/quantor/VariableType.h \
+    $$picosatDir/*.h \
+    $$quantorDir/*.h
+
+INCLUDEPATH +=\
+    $$picosatDir \
+    $$quantorDir
 
 FORMS    +=\
     gui/MainWindow.ui \
     gui/SchematicsTab.ui
+
+# exclude quantorizer.ypp
+HEADERS -= interfaces/quantor/Quantorizer.ypp
+SOURCES -= interfaces/quantor/Quantorizer.ypp
+
+# exclude picosat main
+SOURCES -= $$picosatDir/main.c
+# exclude quantor main
+SOURCES -= $$quantorDir/main.c

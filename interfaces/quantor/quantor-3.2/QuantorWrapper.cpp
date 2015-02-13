@@ -5,7 +5,7 @@ class QuantorWrapper {
 
   //+ Construction / Destruction +++++++++++++++++++++++++++++++++++++++++++++
 public:
-  QuantorWrapper() q(quantor_new()) {}
+  QuantorWrapper() : q(quantor_new()) {}
   ~QuantorWrapper() {
     quantor_delete(q);
   }
@@ -20,12 +20,12 @@ private:
       if(lit == 0)  break;
     }
   }
-  
+
 public:
   template<typename IT>
   void declareVars(IT  cfgs,
-		   IT  inputs,
-		   II  nodes) {
+           IT  inputs,
+           IT  nodes) {
 
     // Configuration Variables
     quantor_scope(q, QUANTOR_EXISTENTIAL_VARIABLE_TYPE);
@@ -49,4 +49,4 @@ public:
     if(quantor_sat(q) != QUANTOR_RESULT_SATISFIABLE)  return  0;
     return  quantor_assignment(q);
   }
-}
+};
