@@ -36,69 +36,34 @@ class Quantorizer {
 
 //- Life Cycle ---------------------------------------------------------------
 private:
-  Quantorizer() : max_var(0), context(0), formula(0) {}
-  ~Quantorizer() {}
+  Quantorizer();
+  ~Quantorizer();
 
 //- Problem Building ---------------------------------------------------------
+private:
   template<typename IT>
   void openScope(QuantorQuantificationType const  type, IT  vars);
-  void closeScope() { quantor.add(0); }
+  void closeScope();
 
-  void append(QIContext const &ctx) {
-    context = &ctx;
-    Iterator<QList<std::string>::const_iterator>  formulas = ctx.functionIterator();
-    while(formulas) {
-      formula = formulas++->c_str();
-      parse();
-    }
-  }
-
-  void finish() {
-    // Finish Problem Specification
-    closeScope();
-    for(int  lit : clauses)  quantor.add(lit);
-  }
-
-  QuantorResult solve(std::vector<int> &sol) {
-    QuantorResult const  res = quantor.sat();
-    if(res == QUANTOR_RESULT_SATISFIABLE) {
-      int const *s = quantor.assignment();
-      while(*s)  sol.push_back(*s++);
-    }
-    return  res;
-  }
-
-//- Public Usage Interface ---------------------------------------------------
-public:
-  static Result solve(QICircuit const &ctx, std::vector<int> &sol);
+//- Private Parser Helpers ---------------------------------------------------
+private:
+  unsigned makeAuxiliary();
+  void addClause(int const  a, int const  b);
+  void addClause(int const  a, int const  b, int const  c);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
+  void error(std::string  msg);
   unsigned nextToken(YYSVal &sval);
-  void error(std::string  msg) {
-    throw  ParseException(msg, *context);
-  }
 
-//- Custom Parser Helpers ----------------------------------------------------
+//- Usage Interface ----------------------------------------------------------
 private:
-  unsigned makeAuxiliary() {
-    unsigned const  res = ++max_var;
-    quantor.add(res);
-    return  res;
-  }
-  void addClause(int const  a, int const  b) {
-    clauses.push_back(a);
-    clauses.push_back(b);
-    clauses.push_back(0);
-  }
-  void addClause(int const  a, int const  b, int const  c) {
-    clauses.push_back(a);
-    clauses.push_back(b);
-    clauses.push_back(c);
-    clauses.push_back(0);
-  }
+  Result solve0(QICircuit const &c, std::vector<int> &sol);
+public:
+  static Result solve(QICircuit const &c, std::vector<int> &sol);
 
-#line 101 "Quantorizer.hpp"
+#line 65 "Quantorizer.hpp"
+private:
   void parse();
 public:
 enum {

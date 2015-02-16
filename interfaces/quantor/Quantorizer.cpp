@@ -1,8 +1,48 @@
-#line 103 "Quantorizer.ypp"
+#line 67 "Quantorizer.ypp"
 
 #include "Quantorizer.hpp"
 
 using namespace q2d::quantor;
+
+//- Life Cycle ---------------------------------------------------------------
+inline Quantorizer::Quantorizer() : max_var(0), context(0), formula(0) {}
+inline Quantorizer::~Quantorizer() {}
+
+//- Problem Building ---------------------------------------------------------
+template<typename IT>
+void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
+  quantor.scope(type);
+  while(vars) {
+    unsigned const  var = *vars++;
+    assert(var > 0);
+    if(var > max_var)  max_var = var;
+    quantor.add(var);
+  }
+}
+inline void Quantorizer::closeScope() { quantor.add(0); }
+
+//- Private Parser Helpers ---------------------------------------------------
+inline unsigned Quantorizer::makeAuxiliary() {
+  unsigned const  res = ++max_var;
+  quantor.add(res);
+  return  res;
+}
+inline void Quantorizer::addClause(int const  a, int const  b) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(0);
+}
+inline void Quantorizer::addClause(int const  a, int const  b, int const  c) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(c);
+  clauses.push_back(0);
+}
+
+//- Parser Interface Methods -------------------------------------------------
+inline void Quantorizer::error(std::string  msg) {
+  throw  ParseException(msg, *context);
+}
 
 unsigned Quantorizer::nextToken(YYSVal &sval) {
   assert(formula != 0);
@@ -66,43 +106,47 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
   }
 }
 
-template<typename IT>
-void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
-  quantor.scope(type);
-  while(vars) {
-    unsigned const  var = *vars++;
-    assert(var > 0);
-    if(var > max_var)  max_var = var;
-    quantor.add(var);
-  }
-}
-
-Result Quantorizer::solve(QICircuit const &ctx, std::vector<int> &sol) {
-  Quantorizer q;
-
+//- Public Usage Interface ---------------------------------------------------
+inline Result Quantorizer::solve0(QICircuit const &c, std::vector<int> &sol) {
   // Quantifier Preamble
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.configVars());
-  q.closeScope();
-  q.openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   ctx.inputVars());
-  q.closeScope();
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.nodeVars());
+  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.configVars());
+  closeScope();
+  openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   c.inputVars());
+  closeScope();
+  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.nodeVars());
   // leave it open!
-
 #ifndef NDEBUG
-  q.max_named = q.max_var;
+  max_named = max_var;
 #endif
 
-  { // Parse in Component Specifications
-    auto  ctxs = ctx.contexts();
-    while(ctxs)  q.append(*ctxs++);
+  // Parse in Component Specifications
+  for(auto  ctx = c.contexts(); ctx; ctx++) {
+    context = &*ctx;
+    for(auto  formulas = ctx->functionIterator(); formulas; formulas++) {
+      formula = formulas->c_str();
+      parse();
+    }
   }
 
-  q.finish();
-  return  q.solve(sol);
+  // Finish Problem Specification
+  closeScope();
+  for(int  lit : clauses)  quantor.add(lit);
+
+  // Solve Problem
+  Result const  res = quantor.sat();
+  if(res == QUANTOR_RESULT_SATISFIABLE) {
+    int const *s = quantor.assignment();
+    while(*s)  sol.push_back(*s++);
+  }
+  return  res;
+}
+
+Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
+  return  Quantorizer().solve0(c, sol);
 }
 
 
-#line 105 "Quantorizer.cpp"
+#line 149 "Quantorizer.cpp"
 #include <vector>
 class q2d::quantor::Quantorizer::YYStack {
   class Ele {
@@ -297,16 +341,16 @@ void q2d::quantor::Quantorizer::parse() {
         case 0:         // accept
           return;
 case 1: {
-#line 214 "Quantorizer.ypp"
+#line 222 "Quantorizer.ypp"
 
         addClause( yystack[yylen - 1], -yystack[yylen - 3]);
         addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
           
-#line 305 "Quantorizer.cpp"
+#line 349 "Quantorizer.cpp"
 break;
 }
 case 2: {
-#line 218 "Quantorizer.ypp"
+#line 226 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -314,11 +358,11 @@ case 2: {
         addClause(-res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 317 "Quantorizer.cpp"
+#line 361 "Quantorizer.cpp"
 break;
 }
 case 3: {
-#line 225 "Quantorizer.ypp"
+#line 233 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res,  yystack[yylen - 1], yystack[yylen - 3]);
@@ -326,11 +370,11 @@ case 3: {
         addClause( res, -yystack[yylen - 3]);
         yylval = res;
           
-#line 329 "Quantorizer.cpp"
+#line 373 "Quantorizer.cpp"
 break;
 }
 case 4: {
-#line 232 "Quantorizer.ypp"
+#line 240 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -339,11 +383,11 @@ case 4: {
         addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
-#line 342 "Quantorizer.cpp"
+#line 386 "Quantorizer.cpp"
 break;
 }
 case 5: {
-#line 240 "Quantorizer.ypp"
+#line 248 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -351,11 +395,11 @@ case 5: {
         addClause( res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 354 "Quantorizer.cpp"
+#line 398 "Quantorizer.cpp"
 break;
 }
 case 6: {
-#line 247 "Quantorizer.ypp"
+#line 255 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res,  yystack[yylen - 1], yystack[yylen - 3]);
@@ -363,11 +407,11 @@ case 6: {
         addClause(-res, -yystack[yylen - 3]);
         yylval = res;
           
-#line 366 "Quantorizer.cpp"
+#line 410 "Quantorizer.cpp"
 break;
 }
 case 7: {
-#line 254 "Quantorizer.ypp"
+#line 262 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -376,36 +420,36 @@ case 7: {
         addClause(-res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
-#line 379 "Quantorizer.cpp"
+#line 423 "Quantorizer.cpp"
 break;
 }
 case 8: {
-#line 262 "Quantorizer.ypp"
+#line 270 "Quantorizer.ypp"
  yylval = yystack[yylen - 1]; 
-#line 385 "Quantorizer.cpp"
+#line 429 "Quantorizer.cpp"
 break;
 }
 case 9: {
-#line 263 "Quantorizer.ypp"
+#line 271 "Quantorizer.ypp"
  yylval = yystack[yylen - 1]; 
-#line 391 "Quantorizer.cpp"
+#line 435 "Quantorizer.cpp"
 break;
 }
 case 10: {
-#line 264 "Quantorizer.ypp"
+#line 272 "Quantorizer.ypp"
  yylval = yystack[yylen - 2]; 
-#line 397 "Quantorizer.cpp"
+#line 441 "Quantorizer.cpp"
 break;
 }
 case 11: {
-#line 265 "Quantorizer.ypp"
+#line 273 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res,  yystack[yylen - 2]);
         addClause(-res, -yystack[yylen - 2]);
         yylval = res;
       
-#line 408 "Quantorizer.cpp"
+#line 452 "Quantorizer.cpp"
 break;
 }
         }

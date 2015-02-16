@@ -17,10 +17,6 @@ namespace q2d {
     class Quantor {
       ::Quantor *const  quantor;
 
-      //- Inner Types
-    public:
-      typedef ::QuantorQuantificationType  quant_t;
-
       //- Construction / Destruction
     public:
       Quantor() : quantor(quantor_new()) {}
@@ -34,7 +30,7 @@ namespace q2d {
 
       //- Problem Construction
     public:
-      char const *scope(quant_t const  quant) {
+      char const *scope(::QuantorQuantificationType const  quant) {
 	return  quantor_scope(quantor, quant);
       }
       char const *add(int const  lit) {
