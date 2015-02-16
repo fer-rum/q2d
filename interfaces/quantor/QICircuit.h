@@ -1,5 +1,5 @@
-#ifndef QICIRCUIT_H
-#define QICIRCUIT_H
+#ifndef Q2D_QUANTOR_QICIRCUIT_H
+#define Q2D_QUANTOR_QICIRCUIT_H
 
 #include "Iterator.h"
 #include "../Quantor.h"
@@ -55,5 +55,4 @@ public:
 } // namespace quantor
 } // namepsce q2d
 
-
-#endif // QICIRCUIT_H
+#endif // Q2D_QUANTOR_QICIRCUIT_H

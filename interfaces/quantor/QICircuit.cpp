@@ -1,4 +1,4 @@
-#include "Circuit.hpp"
+#include "QICircuit.h"
 #include "../Quantor.h"
 
 
