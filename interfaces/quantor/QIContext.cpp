@@ -8,24 +8,35 @@
 
 using namespace q2d::quantor;
 
-QIContext::QIContext(QString contextName, unsigned int lowestIndex,
-                     model::ModelElement* contextSource ) {
-    m_contextName = contextName;
+QIContext::QIContext(unsigned int lowestIndex,
+                     model::ModelElement* const contextSource )
+    : QIContext(lowestIndex) {
+    this->addModelElement(*contextSource);
+}
+
+QIContext::QIContext(unsigned int lowestIndex){
     m_lowestIndex = lowestIndex;
-    m_highestIndex = m_lowestIndex;
+    m_highestIndex = m_lowestIndex - 1;
+}
 
-
-    for (QString varName : contextSource->nodeVariables()) {
+void
+QIContext::addModelElement(model::ModelElement const &element){
+    for (QString varName : element.nodeVariables()) {
         this->assignVariable(varName, VariableType::NODE);
     }
 
-    for (QString varName : contextSource->configVariables()) {
-        this->assignVariable(varName, VariableType::NODE);
+    for (QString varName : element.configVariables()) {
+        this->assignVariable(varName, VariableType::CONFIG);
     }
 
-    for (QString function : contextSource->functions()) {
+    for (QString function : element.functions()) {
         m_functions.append(function.toStdString());
     }
+}
+
+void
+QIContext::addFunction(QString function){
+    m_functions.append(function.toStdString());
 }
 
 void
@@ -37,10 +48,9 @@ QIContext::assignVariable(QString varName, VariableType type) {
     } else {
         qDebug() << logPrefix << "Variable assignment:"
                  << varName << "->" << util::intToString(m_highestIndex);
+        m_highestIndex ++;
         m_variableMapping.insert(varName, m_highestIndex);
         m_typeMapping.insert(m_highestIndex, type);
-        m_highestIndex ++;
-
     }
 }
 

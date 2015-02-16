@@ -22,8 +22,16 @@ namespace quantor {
 class QIContext {
 
 private:
-    QString m_contextName;
+    /**
+     * @brief m_lowestIndex is the lowest variable index that is in use by this context.
+     */
     unsigned int m_lowestIndex;
+
+    /**
+     * @brief m_highestIndex is the highest variable index that is in use by this context.
+     * If the m_highestIndex is smaller then the m_lowestIndex, there is no variable assigned at all.
+     * If the m_highestIndex equals the m_lowestIndex, there is exactly one variable assigned.
+     */
     unsigned int m_highestIndex;
 
     QMap<QString, unsigned int> m_variableMapping;
@@ -33,7 +41,17 @@ private:
     void assignVariable(QString varName, VariableType type);
 
 public:
-    QIContext(QString contextName, unsigned int lowestIndex, model::ModelElement* contextSource);
+    /**
+     * @brief QIContext creates a minimal, empty context to be filled manually.
+     * @param contextName
+     * @param lowestIndex
+     */
+    QIContext(unsigned int lowestIndex);
+    QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource);
+
+    void addModelElement(model::ModelElement const &element);
+    void addFunction(QString function);
+
 
     QStringList varNames() const;
     unsigned int lowestIndex() const    {

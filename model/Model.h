@@ -12,8 +12,6 @@ namespace q2d {
 class Document;
 
 namespace model {
-
-// forward declaration
 class Component;
 class Conductor;
 class Node;
@@ -36,6 +34,14 @@ public:
 
     QList<Component*> components() const {
         return m_components;
+    }
+
+    QList<Conductor*> conductors() const {
+        return m_conductors;
+    }
+
+    QList<Port*> outsidePorts() const {
+        return m_outsidePorts;
     }
 };
 

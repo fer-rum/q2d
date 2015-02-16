@@ -16,14 +16,11 @@ using namespace q2d::model;
  * @param parent must not be null
  */
 Model::Model(Document* parent)
-    : QObject(parent) {
+    : QObject(parent), m_components(), m_conductors(), m_outsidePorts() {
 
     Q_CHECK_PTR(parent);
 
     m_name = parent->text();
-    m_components = QList<Component*>();
-    m_conductors = QList<Conductor*>();
-    m_outsidePorts = QList<Port*>();
 
     qDebug() << "Model: creating new model " << m_name << "";
 }
