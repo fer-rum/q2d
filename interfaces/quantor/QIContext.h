@@ -23,7 +23,16 @@ class QIContext {
 
 private:
     QString m_contextName;
+    /**
+     * @brief m_lowestIndex is the lowest variable index that is in use by this context.
+     */
     unsigned int m_lowestIndex;
+
+    /**
+     * @brief m_highestIndex is the highest variable index that is in use by this context.
+     * If the m_highestIndex is smaller then the m_lowestIndex, there is no variable assigned at all.
+     * If the m_highestIndex equals the m_lowestIndex, ther is exactly one variable assigned.
+     */
     unsigned int m_highestIndex;
 
     QMap<QString, unsigned int> m_variableMapping;

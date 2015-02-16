@@ -12,7 +12,7 @@ QIContext::QIContext(QString contextName, unsigned int lowestIndex,
                      model::ModelElement* contextSource ) {
     m_contextName = contextName;
     m_lowestIndex = lowestIndex;
-    m_highestIndex = m_lowestIndex;
+    m_highestIndex = m_lowestIndex - 1;
 
 
     for (QString varName : contextSource->nodeVariables()) {
@@ -37,10 +37,9 @@ QIContext::assignVariable(QString varName, VariableType type) {
     } else {
         qDebug() << logPrefix << "Variable assignment:"
                  << varName << "->" << util::intToString(m_highestIndex);
+        m_highestIndex ++;
         m_variableMapping.insert(varName, m_highestIndex);
         m_typeMapping.insert(m_highestIndex, type);
-        m_highestIndex ++;
-
     }
 }
 
