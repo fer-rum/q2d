@@ -6,7 +6,7 @@
 #include "../model/Model.h"
 #include "../model/ModelElement.h"
 
-#include "quantor/Circuit.hpp"
+#include "quantor/QICircuit.h"
 #include "Quantor.h"
 
 using namespace q2d::quantor;
@@ -61,6 +61,8 @@ QuantorInterface::slot_solveProblem(Document &targetDocument, QString targetFunc
     // call the solver
     std::vector<int> rawSolution;
     Q_CHECK_PTR(m_solverMain);
+
+    // TODO catch exception
     this->m_solverMain(QICircuit(this), rawSolution);
 
     // interprete the result

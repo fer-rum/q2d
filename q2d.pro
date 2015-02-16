@@ -68,7 +68,7 @@ SOURCES +=\
     Util.cpp \
     metamodel/ComponentDescriptor.cpp \
     interfaces/Quantor.cpp \
-    interfaces/quantor/Circuit.cpp \
+    interfaces/quantor/QICircuit.cpp \
     interfaces/quantor/QIContext.cpp \
     interfaces/quantor/Quantorizer.cpp \
 # including relevant picosat foles
@@ -114,7 +114,7 @@ HEADERS  +=\
     metamodel/ComponentDescriptor.h \
     interfaces/Quantor.h \
     interfaces/VariableType.h \
-    interfaces/quantor/Circuit.hpp \
+    interfaces/quantor/QICircuit.h \
     interfaces/quantor/Iterator.h \
     interfaces/quantor/ParseException.h \
     interfaces/quantor/QIContext.h \

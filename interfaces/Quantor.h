@@ -32,7 +32,7 @@ class QuantorInterface :
 private:
 
     // NOTE make sure, the lowest variable index is 1, NOT 0
-    // since 0 is already used for terminating
+    // since 0 is already used by quantor for terminating
 
     QMap<QString, QIContext> m_contexts;
 
