@@ -1,14 +1,16 @@
 %header{
-extern "C" {
-#include "quantor.h"
-#include <strings.h>
-}
 #include <vector>
 #include <cctype>
 #include <cassert>
-#include "Circuit.hpp"
+
+#include <strings.h>
+
+#include "Quantor.h"
+#include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
+
+ using namespace q2d::quantor;
 }
 
 /**
@@ -22,10 +24,10 @@ extern "C" {
  * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
  */
 %class q2d::quantor::Quantorizer {
-  Quantor *const  quantor;
-  unsigned        max_var;
+  Quantor   quantor;
+  unsigned  max_var;
 #ifndef NDEBUG
-  unsigned        max_named;
+  unsigned  max_named;
 #endif
 
   std::vector<int>  clauses;
@@ -34,71 +36,31 @@ extern "C" {
 
 //- Life Cycle ---------------------------------------------------------------
 private:
-  Quantorizer()
-    : quantor(quantor_new()), max_var(0), context(0), formula(0) {}
-  ~Quantorizer() {
-    quantor_delete(quantor);
-  }
+  Quantorizer();
+  ~Quantorizer();
 
 //- Problem Building ---------------------------------------------------------
+private:
   template<typename IT>
   void openScope(QuantorQuantificationType const  type, IT  vars);
-  void closeScope() { quantor_add(quantor, 0); }
+  void closeScope();
 
-  void append(QIContext const &ctx) {
-    context = &ctx;
-    Iterator<QList<std::string>::const_iterator>  formulas = ctx.functionIterator();
-    while(formulas) {
-      formula = formulas++->c_str();
-      parse();
-    }
-  }
-
-  void finish() {
-    // Finish Problem Specification
-    closeScope();
-    for(int  lit : clauses)  quantor_add(quantor, lit);
-  }
-
-  QuantorResult solve(std::vector<int> &sol) {
-    QuantorResult const  res = quantor_sat(quantor);
-    if(res == QUANTOR_RESULT_SATISFIABLE) {
-      int const *s = quantor_assignment(quantor);
-      while(*s)  sol.push_back(*s++);
-    }
-    return  res;
-  }
-
-//- Public Usage Interface ---------------------------------------------------
-public:
-  static QuantorResult solve(Circuit const &ctx, std::vector<int> &sol);
-  static char const* resultText(QuantorResult const  res);
+//- Private Parser Helpers ---------------------------------------------------
+private:
+  unsigned makeAuxiliary();
+  void addClause(int const  a, int const  b);
+  void addClause(int const  a, int const  b, int const  c);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
+  void error(std::string  msg);
   unsigned nextToken(YYSVal &sval);
-  void error(std::string  msg) {
-    throw  ParseException(msg, *context);
-  }
 
-//- Custom Parser Helpers ----------------------------------------------------
+//- Usage Interface ----------------------------------------------------------
 private:
-  unsigned makeAuxiliary() {
-    unsigned const  res = ++max_var;
-    quantor_add(quantor, res);
-    return  res;
-  }
-  void addClause(int const  a, int const  b) {
-    clauses.push_back(a);
-    clauses.push_back(b);
-    clauses.push_back(0);
-  }
-  void addClause(int const  a, int const  b, int const  c) {
-    clauses.push_back(a);
-    clauses.push_back(b);
-    clauses.push_back(c);
-    clauses.push_back(0);
-  }
+  Result solve0(QICircuit const &c, std::vector<int> &sol);
+public:
+  static Result solve(QICircuit const &c, std::vector<int> &sol);
 }
 
 %sval unsigned
@@ -106,6 +68,46 @@ private:
 #include "Quantorizer.hpp"
 
 using namespace q2d::quantor;
+
+//- Life Cycle ---------------------------------------------------------------
+inline Quantorizer::Quantorizer() : max_var(0), context(0), formula(0) {}
+inline Quantorizer::~Quantorizer() {}
+
+//- Problem Building ---------------------------------------------------------
+template<typename IT>
+void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
+  quantor.scope(type);
+  while(vars) {
+    unsigned const  var = *vars++;
+    assert(var > 0);
+    if(var > max_var)  max_var = var;
+    quantor.add(var);
+  }
+}
+inline void Quantorizer::closeScope() { quantor.add(0); }
+
+//- Private Parser Helpers ---------------------------------------------------
+inline unsigned Quantorizer::makeAuxiliary() {
+  unsigned const  res = ++max_var;
+  quantor.add(res);
+  return  res;
+}
+inline void Quantorizer::addClause(int const  a, int const  b) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(0);
+}
+inline void Quantorizer::addClause(int const  a, int const  b, int const  c) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(c);
+  clauses.push_back(0);
+}
+
+//- Parser Interface Methods -------------------------------------------------
+inline void Quantorizer::error(std::string  msg) {
+  throw  ParseException(msg, *context);
+}
 
 unsigned Quantorizer::nextToken(YYSVal &sval) {
   assert(formula != 0);
@@ -169,49 +171,46 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
   }
 }
 
-template<typename IT>
-void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
-  quantor_scope(quantor, type);
-  while(vars) {
-    unsigned const  var = *vars++;
-    assert(var > 0);
-    if(var > max_var)  max_var = var;
-    quantor_add(quantor, var);
-  }
-}
-
-QuantorResult Quantorizer::solve(Circuit const &ctx, std::vector<int> &sol) {
-  Quantorizer q;
-
+//- Public Usage Interface ---------------------------------------------------
+inline Result Quantorizer::solve0(QICircuit const &c, std::vector<int> &sol) {
   // Quantifier Preamble
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.getConfigs());
-  q.closeScope();
-  q.openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   ctx.getInputs());
-  q.closeScope();
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.getNodes());
+  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.configVars());
+  closeScope();
+  openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   c.inputVars());
+  closeScope();
+  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.nodeVars());
   // leave it open!
-
 #ifndef NDEBUG
-  q.max_named = q.max_var;
+  max_named = max_var;
 #endif
 
-  { // Parse in Component Specifications
-    auto  ctxs = ctx.getContexts();
-    while(ctxs)  q.append(*ctxs++);
+  // Parse in Component Specifications
+  for(auto  ctx = c.contexts(); ctx; ctx++) {
+    context = &*ctx;
+    for(auto  formulas = ctx->functionIterator(); formulas; formulas++) {
+      formula = formulas->c_str();
+      parse();
+    }
   }
 
-  q.finish();
-  return  q.solve(sol);
+  // Finish Problem Specification
+  closeScope();
+  for(int  lit : clauses)  quantor.add(lit);
+
+  // Solve Problem
+  Result const  res = quantor.sat();
+  if(res == QUANTOR_RESULT_SATISFIABLE) {
+    int const *s = quantor.assignment();
+    while(*s)  sol.push_back(*s++);
+  }
+  return  res;
 }
 
-char const* Quantorizer::resultText(QuantorResult const  res) {
-  static char const *const  TEXTS[] = {
-    "UNKNOWN", "SAT", "UNSAT", "TIMEOUT", "SPACEOUT"
-  };
-  unsigned const  r = res/10;
-  return  TEXTS[r>4? 0 : r];
+Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
+  return  Quantorizer().solve0(c, sol);
 }
-}
+
+} // impl
 
 %%
 %right NOT
