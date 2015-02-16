@@ -4,13 +4,10 @@
 
 using namespace q2d::quantor;
 
-QICircuit::QICircuit(QuantorInterface* interface)
-    : m_interface(interface){
-Q_CHECK_PTR(interface);
-
-    for (QIContext context : interface->contexts().values()) {
-        for (QString varName : context.varNames()) {
-            unsigned int var = context[varName.toStdString()];
+QICircuit::QICircuit(QuantorInterface const &interface) : m_interface(interface) {
+    for(QIContext const &context : interface.contexts().values()) {
+        for (QString const &varName : context.varNames()) {
+            unsigned int const  var = context[varName.toStdString()];
             switch(context.typeOf(var)){
             case VariableType::CONFIG :
                 m_configVars.append(var);

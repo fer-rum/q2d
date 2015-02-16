@@ -48,7 +48,7 @@ private:
     void solve();
 public:
     QuantorInterface(int * (*solverMain)(QICircuit const&, std::vector<int>&));
-    QMap<QString, QIContext> contexts() const { return m_contexts; }
+    QMap<QString, QIContext> const& contexts() const { return m_contexts; }
 
 public slots:
     void slot_solveProblem(q2d::Document& targetDocument, QString targetFunction);
