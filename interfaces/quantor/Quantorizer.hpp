@@ -2,13 +2,13 @@
 #define Q2D_QUANTOR_QUANTORIZER_HPP_INCLUDED
 #line 1 "Quantorizer.ypp"
 
-extern "C" {
-#include "quantor.h"
-#include <strings.h>
-}
 #include <vector>
 #include <cctype>
 #include <cassert>
+
+#include <strings.h>
+
+#include "Quantor.h"
 #include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
@@ -24,10 +24,10 @@ class Quantorizer {
   class YYStack;
 #line 26 "Quantorizer.ypp"
 
-  Quantor *const  quantor;
-  unsigned        max_var;
+  Quantor   quantor;
+  unsigned  max_var;
 #ifndef NDEBUG
-  unsigned        max_named;
+  unsigned  max_named;
 #endif
 
   std::vector<int>  clauses;
@@ -36,16 +36,13 @@ class Quantorizer {
 
 //- Life Cycle ---------------------------------------------------------------
 private:
-  Quantorizer()
-    : quantor(quantor_new()), max_var(0), context(0), formula(0) {}
-  ~Quantorizer() {
-    quantor_delete(quantor);
-  }
+  Quantorizer() : max_var(0), context(0), formula(0) {}
+  ~Quantorizer() {}
 
 //- Problem Building ---------------------------------------------------------
   template<typename IT>
   void openScope(QuantorQuantificationType const  type, IT  vars);
-  void closeScope() { quantor_add(quantor, 0); }
+  void closeScope() { quantor.add(0); }
 
   void append(QIContext const &ctx) {
     context = &ctx;
@@ -59,13 +56,13 @@ private:
   void finish() {
     // Finish Problem Specification
     closeScope();
-    for(int  lit : clauses)  quantor_add(quantor, lit);
+    for(int  lit : clauses)  quantor.add(lit);
   }
 
   QuantorResult solve(std::vector<int> &sol) {
-    QuantorResult const  res = quantor_sat(quantor);
+    QuantorResult const  res = quantor.sat();
     if(res == QUANTOR_RESULT_SATISFIABLE) {
-      int const *s = quantor_assignment(quantor);
+      int const *s = quantor.assignment();
       while(*s)  sol.push_back(*s++);
     }
     return  res;
@@ -73,8 +70,7 @@ private:
 
 //- Public Usage Interface ---------------------------------------------------
 public:
-  static QuantorResult solve(QICircuit const &ctx, std::vector<int> &sol);
-  static char const* resultText(QuantorResult const  res);
+  static Result solve(QICircuit const &ctx, std::vector<int> &sol);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
@@ -87,7 +83,7 @@ private:
 private:
   unsigned makeAuxiliary() {
     unsigned const  res = ++max_var;
-    quantor_add(quantor, res);
+    quantor.add(res);
     return  res;
   }
   void addClause(int const  a, int const  b) {
@@ -102,7 +98,7 @@ private:
     clauses.push_back(0);
   }
 
-#line 105 "Quantorizer.hpp"
+#line 101 "Quantorizer.hpp"
   void parse();
 public:
 enum {
