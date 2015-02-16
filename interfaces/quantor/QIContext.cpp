@@ -19,6 +19,18 @@ QIContext::QIContext(unsigned int lowestIndex){
     m_highestIndex = m_lowestIndex - 1;
 }
 
+bool
+QIContext::operator==(QIContext const &other) const {
+    if(this == &other){ return true; }
+
+    if(m_lowestIndex != other.m_lowestIndex
+            || m_highestIndex != other.m_highestIndex){ return false; }
+
+    if(m_variableMapping == other.m_variableMapping
+            && m_typeMapping == other.m_typeMapping) { return true; }
+    return false;
+}
+
 void
 QIContext::addModelElement(model::ModelElement const &element){
     for (QString varName : element.nodeVariables()) {

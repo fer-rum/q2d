@@ -49,6 +49,8 @@ public:
     QIContext(unsigned int lowestIndex);
     QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource);
 
+    bool operator==(QIContext const &other) const;
+
     void addModelElement(model::ModelElement const &element);
     void addFunction(QString function);
 

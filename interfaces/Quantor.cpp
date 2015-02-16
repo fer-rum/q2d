@@ -6,8 +6,11 @@
 #include "../model/Model.h"
 #include "../model/ModelElement.h"
 
+#include "quantor/ParseException.h"
 #include "quantor/QICircuit.h"
 #include "Quantor.h"
+
+#include <QtDebug>
 
 using namespace q2d::quantor;
 
@@ -62,9 +65,14 @@ QuantorInterface::slot_solveProblem(Document &targetDocument, QString targetFunc
     std::vector<int> rawSolution;
     Q_CHECK_PTR(m_solverMain);
 
-    // TODO catch exception
-    this->m_solverMain(QICircuit(this), rawSolution);
-
+    try {
+        this->m_solverMain(QICircuit(this), rawSolution);
+    } catch (ParseException exception){
+        const QIContext failedCtx = exception.context();
+        qWarning() << "In context" << m_contexts.key(failedCtx);
+        qWarning() << QString::fromStdString(exception.message());
+        return;
+    }
     // interprete the result
     m_solution.fromVector(QVector<int>::fromStdVector(rawSolution));
 }
