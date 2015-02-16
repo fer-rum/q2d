@@ -1,27 +1,28 @@
 #ifndef Q2D_QUANTOR_QUANTORIZER_HPP_INCLUDED
 #define Q2D_QUANTOR_QUANTORIZER_HPP_INCLUDED
-// #line 1 "Quantorizer.ypp"
+#line 1 "Quantorizer.ypp"
 
 extern "C" {
-#include "quantor-3.2/quantor.h"
+#include "quantor.h"
 #include <strings.h>
 }
 #include <vector>
 #include <cctype>
 #include <cassert>
-#include "Circuit.hpp"
+#include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
 
-// #line 16 "Quantorizer.hpp"
+ using namespace q2d::quantor;
+
+#line 18 "Quantorizer.hpp"
 #include <string>
 namespace q2d {
 namespace quantor {
-
 class Quantorizer {
   typedef unsigned YYSVal;
   class YYStack;
-// #line 24 "Quantorizer.ypp"
+#line 26 "Quantorizer.ypp"
 
   Quantor *const  quantor;
   unsigned        max_var;
@@ -72,7 +73,7 @@ private:
 
 //- Public Usage Interface ---------------------------------------------------
 public:
-  static QuantorResult solve(QICircuit& ctx, std::vector<int> &sol);
+  static QuantorResult solve(QICircuit const &ctx, std::vector<int> &sol);
   static char const* resultText(QuantorResult const  res);
 
 //- Parser Interface Methods -------------------------------------------------
@@ -101,7 +102,7 @@ private:
     clauses.push_back(0);
   }
 
-// #line 103 "Quantorizer.hpp"
+#line 105 "Quantorizer.hpp"
   void parse();
 public:
 enum {

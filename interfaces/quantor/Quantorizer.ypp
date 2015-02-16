@@ -6,9 +6,11 @@ extern "C" {
 #include <vector>
 #include <cctype>
 #include <cassert>
-#include "Circuit.hpp"
+#include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
+
+ using namespace q2d::quantor;
 }
 
 /**
@@ -71,7 +73,7 @@ private:
 
 //- Public Usage Interface ---------------------------------------------------
 public:
-  static QuantorResult solve(Circuit const &ctx, std::vector<int> &sol);
+  static QuantorResult solve(QICircuit const &ctx, std::vector<int> &sol);
   static char const* resultText(QuantorResult const  res);
 
 //- Parser Interface Methods -------------------------------------------------
@@ -180,15 +182,15 @@ void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
   }
 }
 
-QuantorResult Quantorizer::solve(Circuit const &ctx, std::vector<int> &sol) {
+QuantorResult Quantorizer::solve(QICircuit const &ctx, std::vector<int> &sol) {
   Quantorizer q;
 
   // Quantifier Preamble
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.getConfigs());
+  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.configVars());
   q.closeScope();
-  q.openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   ctx.getInputs());
+  q.openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   ctx.inputVars());
   q.closeScope();
-  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.getNodes());
+  q.openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, ctx.nodeVars());
   // leave it open!
 
 #ifndef NDEBUG
@@ -196,7 +198,7 @@ QuantorResult Quantorizer::solve(Circuit const &ctx, std::vector<int> &sol) {
 #endif
 
   { // Parse in Component Specifications
-    auto  ctxs = ctx.getContexts();
+    auto  ctxs = ctx.contexts();
     while(ctxs)  q.append(*ctxs++);
   }
 

@@ -12,7 +12,7 @@ namespace quantor {
  *
  * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
  */
-template<typename T>
+template<typename T = void>
 class Iterator {
 private:
   T        m_cur;
@@ -20,7 +20,9 @@ private:
 
 public:
   Iterator(T beg, T end) : m_cur(beg), m_end(end) {}
+  ~Iterator() {}
 
+public:
   operator bool() const {
     return m_cur != m_end;
   }
@@ -41,6 +43,18 @@ public:
   }
 };
 
+template<>
+class Iterator<void> {
+public:
+template<typename T>
+static Iterator<T> span(T beg, T end) {
+  return  Iterator<T>(beg, end);
+}
+template<typename T>
+static auto over(T cont) -> Iterator<decltype(cont.begin())> {
+  return  span(cont.begin(), cont.end());
+}
+};
 } // namespace quantor
 } // namespace q2d
 

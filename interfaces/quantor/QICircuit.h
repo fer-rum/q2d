@@ -2,12 +2,10 @@
 #define QICIRCUIT_H
 
 #include "Iterator.h"
-#include "QIContext.h"
+#include "../Quantor.h"
 
 namespace q2d {
 namespace quantor {
-
-class QuantorInterface;
 
 class QICircuit {
 private:
@@ -21,27 +19,37 @@ private:
 public:
     QICircuit(QuantorInterface* interface);
 
-    Iterator<QList<QIContext>::const_iterator> contexts();
+    auto contexts() const
+      -> decltype(Iterator<>::over(m_interface->contexts().values())) {
+      auto const& ctxs = m_interface->contexts().values();
+      return  Iterator<>::over(ctxs);
+    }
 
     /**
      * @brief configVars fetches all configuration variables in all contexts.
      * Excludes input variables
      * @return
      */
-    Iterator<QList<unsigned int>::const_iterator> configVars();
+    auto configVars() const -> decltype(Iterator<>::over(m_configVars)) {
+      return  Iterator<>::over(m_configVars);
+    }
 
     /**
      * @brief nodeVars fetches all node variables in all contexts.
      * Excludes input variables, but includes output vars, since they need no extra handling.
      * @return
      */
-    Iterator<QList<unsigned int>::const_iterator> nodeVars();
+    auto nodeVars() const -> decltype(Iterator<>::over(m_nodeVars)) {
+      return  Iterator<>::over(m_nodeVars);
+    }
 
     /**
      * @brief inputVars fetches all schematic-wide I/O-port variables
      * @return
      */
-    Iterator<QList<unsigned int>::const_iterator> inputVars();
+    auto inputVars() const -> decltype(Iterator<>::over(m_inputVars)) {
+      return  Iterator<>::over(m_inputVars);
+    }
 };
 
 } // namespace quantor
