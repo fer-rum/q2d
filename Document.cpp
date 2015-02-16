@@ -70,7 +70,7 @@ Document::schematic() {
  * @return
  */
 model::Model*
-Document::model() {
+Document::model() const {
     return this->data(DocumentRole::MODEL).value<model::Model*>();
 }
 

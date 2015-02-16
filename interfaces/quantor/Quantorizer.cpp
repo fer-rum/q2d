@@ -109,7 +109,7 @@ char const* Quantorizer::resultText(QuantorResult const  res) {
   return  TEXTS[r>4? 0 : r];
 }
 
-// #line 112 "Quantorizer.cpp"
+#line 112 "Quantorizer.cpp"
 #include <vector>
 class q2d::quantor::Quantorizer::YYStack {
   class Ele {

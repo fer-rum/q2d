@@ -14,6 +14,8 @@
 namespace q2d {
 
 // forward declaration
+class Document;
+
 namespace model {
 class Model;
 }
@@ -36,10 +38,10 @@ private:
 
     // the solver will return a zero-terminated array of int
     int* (*m_solverMain)(QICircuit const&, std::vector<int>&) = nullptr;
-    QList<QList<int>> m_solutions;
+    QList<int> m_solution;
 
     // helper functions
-    void buildContexts(const q2d::model::Model* contextSource);
+    void buildContexts(const q2d::model::Model& contextSource, const QString targetFunction);
     Iterator<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
 
     // creates the thread and collects the result once it finfished
@@ -49,7 +51,7 @@ public:
     QMap<QString, QIContext> contexts() const { return m_contexts; }
 
 public slots:
-    void slot_solveProblem();
+    void slot_solveProblem(q2d::Document& targetDocument, QString targetFunction);
 };
 
 

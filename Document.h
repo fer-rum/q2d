@@ -45,6 +45,7 @@ private:
      * @brief m_entries keeps all the relations between model and
      * schematic elements.
      */
+    // TODO no pointer
     QList<DocumentEntry*> m_entries;
 
     void addComponentPorts(metamodel::ComponentDescriptor* type,
@@ -54,7 +55,7 @@ public:
     explicit Document(QString name, Project* parent);
 
     gui::SchematicsScene* schematic();
-    model::Model* model();
+    model::Model* model() const;
     ComponentFactory* componentFactory() const;
 
     // TODO rename: instantiateComponent?
