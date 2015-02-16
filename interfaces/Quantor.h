@@ -1,7 +1,6 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include "quantor/Iterator.h"
 #include "quantor/QIContext.h"
 
 #include <vector>
@@ -42,7 +41,7 @@ private:
 
     // helper functions
     void buildContexts(const q2d::model::Model& contextSource, const QString targetFunction);
-    Iterator<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
+    QList<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
 
     // creates the thread and collects the result once it finfished
     void solve();

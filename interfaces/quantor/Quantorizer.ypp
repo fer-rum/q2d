@@ -77,8 +77,7 @@ inline Quantorizer::~Quantorizer() {}
 template<typename IT>
 void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
   quantor.scope(type);
-  while(vars) {
-    unsigned const  var = *vars++;
+  for(unsigned const  var : vars) {
     assert(var > 0);
     if(var > max_var)  max_var = var;
     quantor.add(var);
@@ -185,10 +184,10 @@ inline Result Quantorizer::solve0(QICircuit const &c, std::vector<int> &sol) {
 #endif
 
   // Parse in Component Specifications
-  for(auto  ctx = c.contexts(); ctx; ctx++) {
-    context = &*ctx;
-    for(auto  formulas = ctx->functionIterator(); formulas; formulas++) {
-      formula = formulas->c_str();
+  for(QIContext const &ctx : c.contexts()) {
+    context = &ctx;
+    for(std::string const&  f : ctx.functions()) {
+      formula = f.c_str();
       parse();
     }
   }

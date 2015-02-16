@@ -1,7 +1,6 @@
 #ifndef Q2D_QUANTOR_QICONTEXT_H
 #define Q2D_QUANTOR_QICONTEXT_H
 
-#include "Iterator.h"
 #include "VariableType.h"
 
 #include <QString>
@@ -70,10 +69,12 @@ public:
     VariableType typeOf(std::string varName) const;
 
     /**
-     * @brief functionIterator
-     * @return an iterator over all available function strings in the context
+     * @brief functions
+     * @return  all available function strings in the context
      */
-    Iterator<QList<std::string>::const_iterator> functionIterator() const; // TBP-compat
+    QList<std::string> const& functions() const {
+      return  m_functions;
+    }
 };
 
 } // namespace quantor
