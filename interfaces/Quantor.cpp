@@ -8,14 +8,15 @@
 
 #include "quantor/ParseException.h"
 #include "quantor/QICircuit.h"
+#include "quantor/Quantorizer.hpp"
 #include "Quantor.h"
 
 #include <QtDebug>
 
 using namespace q2d::quantor;
 
-QuantorInterface::QuantorInterface(int *(*solverMain)(const QICircuit &, std::vector<int> &)){
-    m_solverMain = solverMain;
+QuantorInterface::QuantorInterface(){
+    m_solverMain = Quantorizer::solve();
 }
 
 void

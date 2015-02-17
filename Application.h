@@ -1,6 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "interfaces/Quantor.h"
 #include "ApplicationContext.h"
 #include "Constants.h"
 
@@ -14,6 +15,7 @@ class Application : public QApplication {
 private:
     QSettings* m_appSettings;
     ApplicationContext* m_context;
+    quantor::QuantorInterface m_quantorInterface;
 
     void defaultSetting(QString name, QVariant defaultValue);
     void checkSettings();
@@ -28,8 +30,9 @@ public:
 
     static Application* instance();
 signals:
-
+    void signal_triggerQuantor(Document* document, QString targetFunction);
 public slots:
+
 };
 
 } // namespace q2d

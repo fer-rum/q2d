@@ -7,7 +7,8 @@
 using namespace q2d;
 using namespace q2d::constants;
 
-Application::Application(int &argc, char** argv[]) : QApplication(argc, *argv) {
+Application::Application(int &argc, char** argv[])
+    : QApplication(argc, *argv), m_context(this), m_quantorInterface() {
 
     this->setApplicationName("q2d");
     this->setOrganizationName("Fredo Erxleben");
@@ -19,8 +20,8 @@ Application::Application(int &argc, char** argv[]) : QApplication(argc, *argv) {
     this->m_appSettings = new QSettings();
     this->checkSettings();
 
-    m_context = new ApplicationContext(this);
-    Q_CHECK_PTR(m_context);
+    connect(this, &Application::signal_triggerQuantor,
+            m_quantorInterface, &quantor::QuantorInterface::slot_solveProblem);
 }
 
 Application::~Application() {
