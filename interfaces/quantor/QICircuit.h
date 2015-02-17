@@ -10,19 +10,17 @@ namespace quantor {
 class QICircuit {
 private:
 
-    QuantorInterface* m_interface;
+    QuantorInterface const &m_interface;
 
     // cached variables
     QList<unsigned int> m_configVars;
     QList<unsigned int> m_inputVars;
     QList<unsigned int> m_nodeVars;
 public:
-    QICircuit(QuantorInterface* interface);
+    QICircuit(QuantorInterface const &interface);
 
-    auto contexts() const
-      -> decltype(Iterator<>::over(m_interface->contexts().values())) {
-      auto const& ctxs = m_interface->contexts().values();
-      return  Iterator<>::over(ctxs);
+    auto contexts() const -> decltype(Iterator<>::over(m_interface.contexts())) {
+      return  Iterator<>::over(m_interface.contexts());
     }
 
     /**

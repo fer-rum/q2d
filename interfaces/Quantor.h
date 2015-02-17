@@ -47,8 +47,8 @@ private:
     // creates the thread and collects the result once it finfished
     void solve();
 public:
-    QuantorInterface();
-    QMap<QString, QIContext> contexts() const { return m_contexts; }
+    QuantorInterface(int * (*solverMain)(QICircuit const&, std::vector<int>&));
+    QMap<QString, QIContext> const& contexts() const { return m_contexts; }
 
 public slots:
     void slot_solveProblem(q2d::Document& targetDocument, QString targetFunction);
