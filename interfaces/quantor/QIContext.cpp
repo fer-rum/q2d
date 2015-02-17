@@ -1,5 +1,4 @@
 #include "QIContext.h"
-#include "Iterator.h"
 
 #include "../../model/ModelElement.h"
 #include "../../Util.h"
@@ -107,9 +106,4 @@ QIContext::typeOf(std::string varName) const {
     } else {
         return this->typeOf(var);
     }
-}
-
-Iterator<QList<std::string>::const_iterator>
-QIContext::functionIterator() const {
-  return  Iterator<QList<std::string>::const_iterator>(m_functions.begin(), m_functions.end());
 }
