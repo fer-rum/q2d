@@ -71,6 +71,7 @@ SOURCES +=\
     interfaces/quantor/QICircuit.cpp \
     interfaces/quantor/QIContext.cpp \
     interfaces/quantor/Quantorizer.cpp \
+    interfaces/quantor/Result.cpp \
 # including relevant picosat foles
     $$picosatDir/picosat.c \
     $$picosatDir/version.c \
@@ -120,6 +121,7 @@ HEADERS  +=\
     interfaces/quantor/QIContext.h \
     interfaces/quantor/Quantorizer.hpp \
     interfaces/quantor/VariableType.h \
+    interfaces/quantor/Result.h \
     $$picosatDir/*.h \
     $$quantorDir/*.h
 

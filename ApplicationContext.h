@@ -24,6 +24,7 @@ class Document;
 class ApplicationContext : public QObject {
     Q_OBJECT
 private:
+    Application* m_application;
     Project* m_currentProject = nullptr;
     gui::MainWindow* m_mainWindow;
     ComponentFactory* m_componentFactory;
@@ -56,6 +57,7 @@ signals:
     void signal_componentModelChanged(QStandardItemModel* model);
     void signal_saveProject();
     void signal_clearComponentTypes();
+    void signal_triggerQuantor(Document* document, QString targetFunction);
 
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);

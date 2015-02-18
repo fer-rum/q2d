@@ -15,12 +15,15 @@ using MainWindow = q2d::gui::MainWindow;
 
 ApplicationContext::ApplicationContext(Application* parent)
     : QObject(parent) {
-    this->m_componentFactory = new ComponentFactory(this);
+    Q_CHECK_PTR(parent);
+
+    m_application = parent;
+    m_componentFactory = new ComponentFactory(this);
 
     // create the main window
-    this->m_mainWindow = new gui::MainWindow(this);
-    this->m_mainWindow->setupSignalsAndSlots();
-    this->m_mainWindow->show();
+    m_mainWindow = new gui::MainWindow(this);
+    m_mainWindow->setupSignalsAndSlots();
+    m_mainWindow->show();
 
     this->setupSignalsAndSlots();
 
@@ -85,7 +88,9 @@ ApplicationContext::setupSignalsAndSlots() {
     connect(m_mainWindow, &MainWindow::signal_clearComponentTypes,
             m_componentFactory, &ComponentFactory::slot_clearHierarchy);
 
-
+    // ApplicationContext -> Application
+    connect(this, &ApplicationContext::signal_triggerQuantor,
+            m_application, &Application::signal_triggerQuantor);
 
 }
 
@@ -166,7 +171,6 @@ ApplicationContext::slot_newProject(QString name) {
 
     // create new empty project
     this->createProject(name);
-
 }
 
 

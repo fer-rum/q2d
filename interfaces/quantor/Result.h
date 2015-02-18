@@ -14,12 +14,12 @@ namespace q2d {
      * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
      */
     class Result {
-      ::QuantorResult const  m_val;
+      QuantorResult const  m_val;
 
       //- Construction / Destruction
     public:
-      Result(::QuantorResult const &val) : m_val(val) {
-	assert((0 <= val) && (val <= 40) && ((val%10) == 0));
+      Result(QuantorResult const &val) : m_val(val) {
+    assert((0 <= val) && (val <= 40) && ((val%10) == 0));
       }
       ~Result() {}
 

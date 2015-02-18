@@ -17,14 +17,19 @@ namespace gui {
 class SchematicsTab :
     public QWidget {
     Q_OBJECT
+private:
+    Ui::SchematicsTab* m_ui;
+    Document* m_relatedDocument;
 
 public:
     explicit SchematicsTab(QWidget* parent, Document* m_relatedDocument);
     virtual ~SchematicsTab();
 
-private:
-    Ui::SchematicsTab* m_ui;
-    Document* m_relatedDocument;
+signals:
+    void signal_triggerQuantor(Document* document, QString targetFunction);
+
+private slots:
+   void slot_requestedSatSolving();
 };
 
 } // namespace gui

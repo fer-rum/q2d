@@ -89,7 +89,9 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument) {
     SchematicsTab* newTab = new SchematicsTab(this->m_ui->schematicsTabWidget, relatedDocument);
     this->m_ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
-    // TODO connect signals and slots
+    // connect signals and slots
+    connect(newTab, &SchematicsTab::signal_triggerQuantor,
+            m_context, &ApplicationContext::signal_triggerQuantor);
 }
 
 void

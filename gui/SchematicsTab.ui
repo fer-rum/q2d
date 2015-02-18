@@ -15,21 +15,21 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="tabLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="functionLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="lbl_function">
          <property name="text">
           <string>Function:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="input_function"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btn_solve">
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Evaluate, if the given function can be satisfied by the circuit design.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>

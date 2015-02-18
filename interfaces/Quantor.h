@@ -21,12 +21,13 @@ class Model;
 
 namespace quantor {
 class QICircuit;
+class Result;
 
 /**
  * @brief The Quantor class provides utility functions and keeps the state necessary for interfacing with the tool quantor.
  */
 class QuantorInterface :
-        QObject {
+        public QObject {
     Q_OBJECT
 private:
 
@@ -36,7 +37,7 @@ private:
     QMap<QString, QIContext> m_contexts;
 
     // the solver will return a zero-terminated array of int
-    int* (*m_solverMain)(QICircuit const&, std::vector<int>&) = nullptr;
+    Result (*m_solverMain)(QICircuit const&, std::vector<int>&) = nullptr;
     QList<int> m_solution;
 
     // helper functions
@@ -46,11 +47,11 @@ private:
     // creates the thread and collects the result once it finfished
     void solve();
 public:
-    QuantorInterface(int * (*solverMain)(QICircuit const&, std::vector<int>&));
+    QuantorInterface();
     QMap<QString, QIContext> const& contexts() const { return m_contexts; }
 
 public slots:
-    void slot_solveProblem(q2d::Document& targetDocument, QString targetFunction);
+    void slot_solveProblem(q2d::Document* targetDocument, QString targetFunction);
 };
 
 

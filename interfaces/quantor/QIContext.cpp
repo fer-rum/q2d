@@ -52,7 +52,7 @@ QIContext::addFunction(QString function){
 
 void
 QIContext::assignVariable(QString varName, VariableType type) {
-    const QString logPrefix = "assignVariable(" + varName + ", " + (int)type + ")";
+    const QString logPrefix = "assignVariable(" + varName + ", " + util::intToString((int)type) + ")";
 
     if (m_variableMapping.contains(varName)) {
         qWarning() << logPrefix << "Duplicate variable name " << varName << "ignored";

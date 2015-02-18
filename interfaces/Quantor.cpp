@@ -9,6 +9,7 @@
 #include "quantor/ParseException.h"
 #include "quantor/QICircuit.h"
 #include "quantor/Quantorizer.hpp"
+#include "quantor/Result.h"
 #include "Quantor.h"
 
 #include <QtDebug>
@@ -16,7 +17,7 @@
 using namespace q2d::quantor;
 
 QuantorInterface::QuantorInterface(){
-    m_solverMain = Quantorizer::solve();
+    m_solverMain = &Quantorizer::solve;
 }
 
 void
@@ -56,10 +57,12 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource, QString 
 }
 
 void
-QuantorInterface::slot_solveProblem(Document &targetDocument, QString targetFunction) {
+QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunction) {
+
+    qDebug() << "SLOT QuantorInterface::solveProblem called.";
 
     // get the model
-    const model::Model* contextSource = targetDocument.model();
+    const model::Model* contextSource = targetDocument->model();
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
@@ -67,7 +70,7 @@ QuantorInterface::slot_solveProblem(Document &targetDocument, QString targetFunc
     Q_CHECK_PTR(m_solverMain);
 
     try {
-        this->m_solverMain(QICircuit(this), rawSolution);
+        this->m_solverMain(QICircuit(*this), rawSolution);
     } catch (ParseException exception){
         const QIContext failedCtx = exception.context();
         qWarning() << "In context" << m_contexts.key(failedCtx);

@@ -1,5 +1,8 @@
 #include "Application.h"
 
+#include "Document.h"
+
+#include <QObject>
 #include <QDir>
 #include <QtSvg/QGraphicsSvgItem>
 
@@ -8,7 +11,7 @@ using namespace q2d;
 using namespace q2d::constants;
 
 Application::Application(int &argc, char** argv[])
-    : QApplication(argc, *argv), m_context(this), m_quantorInterface() {
+    : QApplication(argc, *argv), m_context(new ApplicationContext(this)), m_quantorInterface() {
 
     this->setApplicationName("q2d");
     this->setOrganizationName("Fredo Erxleben");
@@ -21,7 +24,7 @@ Application::Application(int &argc, char** argv[])
     this->checkSettings();
 
     connect(this, &Application::signal_triggerQuantor,
-            m_quantorInterface, &quantor::QuantorInterface::slot_solveProblem);
+            &m_quantorInterface, &quantor::QuantorInterface::slot_solveProblem);
 }
 
 Application::~Application() {
