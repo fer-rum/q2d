@@ -6,14 +6,14 @@
 #include <cctype>
 #include <cassert>
 
-#include <strings.h>
+#include <string.h>
 
 #include "Quantor.h"
 #include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
 
- using namespace q2d::quantor;
+using namespace q2d::quantor;
 
 #line 18 "Quantorizer.hpp"
 #include <string>

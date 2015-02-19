@@ -76,17 +76,17 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
       unsigned  res = 0;
       switch(len) {
       case 2:
-    if(strncasecmp(formula, "OR", 2) == 0)  res = OR;
+    if(strncmp(formula, "or", 2) == 0)  res = OR;
     break;
       case 3:
-    if     (strncasecmp(formula, "AND", 3) == 0)  res = AND;
-    else if(strncasecmp(formula, "XOR", 3) == 0)  res = XOR;
-    else if(strncasecmp(formula, "NOR", 3) == 0)  res = NOR;
-    else if(strncasecmp(formula, "NOT", 3) == 0)  res = NOT;
+    if     (strncmp(formula, "and", 3) == 0)  res = AND;
+    else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
+    else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
+    else if(strncmp(formula, "not", 3) == 0)  res = NOT;
     break;
       case 4:
-    if     (strncasecmp(formula, "NAND", 4) == 0)  res = NAND;
-    else if(strncasecmp(formula, "XNOR", 4) == 0)  res = XNOR;
+    if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
+    else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
     break;
       }
       if(res == 0) {
