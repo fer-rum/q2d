@@ -3,6 +3,9 @@
 namespace q2d {
 namespace constants {
 
+
+QSize ICON_SIZE = QSize(48, 48);
+
 QString HIERARCHY_SEPERATOR    = "/";
 
 QString KEY_DIR_COMPONENTS  = "paths/componentsFolder";
@@ -12,6 +15,8 @@ QString KEY_FILE_BIT_GROUP  = "paths/symbols/bit_group";
 QString KEY_FILE_PORT_IN    = "paths/symbols/port_in";
 QString KEY_FILE_PORT_OUT   = "paths/symbols/port_out";
 QString KEY_FILE_PORT_INOUT = "paths/symbols/port_inout";
+QString KEY_FILE_OPORT_IN   = "paths/symbols/outside_port_in";
+QString KEY_FILE_OPORT_OUT  = "paths/symbols/outside_port_out";
 
 QString JSON_GENERAL_SIZE = "size";
 
@@ -47,6 +52,7 @@ QString GENERAL_TYPE_WIRE       = "wire";
 QString GENERAL_TYPE_UNDEFINED  = "undefined";
 
 QString MIME_COMPONENT_TYPE = "application/component-type";
+QString MIME_PORT_PLACEMENT = "application/port-placement";
 QString MIME_WIRE_START_POS = "application/wire-start-pos";
 
 QString FILE_COMPONENT_TREE    = "/components.q2tree";

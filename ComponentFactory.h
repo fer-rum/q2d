@@ -71,6 +71,13 @@ public:
                                    DocumentEntry* sender,
                                    DocumentEntry* receiver,
                                    QString id);
+    DocumentEntry* instantiateInputPort(Document* document,
+                                        QPointF position,
+                                        QString id);
+    DocumentEntry* instantiateOutputPort(Document* document,
+                                         QPointF position,
+                                         QString id);
+
     QJsonDocument exportHierarchy();
     void importHierarchy(QJsonDocument source);
 

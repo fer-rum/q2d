@@ -61,6 +61,8 @@ public:
     // TODO rename: instantiateComponent?
     void addComponent(QString typeId, QPoint position);
     void addWire(QString senderNodeId, QString receiverNodeId);
+    void addInputPort(QString id, QPointF pos);
+    void addOutputPort(QString id, QPointF pos);
 
     // intended for loading a document from Json
     void addEntry(DocumentEntry* entry);

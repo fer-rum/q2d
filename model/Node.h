@@ -14,8 +14,6 @@ namespace model {
 class Component;
 
 // TODO documentation
-// TODO visitor pattern
-// TODO implementation
 class Node : public ModelElement {
 private:
     QList<ModelElement*> drivenElements;
@@ -23,6 +21,7 @@ private:
 public:
     Node(Model* parent, DocumentEntry* relatedEntry);
 
+    // TODO rename to better reflect actual function
     void addDriver(ModelElement* driver);
     void addDrivenElement(ModelElement* drivenElement);
 };
@@ -30,10 +29,21 @@ public:
 // TODO documentation
 class Port : public Node {
 private:
-    enums::PortDirection direction;
+    enums::PortDirection m_direction;
 public:
+    /**
+     * @brief Port
+     * @param direction
+     * @param topLevel may be nullptr in case this is an outside port
+     * @param parent
+     * @param relatedEntry
+     */
     Port(enums::PortDirection direction, Component* topLevel, Model* parent,
          DocumentEntry* relatedEntry = nullptr);
+
+    enums::PortDirection direction() const{
+        return m_direction;
+    }
 
     virtual QStringList nodeVariables() const override;
 };

@@ -12,18 +12,17 @@ Node::Node(Model* parent, DocumentEntry* relatedEntry) : ModelElement(parent, re
 
 Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent,
            DocumentEntry* relatedEntry) : Node(parent, relatedEntry) {
-    Q_CHECK_PTR(topLevel);
     Q_CHECK_PTR(parent);
 
-    this->direction = direction;
+    m_direction = direction;
 
-    if (direction == enums::PortDirection::IN) {
+    if(topLevel != nullptr){
+    if (m_direction == enums::PortDirection::IN) {
         this->addDrivenElement(topLevel);
-    } else if (direction == enums::PortDirection::OUT) {
+    } else if (m_direction == enums::PortDirection::OUT) {
         this->addDriver(topLevel);
     }
-
-    // TODO how to handle INOUT?
+    }
 }
 
 

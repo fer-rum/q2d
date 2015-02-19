@@ -48,6 +48,7 @@ private:
     QBrush  m_defaultBrush;
     QPointF m_dragStartPosition;
 
+    // TODO is this duplicate information really needed
     q2d::model::enums::PortDirection m_direction;
 
     // for drag and drop
@@ -75,9 +76,35 @@ public:
     // which is measured from the upper left coner
     virtual QPointF pos() const;
 
+    /**
+     * @brief PortGraphicsItem::PortGraphicsItem
+     * This is the default constructor used for the ports of components.
+     * The item will automatically be added to the scene, its parent belongs to.
+     *
+     * @param text
+     * @param relativeCenterPosition is the center position of this instance
+     * in coordinates relative to the the center of its parent.
+     * @param direction
+     * @param parent
+     */
     explicit PortGraphicsItem(QPointF relativeCenterPosition,
                               model::enums::PortDirection direction,
                               ComponentGraphicsItem* parent);
+
+    /**
+     * @brief PortGraphicsItem
+     * This is the more general constructor if one needs more special things
+     * like input/output ports for the schematic.
+     * @param relativeCenterPosition
+     * @param direction
+     * @param scene
+     * @param parent
+     */
+    PortGraphicsItem(QPointF relativeCenterPosition,
+                     model::enums::PortDirection direction,
+                     SchematicsScene* scene,
+                     QGraphicsSvgItem* decal = nullptr,
+                     ComponentGraphicsItem* parent = nullptr);
 
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);

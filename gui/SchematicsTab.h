@@ -27,9 +27,12 @@ public:
 
 signals:
     void signal_triggerQuantor(Document* document, QString targetFunction);
+    void signal_addInputPort(Document* document, QString id);
+    void signal_addOutputPort(Document* document, QString id);
 
 private slots:
    void slot_requestedSatSolving();
+   void slot_addPortButtonClicked();
 };
 
 } // namespace gui

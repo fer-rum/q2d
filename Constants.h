@@ -1,13 +1,14 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QSize>
 #include <QString>
 
 namespace q2d {
 namespace constants {
 
-// internally used constants
-
+// TODO move to settings and make changeable
+extern QSize ICON_SIZE;
 
 // File extensions for saving and loading
 
@@ -87,9 +88,12 @@ extern QString KEY_FILE_BIT_GROUP;
 extern QString KEY_FILE_PORT_IN;
 extern QString KEY_FILE_PORT_INOUT;
 extern QString KEY_FILE_PORT_OUT;
+extern QString KEY_FILE_OPORT_IN;
+extern QString KEY_FILE_OPORT_OUT;
 
 // custom MIME types
 extern QString MIME_COMPONENT_TYPE;
+extern QString MIME_PORT_PLACEMENT;
 extern QString MIME_WIRE_START_POS;
 
 } // namespace constants

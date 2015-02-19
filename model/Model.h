@@ -17,6 +17,10 @@ class Conductor;
 class Node;
 class Port;
 
+namespace enums {
+enum class PortDirection;
+}
+
 // TODO documentation
 class Model : public QObject {
     Q_OBJECT
@@ -25,11 +29,15 @@ private:
     QString m_name;
     QList<Component*> m_components;
     QList<Conductor*> m_conductors;
-    QList<Port*> m_outsidePorts;
+    QList<Port*> m_inputPorts;
+    QList<Port*> m_outputPorts;
 public:
     Model(Document* parent);
 
     void addComponent(Component* toAdd);
+    void addInputPort(Port* inputPort);
+    void addOutputPort(Port* outputPort);
+
     Conductor* connect(Node* start, Node* end);
 
     QList<Component*> components() const {
@@ -41,7 +49,9 @@ public:
     }
 
     QList<Port*> outsidePorts() const {
-        return m_outsidePorts;
+        QList<Port*> result = QList<Port*>(m_inputPorts);
+        result.append(m_outputPorts);
+        return result;
     }
 };
 

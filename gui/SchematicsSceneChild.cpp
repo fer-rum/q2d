@@ -41,12 +41,12 @@ SchematicsSceneChild::addActual(QGraphicsItem* actual) {
  * @brief SchematicsSceneChild::actual gives the actual element
  * under the assumption that there is only exactly one item
  * in the list of actuals.
+ * If there are more, the first one will be returned
  * @return
  */
 QAbstractGraphicsShapeItem*
 SchematicsSceneChild::actual() const {
     Q_ASSERT(!m_actuals.isEmpty());
-    Q_ASSERT(m_actuals.count() == 1);
     QAbstractGraphicsShapeItem* result =
         dynamic_cast<QAbstractGraphicsShapeItem*>(m_actuals.first());
     Q_CHECK_PTR(result);

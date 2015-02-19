@@ -1,5 +1,6 @@
 #include "ComponentFactory.h"
 
+#include "Application.h"
 #include "ApplicationContext.h"
 #include "Constants.h"
 #include "Document.h"
@@ -293,10 +294,7 @@ ComponentFactory::instantiatePort(Document* document,
              << "with direction" << model::enums::PortDirectionToString(direction);
 
     // add port graphics to schematic
-    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(
-        position,
-        direction,
-        schematicComponent);
+    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, direction, schematicComponent);
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
     schematicPort->setToolTip(id);
@@ -320,6 +318,55 @@ ComponentFactory::instantiatePort(Document* document,
 
     return entry;
 }
+
+DocumentEntry*
+ComponentFactory::instantiateInputPort(Document *document, QPointF position, QString id){
+
+    // NOTE as seen from the inside of the schematic, the Input Port actually is an output that emits
+    // data into the schematic
+
+    QString filePath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
+    gui::PortGraphicsItem* schematicPort =
+            new gui::PortGraphicsItem(position, model::enums::PortDirection::OUT,
+                                      document->schematic(), new QGraphicsSvgItem(filePath));
+    document->schematic()->addItem(schematicPort);
+
+    schematicPort->setToolTip(id);
+
+    model::Port* modelPort = new model::Port(model::enums::PortDirection::OUT, nullptr, document->model());
+    document->model()->addInputPort(modelPort);
+
+    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT, modelPort, schematicPort);
+    Q_CHECK_PTR(entry);
+
+    document->addEntry(entry);
+    return entry;
+}
+
+DocumentEntry*
+ComponentFactory::instantiateOutputPort(Document *document, QPointF position, QString id){
+
+    // NOTE as seen from the inside of the schematic, the Output Port actually is an output that takes
+    // data out of the schematic
+
+    QString filePath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();
+    gui::PortGraphicsItem* schematicPort =
+            new gui::PortGraphicsItem(position, model::enums::PortDirection::IN,
+                                      document->schematic(), new QGraphicsSvgItem(filePath));
+    document->schematic()->addItem(schematicPort);
+
+    schematicPort->setToolTip(id);
+
+    model::Port* modelPort = new model::Port(model::enums::PortDirection::IN, nullptr, document->model());
+    document->model()->addOutputPort(modelPort);
+
+    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT, modelPort, schematicPort);
+    Q_CHECK_PTR(entry);
+
+    document->addEntry(entry);
+    return entry;
+}
+
 DocumentEntry*
 ComponentFactory::instantiateWire(Document* document, DocumentEntry* sender,
                                   DocumentEntry* receiver, QString id) {

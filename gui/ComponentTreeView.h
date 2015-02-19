@@ -11,8 +11,6 @@ namespace gui {
 
 class ComponentTreeView : public QTreeView {
 private:
-    // TODO make changeable via settings
-    static QSize ICON_SIZE;
 
     QPoint dragStartPosition;
 

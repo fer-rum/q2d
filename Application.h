@@ -31,7 +31,9 @@ public:
     static Application* instance();
 signals:
     void signal_triggerQuantor(Document* document, QString targetFunction);
+
 public slots:
+    void slot_resetSettings();
 
 };
 

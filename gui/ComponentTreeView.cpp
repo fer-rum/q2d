@@ -14,9 +14,6 @@
 using namespace q2d::gui;
 using namespace q2d::constants;
 
-
-QSize ComponentTreeView::ICON_SIZE = QSize(48, 48);
-
 ComponentTreeView::ComponentTreeView(QWidget* parent) :
     QTreeView(parent) {}
 

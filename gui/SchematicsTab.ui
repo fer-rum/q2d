@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="2" column="0">
     <layout class="QVBoxLayout" name="tabLayout">
      <item>
-      <layout class="QHBoxLayout" name="functionLayout">
+      <layout class="QHBoxLayout" name="toolsLayout">
        <item>
         <widget class="QLabel" name="lbl_function">
          <property name="text">
@@ -38,11 +38,54 @@
          </property>
         </widget>
        </item>
+       <item>
+        <spacer name="spacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QComboBox" name="sel_direction">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the direction of newly created ports that connect your schematic design to the outside world.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This does not affect the ports of components in any way.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input: &lt;/span&gt;The data flows from the outside into your design.&lt;/p&gt;&lt;p&gt;Note that - when viewed from the inside of your design - an input port appears as if it is emitting data.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Output:&lt;/span&gt; The data flows from your design to the outside.&lt;/p&gt;&lt;p&gt;Note that - when viewed from the inside of your design - an output port appears as if it is taking in data.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="insertPolicy">
+          <enum>QComboBox::NoInsert</enum>
+         </property>
+         <item>
+          <property name="text">
+           <string>Input</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Output</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_addPort">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adds a port that connects your schematic design to the outside world.&lt;/p&gt;&lt;p&gt;Select your desired direction beforehand in the combo box to the left.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Add Port</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
+   <item row="3" column="0">
     <widget class="q2d::gui::SchematicsView" name="schematicsView">
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>

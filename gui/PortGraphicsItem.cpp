@@ -37,30 +37,26 @@ QPointF PortGraphicsItem::m_wireDrawingStart = QPoint();
 QPointF PortGraphicsItem::m_wireDrawingEnd = QPoint();
 QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
 
-/**
- * @brief PortGraphicsItem::PortGraphicsItem
- * The item will automatically be added to the scene, its parent belongs to.
- *
- * @param text
- * @param relativeCenterPosition is the center position of this instance
- * in coordinates relative to the the center of its parent.
- * @param direction
- * @param parent
- */
+PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
+                 model::enums::PortDirection direction,
+                 ComponentGraphicsItem *parent)
+    : PortGraphicsItem(relativeCenterPosition, direction, parent->scene(), nullptr, parent) {
+    Q_CHECK_PTR(parent);
+    Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
+}
+
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
                                    model::enums::PortDirection direction,
+                                   SchematicsScene* scene, QGraphicsSvgItem* decal,
                                    ComponentGraphicsItem* parent)
-    : SchematicsSceneChild(parent->SchematicsSceneChild::scene(),
-                           parent) {
+    : SchematicsSceneChild(scene, parent) {
     /* TODO: known quasi-bug
      * Passing an anonymous new QGraphicsEllipseItem directly into the constructor
      * of the SchematicsSceneChild leads to a SIGSEGV.
      *
      * I have as for now no idea why…
      */
-
-    Q_CHECK_PTR(parent);
-    Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
+    Q_CHECK_PTR(scene);
 
     QAbstractGraphicsShapeItem* newActual = new QGraphicsEllipseItem(0, 0, DIAMETER, DIAMETER, this);
     Q_CHECK_PTR(newActual);
@@ -90,6 +86,9 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     newActual->setBrush(this->m_defaultBrush);
 
     this->addActual(newActual);
+    if(decal != nullptr){
+        this->addActual(decal);
+    }
 
     this->setPos(relativeCenterPosition - CENTER_OFFSET);
 

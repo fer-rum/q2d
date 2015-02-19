@@ -2,6 +2,7 @@
 #include "Conductor.h"
 #include "Node.h"
 #include "Model.h"
+#include "../Enumerations.h"
 
 #include "../Document.h"
 
@@ -16,7 +17,7 @@ using namespace q2d::model;
  * @param parent must not be null
  */
 Model::Model(Document* parent)
-    : QObject(parent), m_components(), m_conductors(), m_outsidePorts() {
+    : QObject(parent), m_components(), m_conductors(), m_inputPorts(), m_outputPorts() {
 
     Q_CHECK_PTR(parent);
 
@@ -32,6 +33,21 @@ Model::addComponent(Component* toAdd) {
 
     qDebug() << "Model: Added component of type \"" << toAdd->descriptor()->text() << "\"";
 }
+
+void
+Model::addInputPort(Port* inputPort){
+    Q_CHECK_PTR(inputPort);
+    Q_ASSERT(inputPort->direction() == enums::PortDirection::OUT);
+    m_inputPorts.append(inputPort);
+}
+
+void
+Model::addOutputPort(Port* outputPort){
+    Q_CHECK_PTR(outputPort);
+    Q_ASSERT(outputPort->direction() == enums::PortDirection::IN);
+    m_outputPorts.append(outputPort);
+}
+
 
 Conductor*
 Model::connect(Node* start, Node* end) {

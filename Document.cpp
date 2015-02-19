@@ -101,6 +101,17 @@ Document::addComponent(QString typeId, QPoint position) {
     m_componentFactory->instantiatePorts(this, type, entry);
 }
 
+
+void
+Document::addInputPort(QString id, QPointF pos){
+    m_componentFactory->instantiateInputPort(this, pos, id);
+}
+
+void
+Document::addOutputPort(QString id, QPointF pos){
+    m_componentFactory->instantiateOutputPort(this, pos, id);
+}
+
 /**
  * @brief Document::entry searches for an document entry given by an id string.
  * @param id

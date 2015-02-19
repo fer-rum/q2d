@@ -56,11 +56,20 @@ Application::checkSettings() {
     this->defaultSetting(KEY_FILE_PORT_INOUT,   basePath + "/icons/port_inout.svg");
     this->defaultSetting(KEY_FILE_PORT_OUT,     basePath + "/icons/port_out.svg");
     this->defaultSetting(KEY_FILE_BIT_GROUP,    basePath + "/icons/bit_group.svg");
+    this->defaultSetting(KEY_FILE_OPORT_IN,     basePath + "/icons/outside_port_in.svg");
+    this->defaultSetting(KEY_FILE_OPORT_OUT,    basePath + "/icons/outside_port_out.svg");
 }
 
 QVariant
 Application::getSetting(QString key) {
     return this->m_appSettings->value(key);
+}
+
+
+void
+Application::slot_resetSettings(){
+    m_appSettings->clear();
+    this->checkSettings();
 }
 
 Application*

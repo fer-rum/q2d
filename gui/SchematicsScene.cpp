@@ -48,7 +48,8 @@ void
 SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
     QMimeData const* mimeData = event->mimeData();
 
-    if (mimeData->hasFormat(MIME_COMPONENT_TYPE)) {
+    if (mimeData->hasFormat(MIME_COMPONENT_TYPE)
+            || mimeData ->hasFormat(MIME_PORT_PLACEMENT)) {
         m_dragOver = true;
         event->accept();
     } else {
@@ -79,13 +80,25 @@ SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 void
 SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
     // TODO find a proper way to scale the scene and the viewport when adding items
+    // TODO refactor into less ugly code
 
     QMimeData const* mimeData = event->mimeData();
-    if (m_dragOver) {
-        QString path = mimeData->text();
-        QPoint dropPosition = event->scenePos().toPoint();
+    QPoint dropPosition = event->scenePos().toPoint();
+    Document* parent = dynamic_cast<Document*>(this->parent());
 
-        dynamic_cast<Document*>(this->parent())->addComponent(path, dropPosition);
+    if (m_dragOver) {
+        if(mimeData->hasFormat(MIME_COMPONENT_TYPE)){
+        QString path = mimeData->text();
+
+        parent->addComponent(path, dropPosition);
+        } else if(mimeData->hasFormat(MIME_PORT_PLACEMENT)){
+
+            if(QString(mimeData->data(MIME_PORT_PLACEMENT)) == "Input"){
+                parent->addInputPort(mimeData->text(), dropPosition);
+            } else {
+                parent->addOutputPort(mimeData->text(), dropPosition);
+            }
+        }
         event->accept();
         this->update(); // TODO better emit this->changed?
     } else {

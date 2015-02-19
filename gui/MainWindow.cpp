@@ -47,6 +47,8 @@ MainWindow::setupSignalsAndSlots() {
             m_context, &ApplicationContext::signal_saveProject);
     connect(m_ui->action_loadProject, &QAction::triggered,
             this, &MainWindow::slot_loadProject);
+    connect(m_ui->action_resetSettings, &QAction::triggered,
+            m_application, &Application::slot_resetSettings);
 
 
     // buttons
