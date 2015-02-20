@@ -318,12 +318,13 @@ void q2d::quantor::Quantorizer::parse() {
     while(true) {
       signed short const  yyact = yyaction[*yystack][yytok];
       if(yyact == 0) {
-        std::string                yymsg("Syntax Error, expecting one of: ");
+        std::string                yymsg("Expecting (");
         signed short const *const  yyrow = yyaction[*yystack];
-        for(unsigned  i = 0; i < YYINTERN; i++) {
-          if(yyrow[i])  yymsg.append(yyterms[i]).append(", ");
+        for(unsigned  i = 0; i < 12; i++) {
+          if(yyrow[i])  yymsg.append(yyterms[i]) += '|';
         }
-        error(yymsg.erase(yymsg.length()-2));
+        *yymsg.rbegin() = ')';
+        error(yymsg.append(" instead of ").append(yyterms[yytok]));
         return;
       }
       if(yyact >  1) { // shift
@@ -350,7 +351,7 @@ case 1: {
         addClause( yystack[yylen - 1], -yystack[yylen - 3]);
         addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
           
-#line 353 "Quantorizer.cpp"
+#line 354 "Quantorizer.cpp"
 break;
 }
 case 2: {
@@ -362,7 +363,7 @@ case 2: {
         addClause(-res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 365 "Quantorizer.cpp"
+#line 366 "Quantorizer.cpp"
 break;
 }
 case 3: {
@@ -374,7 +375,7 @@ case 3: {
         addClause( res, -yystack[yylen - 3]);
         yylval = res;
           
-#line 377 "Quantorizer.cpp"
+#line 378 "Quantorizer.cpp"
 break;
 }
 case 4: {
@@ -387,7 +388,7 @@ case 4: {
         addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
-#line 390 "Quantorizer.cpp"
+#line 391 "Quantorizer.cpp"
 break;
 }
 case 5: {
@@ -399,7 +400,7 @@ case 5: {
         addClause( res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 402 "Quantorizer.cpp"
+#line 403 "Quantorizer.cpp"
 break;
 }
 case 6: {
@@ -411,7 +412,7 @@ case 6: {
         addClause(-res, -yystack[yylen - 3]);
         yylval = res;
           
-#line 414 "Quantorizer.cpp"
+#line 415 "Quantorizer.cpp"
 break;
 }
 case 7: {
@@ -424,25 +425,25 @@ case 7: {
         addClause(-res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
-#line 427 "Quantorizer.cpp"
+#line 428 "Quantorizer.cpp"
 break;
 }
 case 8: {
 #line 269 "Quantorizer.ypp"
  yylval = yystack[yylen - 1]; 
-#line 433 "Quantorizer.cpp"
+#line 434 "Quantorizer.cpp"
 break;
 }
 case 9: {
 #line 270 "Quantorizer.ypp"
  yylval = yystack[yylen - 1]; 
-#line 439 "Quantorizer.cpp"
+#line 440 "Quantorizer.cpp"
 break;
 }
 case 10: {
 #line 271 "Quantorizer.ypp"
  yylval = yystack[yylen - 2]; 
-#line 445 "Quantorizer.cpp"
+#line 446 "Quantorizer.cpp"
 break;
 }
 case 11: {
@@ -453,7 +454,7 @@ case 11: {
         addClause(-res, -yystack[yylen - 2]);
         yylval = res;
       
-#line 456 "Quantorizer.cpp"
+#line 457 "Quantorizer.cpp"
 break;
 }
         }
