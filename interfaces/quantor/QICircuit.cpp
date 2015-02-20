@@ -5,10 +5,10 @@
 using namespace q2d::quantor;
 
 QICircuit::QICircuit(QuantorInterface const &interface) : m_interface(interface) {
-    for(QIContext const &context : interface.contexts()) {
-        for (QString const &varName : context.varNames()) {
+    for (QIContext const & context : interface.contexts()) {
+        for (QString const & varName : context.varNames()) {
             unsigned int const  var = context[varName.toStdString()];
-            switch(context.typeOf(var)){
+            switch (context.typeOf(var)) {
             case VariableType::CONFIG :
                 m_configVars.append(var);
                 break;
@@ -18,8 +18,9 @@ QICircuit::QICircuit(QuantorInterface const &interface) : m_interface(interface)
             case VariableType::NODE :
                 m_nodeVars.append(var);
                 break;
-            default:;
-            // TODO warning
+            default:
+                ;
+                // TODO warning
             }
         }
     }

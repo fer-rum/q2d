@@ -26,6 +26,22 @@ enum ComponentDescriptorType {
     PORT_DESCRIPTOR
 };
 
+namespace enums {
+
+enum class DocumentEntryType {
+    COMPONENT,
+    COMPONENT_PORT,
+    OUTSIDE_PORT,
+    WIRE,
+    UNDEFINED
+};
+
+extern QMap<DocumentEntryType, QString> map_DocumentEntryType;
+QString DocumentEntryTypeToString(const DocumentEntryType type);
+DocumentEntryType StringToDocumentEntryType(const QString string);
+
+}
+
 namespace metamodel {
 namespace enums {
 

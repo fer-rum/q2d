@@ -1,5 +1,6 @@
 #include "DocumentEntry.h"
 #include "Document.h"
+#include "Enumerations.h"
 #include "Constants.h"
 #include "model/ModelElement.h"
 
@@ -9,40 +10,7 @@ using namespace q2d;
 using namespace q2d::constants;
 using namespace q2d::gui;
 
-QString
-q2d::DocumentEntryTypeToString(DocumentEntryType type) {
-
-    switch (type) {
-    case COMPONENT :
-        return GENERAL_TYPE_COMPONENT;
-    case PORT :
-        return GENERAL_TYPE_PORT;
-    case WIRE :
-        return GENERAL_TYPE_WIRE;
-    default :
-        return GENERAL_TYPE_UNDEFINED;
-    }
-}
-
-// TODO constness
-DocumentEntryType
-q2d::StringToDocumentEntryType(QString string) {
-
-    string = string.trimmed().toLower();
-
-    if (string == GENERAL_TYPE_COMPONENT) {
-        return DocumentEntryType::COMPONENT;
-    }
-    if (string == GENERAL_TYPE_PORT) {
-        return DocumentEntryType::PORT;
-    }
-    if (string == GENERAL_TYPE_WIRE) {
-        return DocumentEntryType::WIRE;
-    }
-    return DocumentEntryType::UNDEFINED;
-}
-
-DocumentEntry::DocumentEntry(QString id, DocumentEntryType type,
+DocumentEntry::DocumentEntry(QString id, enums::DocumentEntryType type,
                              model::ModelElement* modelElement,
                              SchematicsSceneChild* schematicElement,
                              DocumentEntry* parent) {
@@ -67,7 +35,7 @@ DocumentEntry::id() const {
     return m_id;
 }
 
-DocumentEntryType
+enums::DocumentEntryType
 DocumentEntry::type() {
     return m_type;
 }

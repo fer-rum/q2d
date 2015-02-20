@@ -103,12 +103,12 @@ Document::addComponent(QString typeId, QPoint position) {
 
 
 void
-Document::addInputPort(QString id, QPointF pos){
+Document::addInputPort(QString id, QPointF pos) {
     m_componentFactory->instantiateInputPort(this, pos, id);
 }
 
 void
-Document::addOutputPort(QString id, QPointF pos){
+Document::addOutputPort(QString id, QPointF pos) {
     m_componentFactory->instantiateOutputPort(this, pos, id);
 }
 

@@ -87,13 +87,13 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
     Document* parent = dynamic_cast<Document*>(this->parent());
 
     if (m_dragOver) {
-        if(mimeData->hasFormat(MIME_COMPONENT_TYPE)){
-        QString path = mimeData->text();
+        if (mimeData->hasFormat(MIME_COMPONENT_TYPE)) {
+            QString path = mimeData->text();
 
-        parent->addComponent(path, dropPosition);
-        } else if(mimeData->hasFormat(MIME_PORT_PLACEMENT)){
+            parent->addComponent(path, dropPosition);
+        } else if (mimeData->hasFormat(MIME_PORT_PLACEMENT)) {
 
-            if(QString(mimeData->data(MIME_PORT_PLACEMENT)) == "Input"){
+            if (QString(mimeData->data(MIME_PORT_PLACEMENT)) == "Input") {
                 parent->addInputPort(mimeData->text(), dropPosition);
             } else {
                 parent->addOutputPort(mimeData->text(), dropPosition);

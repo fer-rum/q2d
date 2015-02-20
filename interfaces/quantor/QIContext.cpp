@@ -3,6 +3,9 @@
 #include "../../model/ModelElement.h"
 #include "../../Util.h"
 
+// for debug purposes
+#include "../../DocumentEntry.h"
+
 #include "QtDebug"
 
 using namespace q2d::quantor;
@@ -11,27 +14,35 @@ QIContext::QIContext(unsigned int lowestIndex,
                      model::ModelElement* const contextSource )
     : QIContext(lowestIndex) {
     this->addModelElement(*contextSource);
+    qDebug() << "Context Creation: creating context for" << contextSource->relatedEntry()->id();
 }
 
-QIContext::QIContext(unsigned int lowestIndex){
+QIContext::QIContext(unsigned int lowestIndex) {
     m_lowestIndex = lowestIndex;
     m_highestIndex = m_lowestIndex - 1;
+    qDebug() << "Context Creation: lowest index is" << util::intToString(m_lowestIndex);
 }
 
 bool
 QIContext::operator==(QIContext const &other) const {
-    if(this == &other){ return true; }
+    if (this == &other) {
+        return true;
+    }
 
-    if(m_lowestIndex != other.m_lowestIndex
-            || m_highestIndex != other.m_highestIndex){ return false; }
+    if (m_lowestIndex != other.m_lowestIndex
+            || m_highestIndex != other.m_highestIndex) {
+        return false;
+    }
 
-    if(m_variableMapping == other.m_variableMapping
-            && m_typeMapping == other.m_typeMapping) { return true; }
+    if (m_variableMapping == other.m_variableMapping
+            && m_typeMapping == other.m_typeMapping) {
+        return true;
+    }
     return false;
 }
 
 void
-QIContext::addModelElement(model::ModelElement const &element){
+QIContext::addModelElement(model::ModelElement const &element) {
     for (QString varName : element.nodeVariables()) {
         this->assignVariable(varName, VariableType::NODE);
     }
@@ -46,7 +57,7 @@ QIContext::addModelElement(model::ModelElement const &element){
 }
 
 void
-QIContext::addFunction(QString function){
+QIContext::addFunction(QString function) {
     m_functions.append(function.toStdString());
 }
 
@@ -57,11 +68,11 @@ QIContext::assignVariable(QString varName, VariableType type) {
     if (m_variableMapping.contains(varName)) {
         qWarning() << logPrefix << "Duplicate variable name " << varName << "ignored";
     } else {
-        qDebug() << logPrefix << "Variable assignment:"
-                 << varName << "->" << util::intToString(m_highestIndex);
         m_highestIndex ++;
         m_variableMapping.insert(varName, m_highestIndex);
         m_typeMapping.insert(m_highestIndex, type);
+        qDebug() << logPrefix << "Variable assignment:"
+                 << varName << "->" << util::intToString(m_highestIndex);
     }
 }
 
@@ -81,6 +92,7 @@ QIContext::operator[](std::string const &varName) const {
     if (m_variableMapping.contains(name)) {
         return m_variableMapping[name];
     } else {
+        qDebug() << "QIContext::operator[" << &varName << "] failed";
         return 0;
     }
 }
