@@ -217,7 +217,7 @@ Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
 %token IDENT
 %start spec
 %%
-spec    : expr '=' expr {
+spec    : expr | expr '=' expr {
         addClause( $1, -$3);
         addClause(-$1,  $3);
           }
