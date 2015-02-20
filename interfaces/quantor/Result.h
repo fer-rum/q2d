@@ -5,6 +5,7 @@ extern "C" {
 #include "quantor-3.2/quantor.h"
 }
 #include <cassert>
+#include <ostream>
 
 namespace q2d {
   namespace quantor {
@@ -35,6 +36,11 @@ namespace q2d {
       /** Text representation of the original detailed ::QuantorResult. */
       operator char const*() const;
     };
+
+    inline std::ostream& operator<<(std::ostream &out, Result  r) {
+      out << r.operator char const*();
+      return  out;
+    }
   }
 }
 #endif
