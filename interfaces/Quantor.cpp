@@ -16,12 +16,13 @@
 
 using namespace q2d::quantor;
 
-QuantorInterface::QuantorInterface(){
+QuantorInterface::QuantorInterface() {
     m_solverMain = &Quantorizer::solve;
 }
 
 void
-QuantorInterface::buildContexts(q2d::model::Model const &contextSource, QString const targetFunction) {
+QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
+                                QString const targetFunction) {
 
     const QString GLOBAL_CONTEXT_NAME = "global";
 
@@ -35,18 +36,18 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource, QString 
     QIContext globalContext = QIContext(currentIndex);
     globalContext.addFunction(targetFunction);
 
-    for(model::ModelElement* wire : contextSource.conductors()){
+    for (model::ModelElement * wire : contextSource.conductors()) {
         globalContext.addModelElement(*wire);
     }
 
-    for(model::ModelElement* port : contextSource.outsidePorts()){
+    for (model::ModelElement * port : contextSource.outsidePorts()) {
         globalContext.addModelElement(*port);
     }
     currentIndex = globalContext.highestIndex() + 1;
     m_contexts.insert(GLOBAL_CONTEXT_NAME, globalContext);
 
     qDebug() << "Building component contexts";
-    for(model::ModelElement* c : contextSource.components()){
+    for (model::ModelElement * c : contextSource.components()) {
         QIContext newContext = QIContext(currentIndex, c);
         currentIndex = newContext.highestIndex() + 1;
         m_contexts.insert(c->relatedEntry()->id(), newContext);
@@ -69,8 +70,8 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     try {
         Result result = this->m_solverMain(QICircuit(*this), rawSolution);
         qDebug() << QString(result);
-    } catch (ParseException const &exception){
-        const QIContext& failedCtx = exception.context();
+    } catch (ParseException const &exception) {
+        const QIContext &failedCtx = exception.context();
         qWarning() << "In context" << m_contexts.key(failedCtx);
         qWarning() << QString::fromStdString(exception.message());
         return;

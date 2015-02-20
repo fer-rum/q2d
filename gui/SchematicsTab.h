@@ -31,8 +31,8 @@ signals:
     void signal_addOutputPort(Document* document, QString id);
 
 private slots:
-   void slot_requestedSatSolving();
-   void slot_addPortButtonClicked();
+    void slot_requestedSatSolving();
+    void slot_addPortButtonClicked();
 };
 
 } // namespace gui

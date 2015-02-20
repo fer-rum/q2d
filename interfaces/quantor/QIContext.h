@@ -72,8 +72,8 @@ public:
      * @brief functions
      * @return  all available function strings in the context
      */
-    QList<std::string> const& functions() const {
-      return  m_functions;
+    QList<std::string> const &functions() const {
+        return  m_functions;
     }
 };
 

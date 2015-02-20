@@ -167,7 +167,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
 
     QString id = json.value(JSON_DOCENTRY_ID).toString();
     QString typeString = json.value(JSON_DOCENTRY_TYPE).toString();
-    DocumentEntryType type = StringToDocumentEntryType(typeString);
+    enums::DocumentEntryType type = enums::StringToDocumentEntryType(typeString);
 
     qDebug() << "Parsing document entry" << id << "of type" << typeString;
 
@@ -188,17 +188,20 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     }
 
     switch (type) {
-    case COMPONENT :
+    case enums::DocumentEntryType::COMPONENT :
         document->componentFactory()->instantiateComponent(
             document, typeId, position, id);
         break;
-    case PORT : {
+    case enums::DocumentEntryType::COMPONENT_PORT : {
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         document->componentFactory()->instantiatePort(
             document, parent, position, model::enums::StringToPortDirection(directionString), id);
     }
     break;
-    case WIRE : {
+    case enums::DocumentEntryType::OUTSIDE_PORT:
+        // TODO implement
+        break;
+    case enums::DocumentEntryType::WIRE : {
         QJsonObject additional = schematicJson.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
         Q_ASSERT(!additional.isEmpty());
 
@@ -212,7 +215,8 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     }
     break;
     default:
-        ;
+        qDebug() << "Unknown type of component entry"
+                 ;
         // ignore everything else for now
     }
 

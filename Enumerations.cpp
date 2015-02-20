@@ -1,6 +1,35 @@
 #include "Enumerations.h"
 
 using namespace q2d;
+using namespace q2d::enums;
+
+
+// initialize the mappings from enums to strings
+QMap<DocumentEntryType, QString>
+q2d::enums::map_DocumentEntryType {
+    {DocumentEntryType::COMPONENT,      "component"     },
+    {DocumentEntryType::COMPONENT_PORT, "component_port"},
+    {DocumentEntryType::OUTSIDE_PORT,   "outside_port"  },
+    {DocumentEntryType::WIRE,           "wire"          },
+    {DocumentEntryType::UNDEFINED,      "undefined"     }
+};
+
+QString
+q2d::enums::DocumentEntryTypeToString(const DocumentEntryType type) {
+    if (map_DocumentEntryType.contains(type)) {
+        return map_DocumentEntryType[type];
+    } else {
+        return map_DocumentEntryType[DocumentEntryType::UNDEFINED];
+    }
+}
+
+
+DocumentEntryType
+q2d::enums::StringToDocumentEntryType(const QString string) {
+
+    QString lookup = string.trimmed().toLower();
+    return map_DocumentEntryType.key(lookup, DocumentEntryType::UNDEFINED);
+}
 
 int
 metamodel::enums::elementTypeToInt(ElementType t) {

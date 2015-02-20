@@ -41,14 +41,14 @@ SchematicsTab::~SchematicsTab() {
 }
 
 void
-SchematicsTab::slot_requestedSatSolving(){
+SchematicsTab::slot_requestedSatSolving() {
 
     // FIXME: Instead of a edit line, this should request the function
     // after the button was clicked, to avoid cluttering the tab.
     // TODO implement a more comfortable "edit function window"
     QString targetFunction = m_ui->input_function->text();
 
-    if(targetFunction.isEmpty()){
+    if (targetFunction.isEmpty()) {
         QMessageBox::warning(this, tr("Function was empty"),
                              tr("The given function string was empty. "
                                 "This is trivially satisfiable with any configuration."),
@@ -60,7 +60,7 @@ SchematicsTab::slot_requestedSatSolving(){
 }
 
 void
-SchematicsTab::slot_addPortButtonClicked(){
+SchematicsTab::slot_addPortButtonClicked() {
 
     bool ok;
     QString name = QInputDialog::getText(this,
@@ -82,11 +82,13 @@ SchematicsTab::slot_addPortButtonClicked(){
     }
 
     QVariant selection = m_ui->sel_direction->currentText();
-    if(!selection.isValid()){ return; }
+    if (!selection.isValid()) {
+        return;
+    }
 
     // FIXME evil hack
     QString iconPath;
-    if(selection.toString() == "Input"){
+    if (selection.toString() == "Input") {
         iconPath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
     } else {
         iconPath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();

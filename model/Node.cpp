@@ -16,12 +16,12 @@ Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent,
 
     m_direction = direction;
 
-    if(topLevel != nullptr){
-    if (m_direction == enums::PortDirection::IN) {
-        this->addDrivenElement(topLevel);
-    } else if (m_direction == enums::PortDirection::OUT) {
-        this->addDriver(topLevel);
-    }
+    if (topLevel != nullptr) {
+        if (m_direction == enums::PortDirection::IN) {
+            this->addDrivenElement(topLevel);
+        } else if (m_direction == enums::PortDirection::OUT) {
+            this->addDriver(topLevel);
+        }
     }
 }
 

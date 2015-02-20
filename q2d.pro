@@ -26,7 +26,7 @@ QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += qt c++11 debug
 QMAKE_CXXFLAGS += -Wall -Wextra -pedantic
 
 TARGET = q2d
@@ -116,7 +116,6 @@ HEADERS  +=\
     interfaces/Quantor.h \
     interfaces/VariableType.h \
     interfaces/quantor/QICircuit.h \
-    interfaces/quantor/Iterator.h \
     interfaces/quantor/ParseException.h \
     interfaces/quantor/QIContext.h \
     interfaces/quantor/Quantorizer.hpp \

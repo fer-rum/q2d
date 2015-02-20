@@ -67,7 +67,7 @@ Application::getSetting(QString key) {
 
 
 void
-Application::slot_resetSettings(){
+Application::slot_resetSettings() {
     m_appSettings->clear();
     this->checkSettings();
 }

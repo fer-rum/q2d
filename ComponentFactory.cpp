@@ -222,7 +222,7 @@ ComponentFactory::instantiateComponent(Document* document,
 
     // connect model and component element
     DocumentEntry* entry =
-        new DocumentEntry(id, DocumentEntryType::COMPONENT,
+        new DocumentEntry(id, enums::DocumentEntryType::COMPONENT,
                           modelComponent, schematicComponent);
     Q_CHECK_PTR(entry);
     schematicComponent->setToolTip(entry->id());
@@ -294,7 +294,8 @@ ComponentFactory::instantiatePort(Document* document,
              << "with direction" << model::enums::PortDirectionToString(direction);
 
     // add port graphics to schematic
-    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, direction, schematicComponent);
+    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, direction,
+            schematicComponent);
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
     schematicPort->setToolTip(id);
@@ -310,7 +311,7 @@ ComponentFactory::instantiatePort(Document* document,
         document->model());
 
     // create and add the document entry
-    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT,
+    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT_PORT,
             modelPort, schematicPort,
             parentComponent);
     Q_CHECK_PTR(entry);
@@ -320,23 +321,25 @@ ComponentFactory::instantiatePort(Document* document,
 }
 
 DocumentEntry*
-ComponentFactory::instantiateInputPort(Document *document, QPointF position, QString id){
+ComponentFactory::instantiateInputPort(Document* document, QPointF position, QString id) {
 
     // NOTE as seen from the inside of the schematic, the Input Port actually is an output that emits
     // data into the schematic
 
     QString filePath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
     gui::PortGraphicsItem* schematicPort =
-            new gui::PortGraphicsItem(position, model::enums::PortDirection::OUT,
-                                      document->schematic(), new QGraphicsSvgItem(filePath));
+        new gui::PortGraphicsItem(position, model::enums::PortDirection::OUT,
+                                  document->schematic(), new QGraphicsSvgItem(filePath));
     document->schematic()->addItem(schematicPort);
 
     schematicPort->setToolTip(id);
 
-    model::Port* modelPort = new model::Port(model::enums::PortDirection::OUT, nullptr, document->model());
+    model::Port* modelPort = new model::Port(model::enums::PortDirection::OUT, nullptr,
+            document->model());
     document->model()->addInputPort(modelPort);
 
-    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT, modelPort, schematicPort);
+    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT, modelPort,
+            schematicPort);
     Q_CHECK_PTR(entry);
 
     document->addEntry(entry);
@@ -344,23 +347,25 @@ ComponentFactory::instantiateInputPort(Document *document, QPointF position, QSt
 }
 
 DocumentEntry*
-ComponentFactory::instantiateOutputPort(Document *document, QPointF position, QString id){
+ComponentFactory::instantiateOutputPort(Document* document, QPointF position, QString id) {
 
     // NOTE as seen from the inside of the schematic, the Output Port actually is an output that takes
     // data out of the schematic
 
     QString filePath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();
     gui::PortGraphicsItem* schematicPort =
-            new gui::PortGraphicsItem(position, model::enums::PortDirection::IN,
-                                      document->schematic(), new QGraphicsSvgItem(filePath));
+        new gui::PortGraphicsItem(position, model::enums::PortDirection::IN,
+                                  document->schematic(), new QGraphicsSvgItem(filePath));
     document->schematic()->addItem(schematicPort);
 
     schematicPort->setToolTip(id);
 
-    model::Port* modelPort = new model::Port(model::enums::PortDirection::IN, nullptr, document->model());
+    model::Port* modelPort = new model::Port(model::enums::PortDirection::IN, nullptr,
+            document->model());
     document->model()->addOutputPort(modelPort);
 
-    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::PORT, modelPort, schematicPort);
+    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT, modelPort,
+            schematicPort);
     Q_CHECK_PTR(entry);
 
     document->addEntry(entry);
@@ -401,7 +406,7 @@ ComponentFactory::instantiateWire(Document* document, DocumentEntry* sender,
     Q_CHECK_PTR(modelWire);
 
     // add the document entry
-    DocumentEntry* entry = new DocumentEntry(id, DocumentEntryType::WIRE,
+    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::WIRE,
             modelWire, schematicWire);
     document->addEntry(entry);
 

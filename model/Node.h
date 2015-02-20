@@ -41,7 +41,7 @@ public:
     Port(enums::PortDirection direction, Component* topLevel, Model* parent,
          DocumentEntry* relatedEntry = nullptr);
 
-    enums::PortDirection direction() const{
+    enums::PortDirection direction() const {
         return m_direction;
     }
 

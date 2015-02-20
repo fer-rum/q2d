@@ -17,7 +17,7 @@ QIContext::QIContext(unsigned int lowestIndex,
     qDebug() << "Context Creation: creating context for" << contextSource->relatedEntry()->id();
 }
 
-QIContext::QIContext(unsigned int lowestIndex){
+QIContext::QIContext(unsigned int lowestIndex) {
     m_lowestIndex = lowestIndex;
     m_highestIndex = m_lowestIndex - 1;
     qDebug() << "Context Creation: lowest index is" << util::intToString(m_lowestIndex);
@@ -25,18 +25,24 @@ QIContext::QIContext(unsigned int lowestIndex){
 
 bool
 QIContext::operator==(QIContext const &other) const {
-    if(this == &other){ return true; }
+    if (this == &other) {
+        return true;
+    }
 
-    if(m_lowestIndex != other.m_lowestIndex
-            || m_highestIndex != other.m_highestIndex){ return false; }
+    if (m_lowestIndex != other.m_lowestIndex
+            || m_highestIndex != other.m_highestIndex) {
+        return false;
+    }
 
-    if(m_variableMapping == other.m_variableMapping
-            && m_typeMapping == other.m_typeMapping) { return true; }
+    if (m_variableMapping == other.m_variableMapping
+            && m_typeMapping == other.m_typeMapping) {
+        return true;
+    }
     return false;
 }
 
 void
-QIContext::addModelElement(model::ModelElement const &element){
+QIContext::addModelElement(model::ModelElement const &element) {
     for (QString varName : element.nodeVariables()) {
         this->assignVariable(varName, VariableType::NODE);
     }
@@ -51,7 +57,7 @@ QIContext::addModelElement(model::ModelElement const &element){
 }
 
 void
-QIContext::addFunction(QString function){
+QIContext::addFunction(QString function) {
     m_functions.append(function.toStdString());
 }
 

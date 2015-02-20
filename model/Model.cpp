@@ -35,14 +35,14 @@ Model::addComponent(Component* toAdd) {
 }
 
 void
-Model::addInputPort(Port* inputPort){
+Model::addInputPort(Port* inputPort) {
     Q_CHECK_PTR(inputPort);
     Q_ASSERT(inputPort->direction() == enums::PortDirection::OUT);
     m_inputPorts.append(inputPort);
 }
 
 void
-Model::addOutputPort(Port* outputPort){
+Model::addOutputPort(Port* outputPort) {
     Q_CHECK_PTR(outputPort);
     Q_ASSERT(outputPort->direction() == enums::PortDirection::IN);
     m_outputPorts.append(outputPort);

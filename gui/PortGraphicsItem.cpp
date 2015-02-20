@@ -38,8 +38,8 @@ QPointF PortGraphicsItem::m_wireDrawingEnd = QPoint();
 QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
 
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
-                 model::enums::PortDirection direction,
-                 ComponentGraphicsItem *parent)
+                                   model::enums::PortDirection direction,
+                                   ComponentGraphicsItem* parent)
     : PortGraphicsItem(relativeCenterPosition, direction, parent->scene(), nullptr, parent) {
     Q_CHECK_PTR(parent);
     Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
@@ -86,7 +86,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     newActual->setBrush(this->m_defaultBrush);
 
     this->addActual(newActual);
-    if(decal != nullptr){
+    if (decal != nullptr) {
         this->addActual(decal);
     }
 
