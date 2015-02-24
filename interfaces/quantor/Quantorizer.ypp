@@ -48,6 +48,7 @@ private:
 //- Private Parser Helpers ---------------------------------------------------
 private:
   unsigned makeAuxiliary();
+  void addClause(int const  a);
   void addClause(int const  a, int const  b);
   void addClause(int const  a, int const  b, int const  c);
 
@@ -90,6 +91,10 @@ inline unsigned Quantorizer::makeAuxiliary() {
   unsigned const  res = ++max_var;
   quantor.add(res);
   return  res;
+}
+inline void Quantorizer::addClause(int const  a) {
+  clauses.push_back(a);
+  clauses.push_back(0);
 }
 inline void Quantorizer::addClause(int const  a, int const  b) {
   clauses.push_back(a);
@@ -217,9 +222,12 @@ Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
 %token IDENT
 %start spec
 %%
-spec    : expr | expr '=' expr {
-        addClause( $1, -$3);
-        addClause(-$1,  $3);
+spec    : expr {
+	   addClause($1);
+          }
+        | expr '=' expr {
+           addClause( $1, -$3);
+           addClause(-$1,  $3);
           }
 expr    : expr AND  expr {
         unsigned const  res = makeAuxiliary();
