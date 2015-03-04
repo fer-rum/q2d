@@ -1,4 +1,4 @@
-#line 67 "Quantorizer.ypp"
+#line 68 "Quantorizer.ypp"
 
 #include "Quantorizer.hpp"
 
@@ -25,6 +25,10 @@ inline unsigned Quantorizer::makeAuxiliary() {
   unsigned const  res = ++max_var;
   quantor.add(res);
   return  res;
+}
+inline void Quantorizer::addClause(int const  a) {
+  clauses.push_back(a);
+  clauses.push_back(0);
 }
 inline void Quantorizer::addClause(int const  a, int const  b) {
   clauses.push_back(a);
@@ -71,7 +75,7 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     if(isspace(c))  continue;
     if(isalpha(c) || (c == '_')) {
       char const *p = formula--;
-      while(isalnum(*p))  p++;
+      while(isalnum(*p) || (*p == '_'))  p++;
       unsigned const  len = p-formula;
       unsigned  res = 0;
       switch(len) {
@@ -145,7 +149,7 @@ Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
 }
 
 
-#line 148 "Quantorizer.cpp"
+#line 152 "Quantorizer.cpp"
 #include <vector>
 class q2d::quantor::Quantorizer::YYStack {
   class Ele {
@@ -224,25 +228,26 @@ unsigned short const  q2d::quantor::Quantorizer::yyintern[] = {
 #ifdef TRACE
 char const *const  q2d::quantor::Quantorizer::yyrules[] = {
 "   0: [ 0] $        -> spec",
-"   1: [ 0] spec     -> expr '=' expr",
-"   2: [ 2] expr     -> expr AND expr",
-"   3: [ 2] expr     -> expr OR expr",
-"   4: [ 2] expr     -> expr XOR expr",
-"   5: [ 2] expr     -> expr NAND expr",
-"   6: [ 2] expr     -> expr NOR expr",
-"   7: [ 2] expr     -> expr XNOR expr",
-"   8: [ 2] expr     -> prim",
-"   9: [ 3] prim     -> IDENT",
-"  10: [ 0] prim     -> '(' expr ')'",
-"  11: [ 1] prim     -> NOT prim",
+"   1: [ 0] spec     -> expr",
+"   2: [ 0] spec     -> expr '=' expr",
+"   3: [ 2] expr     -> expr AND expr",
+"   4: [ 2] expr     -> expr OR expr",
+"   5: [ 2] expr     -> expr XOR expr",
+"   6: [ 2] expr     -> expr NAND expr",
+"   7: [ 2] expr     -> expr NOR expr",
+"   8: [ 2] expr     -> expr XNOR expr",
+"   9: [ 2] expr     -> prim",
+"  10: [ 3] prim     -> IDENT",
+"  11: [ 0] prim     -> '(' expr ')'",
+"  12: [ 1] prim     -> NOT prim",
 };
 #endif
 unsigned short const q2d::quantor::Quantorizer::yylength[] = {
-     1,      3,      3,      3,      3,      3,      3,      3,
-     1,      1,      3,      2, };
+     1,      1,      3,      3,      3,      3,      3,      3,
+     3,      1,      1,      3,      2, };
 unsigned short const q2d::quantor::Quantorizer::yylhs   [] = {
-   (unsigned short)~0u,      0,      1,      1,      1,      1,      1,      1,
-     1,      2,      2,      2, };
+   (unsigned short)~0u,      0,      0,      1,      1,      1,      1,      1,
+     1,      1,      2,      2,      2, };
 
 unsigned short const  q2d::quantor::Quantorizer::yygoto  [][3] = {
 {      3,      2,      1,  },
@@ -273,11 +278,11 @@ unsigned short const  q2d::quantor::Quantorizer::yygoto  [][3] = {
 
 signed short const  q2d::quantor::Quantorizer::yyaction[][12] = {
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{     -8,      0,     -8,     -8,     -8,     -8,     -8,     -8,      0,     -8,      0,     -8,  },
-{      0,      0,      8,      9,     10,     11,     12,     13,      0,     22,      0,      0,  },
+{     -9,      0,     -9,     -9,     -9,     -9,     -9,     -9,      0,     -9,      0,     -9,  },
+{     -1,      0,      8,      9,     10,     11,     12,     13,      0,     22,      0,      0,  },
 {      1,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{     -9,      0,     -9,     -9,     -9,     -9,     -9,     -9,      0,     -9,      0,     -9,  },
+{    -10,      0,    -10,    -10,    -10,    -10,    -10,    -10,      0,    -10,      0,    -10,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
 {      0,      0,      8,      9,     10,     11,     12,     13,      0,      0,      0,     14,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
@@ -286,16 +291,16 @@ signed short const  q2d::quantor::Quantorizer::yyaction[][12] = {
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{    -10,      0,    -10,    -10,    -10,    -10,    -10,    -10,      0,    -10,      0,    -10,  },
+{    -11,      0,    -11,    -11,    -11,    -11,    -11,    -11,      0,    -11,      0,    -11,  },
+{     -8,      0,     -8,     -8,     -8,     -8,     -8,     -8,      0,     -8,      0,     -8,  },
 {     -7,      0,     -7,     -7,     -7,     -7,     -7,     -7,      0,     -7,      0,     -7,  },
 {     -6,      0,     -6,     -6,     -6,     -6,     -6,     -6,      0,     -6,      0,     -6,  },
 {     -5,      0,     -5,     -5,     -5,     -5,     -5,     -5,      0,     -5,      0,     -5,  },
 {     -4,      0,     -4,     -4,     -4,     -4,     -4,     -4,      0,     -4,      0,     -4,  },
 {     -3,      0,     -3,     -3,     -3,     -3,     -3,     -3,      0,     -3,      0,     -3,  },
-{     -2,      0,     -2,     -2,     -2,     -2,     -2,     -2,      0,     -2,      0,     -2,  },
-{    -11,      0,    -11,    -11,    -11,    -11,    -11,    -11,      0,    -11,      0,    -11,  },
+{    -12,      0,    -12,    -12,    -12,    -12,    -12,    -12,      0,    -12,      0,    -12,  },
 {      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{     -1,      0,      8,      9,     10,     11,     12,     13,      0,      0,      0,      0,  },
+{     -2,      0,      8,      9,     10,     11,     12,     13,      0,      0,      0,      0,  },
 };
 
 void q2d::quantor::Quantorizer::parse() {
@@ -346,16 +351,24 @@ void q2d::quantor::Quantorizer::parse() {
         case 0:         // accept
           return;
 case 1: {
-#line 221 "Quantorizer.ypp"
+#line 226 "Quantorizer.ypp"
 
-        addClause( yystack[yylen - 1], -yystack[yylen - 3]);
-        addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
+	   addClause(yystack[yylen - 1]);
           
-#line 354 "Quantorizer.cpp"
+#line 358 "Quantorizer.cpp"
 break;
 }
 case 2: {
-#line 225 "Quantorizer.ypp"
+#line 229 "Quantorizer.ypp"
+
+           addClause( yystack[yylen - 1], -yystack[yylen - 3]);
+           addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
+          
+#line 367 "Quantorizer.cpp"
+break;
+}
+case 3: {
+#line 233 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -363,29 +376,16 @@ case 2: {
         addClause(-res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 366 "Quantorizer.cpp"
+#line 379 "Quantorizer.cpp"
 break;
 }
-case 3: {
-#line 232 "Quantorizer.ypp"
+case 4: {
+#line 240 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res,  yystack[yylen - 1], yystack[yylen - 3]);
         addClause( res, -yystack[yylen - 1]);
         addClause( res, -yystack[yylen - 3]);
-        yylval = res;
-          
-#line 378 "Quantorizer.cpp"
-break;
-}
-case 4: {
-#line 239 "Quantorizer.ypp"
-
-        unsigned const  res = makeAuxiliary();
-        addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
-        addClause(-res,  yystack[yylen - 1],  yystack[yylen - 3]);
-        addClause( res, -yystack[yylen - 1],  yystack[yylen - 3]);
-        addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
 #line 391 "Quantorizer.cpp"
@@ -396,15 +396,28 @@ case 5: {
 
         unsigned const  res = makeAuxiliary();
         addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
+        addClause(-res,  yystack[yylen - 1],  yystack[yylen - 3]);
+        addClause( res, -yystack[yylen - 1],  yystack[yylen - 3]);
+        addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
+        yylval = res;
+          
+#line 404 "Quantorizer.cpp"
+break;
+}
+case 6: {
+#line 255 "Quantorizer.ypp"
+
+        unsigned const  res = makeAuxiliary();
+        addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
         addClause( res,  yystack[yylen - 1]);
         addClause( res,  yystack[yylen - 3]);
         yylval = res;
           
-#line 403 "Quantorizer.cpp"
+#line 416 "Quantorizer.cpp"
 break;
 }
-case 6: {
-#line 254 "Quantorizer.ypp"
+case 7: {
+#line 262 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res,  yystack[yylen - 1], yystack[yylen - 3]);
@@ -412,11 +425,11 @@ case 6: {
         addClause(-res, -yystack[yylen - 3]);
         yylval = res;
           
-#line 415 "Quantorizer.cpp"
+#line 428 "Quantorizer.cpp"
 break;
 }
-case 7: {
-#line 261 "Quantorizer.ypp"
+case 8: {
+#line 269 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -425,36 +438,36 @@ case 7: {
         addClause(-res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
           
-#line 428 "Quantorizer.cpp"
-break;
-}
-case 8: {
-#line 269 "Quantorizer.ypp"
- yylval = yystack[yylen - 1]; 
-#line 434 "Quantorizer.cpp"
+#line 441 "Quantorizer.cpp"
 break;
 }
 case 9: {
-#line 270 "Quantorizer.ypp"
+#line 277 "Quantorizer.ypp"
  yylval = yystack[yylen - 1]; 
-#line 440 "Quantorizer.cpp"
+#line 447 "Quantorizer.cpp"
 break;
 }
 case 10: {
-#line 271 "Quantorizer.ypp"
- yylval = yystack[yylen - 2]; 
-#line 446 "Quantorizer.cpp"
+#line 278 "Quantorizer.ypp"
+ yylval = yystack[yylen - 1]; 
+#line 453 "Quantorizer.cpp"
 break;
 }
 case 11: {
-#line 272 "Quantorizer.ypp"
+#line 279 "Quantorizer.ypp"
+ yylval = yystack[yylen - 2]; 
+#line 459 "Quantorizer.cpp"
+break;
+}
+case 12: {
+#line 280 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res,  yystack[yylen - 2]);
         addClause(-res, -yystack[yylen - 2]);
         yylval = res;
       
-#line 457 "Quantorizer.cpp"
+#line 470 "Quantorizer.cpp"
 break;
 }
         }

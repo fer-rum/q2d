@@ -48,6 +48,7 @@ private:
 //- Private Parser Helpers ---------------------------------------------------
 private:
   unsigned makeAuxiliary();
+  void addClause(int const  a);
   void addClause(int const  a, int const  b);
   void addClause(int const  a, int const  b, int const  c);
 
@@ -62,7 +63,7 @@ private:
 public:
   static Result solve(QICircuit const &c, std::vector<int> &sol);
 
-#line 65 "Quantorizer.hpp"
+#line 66 "Quantorizer.hpp"
 private:
   void parse();
 public:
