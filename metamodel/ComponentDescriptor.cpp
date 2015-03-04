@@ -105,7 +105,7 @@ ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup)
 
 QString
 ComponentDescriptor::generateId() {
-    QString id = this->text() + " " + QString::number(m_instanceIndex);
+    QString id = this->text() + QString::number(m_instanceIndex);
     ++m_instanceIndex;
     return id;
 }
