@@ -160,11 +160,12 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     break;
       }
       if(res == 0) {
-    unsigned const  var = (*context)[std::string(formula, len)];
-    assert(var > 0);
-    assert(var <= max_named);
-    sval = var;
-    res  = IDENT;
+	std::string  name(formula, len);
+	unsigned const  var = (*context)[name];
+	assert(var <= max_named);
+	if(var == 0)  error("Could not resolve variable \"" + name + '"');
+	sval = var;
+	res  = IDENT;
       }
       formula = p;
       return  res;
