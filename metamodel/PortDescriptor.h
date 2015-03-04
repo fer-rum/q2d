@@ -26,7 +26,7 @@ public:
     model::enums::PortDirection direction();
 
     virtual int type() const {
-        return (int)ComponentDescriptorType::PORT_DESCRIPTOR;
+        return (int)enums::ElementType::PORT;
     }
 };
 

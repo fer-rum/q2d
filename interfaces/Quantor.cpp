@@ -5,6 +5,7 @@
 #include "../model/Conductor.h"
 #include "../model/Model.h"
 #include "../model/ModelElement.h"
+#include "../Util.h"
 
 #include "quantor/ParseException.h"
 #include "quantor/QICircuit.h"
@@ -64,19 +65,62 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
-    std::vector<int> rawSolution;
+    std::vector<int>* rawSolution = new std::vector<int>();
     Q_CHECK_PTR(m_solverMain);
 
     try {
-        Result result = this->m_solverMain(QICircuit(*this), rawSolution);
-        qDebug() << QString(result);
+        QICircuit circuit = QICircuit(*this);
+        Result result = m_solverMain(circuit, *rawSolution);
+        m_solution.fromVector(QVector<int>::fromStdVector(*rawSolution));
+
+        // DEBUG
+        // FIXME known bug
+        // rawSolution is empty
+        qDebug() << "Solutions:";
+        for(int i : m_solution){
+            qDebug() << util::intToString(i);
+        }
+        // END DEBUG
+
+        this->interpreteSolution(result);
     } catch (ParseException const &exception) {
         const QIContext &failedCtx = exception.context();
         qWarning() << "In context" << m_contexts.key(failedCtx);
         qWarning() << QString::fromStdString(exception.message());
         return;
     }
-    // interprete the result
-    m_solution.fromVector(QVector<int>::fromStdVector(rawSolution));
-    // TODO continue give feedback
+}
+
+void
+QuantorInterface::interpreteSolution(const Result &result){
+
+    QString textualResult = QString(result);
+    qDebug() << textualResult;
+
+    if(result.isSatisfiable()){
+        // resolve variable numbers to names and
+        // translate sign to truth value
+
+        QMap<QString, bool>* resultMapping = new QMap<QString, bool>();
+
+        QMapIterator<QString, QIContext> contextIter(m_contexts);
+        while(contextIter.hasNext()){
+            contextIter.next();
+            QIContext actualContext = contextIter.value();
+            for(QString varName : actualContext.varNames()){
+                int index = actualContext[varName.toStdString()];
+                if(m_solution.contains(index)){
+                    resultMapping->insert(contextIter.key() + "/" + varName, true);
+                } else if (m_solution.contains(-index)){
+                    resultMapping->insert(contextIter.key() + "/" + varName, false);
+                } else {
+                    qDebug() << "Solution did not contain variable"
+                                << varName << "with index" << util::intToString(index);
+                }
+            }
+        }
+        emit signal_hasSolution(textualResult, resultMapping);
+    } else {
+     emit signal_hasSolution(textualResult);
+    }
 }

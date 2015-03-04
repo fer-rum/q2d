@@ -18,14 +18,6 @@ enum ComponentDescriptorRole {
     HIERARCHY_NAME
 };
 
-// FIXME deprecated
-// replace with metamodel::enums::Type
-enum ComponentDescriptorType {
-    COMPONENT_TYPE = QStandardItem::UserType + 2000,
-    COMPONENT_CATEGORY,
-    PORT_DESCRIPTOR
-};
-
 namespace enums {
 
 enum class DocumentEntryType {

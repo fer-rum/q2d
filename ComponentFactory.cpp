@@ -523,15 +523,15 @@ ComponentFactory::entryToJson(QStandardItem* item) {
     QJsonObject result;
 
     switch (item->type()) {
-    case COMPONENT_TYPE:
+    case (int)metamodel::enums::ElementType::COMPONENT:
         result = typeEntryToJson(item);
         result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_COMPONENT));
         break;
-    case COMPONENT_CATEGORY:
+    case (int)metamodel::enums::ElementType::CATEGORY:
         result = categoryEntryToJson(item);
         result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_CATEGORY));
         break;
-    case PORT_DESCRIPTOR:
+    case (int)metamodel::enums::ElementType::PORT:
         // nothing to save, since they are bound to the component
         // this should not happen anyways
         Q_ASSERT(false);

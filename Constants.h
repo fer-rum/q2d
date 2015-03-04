@@ -22,11 +22,6 @@ extern QString EXTENSION_DOCFILE;
  */
 extern QString FILE_COMPONENT_TREE;
 
-extern QString GENERAL_TYPE_COMPONENT;
-extern QString GENERAL_TYPE_PORT;
-extern QString GENERAL_TYPE_WIRE;
-extern QString GENERAL_TYPE_UNDEFINED;
-
 /**
  * @brief HIERARCHY_PATH_SEPERATOR is used when fetching the hierarchy names
  * of ComponentDescriptors to split th seperate levels of the hierarchy.

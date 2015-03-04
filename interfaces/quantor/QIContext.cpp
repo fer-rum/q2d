@@ -92,7 +92,7 @@ QIContext::operator[](std::string const &varName) const {
     if (m_variableMapping.contains(name)) {
         return m_variableMapping[name];
     } else {
-        qDebug() << "QIContext::operator[" << &varName << "] failed";
+        qDebug() << "QIContext::operator[" << varName.c_str() << "] failed";
         return 0;
     }
 }

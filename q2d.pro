@@ -130,7 +130,8 @@ INCLUDEPATH +=\
 
 FORMS    +=\
     gui/MainWindow.ui \
-    gui/SchematicsTab.ui
+    gui/SchematicsTab.ui \
+    gui/QuantorResult.ui
 
 # exclude quantorizer.ypp
 HEADERS -= interfaces/quantor/Quantorizer.ypp

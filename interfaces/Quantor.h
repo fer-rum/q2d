@@ -44,8 +44,9 @@ private:
     void buildContexts(const q2d::model::Model &contextSource, const QString targetFunction);
     QList<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
 
-    // creates the thread and collects the result once it finfished
+    // creates the TODO thread and collects the result once it finfished
     void solve();
+    void interpreteSolution(const Result& result);
 public:
     QuantorInterface();
     QMap<QString, QIContext> const &contexts() const {
@@ -54,9 +55,16 @@ public:
 
 public slots:
     void slot_solveProblem(q2d::Document* targetDocument, QString targetFunction);
+
+signals:
+    /**
+     * @brief signal_hasSolution is supposed to be raised when a solution from Quantor is available.
+     * @param textualRepresentation summarizes the result in textual form.
+     * @param variableMapping provides a mapping from variable names to truth values if there was found one.
+     * This may be null, if the result does not incorporate a variable assignment
+     */
+    void signal_hasSolution(QString textualRepresentation, const QMap<QString, bool>* variableMapping = nullptr);
 };
-
-
 
 } // namespace quantor
 } // namespace q2d

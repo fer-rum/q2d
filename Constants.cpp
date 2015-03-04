@@ -3,7 +3,6 @@
 namespace q2d {
 namespace constants {
 
-
 QSize ICON_SIZE = QSize(48, 48);
 
 QString HIERARCHY_SEPERATOR    = "/";
@@ -18,7 +17,11 @@ QString KEY_FILE_PORT_INOUT = "paths/symbols/port_inout";
 QString KEY_FILE_OPORT_IN   = "paths/symbols/outside_port_in";
 QString KEY_FILE_OPORT_OUT  = "paths/symbols/outside_port_out";
 
+QString JSON_GENERAL_NAME = "name";
 QString JSON_GENERAL_SIZE = "size";
+QString JSON_GENERAL_POSITION  = "pos";
+QString JSON_GENERAL_POSITION_X    = "x";
+QString JSON_GENERAL_POSITION_Y    = "y";
 
 QString JSON_HIERARCHY_TYPE_CATEGORY    = "componentCategory";
 QString JSON_HIERARCHY_TYPE_COMPONENT   = "componentType";
@@ -26,13 +29,9 @@ QString JSON_HIERARCHY_CATEGORY_NAME    = "name";
 QString JSON_HIERARCHY_TYPE      = "hierarchy_type";
 QString JSON_HIERARCHY_CHILD    = "child";
 QString JSON_HIERARCHY_SOURCE   = "descriptorPath";
-QString JSON_GENERAL_NAME = "name";
-QString JSON_PORTS          = "ports";
-QString JSON_PORT_DIRECTION = "direction";
-QString JSON_GENERAL_POSITION  = "pos";
-QString JSON_GENERAL_POSITION_X    = "x";
-QString JSON_GENERAL_POSITION_Y    = "y";
-QString JSON_SYMBOL_PATH    = "symbolFile";
+QString JSON_PORTS              = "ports";
+QString JSON_PORT_DIRECTION     = "direction";
+QString JSON_SYMBOL_PATH        = "symbolFile";
 QString JSON_CONFIG_BIT_GROUP     = "configBits";
 QString JSON_DOCENTRY                   = "entry";
 QString JSON_DOCENTRY_ID                = "entry_id";
@@ -45,11 +44,6 @@ QString JSON_SCHEMATIC_ADDITIONAL       = "additionalInfo";
 QString JSON_SCHEMATIC_POSITION         = "scenePos";
 QString JSON_WIRE_START                 = "wire_start";
 QString JSON_WIRE_END                   = "wire_end";
-
-QString GENERAL_TYPE_COMPONENT  = "component";
-QString GENERAL_TYPE_PORT       = "port";
-QString GENERAL_TYPE_WIRE       = "wire";
-QString GENERAL_TYPE_UNDEFINED  = "undefined";
 
 QString MIME_COMPONENT_TYPE = "application/component-type";
 QString MIME_PORT_PLACEMENT = "application/port-placement";
