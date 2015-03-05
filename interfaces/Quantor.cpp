@@ -31,8 +31,6 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     // build contexts from components
 
     // create the global context
-    // TODO remember full component IDs to recognize them in wire contexts
-    // the global context includes wires and ports to the outside world
     qDebug() << "Building global context";
     QIContext globalContext = QIContext(currentIndex);
     globalContext.addFunction(targetFunction);
@@ -49,7 +47,7 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
 
     qDebug() << "Building component contexts";
     for (model::ModelElement * c : contextSource.components()) {
-        QIContext newContext = QIContext(currentIndex, c);
+        QIContext newContext = QIContext(currentIndex, c, &globalContext);
         currentIndex = newContext.highestIndex() + 1;
         m_contexts.insert(c->relatedEntry()->id(), newContext);
     }
@@ -65,13 +63,17 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
-    std::vector<int>* rawSolution = new std::vector<int>();
+    std::vector<int> rawSolution;
     Q_CHECK_PTR(m_solverMain);
 
     try {
         QICircuit circuit = QICircuit(*this);
-        Result result = m_solverMain(circuit, *rawSolution);
-        m_solution.fromVector(QVector<int>::fromStdVector(*rawSolution));
+        Result result = m_solverMain(circuit, rawSolution);
+        QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
+        m_solution = QList<int>::fromVector(qVector);
+
+        Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
+        Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
 
         // DEBUG
         // FIXME known bug

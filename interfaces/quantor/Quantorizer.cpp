@@ -1,6 +1,7 @@
 #line 68 "Quantorizer.ypp"
 
 #include "Quantorizer.hpp"
+#include "QtDebug"
 
 using namespace q2d::quantor;
 
@@ -95,6 +96,7 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
       }
       if(res == 0) {
     unsigned const  var = (*context)[std::string(formula, len)];
+    qDebug() << "resolve:" << QString(formula) << "->" << var;
     assert(var > 0);
     assert(var <= max_named);
     sval = var;
@@ -111,6 +113,15 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
 
 //- Public Usage Interface ---------------------------------------------------
 inline Result Quantorizer::solve0(QICircuit const &c, std::vector<int> &sol) {
+
+    qDebug() << c.configVars().size() << " config vars";
+
+    // DEBUG
+    for(unsigned i : c.configVars()){
+        qDebug() << ":->" << QString::number(i);
+    }
+    // END DEBUG
+
   // Quantifier Preamble
   openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.configVars());
   closeScope();

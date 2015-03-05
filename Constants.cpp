@@ -23,6 +23,8 @@ QString JSON_GENERAL_POSITION  = "pos";
 QString JSON_GENERAL_POSITION_X    = "x";
 QString JSON_GENERAL_POSITION_Y    = "y";
 
+QString JSON_FUNCTIONS  = "functions";
+
 QString JSON_HIERARCHY_TYPE_CATEGORY    = "componentCategory";
 QString JSON_HIERARCHY_TYPE_COMPONENT   = "componentType";
 QString JSON_HIERARCHY_CATEGORY_NAME    = "name";

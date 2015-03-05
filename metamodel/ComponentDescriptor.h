@@ -53,6 +53,7 @@ public:
     // void addPort(PortDescriptor*);
     void addPort(QString name, QPointF relativePosition, model::enums::PortDirection direction);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
+    void addFunction(QString function);
 
     QStringList configVariables() const;
     QStringList functions() const;

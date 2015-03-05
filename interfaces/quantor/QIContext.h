@@ -21,6 +21,9 @@ namespace quantor {
 class QIContext {
 
 private:
+
+    QIContext* m_parent;
+
     /**
      * @brief m_lowestIndex is the lowest variable index that is in use by this context.
      */
@@ -45,8 +48,8 @@ public:
      * @param contextName
      * @param lowestIndex
      */
-    QIContext(unsigned int lowestIndex);
-    QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource);
+    QIContext(unsigned int lowestIndex, QIContext* parent = nullptr);
+    QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource, QIContext* parent = nullptr);
 
     bool operator==(QIContext const &other) const;
 

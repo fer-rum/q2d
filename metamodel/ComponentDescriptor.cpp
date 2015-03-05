@@ -73,9 +73,6 @@ ComponentDescriptor::addPort(QString name, QPointF relativePosition,
                              q2d::model::enums::PortDirection direction) {
     PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
     this->appendRow(portDescriptor);
-
-    // each port name is a valid variable name
-    m_configVariables.append(name);
 }
 
 /**
@@ -101,6 +98,11 @@ ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup)
             m_configVariables.append(varName);
         }
     }
+}
+
+void
+ComponentDescriptor::addFunction(QString function) {
+    m_functions.append(function);
 }
 
 QString

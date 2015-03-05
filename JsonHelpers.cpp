@@ -323,5 +323,12 @@ q2d::json::toComponentDescriptor (
         }
     }
 
+    // read the contained functions, if there are some
+    if(jsonObject.contains(JSON_FUNCTIONS)) {
+        QJsonArray functionsJson = jsonObject.value(JSON_FUNCTIONS).toArray();
+        for(QJsonValue currentFunction : functionsJson){
+            result->addFunction(currentFunction.toString());
+        }
+    }
     return result;
 }

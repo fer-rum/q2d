@@ -1,5 +1,6 @@
 #include "QIContext.h"
 
+#include "../../Constants.h"
 #include "../../model/ModelElement.h"
 #include "../../Util.h"
 
@@ -8,16 +9,18 @@
 
 #include "QtDebug"
 
+using namespace q2d::constants;
 using namespace q2d::quantor;
 
 QIContext::QIContext(unsigned int lowestIndex,
-                     model::ModelElement* const contextSource )
-    : QIContext(lowestIndex) {
+                     model::ModelElement* const contextSource , QIContext* parent)
+    : QIContext(lowestIndex, parent) {
+    qDebug() << "Creating context for" << contextSource->relatedEntry()->id();
     this->addModelElement(*contextSource);
-    qDebug() << "Context Creation: creating context for" << contextSource->relatedEntry()->id();
 }
 
-QIContext::QIContext(unsigned int lowestIndex) {
+QIContext::QIContext(unsigned int lowestIndex, QIContext* parent) {
+    m_parent = parent;
     m_lowestIndex = lowestIndex;
     m_highestIndex = m_lowestIndex - 1;
     qDebug() << "Context Creation: lowest index is" << util::intToString(m_lowestIndex);
@@ -59,17 +62,34 @@ QIContext::addModelElement(model::ModelElement const &element) {
 void
 QIContext::addFunction(QString function) {
     m_functions.append(function.toStdString());
+    qDebug() << "Added function" << function;
 }
 
 void
 QIContext::assignVariable(QString varName, VariableType type) {
     const QString logPrefix = "assignVariable(" + varName + ", " + util::intToString((int)type) + ")";
+    QString varNameShort = varName.split(HIERARCHY_SEPERATOR).last();
+
+    // check if this variable is already known in a parent context
+    if(m_parent != nullptr){
+        unsigned int index = (*m_parent)[varName.toStdString()];
+        if(index != 0){
+            qDebug() << "Variable already known in parent context as" << util::intToString(index);
+            m_variableMapping.insert(varNameShort, index);
+            m_typeMapping.insert(index, type);
+            return;
+        }
+    }
 
     if (m_variableMapping.contains(varName)) {
         qWarning() << logPrefix << "Duplicate variable name " << varName << "ignored";
     } else {
         m_highestIndex ++;
-        m_variableMapping.insert(varName, m_highestIndex);
+        if(m_parent == nullptr){
+            m_variableMapping.insert(varName, m_highestIndex);
+        } else {
+            m_variableMapping.insert(varNameShort, m_highestIndex);
+        }
         m_typeMapping.insert(m_highestIndex, type);
         qDebug() << logPrefix << "Variable assignment:"
                  << varName << "->" << util::intToString(m_highestIndex);

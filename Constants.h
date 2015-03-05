@@ -45,6 +45,8 @@ extern QString JSON_DOCENTRY_PARENT;
 extern QString JSON_DOCENTRY_SCHEMATIC_ELEMENT;
 extern QString JSON_DOCENTRY_TYPE;
 
+extern QString JSON_FUNCTIONS;
+
 // generally used json names
 extern QString JSON_GENERAL_NAME;
 extern QString JSON_GENERAL_POSITION;

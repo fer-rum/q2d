@@ -22,6 +22,7 @@ Port::Port(enums::PortDirection direction, Component* topLevel, Model* parent,
         } else if (m_direction == enums::PortDirection::OUT) {
             this->addDriver(topLevel);
         }
+        topLevel->addPort(this);
     }
 }
 
