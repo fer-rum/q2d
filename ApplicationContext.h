@@ -59,8 +59,10 @@ signals:
     void signal_clearComponentTypes();
     void signal_triggerQuantor(Document* document, QString targetFunction);
 
+
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);
+    void signal_quantorSolutionAvailable(QString, const QMap<QString, bool>*);
 
 public slots:
     void slot_newDocument(QString name);

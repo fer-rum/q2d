@@ -63,7 +63,8 @@ signals:
      * @param variableMapping provides a mapping from variable names to truth values if there was found one.
      * This may be null, if the result does not incorporate a variable assignment
      */
-    void signal_hasSolution(QString textualRepresentation, const QMap<QString, bool>* variableMapping = nullptr);
+    void signal_hasSolution(QString textualRepresentation, const QMap<QString, bool>* variableMapping);
+    // TODO better wrap the parameters in a solution object.
 };
 
 } // namespace quantor

@@ -23,8 +23,13 @@ Application::Application(int &argc, char** argv[])
     this->m_appSettings = new QSettings();
     this->checkSettings();
 
-    connect(this, &Application::signal_triggerQuantor,
+    // Application -> Quantor
+    connect(this, &Application::signal_quantorTriggered,
             &m_quantorInterface, &quantor::QuantorInterface::slot_solveProblem);
+
+    // Quantor -> Application
+    connect(&m_quantorInterface, &quantor::QuantorInterface::signal_hasSolution,
+            this, &Application::signal_quantorSolutionAvailable);
 }
 
 Application::~Application() {

@@ -1,12 +1,12 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include "Application.h"
-#include "Document.h"
-#include "metamodel/Category.h"
-#include "ComponentFactory.h"
-#include "Constants.h"
-#include "gui/SchematicsTab.h"
+#include "../Application.h"
+#include "../Document.h"
+#include "../metamodel/Category.h"
+#include "../ComponentFactory.h"
+#include "../Constants.h"
+#include "SchematicsTab.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -23,11 +23,10 @@ MainWindow::MainWindow(ApplicationContext* parent) :
     QMainWindow(), m_ui(new Ui::MainWindow) {
 
     Q_CHECK_PTR(parent);
-    this->m_context = parent;
-
+    m_context = parent;
     m_ui->setupUi(this);
-
-    this->m_application = qobject_cast<Application*>(Application::instance());
+    m_application = qobject_cast<Application*>(Application::instance());
+    m_resultDialog = nullptr;
 }
 
 MainWindow::~MainWindow() {}
@@ -316,4 +315,20 @@ MainWindow::on_btn_addCategory_clicked() {
 
     // add a new category
     emit this->signal_createCategory(name, parent);
+}
+
+void
+MainWindow::slot_displayQuantorResult(QString textualRepresentation, const QMap<QString, bool>* resultMapping){
+
+    qDebug() << "Show Quantor result dialog";
+    // TODO extend the result dialog so the instance can be reused,
+    // instead of been created anew every time
+    if(m_resultDialog != nullptr){
+        delete m_resultDialog;
+        m_resultDialog = nullptr;
+    }
+    m_resultDialog = new QuantorResultDialog(this, textualRepresentation, resultMapping);
+    m_resultDialog->show();
+    m_resultDialog->raise();
+    m_resultDialog->activateWindow();
 }

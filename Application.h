@@ -30,7 +30,13 @@ public:
 
     static Application* instance();
 signals:
-    void signal_triggerQuantor(Document* document, QString targetFunction);
+
+    // --- forwarded signals ---
+    // ApplicationContext -> Quantor
+    void signal_quantorTriggered(Document* document, QString targetFunction);
+
+    // Quantor -> ApplicationContext -> MainWindow
+    void signal_quantorSolutionAvailable(QString, const QMap<QString, bool>*);
 
 public slots:
     void slot_resetSettings();
