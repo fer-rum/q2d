@@ -1,10 +1,11 @@
-#include "Component.h"
-#include "Conductor.h"
-#include "Node.h"
-#include "Model.h"
+#include "../Document.h"
 #include "../Enumerations.h"
 
-#include "../Document.h"
+#include "Component.h"
+#include "Conductor.h"
+#include "Model.h"
+#include "Node.h"
+#include "Port.h"
 
 #include <QtDebug>
 

@@ -49,28 +49,28 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     if(isspace(c))  continue;
     if(isalpha(c) || (c == '_')) {
       char const *p = formula--;
-      while(isalnum(*p) || (c == '_') || (c == '-') || (c == '/'))  p++;
+      while(isalnum(*p) || (*p == '_') || (*p == '-') || (*p == '/'))  p++;
       unsigned const  len = p-formula;
       unsigned  res = 0;
       switch(len) {
       case 2:
-	if(strncmp(formula, "or", 2) == 0)  res = OR;
-	break;
+    if(strncmp(formula, "or", 2) == 0)  res = OR;
+    break;
       case 3:
-	if     (strncmp(formula, "and", 3) == 0)  res = AND;
-	else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
-	else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
-	else if(strncmp(formula, "not", 3) == 0)  res = NOT;
-	break;
+    if     (strncmp(formula, "and", 3) == 0)  res = AND;
+    else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
+    else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
+    else if(strncmp(formula, "not", 3) == 0)  res = NOT;
+    break;
       case 4:
-	if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
-	else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
-	break;
+    if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
+    else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
+    break;
       }
       if(res == 0) {
-	unsigned const  var = getVar(std::string(formula, len));
-	sval = var;
-	res  = VAR;
+    unsigned const  var = getVar(std::string(formula, len));
+    sval = var;
+    res  = VAR;
       }
       formula = p;
       return  res;
@@ -212,7 +212,7 @@ public:
   unsigned short operator*() const { return  stack.back().state; }
 };
 
-char const *const  q2d::quantor::Quantorizer::yyterms[] = { "EOF", 
+char const *const  q2d::quantor::Quantorizer::yyterms[] = { "EOF",
 "NOT", "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "VAR",
 "'='", "'('", "')'", };
 unsigned short const  q2d::quantor::Quantorizer::yyintern[] = {
@@ -369,7 +369,7 @@ void q2d::quantor::Quantorizer::parse() {
         YYSVal                yylval;
         unsigned short const  yyrno = (yyact < 0)? -yyact : 0;
         unsigned short const  yylen = yylength[yyrno];
-        
+
 #ifdef TRACE
         std::cerr << "Reduce by " << yyrules[yyrno] << std::endl;
 #endif
@@ -380,7 +380,7 @@ case 1: {
 #line 254 "Quantorizer.ypp"
 
         addClause(yystack[yylen - 1]);
-       
+
 #line 384 "Quantorizer.cpp"
 break;
 }
@@ -389,7 +389,7 @@ case 2: {
 
         addClause( yystack[yylen - 1], -yystack[yylen - 3]);
         addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
-       
+
 #line 393 "Quantorizer.cpp"
 break;
 }
@@ -401,7 +401,7 @@ case 3: {
         addClause(-res,  yystack[yylen - 1]);
         addClause(-res,  yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 405 "Quantorizer.cpp"
 break;
 }
@@ -413,7 +413,7 @@ case 4: {
         addClause( res, -yystack[yylen - 1]);
         addClause( res, -yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 417 "Quantorizer.cpp"
 break;
 }
@@ -426,7 +426,7 @@ case 5: {
         addClause( res, -yystack[yylen - 1],  yystack[yylen - 3]);
         addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 430 "Quantorizer.cpp"
 break;
 }
@@ -438,7 +438,7 @@ case 6: {
         addClause( res,  yystack[yylen - 1]);
         addClause( res,  yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 442 "Quantorizer.cpp"
 break;
 }
@@ -450,7 +450,7 @@ case 7: {
         addClause(-res, -yystack[yylen - 1]);
         addClause(-res, -yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 454 "Quantorizer.cpp"
 break;
 }
@@ -463,25 +463,25 @@ case 8: {
         addClause(-res, -yystack[yylen - 1],  yystack[yylen - 3]);
         addClause(-res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
-       
+
 #line 467 "Quantorizer.cpp"
 break;
 }
 case 9: {
 #line 305 "Quantorizer.ypp"
- yylval = yystack[yylen - 1]; 
+ yylval = yystack[yylen - 1];
 #line 473 "Quantorizer.cpp"
 break;
 }
 case 10: {
 #line 307 "Quantorizer.ypp"
- yylval = yystack[yylen - 1]; 
+ yylval = yystack[yylen - 1];
 #line 479 "Quantorizer.cpp"
 break;
 }
 case 11: {
 #line 308 "Quantorizer.ypp"
- yylval = yystack[yylen - 2]; 
+ yylval = yystack[yylen - 2];
 #line 485 "Quantorizer.cpp"
 break;
 }
@@ -492,12 +492,12 @@ case 12: {
         addClause( res,  yystack[yylen - 2]);
         addClause(-res, -yystack[yylen - 2]);
         yylval = res;
-       
+
 #line 496 "Quantorizer.cpp"
 break;
 }
         }
-        
+
         yystack.pop(yylen);
         yystack.push(yygoto[*yystack][yylhs[yyrno]], yylval);
       }

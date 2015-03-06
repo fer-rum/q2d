@@ -67,7 +67,8 @@ public slots:
     void slot_openDocumentTab(const QModelIndex index);
     void slot_openDocumentTab(Document* document);
     void slot_setComponentModel(QStandardItemModel* model);
-    void slot_displayQuantorResult(QString textualRepresentation, const QMap<QString, bool>* resultMapping);
+    void slot_displayQuantorResult(QString textualRepresentation,
+                                   const QMap<QString, bool>* resultMapping);
 
 private slots:
     // created by the Qt Designer

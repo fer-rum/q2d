@@ -78,7 +78,8 @@ SOURCES +=\
 #including relevant quantor files
     $$quantorDir/quantor.c \
     gui/QuantorResultDialog.cpp \
-    MapModel.cpp
+    MapModel.cpp \
+    model/Port.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -126,7 +127,8 @@ HEADERS  +=\
     $$picosatDir/*.h \
     $$quantorDir/*.h \
     gui/QuantorResultDialog.h \
-    MapModel.h
+    MapModel.h \
+    model/Port.h
 
 INCLUDEPATH +=\
     $$picosatDir \

@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QString>
 
-
 namespace q2d {
 
 // forward declaration

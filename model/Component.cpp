@@ -1,6 +1,7 @@
 #include "../Constants.h"
 #include "../DocumentEntry.h"
 #include "Component.h"
+#include "Port.h"
 #include "metamodel/ComponentDescriptor.h"
 
 using namespace q2d::constants;

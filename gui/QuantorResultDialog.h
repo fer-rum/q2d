@@ -7,13 +7,13 @@ namespace Ui {
 class QuantorResultDialog;
 }
 
-class QuantorResultDialog : public QDialog
-{
+class QuantorResultDialog : public QDialog {
     Q_OBJECT
 private:
-    Ui::QuantorResultDialog *m_ui;
+    Ui::QuantorResultDialog* m_ui;
 public:
-    explicit QuantorResultDialog(QWidget *parent, QString resultText, const QMap<QString, bool>* resultMapping);
+    explicit QuantorResultDialog(QWidget* parent, QString resultText,
+                                 const QMap<QString, bool>* resultMapping);
     ~QuantorResultDialog();
 };
 

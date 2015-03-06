@@ -15,8 +15,7 @@
 namespace q2d {
 namespace util {
 
-class MapModel : public QAbstractTableModel
-{
+class MapModel : public QAbstractTableModel {
     Q_OBJECT
 private:
     const QMap<QString, bool>* m_map;
@@ -27,11 +26,13 @@ public:
         ValueRole
     };
 
-    explicit MapModel(QObject *parent = 0);
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    inline void setMap(const QMap<QString, bool>* map) { m_map = map; }
+    explicit MapModel(QObject* parent = 0);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    inline void setMap(const QMap<QString, bool>* map) {
+        m_map = map;
+    }
 };
 
 }

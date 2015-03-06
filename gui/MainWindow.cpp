@@ -318,12 +318,13 @@ MainWindow::on_btn_addCategory_clicked() {
 }
 
 void
-MainWindow::slot_displayQuantorResult(QString textualRepresentation, const QMap<QString, bool>* resultMapping){
+MainWindow::slot_displayQuantorResult(QString textualRepresentation,
+                                      const QMap<QString, bool>* resultMapping) {
 
     qDebug() << "Show Quantor result dialog";
     // TODO extend the result dialog so the instance can be reused,
     // instead of been created anew every time
-    if(m_resultDialog != nullptr){
+    if (m_resultDialog != nullptr) {
         delete m_resultDialog;
         m_resultDialog = nullptr;
     }

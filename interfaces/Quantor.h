@@ -44,7 +44,7 @@ private:
 
     // creates the TODO thread and collects the result once it finfished
     void solve();
-    void interpreteSolution(const Result& result);
+    void interpreteSolution(const Result &result);
 public:
     QuantorInterface();
     QMap<QString, QIContext> const &contexts() const {
