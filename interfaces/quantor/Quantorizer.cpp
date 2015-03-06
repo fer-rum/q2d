@@ -49,7 +49,7 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     if(isspace(c))  continue;
     if(isalpha(c) || (c == '_')) {
       char const *p = formula--;
-      while(isalnum(*p))  p++;
+      while(isalnum(*p) || (c == '_') || (c == '-') || (c == '/'))  p++;
       unsigned const  len = p-formula;
       unsigned  res = 0;
       switch(len) {
