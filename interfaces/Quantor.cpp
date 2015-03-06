@@ -17,7 +17,9 @@
 
 using namespace q2d::quantor;
 
-QuantorInterface::QuantorInterface() {}
+QuantorInterface::QuantorInterface() {
+    m_solverMain = &Quantorizer::solve;
+}
 
 void
 QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
@@ -33,21 +35,34 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     QIContext globalContext = QIContext(currentIndex);
     globalContext.addFunction(targetFunction);
 
+    // IMPORTANT: build the ports before the wires
+    // otherwise the generated context is wrong
+    for (model::Port * port : contextSource.outsidePorts()) {
+        if(port->direction() == model::enums::PortDirection::OUT){
+            // this is a special case handling. more a hack then proper design
+            // TODO subclass port to handle properly
+            for(QString varName : port->nodeVariables()){
+                globalContext.assignVariable(varName, VariableType::INPUT);
+            }
+        } else {
+            globalContext.addModelElement(*port);
+        }
+    }
+
     for (model::ModelElement * wire : contextSource.conductors()) {
         globalContext.addModelElement(*wire);
     }
 
-    for (model::ModelElement * port : contextSource.outsidePorts()) {
-        globalContext.addModelElement(*port);
-    }
     currentIndex = globalContext.highestIndex() + 1;
     m_contexts.insert(GLOBAL_CONTEXT_NAME, globalContext);
+    globalContext.dumpMaps();
 
     qDebug() << "Building component contexts";
     for (model::ModelElement * c : contextSource.components()) {
         QIContext newContext = QIContext(currentIndex, c, &globalContext);
         currentIndex = newContext.highestIndex() + 1;
         m_contexts.insert(c->relatedEntry()->id(), newContext);
+        newContext.dumpMaps();
     }
 }
 
@@ -61,42 +76,32 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
-
-    Quantorizer  q; {
-      // Build the Problem
-      QICircuit circuit = QICircuit(*this);
-      for(QIContext const &ctx : circuit.contexts()) {
-	q.set(ctx);
-	for(std::string const &fct : ctx.functions()) {
-	  try {
-	    q.parse(fct);
-	  }
-	  catch(ParseException const &exc) {
-	    qWarning() << "ParseException in context" << m_contexts.key(ctx) << ".\"" << fct.c_str() << "\":";
-	    qWarning() << exc.message().c_str();
-	    return;
-	  }
-	}
-      }
-    }
     std::vector<int> rawSolution;
-    Result const  res = q.solve(rawSolution);
-    QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
-    m_solution = QList<int>::fromVector(qVector);
+    Q_CHECK_PTR(m_solverMain);
 
-    Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
-    Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
+    try {
+        QICircuit circuit = QICircuit(*this);
+        Result result = m_solverMain(circuit, rawSolution);
+        QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
+        m_solution = QList<int>::fromVector(qVector);
 
-    // DEBUG
-    // FIXME known bug
-    // rawSolution is empty
-    qDebug() << "Solutions:";
-    for(int i : m_solution){
-      qDebug() << util::intToString(i);
+        Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
+        Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
+
+        // DEBUG
+        qDebug() << "Solutions:";
+        for(int i : m_solution){
+            qDebug() << util::intToString(i);
+        }
+        // END DEBUG
+
+        this->interpreteSolution(result);
+    } catch (ParseException const &exception) {
+        const QIContext &failedCtx = exception.context();
+        qWarning() << "In context" << m_contexts.key(failedCtx);
+        qWarning() << QString::fromStdString(exception.message());
+        return;
     }
-    // END DEBUG
-
-    this->interpreteSolution(result);
 }
 
 void
@@ -109,6 +114,7 @@ QuantorInterface::interpreteSolution(const Result &result){
         // resolve variable numbers to names and
         // translate sign to truth value
 
+        // TODO it is sufficient to onle ask for configVars. Others will not be included in the solution
         QMap<QString, bool>* resultMapping = new QMap<QString, bool>();
 
         QMapIterator<QString, QIContext> contextIter(m_contexts);
@@ -127,8 +133,10 @@ QuantorInterface::interpreteSolution(const Result &result){
                 }
             }
         }
+        qDebug() << "Sending result and solution";
         emit signal_hasSolution(textualResult, resultMapping);
     } else {
-     emit signal_hasSolution(textualResult);
+    qDebug() << "Sending result";
+     emit signal_hasSolution(textualResult, nullptr);
     }
 }
