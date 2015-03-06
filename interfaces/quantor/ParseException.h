@@ -5,7 +5,6 @@
 
 namespace q2d {
 namespace quantor {
-class QIContext;
 /**
  * This class captures information about and the location of
  * a parsing problem encountered by the Quantorizer and may
@@ -15,19 +14,22 @@ class QIContext;
  */
 class ParseException {
     std::string const  m_msg;
-    QIContext   const &m_ctx;
+    unsigned           m_pos;
 
 public:
-    ParseException(std::string  msg, QIContext const &ctx)
-        : m_msg(msg), m_ctx(ctx) {}
+    ParseException(std::string  msg, unsigned  pos)
+        : m_msg(msg), m_pos(pos) {}
     ~ParseException() {}
 
 public:
     std::string const &message() const {
         return  m_msg;
     }
-    QIContext   const &context() const {
-        return  m_ctx;
+    unsigned position() const {
+        return  m_pos;
+    }
+    void position(unsigned  pos) {
+	m_pos = pos;
     }
 };
 }

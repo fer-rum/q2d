@@ -17,9 +17,7 @@
 
 using namespace q2d::quantor;
 
-QuantorInterface::QuantorInterface() {
-    m_solverMain = &Quantorizer::solve;
-}
+QuantorInterface::QuantorInterface() {}
 
 void
 QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
@@ -63,34 +61,42 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
-    std::vector<int> rawSolution;
-    Q_CHECK_PTR(m_solverMain);
 
-    try {
-        QICircuit circuit = QICircuit(*this);
-        Result result = m_solverMain(circuit, rawSolution);
-        QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
-        m_solution = QList<int>::fromVector(qVector);
-
-        Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
-        Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
-
-        // DEBUG
-        // FIXME known bug
-        // rawSolution is empty
-        qDebug() << "Solutions:";
-        for(int i : m_solution){
-            qDebug() << util::intToString(i);
-        }
-        // END DEBUG
-
-        this->interpreteSolution(result);
-    } catch (ParseException const &exception) {
-        const QIContext &failedCtx = exception.context();
-        qWarning() << "In context" << m_contexts.key(failedCtx);
-        qWarning() << QString::fromStdString(exception.message());
-        return;
+    Quantorizer  q; {
+      // Build the Problem
+      QICircuit circuit = QICircuit(*this);
+      for(QIContext const &ctx : circuit.contexts()) {
+	q.set(ctx);
+	for(std::string const &fct : ctx.functions()) {
+	  try {
+	    q.parse(fct);
+	  }
+	  catch(ParseException const &exc) {
+	    qWarning() << "ParseException in context" << m_contexts.key(ctx) << ".\"" << fct.c_str() << "\":";
+	    qWarning() << exc.message().c_str();
+	    return;
+	  }
+	}
+      }
     }
+    std::vector<int> rawSolution;
+    Result const  res = q.solve(rawSolution);
+    QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
+    m_solution = QList<int>::fromVector(qVector);
+
+    Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
+    Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
+
+    // DEBUG
+    // FIXME known bug
+    // rawSolution is empty
+    qDebug() << "Solutions:";
+    for(int i : m_solution){
+      qDebug() << util::intToString(i);
+    }
+    // END DEBUG
+
+    this->interpreteSolution(result);
 }
 
 void

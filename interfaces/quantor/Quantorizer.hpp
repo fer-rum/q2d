@@ -3,67 +3,69 @@
 #line 1 "Quantorizer.ypp"
 
 #include <vector>
-#include <cctype>
-#include <cassert>
+#include <map>
 
-#include <string.h>
-
-#include "Quantor.h"
-#include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
+#include "Result.h"
 
 using namespace q2d::quantor;
 
-#line 18 "Quantorizer.hpp"
+#line 14 "Quantorizer.hpp"
 #include <string>
 namespace q2d {
 namespace quantor {
 class Quantorizer {
   typedef unsigned YYSVal;
   class YYStack;
-#line 26 "Quantorizer.ypp"
+#line 22 "Quantorizer.ypp"
 
-  Quantor   quantor;
+
+  // Variable Bookkeeping
   unsigned  max_var;
-#ifndef NDEBUG
-  unsigned  max_named;
-#endif
 
-  std::vector<int>  clauses;
-  QIContext const  *context;
-  char      const  *formula;
+  typedef unsigned Variable;
+  std::map<Variable, unsigned>  varConfigs;
+  std::map<Variable, unsigned>  varInputs;
+  std::map<Variable, unsigned>  varNodes;
+
+  std::vector<unsigned>  varAux;
+  std::vector<int>       clauses;
+
+  // Current Parsing State
+  QIContext const *context;
+  char      const *formula;
 
 //- Life Cycle ---------------------------------------------------------------
-private:
+public:
   Quantorizer();
   ~Quantorizer();
-
-//- Problem Building ---------------------------------------------------------
-private:
-  template<typename IT>
-  void openScope(QuantorQuantificationType const  type, IT  vars);
-  void closeScope();
-
-//- Private Parser Helpers ---------------------------------------------------
-private:
-  unsigned makeAuxiliary();
-  void addClause(int const  a);
-  void addClause(int const  a, int const  b);
-  void addClause(int const  a, int const  b, int const  c);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
   void error(std::string  msg);
   unsigned nextToken(YYSVal &sval);
 
-//- Usage Interface ----------------------------------------------------------
+//- Private Parser Helpers ---------------------------------------------------
 private:
-  Result solve0(QICircuit const &c, std::vector<int> &sol);
-public:
-  static Result solve(QICircuit const &c, std::vector<int> &sol);
+  unsigned getVar(std::string const &name);
+  unsigned makeAuxiliary();
+  void addClause(int const  a);
+  void addClause(int const  a, int const  b);
+  void addClause(int const  a, int const  b, int const  c);
 
-#line 66 "Quantorizer.hpp"
+//- Usage Interface ----------------------------------------------------------
+public:
+  // Builds a problem by adding contexts with formulae.
+  void set(QIContext const &ctx) {
+    context = &ctx;
+  }
+  void parse(char const *fct) throw (ParseException);
+
+  // Solves the current problem and clears this Quantorizers state.
+  Result solve(std::vector<unsigned> &sol);
+
+#line 68 "Quantorizer.hpp"
 private:
   void parse();
 public:
@@ -75,7 +77,7 @@ enum {
   NAND = 260,
   NOR = 261,
   XNOR = 262,
-  IDENT = 263,
+  VAR = 263,
 };
 private:
 enum { YYINTERN = 264 };
