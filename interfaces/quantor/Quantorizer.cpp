@@ -134,7 +134,7 @@ void Quantorizer::parse(char const *fct) throw (ParseException) {
   }
 }
 
-Result Quantorizer::solve(std::vector<unsigned> &sol) {
+Result Quantorizer::solve(std::vector<int> &sol) {
   q2d::quantor::Quantor         q;      // solver
   std::map<unsigned, Variable>  confs;  // reverse map for configs
 

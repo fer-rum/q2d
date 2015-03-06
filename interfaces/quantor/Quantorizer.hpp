@@ -63,7 +63,7 @@ public:
   void parse(char const *fct) throw (ParseException);
 
   // Solves the current problem and clears this Quantorizers state.
-  Result solve(std::vector<unsigned> &sol);
+  Result solve(std::vector<int> &sol);
 
 #line 68 "Quantorizer.hpp"
 private:
