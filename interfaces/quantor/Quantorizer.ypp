@@ -1,14 +1,10 @@
 %header{
 #include <vector>
-#include <cctype>
-#include <cassert>
+#include <map>
 
-#include <string.h>
-
-#include "Quantor.h"
-#include "QICircuit.h"
 #include "QIContext.h"
 #include "ParseException.h"
+#include "Result.h"
 
 using namespace q2d::quantor;
 }
@@ -24,93 +20,73 @@ using namespace q2d::quantor;
  * @author Thomas B. Preußer <thomas.preusser@utexas.edu>
  */
 %class q2d::quantor::Quantorizer {
-  Quantor   quantor;
-  unsigned  max_var;
-#ifndef NDEBUG
-  unsigned  max_named;
-#endif
 
-  std::vector<int>  clauses;
-  QIContext const  *context;
-  char      const  *formula;
+  // Variable Bookkeeping
+  unsigned  max_var;
+
+  typedef unsigned Variable;
+  std::map<Variable, unsigned>  varConfigs;
+  std::map<Variable, unsigned>  varInputs;
+  std::map<Variable, unsigned>  varNodes;
+
+  std::vector<unsigned>  varAux;
+  std::vector<int>       clauses;
+
+  // Current Parsing State
+  QIContext const *context;
+  char      const *formula;
 
 //- Life Cycle ---------------------------------------------------------------
-private:
+public:
   Quantorizer();
   ~Quantorizer();
-
-//- Problem Building ---------------------------------------------------------
-private:
-  template<typename IT>
-  void openScope(QuantorQuantificationType const  type, IT  vars);
-  void closeScope();
-
-//- Private Parser Helpers ---------------------------------------------------
-private:
-  unsigned makeAuxiliary();
-  void addClause(int const  a);
-  void addClause(int const  a, int const  b);
-  void addClause(int const  a, int const  b, int const  c);
 
 //- Parser Interface Methods -------------------------------------------------
 private:
   void error(std::string  msg);
   unsigned nextToken(YYSVal &sval);
 
-//- Usage Interface ----------------------------------------------------------
+//- Private Parser Helpers ---------------------------------------------------
 private:
-  Result solve0(QICircuit const &c, std::vector<int> &sol);
+  unsigned getVar(std::string const &name);
+  unsigned makeAuxiliary();
+  void addClause(int const  a);
+  void addClause(int const  a, int const  b);
+  void addClause(int const  a, int const  b, int const  c);
+
+//- Usage Interface ----------------------------------------------------------
 public:
-  static Result solve(QICircuit const &c, std::vector<int> &sol);
+  // Builds a problem by adding contexts with formulae.
+  void set(QIContext const &ctx) {
+    context = &ctx;
+  }
+  void parse(char const *fct) throw (ParseException);
+
+  // Solves the current problem and clears this Quantorizers state.
+  Result solve(std::vector<int> &sol);
 }
 
 %sval unsigned
 %impl {
 #include "Quantorizer.hpp"
 
+#include <cctype>
+#include <cassert>
+#include <string.h>
+
+extern "C" {
+#include "Quantor.h"
+}
+
 using namespace q2d::quantor;
 
 //- Life Cycle ---------------------------------------------------------------
-inline Quantorizer::Quantorizer() : max_var(0), context(0), formula(0) {}
-inline Quantorizer::~Quantorizer() {}
-
-//- Problem Building ---------------------------------------------------------
-template<typename IT>
-void Quantorizer::openScope(QuantorQuantificationType const  type, IT  vars) {
-  quantor.scope(type);
-  for(unsigned const  var : vars) {
-    assert(var > 0);
-    if(var > max_var)  max_var = var;
-    quantor.add(var);
-  }
-}
-inline void Quantorizer::closeScope() { quantor.add(0); }
-
-//- Private Parser Helpers ---------------------------------------------------
-inline unsigned Quantorizer::makeAuxiliary() {
-  unsigned const  res = ++max_var;
-  quantor.add(res);
-  return  res;
-}
-inline void Quantorizer::addClause(int const  a) {
-  clauses.push_back(a);
-  clauses.push_back(0);
-}
-inline void Quantorizer::addClause(int const  a, int const  b) {
-  clauses.push_back(a);
-  clauses.push_back(b);
-  clauses.push_back(0);
-}
-inline void Quantorizer::addClause(int const  a, int const  b, int const  c) {
-  clauses.push_back(a);
-  clauses.push_back(b);
-  clauses.push_back(c);
-  clauses.push_back(0);
-}
+Quantorizer::Quantorizer() : max_var(0), context(0), formula(0) {}
+Quantorizer::~Quantorizer() {}
 
 //- Parser Interface Methods -------------------------------------------------
 inline void Quantorizer::error(std::string  msg) {
-  throw  ParseException(msg, *context);
+  throw  ParseException(msg, 0);
 }
 
 unsigned Quantorizer::nextToken(YYSVal &sval) {
@@ -141,31 +117,28 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     if(isspace(c))  continue;
     if(isalpha(c) || (c == '_')) {
       char const *p = formula--;
-      while(isalnum(*p) || (*p == '_') || (*p == '/') || (*p == '-'))  p++;
+      while(isalnum(*p) || (c == '_') || (c == '-') || (c == '/'))  p++;
       unsigned const  len = p-formula;
       unsigned  res = 0;
       switch(len) {
       case 2:
-    if(strncmp(formula, "or", 2) == 0)  res = OR;
-    break;
+	if(strncmp(formula, "or", 2) == 0)  res = OR;
+	break;
       case 3:
-    if     (strncmp(formula, "and", 3) == 0)  res = AND;
-    else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
-    else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
-    else if(strncmp(formula, "not", 3) == 0)  res = NOT;
-    break;
+	if     (strncmp(formula, "and", 3) == 0)  res = AND;
+	else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
+	else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
+	else if(strncmp(formula, "not", 3) == 0)  res = NOT;
+	break;
       case 4:
-    if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
-    else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
-    break;
+	if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
+	else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
+	break;
       }
       if(res == 0) {
-	std::string  name(formula, len);
-	unsigned const  var = (*context)[name];
-	assert(var <= max_named);
-	if(var == 0)  error("Could not resolve variable \"" + name + '"');
+	unsigned const  var = getVar(std::string(formula, len));
 	sval = var;
-	res  = IDENT;
+	res  = VAR;
       }
       formula = p;
       return  res;
@@ -176,43 +149,97 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
   }
 }
 
-//- Public Usage Interface ---------------------------------------------------
-inline Result Quantorizer::solve0(QICircuit const &c, std::vector<int> &sol) {
-  // Quantifier Preamble
-  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.configVars());
-  closeScope();
-  openScope(QUANTOR_UNIVERSAL_VARIABLE_TYPE,   c.inputVars());
-  closeScope();
-  openScope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE, c.nodeVars());
-  // leave it open!
-#ifndef NDEBUG
-  max_named = max_var;
-#endif
-
-  // Parse in Component Specifications
-  for(QIContext const &ctx : c.contexts()) {
-    context = &ctx;
-    for(std::string const&  f : ctx.functions()) {
-      formula = f.c_str();
-      parse();
-    }
+//- Private Parser Helpers ---------------------------------------------------
+unsigned Quantorizer::getVar(std::string const &name) {
+  Variable const  var = (*context)[name];
+  std::map<Variable, unsigned> *cat;
+  switch(context->typeOf(var)) {
+  case VariableType::CONFIG:  cat = &varConfigs; break;
+  case VariableType::INPUT:   cat = &varInputs;  break;
+  case VariableType::NODE:    cat = &varNodes;   break;
+  default: error("Unknown identifier: " + name);
   }
 
-  // Finish Problem Specification
-  closeScope();
-  for(int  lit : clauses)  quantor.add(lit);
+  // Check if variable is known already
+  auto const  v = cat->find(var);
+  if(v != cat->end())  return  v->second;
 
-  // Solve Problem
-  Result const  res = quantor.sat();
-  if(res == QUANTOR_RESULT_SATISFIABLE) {
-    int const *s = quantor.assignment();
-    while(*s)  sol.push_back(*s++);
-  }
-  return  res;
+  // Register new variable according to its type
+  return (*cat)[var] = ++max_var;
 }
 
-Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
-  return  Quantorizer().solve0(c, sol);
+inline unsigned Quantorizer::makeAuxiliary() {
+  unsigned const  id = ++max_var;
+  varAux.push_back(id);
+  return  id;
+}
+
+inline void Quantorizer::addClause(int const  a) {
+  clauses.push_back(a);
+  clauses.push_back(0);
+}
+inline void Quantorizer::addClause(int const  a, int const  b) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(0);
+}
+inline void Quantorizer::addClause(int const  a, int const  b, int const  c) {
+  clauses.push_back(a);
+  clauses.push_back(b);
+  clauses.push_back(c);
+  clauses.push_back(0);
+}
+
+//- Public Usage Interface ---------------------------------------------------
+void Quantorizer::parse(char const *fct) throw (ParseException) {
+  formula = fct;
+  try {
+    parse();
+  }
+  catch(ParseException &e) {
+    e.position(formula-fct);
+    throw;
+  }
+}
+
+Result Quantorizer::solve(std::vector<int> &sol) {
+  q2d::quantor::Quantor         q;      // solver
+  std::map<unsigned, Variable>  confs;  // reverse map for configs
+
+  // Problem Building
+  q.scope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE);
+  for(auto const &e : varConfigs) {
+    q.add(e.second);
+    confs.emplace(e.second, e.first);
+  }
+  varConfigs.clear();
+  q.add(0);
+
+  q.scope(QUANTOR_UNIVERSAL_VARIABLE_TYPE);
+  for(auto const &e : varInputs)  q.add(e.second);
+  varInputs.clear();
+  q.add(0);
+
+  q.scope(QUANTOR_EXISTENTIAL_VARIABLE_TYPE);
+  for(auto const &e : varNodes)  q.add(e.second);
+  varNodes.clear();
+  for(unsigned  v : varAux)  q.add(v);
+  varAux.clear();
+  q.add(0);
+
+  for(int  lit : clauses)  q.add(lit);
+  clauses.clear();
+
+  // Solve Problem
+  Result const  res = q.sat();
+  if(res) {
+    auto const  end = confs.end();
+    for(int const *s = q.assignment(); *s; s++) {
+      auto const  it = confs.find(abs(*s));
+      if(it != end)  sol.push_back(*s < 0? -it->second : it->second);
+    }
+  }
+  return  res;
 }
 
 } // impl
@@ -220,66 +247,67 @@ Result Quantorizer::solve(QICircuit const &c, std::vector<int> &sol) {
 %%
 %right NOT
 %left AND OR XOR NAND NOR XNOR
-%token IDENT
+%token VAR
 %start spec
 %%
-spec    : expr {
-	   addClause($1);
-          }
-        | expr '=' expr {
-           addClause( $1, -$3);
-           addClause(-$1,  $3);
-          }
-expr    : expr AND  expr {
+spec : expr {
+        addClause($1);
+       }
+     | expr '=' expr {
+        addClause( $1, -$3);
+        addClause(-$1,  $3);
+       }
+expr : expr AND  expr {
         unsigned const  res = makeAuxiliary();
         addClause( res, -$1, -$3);
         addClause(-res,  $1);
         addClause(-res,  $3);
         $$ = res;
-          }
-        | expr OR   expr {
+       }
+     | expr OR   expr {
         unsigned const  res = makeAuxiliary();
         addClause(-res,  $1, $3);
         addClause( res, -$1);
         addClause( res, -$3);
         $$ = res;
-          }
-        | expr XOR  expr {
+       }
+     | expr XOR  expr {
         unsigned const  res = makeAuxiliary();
         addClause(-res, -$1, -$3);
         addClause(-res,  $1,  $3);
         addClause( res, -$1,  $3);
         addClause( res,  $1, -$3);
         $$ = res;
-          }
-        | expr NAND expr {
+       }
+     | expr NAND expr {
         unsigned const  res = makeAuxiliary();
         addClause(-res, -$1, -$3);
         addClause( res,  $1);
         addClause( res,  $3);
         $$ = res;
-          }
-        | expr NOR  expr {
+       }
+     | expr NOR  expr {
         unsigned const  res = makeAuxiliary();
         addClause( res,  $1, $3);
         addClause(-res, -$1);
         addClause(-res, -$3);
         $$ = res;
-          }
-        | expr XNOR expr {
+       }
+     | expr XNOR expr {
         unsigned const  res = makeAuxiliary();
         addClause( res, -$1, -$3);
         addClause( res,  $1,  $3);
         addClause(-res, -$1,  $3);
         addClause(-res,  $1, -$3);
         $$ = res;
-          }
-        | prim           { $$ = $1; }
-prim    : IDENT          { $$ = $1; }
-    | '(' expr ')'   { $$ = $2; }
-    | NOT prim {
+       }
+     | prim         { $$ = $1; }
+
+prim : VAR          { $$ = $1; }
+     | '(' expr ')' { $$ = $2; }
+     | NOT prim {
         unsigned const  res = makeAuxiliary();
         addClause( res,  $2);
         addClause(-res, -$2);
         $$ = res;
-      }
+       }

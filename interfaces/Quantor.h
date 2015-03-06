@@ -36,8 +36,6 @@ private:
 
     QMap<QString, QIContext> m_contexts;
 
-    // the solver will return a zero-terminated array of int
-    Result (*m_solverMain)(QICircuit const &, std::vector<int> &) = nullptr;
     QList<int> m_solution;
 
     // helper functions
