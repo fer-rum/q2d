@@ -6,7 +6,7 @@
 
 // for debug purposes
 #include "../../DocumentEntry.h"
-
+#include <QMap>
 #include "QtDebug"
 
 using namespace q2d::constants;
@@ -138,4 +138,29 @@ QIContext::typeOf(std::string varName) const {
     } else {
         return this->typeOf(var);
     }
+}
+
+void
+QIContext::dumpMaps(){
+    qDebug() << "=== Dumping Context ===";
+    qDebug() << "variable assignments:";
+    QMapIterator<QString, unsigned> iterVar(m_variableMapping);
+    while(iterVar.hasNext()){
+        iterVar.next();
+        qDebug() << iterVar.key() << "->" << QString::number(iterVar.value());
+    }
+
+    qDebug() << "variable types:";
+    QMapIterator<unsigned, VariableType> iterType(m_typeMapping);
+    while(iterType.hasNext()){
+        iterType.next();
+        qDebug() << QString::number(iterType.key()) << "->" << QString::number((int)iterType.value());
+    }
+
+    qDebug() << "Functions:";
+    for(std::string entry : m_functions){
+        qDebug() << QString::fromStdString(entry);
+    }
+
+    qDebug() << "=== End dump ===";
 }

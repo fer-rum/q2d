@@ -40,9 +40,13 @@ private:
     QMap<unsigned int, VariableType> m_typeMapping;
     QList<std::string> m_functions;
 
-    void assignVariable(QString varName, VariableType type);
+
 
 public:
+    // TODO should be private
+    // public due to hack
+     void assignVariable(QString varName, VariableType type);
+
     /**
      * @brief QIContext creates a minimal, empty context to be filled manually.
      * @param contextName
@@ -78,6 +82,11 @@ public:
     QList<std::string> const &functions() const {
         return  m_functions;
     }
+
+    /**
+     * @brief dumpMaps is a helper function for debugging
+     */
+    void dumpMaps();
 };
 
 } // namespace quantor

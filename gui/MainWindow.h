@@ -4,7 +4,7 @@
 #define MAINWINDOW_H
 
 #include "ui_MainWindow.h"
-
+#include "QuantorResultDialog.h"
 #include "metamodel/Category.h"
 
 #include <QDir>
@@ -30,6 +30,8 @@ private:
     Ui::MainWindow*             m_ui;
     q2d::Application*           m_application;
     q2d::ApplicationContext*    m_context;
+
+    QuantorResultDialog*        m_resultDialog;
 
 
     void addNewSchematicsTab(Document* relatedDocument);
@@ -65,6 +67,7 @@ public slots:
     void slot_openDocumentTab(const QModelIndex index);
     void slot_openDocumentTab(Document* document);
     void slot_setComponentModel(QStandardItemModel* model);
+    void slot_displayQuantorResult(QString textualRepresentation, const QMap<QString, bool>* resultMapping);
 
 private slots:
     // created by the Qt Designer

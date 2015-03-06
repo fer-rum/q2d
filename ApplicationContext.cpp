@@ -76,6 +76,8 @@ ApplicationContext::setupSignalsAndSlots() {
     connect(this, &ApplicationContext::signal_showDocument,
             m_mainWindow, static_cast<void (MainWindow::*)(Document*)>
             (&MainWindow::slot_openDocumentTab)); // ship around overloaded function
+    connect(this, &ApplicationContext::signal_quantorSolutionAvailable,
+            m_mainWindow, &MainWindow::slot_displayQuantorResult);
     // saving signal has to be set up by project
 
     // ApplicationContext -> ComponentFactory
@@ -90,7 +92,11 @@ ApplicationContext::setupSignalsAndSlots() {
 
     // ApplicationContext -> Application
     connect(this, &ApplicationContext::signal_triggerQuantor,
-            m_application, &Application::signal_triggerQuantor);
+            m_application, &Application::signal_quantorTriggered);
+
+    // Application -> ApplicationContext
+    connect(m_application, &Application::signal_quantorSolutionAvailable,
+            this, &ApplicationContext::signal_quantorSolutionAvailable);
 
 }
 

@@ -76,7 +76,9 @@ SOURCES +=\
     $$picosatDir/picosat.c \
     $$picosatDir/version.c \
 #including relevant quantor files
-    $$quantorDir/quantor.c
+    $$quantorDir/quantor.c \
+    gui/QuantorResultDialog.cpp \
+    MapModel.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -122,7 +124,9 @@ HEADERS  +=\
     interfaces/quantor/VariableType.h \
     interfaces/quantor/Result.h \
     $$picosatDir/*.h \
-    $$quantorDir/*.h
+    $$quantorDir/*.h \
+    gui/QuantorResultDialog.h \
+    MapModel.h
 
 INCLUDEPATH +=\
     $$picosatDir \
@@ -131,7 +135,7 @@ INCLUDEPATH +=\
 FORMS    +=\
     gui/MainWindow.ui \
     gui/SchematicsTab.ui \
-    gui/QuantorResult.ui
+    gui/QuantorResultDialog.ui
 
 # exclude quantorizer.ypp
 HEADERS -= interfaces/quantor/Quantorizer.ypp
