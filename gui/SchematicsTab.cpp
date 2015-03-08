@@ -45,6 +45,7 @@ SchematicsTab::slot_requestedSatSolving() {
 
     // FIXME: Instead of a edit line, this should request the function
     // after the button was clicked, to avoid cluttering the tab.
+    // Which would depend on variable tracking
     // TODO implement a more comfortable "edit function window"
     QString targetFunction = m_ui->input_function->text();
 

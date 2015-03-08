@@ -29,7 +29,7 @@ public:
         return  m_pos;
     }
     void position(unsigned  pos) {
-	m_pos = pos;
+        m_pos = pos;
     }
 };
 }

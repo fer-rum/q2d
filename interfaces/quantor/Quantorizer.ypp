@@ -117,28 +117,28 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     if(isspace(c))  continue;
     if(isalpha(c) || (c == '_')) {
       char const *p = formula--;
-      while(isalnum(*p) || (c == '_') || (c == '-') || (c == '/'))  p++;
+      while(isalnum(*p) || (*p == '_') || (*p == '-') || (*p == '/'))  p++;
       unsigned const  len = p-formula;
       unsigned  res = 0;
       switch(len) {
       case 2:
-	if(strncmp(formula, "or", 2) == 0)  res = OR;
-	break;
+    if(strncmp(formula, "or", 2) == 0)  res = OR;
+    break;
       case 3:
-	if     (strncmp(formula, "and", 3) == 0)  res = AND;
-	else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
-	else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
-	else if(strncmp(formula, "not", 3) == 0)  res = NOT;
-	break;
+    if     (strncmp(formula, "and", 3) == 0)  res = AND;
+    else if(strncmp(formula, "xor", 3) == 0)  res = XOR;
+    else if(strncmp(formula, "nor", 3) == 0)  res = NOR;
+    else if(strncmp(formula, "not", 3) == 0)  res = NOT;
+    break;
       case 4:
-	if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
-	else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
-	break;
+    if     (strncmp(formula, "nand", 4) == 0)  res = NAND;
+    else if(strncmp(formula, "xnor", 4) == 0)  res = XNOR;
+    break;
       }
       if(res == 0) {
-	unsigned const  var = getVar(std::string(formula, len));
-	sval = var;
-	res  = VAR;
+    unsigned const  var = getVar(std::string(formula, len));
+    sval = var;
+    res  = VAR;
       }
       formula = p;
       return  res;

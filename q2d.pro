@@ -59,7 +59,6 @@ SOURCES +=\
     gui/WireGraphicsItem.cpp \
     gui/SchematicsSceneChild.cpp \
     JsonHelpers.cpp \
-    model/ConfigurationBit.cpp \
     metamodel/ConfigurationBitDescriptor.cpp \
     metamodel/HierarchyElement.cpp \
     Enumerations.cpp \
@@ -78,7 +77,8 @@ SOURCES +=\
 #including relevant quantor files
     $$quantorDir/quantor.c \
     gui/QuantorResultDialog.cpp \
-    MapModel.cpp
+    MapModel.cpp \
+    model/Port.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -107,7 +107,6 @@ HEADERS  +=\
     gui/SchematicsSceneChild.h \
     JsonHelpers.h \
     Enumerations.h \
-    model/ConfigurationBit.h \
     metamodel/ConfigurationBitDescriptor.h \
     metamodel/Category.h \
     metamodel/Element.h \
@@ -126,7 +125,8 @@ HEADERS  +=\
     $$picosatDir/*.h \
     $$quantorDir/*.h \
     gui/QuantorResultDialog.h \
-    MapModel.h
+    MapModel.h \
+    model/Port.h
 
 INCLUDEPATH +=\
     $$picosatDir \

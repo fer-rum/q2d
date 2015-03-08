@@ -1,20 +1,22 @@
 #include "../Constants.h"
 #include "../DocumentEntry.h"
 #include "Component.h"
+#include "Model.h"
+#include "Port.h"
 #include "metamodel/ComponentDescriptor.h"
 
 using namespace q2d::constants;
 using namespace q2d::model;
 using namespace q2d::metamodel;
 
-Component::Component(ComponentDescriptor* type, Model* parentModel, DocumentEntry* relatedEntry,
+Component::Component(ComponentDescriptor* type, DocumentEntry* relatedEntry,
                      Model* internalModel)
-    : ModelElement(parentModel, relatedEntry) {
+    : ModelElement(relatedEntry) {
     Q_CHECK_PTR(type);
 
     m_internalModel = internalModel;
     m_descriptor = type;
-    m_ports = QList<Port*>();
+    m_ports = QList<ComponentPort*>();
 }
 
 ComponentDescriptor*

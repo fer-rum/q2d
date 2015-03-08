@@ -5,6 +5,7 @@
 #include "../model/Conductor.h"
 #include "../model/Model.h"
 #include "../model/ModelElement.h"
+#include "../model/Port.h"
 #include "../Util.h"
 
 #include "quantor/ParseException.h"
@@ -17,9 +18,7 @@
 
 using namespace q2d::quantor;
 
-QuantorInterface::QuantorInterface() {
-    m_solverMain = &Quantorizer::solve;
-}
+QuantorInterface::QuantorInterface() {}
 
 void
 QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
@@ -38,10 +37,10 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     // IMPORTANT: build the ports before the wires
     // otherwise the generated context is wrong
     for (model::Port * port : contextSource.outsidePorts()) {
-        if(port->direction() == model::enums::PortDirection::OUT){
+        if (port->direction() == model::enums::PortDirection::OUT) {
             // this is a special case handling. more a hack then proper design
             // TODO subclass port to handle properly
-            for(QString varName : port->nodeVariables()){
+            for (QString varName : port->nodeVariables()) {
                 globalContext.assignVariable(varName, VariableType::INPUT);
             }
         } else {
@@ -76,41 +75,52 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
     this->buildContexts(*contextSource, targetFunction);
 
     // call the solver
-    std::vector<int> rawSolution;
-    Q_CHECK_PTR(m_solverMain);
 
-    try {
+    Quantorizer  q;
+    {
+        // Build the Problem
         QICircuit circuit = QICircuit(*this);
-        Result result = m_solverMain(circuit, rawSolution);
-        QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
-        m_solution = QList<int>::fromVector(qVector);
-
-        Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
-        Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
-
-        // DEBUG
-        qDebug() << "Solutions:";
-        for(int i : m_solution){
-            qDebug() << util::intToString(i);
+        for (QIContext const & ctx : circuit.contexts()) {
+            q.set(ctx);
+            for (std::string const & fct : ctx.functions()) {
+                try {
+                    q.parse(fct.c_str());
+                } catch (ParseException const &exc) {
+                    qWarning() << "ParseException in context" << m_contexts.key(ctx) << ".\"" << fct.c_str() << "\"@" << QString::number(exc.position()) << ":" ;
+                    qWarning() << exc.message().c_str();
+                    return;
+                }
+            }
         }
-        // END DEBUG
-
-        this->interpreteSolution(result);
-    } catch (ParseException const &exception) {
-        const QIContext &failedCtx = exception.context();
-        qWarning() << "In context" << m_contexts.key(failedCtx);
-        qWarning() << QString::fromStdString(exception.message());
-        return;
     }
+    std::vector<int> rawSolution;
+    Result const  result = q.solve(rawSolution);
+    QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
+    m_solution = QList<int>::fromVector(qVector);
+
+    // --- --- ---
+
+    Q_ASSERT(!(qVector.isEmpty() && !rawSolution.empty()));
+    Q_ASSERT(!(m_solution.isEmpty() && !rawSolution.empty()));
+
+    // DEBUG
+    qDebug() << "Solutions:";
+    for (int i : m_solution) {
+        qDebug() << util::intToString(i);
+    }
+    // END DEBUG
+
+    this->interpreteSolution(result);
+
 }
 
 void
-QuantorInterface::interpreteSolution(const Result &result){
+QuantorInterface::interpreteSolution(const Result &result) {
 
     QString textualResult = QString(result);
     qDebug() << textualResult;
 
-    if(result.isSatisfiable()){
+    if (result.isSatisfiable()) {
         // resolve variable numbers to names and
         // translate sign to truth value
 
@@ -118,25 +128,25 @@ QuantorInterface::interpreteSolution(const Result &result){
         QMap<QString, bool>* resultMapping = new QMap<QString, bool>();
 
         QMapIterator<QString, QIContext> contextIter(m_contexts);
-        while(contextIter.hasNext()){
+        while (contextIter.hasNext()) {
             contextIter.next();
             QIContext actualContext = contextIter.value();
-            for(QString varName : actualContext.varNames()){
+            for (QString varName : actualContext.varNames()) {
                 int index = actualContext[varName.toStdString()];
-                if(m_solution.contains(index)){
+                if (m_solution.contains(index)) {
                     resultMapping->insert(contextIter.key() + "/" + varName, true);
-                } else if (m_solution.contains(-index)){
+                } else if (m_solution.contains(-index)) {
                     resultMapping->insert(contextIter.key() + "/" + varName, false);
                 } else {
                     qDebug() << "Solution did not contain variable"
-                                << varName << "with index" << util::intToString(index);
+                             << varName << "with index" << util::intToString(index);
                 }
             }
         }
         qDebug() << "Sending result and solution";
         emit signal_hasSolution(textualResult, resultMapping);
     } else {
-    qDebug() << "Sending result";
-     emit signal_hasSolution(textualResult, nullptr);
+        qDebug() << "Sending result";
+        emit signal_hasSolution(textualResult, nullptr);
     }
 }

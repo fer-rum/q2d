@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QString>
 
-
 namespace q2d {
 
 // forward declaration
@@ -15,6 +14,7 @@ namespace model {
 class Component;
 class Conductor;
 class Node;
+class ModulePort;
 class Port;
 
 namespace enums {
@@ -29,16 +29,15 @@ private:
     QString m_name;
     QList<Component*> m_components;
     QList<Conductor*> m_conductors;
-    QList<Port*> m_inputPorts;
-    QList<Port*> m_outputPorts;
+    QList<ModulePort*> m_inputPorts;
+    QList<ModulePort*> m_outputPorts;
 public:
     Model(Document* parent);
 
     void addComponent(Component* toAdd);
-    void addInputPort(Port* inputPort);
-    void addOutputPort(Port* outputPort);
-
-    Conductor* connect(Node* start, Node* end);
+    void addInputPort(ModulePort* inputPort);
+    void addOutputPort(ModulePort* outputPort);
+    void addConductor(model::Conductor* conductor);
 
     QList<Component*> components() const {
         return m_components;
@@ -48,8 +47,8 @@ public:
         return m_conductors;
     }
 
-    QList<Port*> outsidePorts() const {
-        QList<Port*> result = QList<Port*>(m_inputPorts);
+    QList<ModulePort*> outsidePorts() const {
+        QList<ModulePort*> result = QList<ModulePort*>(m_inputPorts);
         result.append(m_outputPorts);
         return result;
     }

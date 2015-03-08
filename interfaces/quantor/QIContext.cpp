@@ -71,9 +71,9 @@ QIContext::assignVariable(QString varName, VariableType type) {
     QString varNameShort = varName.split(HIERARCHY_SEPERATOR).last();
 
     // check if this variable is already known in a parent context
-    if(m_parent != nullptr){
+    if (m_parent != nullptr) {
         unsigned int index = (*m_parent)[varName.toStdString()];
-        if(index != 0){
+        if (index != 0) {
             qDebug() << "Variable already known in parent context as" << util::intToString(index);
             m_variableMapping.insert(varNameShort, index);
             m_typeMapping.insert(index, type);
@@ -85,7 +85,7 @@ QIContext::assignVariable(QString varName, VariableType type) {
         qWarning() << logPrefix << "Duplicate variable name " << varName << "ignored";
     } else {
         m_highestIndex ++;
-        if(m_parent == nullptr){
+        if (m_parent == nullptr) {
             m_variableMapping.insert(varName, m_highestIndex);
         } else {
             m_variableMapping.insert(varNameShort, m_highestIndex);
@@ -141,24 +141,24 @@ QIContext::typeOf(std::string varName) const {
 }
 
 void
-QIContext::dumpMaps(){
+QIContext::dumpMaps() {
     qDebug() << "=== Dumping Context ===";
     qDebug() << "variable assignments:";
     QMapIterator<QString, unsigned> iterVar(m_variableMapping);
-    while(iterVar.hasNext()){
+    while (iterVar.hasNext()) {
         iterVar.next();
         qDebug() << iterVar.key() << "->" << QString::number(iterVar.value());
     }
 
     qDebug() << "variable types:";
     QMapIterator<unsigned, VariableType> iterType(m_typeMapping);
-    while(iterType.hasNext()){
+    while (iterType.hasNext()) {
         iterType.next();
         qDebug() << QString::number(iterType.key()) << "->" << QString::number((int)iterType.value());
     }
 
     qDebug() << "Functions:";
-    for(std::string entry : m_functions){
+    for (std::string entry : m_functions) {
         qDebug() << QString::fromStdString(entry);
     }
 

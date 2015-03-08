@@ -45,7 +45,7 @@ private:
 public:
     // TODO should be private
     // public due to hack
-     void assignVariable(QString varName, VariableType type);
+    void assignVariable(QString varName, VariableType type);
 
     /**
      * @brief QIContext creates a minimal, empty context to be filled manually.
@@ -53,7 +53,8 @@ public:
      * @param lowestIndex
      */
     QIContext(unsigned int lowestIndex, QIContext* parent = nullptr);
-    QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource, QIContext* parent = nullptr);
+    QIContext(unsigned int lowestIndex, model::ModelElement* const contextSource,
+              QIContext* parent = nullptr);
 
     bool operator==(QIContext const &other) const;
 

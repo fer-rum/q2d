@@ -37,13 +37,17 @@ public:
     /**
      * @brief operator bool is the utility operator version of isSatisfiable().
      */
-    operator bool() const { return this->isSatisfiable(); }
+    operator bool() const {
+        return this->isSatisfiable();
+    }
 
     /**
      * @brief isSatisfiable
      * @return True if and only if this Result proved satisfyability.
      */
-    bool isSatisfiable() const { return m_val == QUANTOR_RESULT_SATISFIABLE; }
+    bool isSatisfiable() const {
+        return m_val == QUANTOR_RESULT_SATISFIABLE;
+    }
 
     /** Conversion to the original detailed QuantorResult. */
     operator QuantorResult() const {
@@ -54,10 +58,10 @@ public:
     operator char const* () const;
 };
 
-    inline std::ostream& operator<<(std::ostream &out, Result  r) {
-        out << r.operator char const*();
-        return  out;
-    }
+inline std::ostream &operator<<(std::ostream &out, Result  r) {
+    out << r.operator char const*();
+    return  out;
+}
 
 } // namespace quantor
 } // namespace q2d

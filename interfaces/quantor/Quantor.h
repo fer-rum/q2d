@@ -47,7 +47,7 @@ public:
 
     //- Solving / Result Retrieval
 public:
-    Result     sat()        const {
+    Result     sat()         {
         return  quantor_sat(quantor);
     }
     int const* assignment() const {

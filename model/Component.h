@@ -1,9 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "Model.h"
 #include "ModelElement.h"
-#include "Node.h"
 
 #include <QList>
 
@@ -14,22 +12,22 @@ class ComponentDescriptor;
 }
 
 namespace model {
-
-// ahead declaration
 class Model;
+class ComponentPort;
 
 // TODO documentation
 // TODO a component should observe its internal model to be informed of changes
 class Component : public ModelElement {
 private:
     metamodel::ComponentDescriptor* m_descriptor;
-    QList<Port*> m_ports;
+    QList<ComponentPort*> m_ports;
     Model* m_internalModel;
 public:
     Component(metamodel::ComponentDescriptor* descriptor,
-              Model* parentModel, DocumentEntry* relatedEntry = nullptr, Model* internalModel = nullptr);
+              DocumentEntry* relatedEntry,
+              Model* internalModel = nullptr);
 
-    void addPort(Port* port) {
+    void addPort(ComponentPort* port) {
         Q_CHECK_PTR(port);
         m_ports.append(port);
     }

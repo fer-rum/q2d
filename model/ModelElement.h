@@ -1,14 +1,13 @@
 #ifndef MODELELEMENT_H
 #define MODELELEMENT_H
 
+#include "../DocumentEntry.h"
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
 
 namespace q2d {
-
-class DocumentEntry;
-
 namespace model {
 
 // forward declaration
@@ -20,12 +19,18 @@ class ModelElement : public QObject {
 private:
     DocumentEntry* m_relatedEntry;
 public:
-    ModelElement(Model* parent, DocumentEntry* relatedEntry = nullptr);
+    ModelElement(DocumentEntry* relatedEntry);
 
     DocumentEntry* relatedEntry() const;
     void setRelatedEntry(q2d::DocumentEntry* relatedEntry);
 
-    Model* model() const;
+    /**
+     * @brief model is a shurtcut to querying the related document entry for the model.
+     * @return
+     */
+    inline Model* model() const {
+        return m_relatedEntry->model();
+    }
 
     virtual QStringList nodeVariables()     const {
         return QStringList();

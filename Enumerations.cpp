@@ -71,7 +71,6 @@ model::enums::StringToPortDirection(const QString string) {
     return PortDirection::UNSPECIFIED;
 }
 
-
 QString
 model::enums::PortDirectionToString(const PortDirection direction) {
     switch (direction) {
@@ -83,5 +82,17 @@ model::enums::PortDirectionToString(const PortDirection direction) {
         return "inout";
     default:
         return "unspecified";
+    }
+}
+
+model::enums::PortDirection
+model::enums::invert(const PortDirection initial){
+    switch(initial){
+    case PortDirection::IN :
+        return PortDirection::OUT;
+    case PortDirection::OUT:
+        return PortDirection::IN;
+    default:
+        return PortDirection::UNSPECIFIED;
     }
 }

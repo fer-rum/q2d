@@ -14,6 +14,7 @@ namespace q2d {
 class Document;
 
 namespace model {
+class Model;
 class ModelElement;
 }
 
@@ -21,7 +22,7 @@ class ModelElement;
  * @brief The DocumentEntry class keeps a mapping between model and schematic elements
  * as well as the unique ids associated with them.
  *
- * DocumentEntry may have parents, to maintain any potential hierarchical relations.
+ * DocumentEntry may have parents, to maintain potential hierarchical relations.
  */
 class DocumentEntry {
 private:
@@ -30,17 +31,34 @@ private:
     model::ModelElement*        m_modelElement;
     gui::SchematicsSceneChild*  m_schematicElement;
     DocumentEntry*              m_parent;
+    Document*                   m_document;
+
 public:
+    /**
+     * @brief DocumentEntry is the minimal constructor.
+     * @param id
+     * @param type
+     * @param parent
+     */
     DocumentEntry(QString id,
                   enums::DocumentEntryType type,
-                  model::ModelElement* modelElement,
-                  gui::SchematicsSceneChild* schematicElement,
+                  Document* document,
                   DocumentEntry* parent = nullptr);
+
+    // setter
+    void setModelElement(model::ModelElement* modelElement);
+    void setSchematicElement(gui::SchematicsSceneChild* schematicElement);
+
+    // getter
     QString id() const;
-    enums::DocumentEntryType type();
+    enums::DocumentEntryType type() const;
     model::ModelElement* modelElement() const;
     gui::SchematicsSceneChild* schematicElement() const;
     DocumentEntry* parent() const;
+    Document* document() const;
+    model::Model* model() const;
+    gui::SchematicsScene* scene() const;
+
 };
 
 } // namespace q2d
