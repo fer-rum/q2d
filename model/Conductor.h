@@ -16,7 +16,7 @@ private:
     Node* m_start;
     Node* m_end;
 public:
-    Conductor(Node* start, Node* end, Model* model, DocumentEntry* relatedEntry = nullptr);
+    Conductor(Node* start, Node* end, DocumentEntry* relatedEntry);
 
     virtual QStringList nodeVariables() const override;
     virtual QStringList functions() const override;

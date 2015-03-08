@@ -5,8 +5,12 @@
 using namespace q2d;
 using namespace q2d::model;
 
-ModelElement::ModelElement(Model* parent, DocumentEntry* relatedEntry)
-    : QObject(parent) {
+ModelElement::ModelElement(DocumentEntry* relatedEntry)
+    : QObject(relatedEntry->model()) {
+
+    Q_CHECK_PTR(relatedEntry);
+    Q_CHECK_PTR(relatedEntry->model());
+
     m_relatedEntry = relatedEntry;
 }
 
@@ -18,9 +22,4 @@ ModelElement::relatedEntry() const {
 void
 ModelElement::setRelatedEntry(DocumentEntry* relatedEntry) {
     m_relatedEntry = relatedEntry;
-}
-
-Model*
-ModelElement::model() const {
-    return qobject_cast<Model*>(this->parent());
 }

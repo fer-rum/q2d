@@ -19,7 +19,7 @@ private:
     QList<ModelElement*> drivenElements;
     ModelElement* driver;
 public:
-    Node(Model* parent, DocumentEntry* relatedEntry);
+    Node(DocumentEntry* relatedEntry);
 
     // TODO rename to better reflect actual function
     void addDriver(ModelElement* driver);

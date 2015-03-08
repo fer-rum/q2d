@@ -36,29 +36,21 @@ Model::addComponent(Component* toAdd) {
 }
 
 void
-Model::addInputPort(Port* inputPort) {
+Model::addInputPort(ModulePort* inputPort) {
     Q_CHECK_PTR(inputPort);
     Q_ASSERT(inputPort->direction() == enums::PortDirection::OUT);
     m_inputPorts.append(inputPort);
 }
 
 void
-Model::addOutputPort(Port* outputPort) {
+Model::addOutputPort(ModulePort* outputPort) {
     Q_CHECK_PTR(outputPort);
     Q_ASSERT(outputPort->direction() == enums::PortDirection::IN);
     m_outputPorts.append(outputPort);
 }
 
 
-Conductor*
-Model::connect(Node* start, Node* end) {
-    Q_CHECK_PTR(start);
-    Q_CHECK_PTR(end);
-
-    Conductor* toAdd = new Conductor(start, end, this);
-    start->addDrivenElement(toAdd);
-    end->addDriver(toAdd);
-
-    m_conductors.append(toAdd);
-    return toAdd;
+void
+Model::addConductor(Conductor* conductor) {
+    m_conductors.append(conductor);
 }

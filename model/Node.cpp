@@ -5,7 +5,7 @@
 
 using namespace q2d::model;
 
-Node::Node(Model* parent, DocumentEntry* relatedEntry) : ModelElement(parent, relatedEntry) {
+Node::Node(DocumentEntry* relatedEntry) : ModelElement(relatedEntry) {
     this->driver = nullptr;
     this->drivenElements = QList<ModelElement*>();
 }

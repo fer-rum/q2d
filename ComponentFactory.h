@@ -42,6 +42,11 @@ private:
     void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
     void jsonToEntry(QJsonObject json, metamodel::Category* parent);
 
+    DocumentEntry* instantiateModulePort(Document* document,
+                                         QPointF position,
+                                         QString id,
+                                         model::enums::PortDirection direction);
+
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
 

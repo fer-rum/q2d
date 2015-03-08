@@ -68,6 +68,7 @@ enum class PortDirection {
 
 PortDirection StringToPortDirection(const QString string);
 QString PortDirectionToString(const PortDirection direction);
+PortDirection invert(const PortDirection initial);
 
 /**
  * @brief The ConfigurationBitState enum

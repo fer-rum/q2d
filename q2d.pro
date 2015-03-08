@@ -59,7 +59,6 @@ SOURCES +=\
     gui/WireGraphicsItem.cpp \
     gui/SchematicsSceneChild.cpp \
     JsonHelpers.cpp \
-    model/ConfigurationBit.cpp \
     metamodel/ConfigurationBitDescriptor.cpp \
     metamodel/HierarchyElement.cpp \
     Enumerations.cpp \
@@ -108,7 +107,6 @@ HEADERS  +=\
     gui/SchematicsSceneChild.h \
     JsonHelpers.h \
     Enumerations.h \
-    model/ConfigurationBit.h \
     metamodel/ConfigurationBitDescriptor.h \
     metamodel/Category.h \
     metamodel/Element.h \

@@ -10,13 +10,16 @@ using namespace q2d::model;
  * @param start
  * @param end
  */
-Conductor::Conductor(Node* start, Node* end, Model* model, DocumentEntry* relatedEntry)
-    : ModelElement(model, relatedEntry) {
+Conductor::Conductor(Node* start, Node* end, DocumentEntry* relatedEntry)
+    : ModelElement(relatedEntry) {
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
 
     this->m_start = start;
     this->m_end = end;
+
+    start->addDrivenElement(this);
+    end->addDriver(this);
 }
 
 QStringList
