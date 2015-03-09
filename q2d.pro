@@ -145,3 +145,6 @@ SOURCES -= interfaces/quantor/Quantorizer.ypp
 SOURCES -= $$picosatDir/main.c
 # exclude quantor main
 SOURCES -= $$quantorDir/main.c
+
+RESOURCES += \
+    icons.qrc

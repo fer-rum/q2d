@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QInputDialog>
+#include <QtDebug>
 
 using namespace q2d::gui;
 using namespace q2d::constants;
@@ -29,8 +30,10 @@ SchematicsTab::SchematicsTab(QWidget* parent, Document* relatedDocument) :
     // connect all the buttons
     connect(m_ui->btn_solve, &QPushButton::clicked,
             this, &SchematicsTab::slot_requestedSatSolving);
-    connect(m_ui->btn_addPort, &QPushButton::clicked,
-            this, &SchematicsTab::slot_addPortButtonClicked);
+    connect(m_ui->btn_addInPort, &QToolButton::clicked,
+            this, &SchematicsTab::slot_addInPortButtonClicked);
+    connect(m_ui->btn_addOutPort, &QToolButton::clicked,
+            this, &SchematicsTab::slot_addOutPortButtonClicked);
 
     // TODO set up sel_direction properly to avoid nasty string comparison when reading its state
 }
@@ -38,6 +41,69 @@ SchematicsTab::SchematicsTab(QWidget* parent, Document* relatedDocument) :
 SchematicsTab::~SchematicsTab() {
     delete m_ui;
     // do not delete the document…
+}
+
+QString
+SchematicsTab::requestPortName(){
+    bool ok;
+    QString name = QInputDialog::getText(this,
+                                         tr("Port name required"),
+                                         tr("Enter the name of the new port:"),
+                                         QLineEdit::Normal, "myPort", &ok);
+
+    if (!ok) { // action canceled
+        throw QString("Action canceled");
+    }
+
+    // validate name
+    if (name.isEmpty()) {
+        QMessageBox::critical(this,
+                              tr("Error: Port name was empty"),
+                              tr("The ports name must not be empty."),
+                              QMessageBox::Ok);
+        throw QString("Name was empty");
+    }
+
+    return name;
+}
+
+void
+SchematicsTab::initiatePortDrag(model::enums::PortDirection portDirection){
+    QString name;
+    try {
+        name = this->requestPortName();
+    } catch( QString msg) {
+        qDebug() << msg;
+        return;
+    }
+
+    // start a drag, so the port can be dropped at the desired location
+    QDrag* drag = new QDrag(this);
+    QMimeData* mimeData = new QMimeData();
+
+    QIcon icon;
+    QString directionString = model::enums::PortDirectionToString(portDirection);
+    // create the pixmap for the drag operation
+    switch(portDirection){
+    case model::enums::PortDirection::IN :
+        icon = QIcon(":/icons/ressources/icons/outside_port_in.svg");
+        break;
+    case model::enums::PortDirection::OUT :
+        icon = QIcon(":/icons/ressources/icons/outside_port_out.svg");
+        break;
+    default: // should not happen
+        Q_ASSERT(false);
+    }
+
+    // getting the size is a hack for now
+    // there should be a proper way to implement it
+    QPixmap iconPixmap = icon.pixmap(ICON_SIZE);
+
+    mimeData->setData(MIME_PORT_PLACEMENT, directionString.toUtf8());
+    mimeData->setText(name);
+    drag->setMimeData(mimeData);
+    drag->setPixmap(iconPixmap);
+    drag->exec();
 }
 
 void
@@ -61,54 +127,13 @@ SchematicsTab::slot_requestedSatSolving() {
 }
 
 void
-SchematicsTab::slot_addPortButtonClicked() {
-
-    bool ok;
-    QString name = QInputDialog::getText(this,
-                                         tr("Port name required"),
-                                         tr("Enter the name of the new port:"),
-                                         QLineEdit::Normal, "myPort", &ok);
-
-    if (!ok) { // action canceled
-        return;
-    }
-
-    // validate name
-    if (name.isEmpty()) {
-        QMessageBox::critical(this,
-                              tr("Error: Port name was empty"),
-                              tr("The ports name must not be empty."),
-                              QMessageBox::Ok);
-        return;
-    }
-
-    QVariant selection = m_ui->sel_direction->currentText();
-    if (!selection.isValid()) {
-        return;
-    }
-
-    // FIXME evil hack
-    QString iconPath;
-    if (selection.toString() == "Input") {
-        iconPath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
-    } else {
-        iconPath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();
-    }
-
-    // start a drag, so the port can be dropped at the desired location
-    QDrag* drag = new QDrag(this);
-    QMimeData* mimeData = new QMimeData();
-
-    // create the pixmap for the drag operation
-    QIcon icon = QIcon(iconPath);
-
-    // getting the size is a hack for now
-    // there should be a more proper way to implement it better
-    QPixmap iconPixmap = icon.pixmap(ICON_SIZE);
-
-    mimeData->setData(MIME_PORT_PLACEMENT, selection.toString().toUtf8());
-    mimeData->setText(name);
-    drag->setMimeData(mimeData);
-    drag->setPixmap(iconPixmap);
-    drag->exec();
+SchematicsTab::slot_addInPortButtonClicked() {
+    this->initiatePortDrag(model::enums::PortDirection::IN);
 }
+
+void
+SchematicsTab::slot_addOutPortButtonClicked() {
+    this->initiatePortDrag(model::enums::PortDirection::OUT);
+}
+
+

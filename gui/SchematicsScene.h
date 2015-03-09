@@ -20,8 +20,9 @@ class SchematicsScene
     Q_OBJECT
 private:
     bool    m_dragOver          = false;
-
     int     m_gridSize          = 20; // TODO read from Settings
+
+    void handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition);
 
 public:
     explicit SchematicsScene(Document* parent);

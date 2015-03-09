@@ -16,9 +16,6 @@ using namespace q2d::constants;
 SchematicsScene::SchematicsScene(Document* parent)
     : QGraphicsScene(parent) {
 
-// for debug purposes
-//    this->addLine(0, -100, 0, 100);
-//    this->addLine(-100, 0, 100, 0);
 }
 
 q2d::Document*
@@ -92,12 +89,7 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
 
             parent->addComponent(path, dropPosition);
         } else if (mimeData->hasFormat(MIME_PORT_PLACEMENT)) {
-
-            if (QString(mimeData->data(MIME_PORT_PLACEMENT)) == "Input") {
-                parent->addInputPort(mimeData->text(), dropPosition);
-            } else {
-                parent->addOutputPort(mimeData->text(), dropPosition);
-            }
+            this->handleMimePortPlacement(mimeData, dropPosition);
         }
         event->accept();
         this->update(); // TODO better emit this->changed?
@@ -105,6 +97,23 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
         QGraphicsScene::dropEvent(event);
     }
     this->m_dragOver = false;
+}
+
+void
+SchematicsScene::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition){
+    model::enums::PortDirection direction =
+            model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
+
+    switch(direction) {
+    case model::enums::PortDirection::IN :
+        this->document()->addInputPort(mimeData->text(), dropPosition);
+        break;
+    case model::enums::PortDirection::OUT :
+        this->document()->addOutputPort(mimeData->text(), dropPosition);
+        break;
+    default: // should not happen
+    Q_ASSERT(false);
+    }
 }
 
 void

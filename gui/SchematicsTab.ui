@@ -52,32 +52,33 @@
         </spacer>
        </item>
        <item>
-        <widget class="QComboBox" name="sel_direction">
+        <widget class="QToolButton" name="btn_addInPort">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the direction of newly created ports that connect your schematic design to the outside world.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This does not affect the ports of components in any way.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Input: &lt;/span&gt;The data flows from the outside into your design.&lt;/p&gt;&lt;p&gt;Note that - when viewed from the inside of your design - an input port appears as if it is emitting data.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Output:&lt;/span&gt; The data flows from your design to the outside.&lt;/p&gt;&lt;p&gt;Note that - when viewed from the inside of your design - an output port appears as if it is taking in data.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;b&gt;Adds a new input port&lt;/b&gt; to the module described in the current document. When viewed from inside the module, an input port behaves like a data source and therefor is indicated with a &lt;span style=&quot; color:#ff0000;&quot;&gt;red &lt;/span&gt; port marker.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::NoInsert</enum>
+         <property name="text">
+          <string>add input port</string>
          </property>
-         <item>
-          <property name="text">
-           <string>Input</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Output</string>
-          </property>
-         </item>
+         <property name="icon">
+          <iconset resource="../icons.qrc">
+           <normaloff>:/icons/ressources/icons/outside_port_in.svg</normaloff>:/icons/ressources/icons/outside_port_in.svg</iconset>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_addPort">
+        <widget class="QToolButton" name="btn_addOutPort">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adds a port that connects your schematic design to the outside world.&lt;/p&gt;&lt;p&gt;Select your desired direction beforehand in the combo box to the left.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;b&gt;Adds a new output port&lt;/b&gt; to the module described in the current document. When viewed from inside the module, an output port behaves like a data sink and therefor is indicated with a &lt;span style=&quot; color:#38c738;&quot;&gt;green&lt;/span&gt; port marker.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>Add Port</string>
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../icons.qrc">
+           <normaloff>:/icons/ressources/icons/outside_port_out.svg</normaloff>:/icons/ressources/icons/outside_port_out.svg</iconset>
          </property>
         </widget>
        </item>
@@ -107,6 +108,8 @@
    <header>gui/SchematicsView.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../icons.qrc"/>
+ </resources>
  <connections/>
 </ui>
