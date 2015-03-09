@@ -9,7 +9,6 @@
 #include "../Util.h"
 
 #include "quantor/ParseException.h"
-#include "quantor/QICircuit.h"
 #include "quantor/Quantorizer.hpp"
 #include "quantor/Result.h"
 #include "Quantor.h"
@@ -68,17 +67,16 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
 
     // call the solver
 
-    Quantorizer  q;
+    Quantorizer quantorizer;
     {
         // Build the Problem
-        QICircuit circuit = QICircuit(*this);
-        for (QIContext const & ctx : circuit.contexts()) {
-            q.set(ctx);
-            for (std::string const & fct : ctx.functions()) {
+        for (QIContext const & context : this->contexts()) {
+            quantorizer.set(context);
+            for (std::string const & function : context.functions()) {
                 try {
-                    q.parse(fct.c_str());
+                    quantorizer.parse(function.c_str());
                 } catch (ParseException const &exc) {
-                    qWarning() << "ParseException in context" << m_contexts.key(ctx) << ".\"" << fct.c_str() << "\"@" << QString::number(exc.position()) << ":" ;
+                    qWarning() << "ParseException in context" << m_contexts.key(context) << ".\"" << function.c_str() << "\"@" << QString::number(exc.position()) << ":" ;
                     qWarning() << exc.message().c_str();
                     return;
                 }
@@ -86,7 +84,7 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
         }
     }
     std::vector<int> rawSolution;
-    Result const  result = q.solve(rawSolution);
+    Result const  result = quantorizer.solve(rawSolution);
     QVector<int> qVector = QVector<int>::fromStdVector(rawSolution);
     m_solution = QList<int>::fromVector(qVector);
 

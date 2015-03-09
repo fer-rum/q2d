@@ -7,7 +7,8 @@ MapModel::MapModel(QObject* parent) :
     m_map = nullptr;
 }
 
-int MapModel::rowCount(const QModelIndex &parent) const {
+int
+MapModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     if (m_map) {
         return m_map->count();
@@ -15,12 +16,14 @@ int MapModel::rowCount(const QModelIndex &parent) const {
     return 0;
 }
 
-int MapModel::columnCount(const QModelIndex &parent) const {
+int
+MapModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return 2;
 }
 
-QVariant MapModel::data(const QModelIndex &index, int role) const {
+QVariant
+MapModel::data(const QModelIndex &index, int role) const {
     if (m_map == nullptr) {
         return QVariant();
     }
@@ -36,4 +39,23 @@ QVariant MapModel::data(const QModelIndex &index, int role) const {
         return m_map->values().at(index.row());
     }
     return QVariant();
+}
+
+QVariant
+MapModel::headerData(int section, Qt::Orientation orientation, int role) const{
+    if(role == Qt::DisplayRole){
+    if(orientation == Qt::Horizontal){
+        switch(section) {
+       case 0: return tr("Variable");
+       case 1: return tr("Assignment");
+       default:
+       return QString("Column %1").arg(section + 1);
+       }
+    }
+    else {
+        return QString::number(section);
+    }
+    } else {
+        return QVariant();
+    }
 }

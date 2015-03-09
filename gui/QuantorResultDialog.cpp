@@ -14,6 +14,8 @@ QuantorResultDialog::QuantorResultDialog(QWidget* parent, QString resultText,
     q2d::util::MapModel* model = new q2d::util::MapModel(this);
     model->setMap(resultMapping);
     m_ui->table_Assignments->setModel(model);
+    m_ui->table_Assignments->adjustSize();
+    this->adjustSize();
 }
 
 QuantorResultDialog::~QuantorResultDialog() {

@@ -67,7 +67,6 @@ SOURCES +=\
     Util.cpp \
     metamodel/ComponentDescriptor.cpp \
     interfaces/Quantor.cpp \
-    interfaces/quantor/QICircuit.cpp \
     interfaces/quantor/QIContext.cpp \
     interfaces/quantor/Quantorizer.cpp \
     interfaces/quantor/Result.cpp \
@@ -116,7 +115,6 @@ HEADERS  +=\
     metamodel/ComponentDescriptor.h \
     interfaces/Quantor.h \
     interfaces/VariableType.h \
-    interfaces/quantor/QICircuit.h \
     interfaces/quantor/ParseException.h \
     interfaces/quantor/QIContext.h \
     interfaces/quantor/Quantorizer.hpp \
