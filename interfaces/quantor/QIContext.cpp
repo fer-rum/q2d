@@ -46,6 +46,10 @@ QIContext::operator==(QIContext const &other) const {
 
 void
 QIContext::addModelElement(model::ModelElement const &element) {
+    for (QString varName : element.inputVariables()) {
+        this->assignVariable(varName, VariableType::INPUT);
+    }
+
     for (QString varName : element.nodeVariables()) {
         this->assignVariable(varName, VariableType::NODE);
     }

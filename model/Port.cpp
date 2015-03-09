@@ -12,7 +12,7 @@ Port::Port(enums::PortDirection direction, DocumentEntry *relatedEntry)
 }
 
 QStringList
-Port::nodeVariables() const {
+ComponentPort::nodeVariables() const {
     return QStringList(this->relatedEntry()->id());
 }
 
@@ -45,4 +45,22 @@ ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEnt
     Q_CHECK_PTR(relatedEntry);
     Q_ASSERT(m_direction == enums::PortDirection::IN
              || m_direction == enums::PortDirection::OUT);
+}
+
+QStringList
+ModulePort::inputVariables() const {
+    if(m_direction == enums::PortDirection::OUT){
+        return QStringList(this->relatedEntry()->id());
+    } else {
+        return Port::inputVariables();
+    }
+}
+
+QStringList
+ModulePort::nodeVariables() const {
+    if(m_direction == enums::PortDirection::IN){
+        return QStringList(this->relatedEntry()->id());
+    } else {
+        return Port::nodeVariables();
+    }
 }

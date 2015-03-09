@@ -1,5 +1,6 @@
 #include "PortGraphicsItem.h"
 
+#include "../Application.h"
 #include "../Constants.h"
 #include "../Document.h"
 #include "ComponentGraphicsItem.h"
@@ -40,14 +41,14 @@ QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
                                    model::enums::PortDirection direction,
                                    ComponentGraphicsItem* parent)
-    : PortGraphicsItem(relativeCenterPosition, direction, parent->scene(), nullptr, parent) {
+    : PortGraphicsItem(relativeCenterPosition, direction, parent->scene(), parent) {
     Q_CHECK_PTR(parent);
     Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
 }
 
 PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
                                    model::enums::PortDirection direction,
-                                   SchematicsScene* scene, QGraphicsSvgItem* decal,
+                                   SchematicsScene* scene,
                                    ComponentGraphicsItem* parent)
     : SchematicsSceneChild(scene, parent) {
     /* TODO: known quasi-bug
@@ -86,9 +87,6 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     newActual->setBrush(this->m_defaultBrush);
 
     this->addActual(newActual);
-    if (decal != nullptr) {
-        this->addActual(decal);
-    }
 
     this->setPos(relativeCenterPosition - CENTER_OFFSET);
 
@@ -249,4 +247,36 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
 
     m_wireDrawingMode = false;
     this->scene()->removeItem(m_wireDrawingLineItem);
+}
+
+ModulePortGI::ModulePortGI(QPointF relativeCenterPosition, model::enums::PortDirection direction, SchematicsScene *scene)
+    : PortGraphicsItem(relativeCenterPosition, model::enums::invert(direction), scene) {
+
+    QString filePath;
+    switch(direction) {
+    case model::enums::PortDirection::OUT :
+        filePath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();
+        break;
+    case model::enums::PortDirection::IN :
+        filePath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
+        break;
+    default : // should not happen
+        Q_ASSERT(false);
+    }
+    QGraphicsSvgItem* decal = new QGraphicsSvgItem(filePath);
+
+    if (decal != nullptr) {
+        this->addActual(decal);
+    }
+}
+
+/**
+ * @brief ModulePortGI::specificType is the PortDirection as viewed from outside the module.
+ * Therefore, the internal value is to be reversed.
+ * So an input port will return <i>in</i> and an output port will return <i>out</i>.
+ * @return The (inverted) PortDirection as String
+ */
+QString
+ModulePortGI::specificType() {
+    return model::enums::PortDirectionToString(model::enums::invert(m_direction));
 }

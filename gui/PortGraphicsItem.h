@@ -30,7 +30,7 @@ private:
     // TODO make these changeable via the settings
     static int DIAMETER;
     static int RADIUS;
-    static QPointF CENTER_OFFSET;
+
 
     static QPen PEN_INPUT_PORT;
     static QPen PEN_IN_OUT_PORT;
@@ -48,9 +48,6 @@ private:
     QBrush  m_defaultBrush;
     QPointF m_dragStartPosition;
 
-    // TODO is this duplicate information really needed
-    q2d::model::enums::PortDirection m_direction;
-
     // for drag and drop
     bool    m_dragOver;
     static bool    m_wireDrawingMode;
@@ -62,7 +59,9 @@ private:
     void performDrag();
 
 protected:
-    virtual QString specificType();
+    static QPointF CENTER_OFFSET;
+    model::enums::PortDirection m_direction;
+    virtual QString specificType() override;
 
 public:
 
@@ -103,7 +102,6 @@ public:
     PortGraphicsItem(QPointF relativeCenterPosition,
                      model::enums::PortDirection direction,
                      SchematicsScene* scene,
-                     QGraphicsSvgItem* decal = nullptr,
                      ComponentGraphicsItem* parent = nullptr);
 
     // ovverride for custom dragging
@@ -127,6 +125,17 @@ signals:
 
 public slots:
 
+};
+
+class ModulePortGI : public PortGraphicsItem {
+
+protected :
+    virtual QString specificType() override;
+
+public:
+    ModulePortGI(QPointF relativeCenterPosition,
+                     model::enums::PortDirection direction,
+                     SchematicsScene* scene);
 };
 
 } // namespace gui

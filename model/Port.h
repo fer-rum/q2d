@@ -28,8 +28,6 @@ public:
     enums::PortDirection direction() const {
         return m_direction;
     }
-
-    virtual QStringList nodeVariables() const override;
 };
 
 class ComponentPort : public Port {
@@ -43,6 +41,8 @@ public:
      * @return the component this port is attached to.
      */
     Component* component() const;
+
+    virtual QStringList nodeVariables() const override;
 };
 
 // TODO class ModulePort
@@ -62,6 +62,8 @@ public:
      */
     ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry);
 
+    virtual QStringList nodeVariables() const override;
+    virtual QStringList inputVariables() const override;
 };
 
 } // namespace model

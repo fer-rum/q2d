@@ -32,6 +32,9 @@ public:
         return m_relatedEntry->model();
     }
 
+    virtual QStringList inputVariables()     const {
+        return QStringList();
+    }
     virtual QStringList nodeVariables()     const {
         return QStringList();
     }

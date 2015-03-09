@@ -36,16 +36,8 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
 
     // IMPORTANT: build the ports before the wires
     // otherwise the generated context is wrong
-    for (model::Port * port : contextSource.outsidePorts()) {
-        if (port->direction() == model::enums::PortDirection::OUT) {
-            // this is a special case handling. more a hack then proper design
-            // TODO subclass port to handle properly
-            for (QString varName : port->nodeVariables()) {
-                globalContext.assignVariable(varName, VariableType::INPUT);
-            }
-        } else {
+    for (model::ModulePort * port : contextSource.outsidePorts()) {
             globalContext.addModelElement(*port);
-        }
     }
 
     for (model::ModelElement * wire : contextSource.conductors()) {

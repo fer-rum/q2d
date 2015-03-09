@@ -198,8 +198,20 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
             document, parent, position, model::enums::StringToPortDirection(directionString), id);
     }
     break;
-    case enums::DocumentEntryType::OUTSIDE_PORT:
-        // TODO implement
+    case enums::DocumentEntryType::OUTSIDE_PORT: {
+        QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
+        model::enums::PortDirection direction = model::enums::StringToPortDirection(directionString);
+        switch(direction) {
+        case model::enums::PortDirection::IN :
+        document->componentFactory()->instantiateInputPort(document, position, id);
+        break;
+        case model::enums::PortDirection::OUT :
+            document->componentFactory()->instantiateOutputPort(document, position, id);
+            break;
+        default: // should not happen
+            Q_ASSERT(false);
+        }
+    }
         break;
     case enums::DocumentEntryType::WIRE : {
         QJsonObject additional = schematicJson.value(JSON_SCHEMATIC_ADDITIONAL).toObject();

@@ -322,11 +322,8 @@ ComponentFactory::instantiateModulePort(Document* document, QPointF position, QS
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT, document);
     Q_CHECK_PTR(entry);
 
-    // TODO the graphics item should be cleverer than that
-    QString filePath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
     gui::PortGraphicsItem* schematicPort =
-        new gui::PortGraphicsItem(position, model::enums::invert(direction),
-                                  document->schematic(), new QGraphicsSvgItem(filePath));
+        new gui::ModulePortGI(position, direction, document->schematic());
     document->schematic()->addItem(schematicPort);
 
     schematicPort->setToolTip(id);

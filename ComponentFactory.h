@@ -42,6 +42,15 @@ private:
     void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
     void jsonToEntry(QJsonObject json, metamodel::Category* parent);
 
+    /**
+     * @brief instantiateModulePort is a helper method. It does not do everything needed, but a subset,
+     * so do not call it on its own.
+     * @param document
+     * @param position
+     * @param id
+     * @param direction
+     * @return
+     */
     DocumentEntry* instantiateModulePort(Document* document,
                                          QPointF position,
                                          QString id,
