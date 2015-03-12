@@ -2,7 +2,7 @@
 #define PORTGRAPHICSITEM_H
 
 #include "Enumerations.h"
-#include "SchematicsSceneChild.h"
+#include "SchematicElement.h"
 
 #include <QBrush>
 #include <QGraphicsEllipseItem>
@@ -24,7 +24,7 @@ class ComponentGraphicsItem;
  * between QGraphicsItem and QObject and keep the code flexible, should one
  * decide, that an ellipse is not enough.
  */
-class PortGraphicsItem : public SchematicsSceneChild {
+class PortGraphicsItem : public SchematicElement {
 
 private:
     // TODO make these changeable via the settings
@@ -76,21 +76,6 @@ public:
     virtual QPointF pos() const;
 
     /**
-     * @brief PortGraphicsItem::PortGraphicsItem
-     * This is the default constructor used for the ports of components.
-     * The item will automatically be added to the scene, its parent belongs to.
-     *
-     * @param text
-     * @param relativeCenterPosition is the center position of this instance
-     * in coordinates relative to the the center of its parent.
-     * @param direction
-     * @param parent
-     */
-    explicit PortGraphicsItem(QPointF relativeCenterPosition,
-                              model::enums::PortDirection direction,
-                              ComponentGraphicsItem* parent);
-
-    /**
      * @brief PortGraphicsItem
      * This is the more general constructor if one needs more special things
      * like input/output ports for the schematic.
@@ -99,10 +84,8 @@ public:
      * @param scene
      * @param parent
      */
-    PortGraphicsItem(QPointF relativeCenterPosition,
-                     model::enums::PortDirection direction,
-                     SchematicsScene* scene,
-                     ComponentGraphicsItem* parent = nullptr);
+    explicit PortGraphicsItem(QPointF position, DocumentEntry* relatedEntry,
+                     model::enums::PortDirection direction);
 
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
@@ -133,9 +116,8 @@ protected :
     virtual QString specificType() override;
 
 public:
-    ModulePortGI(QPointF relativeCenterPosition,
-                     model::enums::PortDirection direction,
-                     SchematicsScene* scene);
+    ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry,
+                     model::enums::PortDirection direction);
 };
 
 } // namespace gui

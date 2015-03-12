@@ -1,7 +1,8 @@
-#include "WireGraphicsItem.h"
 
-#include "Constants.h"
+
+#include "../Constants.h"
 #include "PortGraphicsItem.h"
+#include "WireGraphicsItem.h"
 
 #include <QLineF>
 #include <QPainter>
@@ -15,33 +16,20 @@ QPen WireGraphicsItem::PEN_HOVER = QPen(Qt::darkRed, 4);
 
 const QPointF WireGraphicsItem::m_startPoint = QPointF(0, 0);
 
-/**
- * @brief WireGraphicsItem::WireGraphicsItem
- * Internally, the wire starts at (0, 0) in item coordinates.
- *
- * @param start the starting point of the wire in scene coordinates
- * @param end the end point of the wire in scene coordinates
- * @param scene
- */
 WireGraphicsItem::WireGraphicsItem(
-    QPointF start, QPointF end, SchematicsScene* scene) :
-    SchematicsSceneChild(scene) {
-    qDebug() << "Wire Constructor: start = " << start
-             << " end = " << end;
+        PortGraphicsItem* start,
+        PortGraphicsItem* end,
+        DocumentEntry* relatedEntry)
+    : SchematicElement(
+          m_startPoint,
+        relatedEntry) {
 
-    this->setPos(this->mapFromScene(start));
-    m_endPoint = this->mapFromScene(end);
-    this->route();
-    this->setVisible(true);
-    // move this to the background to be overdrawn by the ports
-    this->setZValue(-1);
-}
-
-WireGraphicsItem::WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end)
-    : WireGraphicsItem(
-        start->scenePos() + PortGraphicsItem::centerOffset(),
-        end->scenePos() + PortGraphicsItem::centerOffset(),
-        start->SchematicsSceneChild::scene()) {
+    this->setPos(this->mapFromScene(start->scenePos() + PortGraphicsItem::centerOffset()));
+     m_endPoint = this->mapFromScene(end->scenePos() + PortGraphicsItem::centerOffset());
+     this->route();
+     this->setVisible(true);
+     // move this to the background to be overdrawn by the ports
+     this->setZValue(-1);
 
     m_additionalInfo = QJsonObject();
     m_additionalInfo.insert(JSON_WIRE_START, QJsonValue(start->id()));

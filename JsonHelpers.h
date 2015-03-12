@@ -15,7 +15,7 @@ class DocumentEntry;
 class Project;
 
 namespace gui {
-class SchematicsSceneChild;
+class SchematicElement;
 }
 
 namespace metamodel {
@@ -29,7 +29,7 @@ class ConfigBitGroupDescriptor;
 QJsonObject DocumentEntryToJson(DocumentEntry* entry);
 void parseDocumentEntry(QJsonObject json, Document* document);
 
-QJsonObject SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc);
+QJsonObject SchematicsSceneChildToJson(gui::SchematicElement* ssc);
 
 // TODO include document name in JSON
 

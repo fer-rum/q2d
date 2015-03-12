@@ -4,7 +4,7 @@
 #include "../Constants.h"
 #include "../Document.h"
 #include "ComponentGraphicsItem.h"
-#include "SchematicsScene.h"
+#include "Schematic.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -38,26 +38,11 @@ QPointF PortGraphicsItem::m_wireDrawingStart = QPoint();
 QPointF PortGraphicsItem::m_wireDrawingEnd = QPoint();
 QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
 
-PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
-                                   model::enums::PortDirection direction,
-                                   ComponentGraphicsItem* parent)
-    : PortGraphicsItem(relativeCenterPosition, direction, parent->scene(), parent) {
-    Q_CHECK_PTR(parent);
-    Q_CHECK_PTR(parent->SchematicsSceneChild::scene());
-}
-
-PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
-                                   model::enums::PortDirection direction,
-                                   SchematicsScene* scene,
-                                   ComponentGraphicsItem* parent)
-    : SchematicsSceneChild(scene, parent) {
-    /* TODO: known quasi-bug
-     * Passing an anonymous new QGraphicsEllipseItem directly into the constructor
-     * of the SchematicsSceneChild leads to a SIGSEGV.
-     *
-     * I have as for now no idea why…
-     */
-    Q_CHECK_PTR(scene);
+PortGraphicsItem::PortGraphicsItem(QPointF position,
+                                   DocumentEntry* relatedEntry,
+                                   model::enums::PortDirection direction)
+    : SchematicElement(position - CENTER_OFFSET, relatedEntry) {
+    // Ports are measured from the center, not the upper left corner
 
     QAbstractGraphicsShapeItem* newActual = new QGraphicsEllipseItem(0, 0, DIAMETER, DIAMETER, this);
     Q_CHECK_PTR(newActual);
@@ -87,8 +72,6 @@ PortGraphicsItem::PortGraphicsItem(QPointF relativeCenterPosition,
     newActual->setBrush(this->m_defaultBrush);
 
     this->addActual(newActual);
-
-    this->setPos(relativeCenterPosition - CENTER_OFFSET);
 
     this->setAcceptHoverEvents(true);
     this->setAcceptedMouseButtons(Qt::LeftButton);
@@ -249,8 +232,8 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
     this->scene()->removeItem(m_wireDrawingLineItem);
 }
 
-ModulePortGI::ModulePortGI(QPointF relativeCenterPosition, model::enums::PortDirection direction, SchematicsScene *scene)
-    : PortGraphicsItem(relativeCenterPosition, model::enums::invert(direction), scene) {
+ModulePortGI::ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry, model::enums::PortDirection direction)
+    : PortGraphicsItem(relativeCenterPosition, relatedEntry, model::enums::invert(direction)) {
 
     QString filePath;
     switch(direction) {

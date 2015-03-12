@@ -9,7 +9,7 @@
 #include "Util.h"
 
 #include "gui/ComponentGraphicsItem.h"
-#include "gui/SchematicsScene.h"
+#include "gui/Schematic.h"
 #include "gui/PortGraphicsItem.h"
 #include "gui/WireGraphicsItem.h"
 
@@ -210,7 +210,8 @@ ComponentFactory::instantiateComponent(Document* document,
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT, document);
     Q_CHECK_PTR(entry);
 
-    gui::ComponentGraphicsItem* schematicComponent = new gui::ComponentGraphicsItem(type, document->schematic(), scenePosition);
+    gui::ComponentGraphicsItem* schematicComponent =
+            new gui::ComponentGraphicsItem(scenePosition, entry, type);
     Q_CHECK_PTR(schematicComponent);
     document->schematic()->addItem(schematicComponent);
 
@@ -293,8 +294,7 @@ ComponentFactory::instantiatePort(Document* document,
     Q_CHECK_PTR(entry);
 
     // add port graphics to schematic
-    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, direction,
-            schematicComponent);
+    gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, entry, direction);
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
     schematicPort->setToolTip(id);
@@ -323,10 +323,8 @@ ComponentFactory::instantiateModulePort(Document* document, QPointF position, QS
     Q_CHECK_PTR(entry);
 
     gui::PortGraphicsItem* schematicPort =
-        new gui::ModulePortGI(position, direction, document->schematic());
+        new gui::ModulePortGI(position, entry, direction);
     document->schematic()->addItem(schematicPort);
-
-    schematicPort->setToolTip(id);
 
     model::ModulePort* modelPort = new model::ModulePort(direction, entry);
 
@@ -371,9 +369,7 @@ ComponentFactory::instantiateWire(Document* document, DocumentEntry* sender,
     Q_CHECK_PTR(receiverItem);
 
     gui::WireGraphicsItem* schematicWire =
-        new gui::WireGraphicsItem(
-        senderItem,
-        receiverItem);
+        new gui::WireGraphicsItem(senderItem, receiverItem, entry);
     Q_CHECK_PTR(schematicWire);
 
     document->schematic()->addItem(schematicWire);

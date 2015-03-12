@@ -2,10 +2,11 @@
 #define DOCUMENTENTRY_H
 
 #include "Enumerations.h"
-#include "gui/SchematicsSceneChild.h"
+#include "gui/SchematicElement.h"
 
 #include <QGraphicsItem>
 #include <QJsonObject>
+#include <QObject>
 #include <QString>
 
 namespace q2d {
@@ -24,12 +25,14 @@ class ModelElement;
  *
  * DocumentEntry may have parents, to maintain potential hierarchical relations.
  */
-class DocumentEntry {
+class DocumentEntry
+    : public QObject {
+    Q_OBJECT
 private:
     QString                     m_id;
     enums::DocumentEntryType    m_type;
     model::ModelElement*        m_modelElement;
-    gui::SchematicsSceneChild*  m_schematicElement;
+    gui::SchematicElement*      m_schematicElement;
     DocumentEntry*              m_parent;
     Document*                   m_document;
 
@@ -47,18 +50,22 @@ public:
 
     // setter
     void setModelElement(model::ModelElement* modelElement);
-    void setSchematicElement(gui::SchematicsSceneChild* schematicElement);
+    void setSchematicElement(gui::SchematicElement* schematicElement);
 
     // getter
     QString id() const;
     enums::DocumentEntryType type() const;
     model::ModelElement* modelElement() const;
-    gui::SchematicsSceneChild* schematicElement() const;
+    gui::SchematicElement* schematicElement() const;
     DocumentEntry* parent() const;
     Document* document() const;
     model::Model* model() const;
-    gui::SchematicsScene* scene() const;
+    gui::Schematic* scene() const;
 
+signals:
+
+private slots:
+    void slot_updateToolTip();
 };
 
 } // namespace q2d

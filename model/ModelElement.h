@@ -44,6 +44,18 @@ public:
     virtual QStringList functions()         const {
         return QStringList();
     }
+
+    /**
+     * @brief toString offers a string representation of the model element.
+     * This might be used for example in tooltips or for debugging.
+     * @return
+     */
+    virtual QString toString()              const {
+        return m_relatedEntry->id();
+    }
+
+signals:
+    void signal_changed();
 };
 
 } // namespace model

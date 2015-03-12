@@ -3,7 +3,7 @@
 
 #include "DocumentEntry.h"
 #include "model/Model.h"
-#include "gui/SchematicsScene.h"
+#include "gui/Schematic.h"
 #include "metamodel/ComponentDescriptor.h"
 
 #include <QDir>
@@ -54,7 +54,7 @@ private:
 public:
     explicit Document(QString name, Project* parent);
 
-    gui::SchematicsScene* schematic();
+    gui::Schematic* schematic();
     model::Model* model() const;
     ComponentFactory* componentFactory() const;
 
@@ -69,7 +69,7 @@ public:
 
     // access helpers
     DocumentEntry* entry(const QString id) const;
-    DocumentEntry* entry(const gui::SchematicsSceneChild* schematicElement) const;
+    DocumentEntry* entry(const gui::SchematicElement* schematicElement) const;
     DocumentEntry* entry(const model::ModelElement* modelElement) const;
 
     QList<DocumentEntry*> entries() const;
@@ -82,6 +82,6 @@ public:
 // metatype declaration for the contents of the document
 // so these things can be used as data
 Q_DECLARE_METATYPE(q2d::model::Model*)
-Q_DECLARE_METATYPE(q2d::gui::SchematicsScene*)
+Q_DECLARE_METATYPE(q2d::gui::Schematic*)
 
 #endif // DOCUMENT_H

@@ -7,10 +7,12 @@
 
 using namespace q2d;
 using namespace q2d::gui;
+using namespace q2d::model;
 
 DocumentEntry::DocumentEntry(QString id,
                              enums::DocumentEntryType type, Document* document,
-                             DocumentEntry* parent) {
+                             DocumentEntry* parent)
+    : QObject(document){
     Q_CHECK_PTR(document);
     Q_ASSERT(!id.isEmpty());
     // TODO better id validation
@@ -24,16 +26,22 @@ DocumentEntry::DocumentEntry(QString id,
 }
 
 void
-DocumentEntry::setModelElement(model::ModelElement* modelElement){
+DocumentEntry::setModelElement(ModelElement* modelElement){
     Q_CHECK_PTR(modelElement);
     m_modelElement = modelElement;
     m_modelElement->setRelatedEntry(this);
+    this->slot_updateToolTip();
+
+    // connect signals and slots
+    connect(m_modelElement, &ModelElement::signal_changed,
+            this, &DocumentEntry::slot_updateToolTip);
 }
 
 void
-DocumentEntry::setSchematicElement(gui::SchematicsSceneChild* schematicElement){
+DocumentEntry::setSchematicElement(SchematicElement* schematicElement){
     Q_CHECK_PTR(schematicElement);
     m_schematicElement = schematicElement;
+    this->slot_updateToolTip();
 }
 
 QString
@@ -41,17 +49,17 @@ DocumentEntry::id() const {
     return m_id;
 }
 
-enums::DocumentEntryType
+q2d::enums::DocumentEntryType
 DocumentEntry::type() const {
     return m_type;
 }
 
-model::ModelElement*
+ModelElement*
 DocumentEntry::modelElement() const {
     return m_modelElement;
 }
 
-SchematicsSceneChild*
+SchematicElement*
 DocumentEntry::schematicElement() const {
     return m_schematicElement;
 }
@@ -66,12 +74,26 @@ DocumentEntry::document() const{
     return m_document;
 }
 
-model::Model*
+Model*
 DocumentEntry::model() const {
     return m_document->model();
 }
 
-gui::SchematicsScene*
+Schematic*
 DocumentEntry::scene() const{
     return m_document->schematic();
+}
+
+
+void
+DocumentEntry::slot_updateToolTip(){
+    if(m_schematicElement == nullptr){
+        return;
+    }
+
+    if(m_modelElement != nullptr){
+        m_schematicElement->setToolTip(m_modelElement->toString());
+    } else {
+        m_schematicElement->setToolTip(this->id());
+    }
 }

@@ -28,6 +28,8 @@ public:
     enums::PortDirection direction() const {
         return m_direction;
     }
+
+    virtual QString toString() const override;
 };
 
 class ComponentPort : public Port {

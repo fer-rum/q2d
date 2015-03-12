@@ -1,7 +1,8 @@
 #ifndef WIREGRAPHICSITEM_H
 #define WIREGRAPHICSITEM_H
 
-#include "SchematicsSceneChild.h"
+#include "SchematicElement.h"
+
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
 #include <QObject>
@@ -14,10 +15,12 @@ class PortGraphicsItem;
 
 /**
  * @brief The WireGraphicsItem class
+ * A WireGraphicsItem is composited from one or multiple WireGraphicsLineItem instances.
+ * These are created when routing.
  * The start is always (0, 0) in local coordinates.
  */
 class WireGraphicsItem :
-    public SchematicsSceneChild {
+    public SchematicElement {
     Q_OBJECT
 private:
 
@@ -43,14 +46,16 @@ protected:
     virtual QString specificType();
     virtual QJsonObject additionalJson();
 public:
-    WireGraphicsItem(QPointF start, QPointF end, SchematicsScene* scene);
-    WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end);
 
-    // required overrides
-    //virtual QRectF boundingRect() const;
-    //virtual void paint(QPainter *painter,
-    //                   const QStyleOptionGraphicsItem *option,
-    //                   QWidget *widget);
+    /**
+     * @brief WireGraphicsItem::WireGraphicsItem
+     * Internally, the wire starts at (0, 0) in item coordinates.
+     *
+     * @param start the starting PortGraphicsItem of the wire
+     * @param end the ending PortGraphicsItem of the wire
+     * @param scene
+     */
+    WireGraphicsItem(PortGraphicsItem* start, PortGraphicsItem* end, DocumentEntry* relatedEntry);
 
     void route();
 signals:

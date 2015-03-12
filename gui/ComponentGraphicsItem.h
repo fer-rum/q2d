@@ -2,7 +2,7 @@
 #define COMPONENTGRAPHICSITEM_H
 
 #include "Constants.h"
-#include "SchematicsSceneChild.h"
+#include "SchematicElement.h"
 #include <QGraphicsSvgItem>
 
 namespace q2d {
@@ -14,18 +14,19 @@ class ComponentDescriptor;
 
 namespace gui {
 
-class ComponentGraphicsItem : public SchematicsSceneChild {
+class ComponentGraphicsItem : public SchematicElement {
     Q_OBJECT
 private:
-    QGraphicsSvgItem* m_actuals; // the actually item that gets displayed
     metamodel::ComponentDescriptor* m_type;
 
 protected:
     virtual QString specificType();
 
 public:
-    explicit ComponentGraphicsItem(metamodel::ComponentDescriptor* type, SchematicsScene* scene,
-                                   QPointF position);
+    explicit ComponentGraphicsItem(
+            QPointF position,
+            DocumentEntry* relatedEntry,
+            metamodel::ComponentDescriptor* type);
 
 signals:
 

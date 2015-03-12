@@ -1,23 +1,22 @@
 #include "ComponentGraphicsItem.h"
-
 #include "PortGraphicsItem.h"
-#include "SchematicsScene.h"
+#include "Schematic.h"
+
 #include "metamodel/ComponentDescriptor.h"
 #include "metamodel/PortDescriptor.h"
 
 using namespace q2d::gui;
 using namespace q2d::metamodel;
 
-ComponentGraphicsItem::ComponentGraphicsItem(metamodel::ComponentDescriptor* type,
-        SchematicsScene* scene,
-        QPointF position)
-    : SchematicsSceneChild(scene,
-                           new QGraphicsSvgItem(type->symbolPath())) {
+ComponentGraphicsItem::ComponentGraphicsItem(
+        QPointF position,
+        DocumentEntry* relatedEntry,
+        metamodel::ComponentDescriptor* type)
+    : SchematicElement(position, relatedEntry) {
     Q_CHECK_PTR(type);
-    Q_CHECK_PTR(scene);
 
     m_type = type;
-    this->setPos(position);
+    this->addActual(new QGraphicsSvgItem(type->symbolPath()));
     this->setFlag(QGraphicsItem::ItemIsMovable);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
 }

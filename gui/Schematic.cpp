@@ -1,4 +1,4 @@
-#include "SchematicsScene.h"
+#include "Schematic.h"
 
 #include "../Constants.h"
 #include "../Document.h"
@@ -13,18 +13,18 @@
 using namespace q2d::gui;
 using namespace q2d::constants;
 
-SchematicsScene::SchematicsScene(Document* parent)
+Schematic::Schematic(Document* parent)
     : QGraphicsScene(parent) {
 
 }
 
 q2d::Document*
-SchematicsScene::document() const {
+Schematic::document() const {
     return qobject_cast<Document*>(parent());
 }
 
 void
-SchematicsScene::drawBackground(QPainter* painter, const QRectF &rect) {
+Schematic::drawBackground(QPainter* painter, const QRectF &rect) {
 
     // TODO read behaviour from settings
     QPen pen;
@@ -42,7 +42,7 @@ SchematicsScene::drawBackground(QPainter* painter, const QRectF &rect) {
 }
 
 void
-SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
+Schematic::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
     QMimeData const* mimeData = event->mimeData();
 
     if (mimeData->hasFormat(MIME_COMPONENT_TYPE)
@@ -55,7 +55,7 @@ SchematicsScene::dragEnterEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event) {
+Schematic::dragMoveEvent(QGraphicsSceneDragDropEvent* event) {
     if (m_dragOver) {
         event->accept();
     } else {
@@ -64,7 +64,7 @@ SchematicsScene::dragMoveEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
+Schematic::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 
     if (m_dragOver) {
         this->m_dragOver = false;
@@ -75,7 +75,7 @@ SchematicsScene::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
+Schematic::dropEvent(QGraphicsSceneDragDropEvent* event) {
     // TODO find a proper way to scale the scene and the viewport when adding items
     // TODO refactor into less ugly code
 
@@ -100,7 +100,7 @@ SchematicsScene::dropEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-SchematicsScene::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition){
+Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition){
     model::enums::PortDirection direction =
             model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
 
@@ -117,6 +117,6 @@ SchematicsScene::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropP
 }
 
 void
-SchematicsScene::addItem(QGraphicsItem* item) {
+Schematic::addItem(QGraphicsItem* item) {
     QGraphicsScene::addItem(item);
 }

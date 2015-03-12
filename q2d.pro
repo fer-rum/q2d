@@ -50,14 +50,12 @@ SOURCES +=\
     ComponentFactory.cpp \
     Constants.cpp \
     gui/SchematicsView.cpp \
-    gui/SchematicsScene.cpp \
     gui/ComponentTreeView.cpp \
     metamodel/PortDescriptor.cpp \
     gui/PortGraphicsItem.cpp \
     gui/ComponentGraphicsItem.cpp \
     DocumentEntry.cpp \
     gui/WireGraphicsItem.cpp \
-    gui/SchematicsSceneChild.cpp \
     JsonHelpers.cpp \
     metamodel/ConfigurationBitDescriptor.cpp \
     metamodel/HierarchyElement.cpp \
@@ -77,7 +75,9 @@ SOURCES +=\
     $$quantorDir/quantor.c \
     gui/QuantorResultDialog.cpp \
     MapModel.cpp \
-    model/Port.cpp
+    model/Port.cpp \
+    gui/Schematic.cpp \
+    gui/SchematicElement.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -96,14 +96,12 @@ HEADERS  +=\
     ComponentFactory.h \
     Constants.h \
     gui/SchematicsView.h \
-    gui/SchematicsScene.h \
     gui/ComponentTreeView.h \
     metamodel/PortDescriptor.h \
     gui/PortGraphicsItem.h \
     gui/ComponentGraphicsItem.h \
     DocumentEntry.h \
     gui/WireGraphicsItem.h \
-    gui/SchematicsSceneChild.h \
     JsonHelpers.h \
     Enumerations.h \
     metamodel/ConfigurationBitDescriptor.h \
@@ -124,7 +122,9 @@ HEADERS  +=\
     $$quantorDir/*.h \
     gui/QuantorResultDialog.h \
     MapModel.h \
-    model/Port.h
+    model/Port.h \
+    gui/Schematic.h \
+    gui/SchematicElement.h
 
 INCLUDEPATH +=\
     $$picosatDir \

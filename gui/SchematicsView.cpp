@@ -1,6 +1,6 @@
 #include "SchematicsView.h"
 
-#include "SchematicsScene.h"
+#include "Schematic.h"
 #include <QtDebug>
 
 using namespace q2d::gui;

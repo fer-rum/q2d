@@ -1,4 +1,5 @@
 #include "../DocumentEntry.h"
+#include "../Enumerations.h"
 #include "Component.h"
 #include "Port.h"
 
@@ -9,6 +10,13 @@ Port::Port(enums::PortDirection direction, DocumentEntry *relatedEntry)
     Q_ASSERT(direction == enums::PortDirection::IN
              || direction == enums::PortDirection::OUT);
     m_direction = direction;
+}
+
+QString
+Port::toString() const {
+    QString text = Node::toString();
+    text += "\nDirection " + enums::PortDirectionToString(m_direction);
+    return text;
 }
 
 QStringList

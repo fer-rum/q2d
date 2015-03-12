@@ -8,9 +8,12 @@
 #include <QList>
 
 namespace q2d {
+
+class DocumentEntry;
+
 namespace gui {
 
-class SchematicsScene;
+class Schematic;
 
 // TODO maybe merge the actuals into a QGraphicsItemGroup?
 
@@ -35,7 +38,7 @@ class SchematicsScene;
  * to be stored while saving.</li>
  * </ul>
  */
-class SchematicsSceneChild : public QGraphicsObject {
+class SchematicElement : public QGraphicsObject {
 
     // TODO maybe cache and update the generated Json,
     // it may also be used as better dragging text or as tooltip?
@@ -49,10 +52,12 @@ private:
      */
     QRectF m_boundingRect;
 
+    DocumentEntry* m_relatedEntry;
+
 protected:
     static const QJsonObject EMPTY_JSON;
 
-    SchematicsScene* m_scene;
+    Schematic* m_scene;
 
     void setBoundingRect(QRectF rect) {
         m_boundingRect = rect;
@@ -72,16 +77,12 @@ protected:
     QList<QGraphicsItem*> actuals() const {
         return m_actuals;
     }
-    // TODO add overrides as needed
 
 public:
-    SchematicsSceneChild(SchematicsScene* scene,
-                         QGraphicsItem* actual,
-                         SchematicsSceneChild* parent = nullptr);
-    SchematicsSceneChild(SchematicsScene* scene,
-                         SchematicsSceneChild* parent = nullptr);
+    SchematicElement(QPointF position, DocumentEntry* relatedEntry);
 
-    SchematicsScene* scene() const;
+    Schematic* scene() const;
+
     // for JSON generation
     // you must/may want to override these.
     virtual QString specificType() = 0;
@@ -90,16 +91,13 @@ public:
     }
 
     // necessary overrides
-    virtual QRectF boundingRect() const {
+    virtual QRectF boundingRect() const override {
         return m_boundingRect;
     }
 
     virtual void paint(QPainter* painter,
                        const QStyleOptionGraphicsItem* option,
-                       QWidget* widget = nullptr);
-    virtual QPointF pos() const {
-        return QGraphicsObject::pos();
-    }
+                       QWidget* widget = nullptr) override;
 };
 
 } // namespace gui

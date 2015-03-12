@@ -15,7 +15,7 @@ class Document;
 namespace gui {
 
 
-class SchematicsScene
+class Schematic
         : public QGraphicsScene {
     Q_OBJECT
 private:
@@ -25,7 +25,7 @@ private:
     void handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition);
 
 public:
-    explicit SchematicsScene(Document* parent);
+    explicit Schematic(Document* parent);
     Document* document() const;
 
     // cosmetic overrides

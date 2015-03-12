@@ -1,8 +1,8 @@
 #include "Document.h"
 
 #include "gui/ComponentGraphicsItem.h"
-#include "gui/SchematicsScene.h"
-#include "gui/SchematicsSceneChild.h"
+#include "gui/Schematic.h"
+#include "gui/SchematicElement.h"
 #include "gui/PortGraphicsItem.h"
 #include "gui/WireGraphicsItem.h"
 #include "metamodel/ComponentDescriptor.h"
@@ -52,7 +52,7 @@ Document::Document(QString name, Project* parent) :
 
     this->setData(QVariant::fromValue(new model::Model(this)),
                   DocumentRole::MODEL);
-    this->setData(QVariant::fromValue(new gui::SchematicsScene(this)),
+    this->setData(QVariant::fromValue(new gui::Schematic(this)),
                   DocumentRole::SCHEMATIC);
 }
 
@@ -60,9 +60,9 @@ Document::Document(QString name, Project* parent) :
  * @brief Document::getSchematicView is a getter for convenience
  * @return
  */
-gui::SchematicsScene*
+gui::Schematic*
 Document::schematic() {
-    return this->data(DocumentRole::SCHEMATIC).value<gui::SchematicsScene*>();
+    return this->data(DocumentRole::SCHEMATIC).value<gui::Schematic*>();
 }
 
 /**
@@ -130,7 +130,7 @@ Document::entry(const QString id) const {
 }
 
 DocumentEntry*
-Document::entry(const gui::SchematicsSceneChild* schematicElement) const {
+Document::entry(const gui::SchematicElement* schematicElement) const {
     Q_CHECK_PTR(schematicElement);
 
     for (DocumentEntry * entry : m_entries) {

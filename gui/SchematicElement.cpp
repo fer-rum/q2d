@@ -1,38 +1,34 @@
-#include "SchematicsSceneChild.h"
-#include "SchematicsScene.h"
+#include "../DocumentEntry.h"
+
 #include "Constants.h"
 #include "JsonHelpers.h"
+#include "Schematic.h"
+#include "SchematicElement.h"
 
 using namespace q2d::gui;
 using namespace q2d::constants;
 
-const QJsonObject SchematicsSceneChild::EMPTY_JSON = QJsonObject();
+const QJsonObject SchematicElement::EMPTY_JSON = QJsonObject();
 
-
-SchematicsSceneChild::SchematicsSceneChild(SchematicsScene* scene, SchematicsSceneChild* parent)
-    : QGraphicsObject(parent) {
-    Q_CHECK_PTR(scene);
-    m_scene = scene;
+SchematicElement::SchematicElement(QPointF position, q2d::DocumentEntry* relatedEntry)
+    : QGraphicsObject(relatedEntry->parent() != nullptr? relatedEntry->parent()->schematicElement()
+                                      : nullptr) {
+    Q_CHECK_PTR(relatedEntry);
+    m_relatedEntry = relatedEntry;
+    m_scene = relatedEntry->scene();
     m_actuals = QList<QGraphicsItem*>();
     m_boundingRect = QRectF(0, 0, 0, 0);
+    this->setPos(position);
 }
 
-SchematicsSceneChild::SchematicsSceneChild(SchematicsScene* scene,
-        QGraphicsItem* actual,
-        SchematicsSceneChild* parent)
-    : SchematicsSceneChild(scene, parent) {
-    Q_CHECK_PTR(actual);
-    this->addActual(actual);
-}
-
-SchematicsScene*
-SchematicsSceneChild::scene() const {
+Schematic*
+SchematicElement::scene() const {
     Q_CHECK_PTR(m_scene);
     return m_scene;
 }
 
 void
-SchematicsSceneChild::addActual(QGraphicsItem* actual) {
+SchematicElement::addActual(QGraphicsItem* actual) {
     m_actuals.append(actual);
     this->recalculateBoundingRect();
 }
@@ -45,7 +41,7 @@ SchematicsSceneChild::addActual(QGraphicsItem* actual) {
  * @return
  */
 QAbstractGraphicsShapeItem*
-SchematicsSceneChild::actual() const {
+SchematicElement::actual() const {
     Q_ASSERT(!m_actuals.isEmpty());
     QAbstractGraphicsShapeItem* result =
         dynamic_cast<QAbstractGraphicsShapeItem*>(m_actuals.first());
@@ -62,7 +58,7 @@ SchematicsSceneChild::actual() const {
  * in m_boundingRect and can be aquired via boundingRect().
  */
 void
-SchematicsSceneChild::recalculateBoundingRect() {
+SchematicElement::recalculateBoundingRect() {
 
     // the trivial case
     if (m_actuals.isEmpty()) {
@@ -101,7 +97,7 @@ SchematicsSceneChild::recalculateBoundingRect() {
 }
 
 void
-SchematicsSceneChild::paint(QPainter* painter,
+SchematicElement::paint(QPainter* painter,
                             const QStyleOptionGraphicsItem* option,
                             QWidget* widget) {
 

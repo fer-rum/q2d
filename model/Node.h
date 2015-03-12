@@ -16,14 +16,24 @@ class Component;
 // TODO documentation
 class Node : public ModelElement {
 private:
-    QList<ModelElement*> drivenElements;
-    ModelElement* driver;
+    QList<ModelElement*> m_drivenElements;
+    ModelElement* m_driver;
 public:
     Node(DocumentEntry* relatedEntry);
 
     // TODO rename to better reflect actual function
     void addDriver(ModelElement* driver);
     void addDrivenElement(ModelElement* drivenElement);
+
+    ModelElement* driver() const {
+        return m_driver;
+    }
+
+    QList<ModelElement*> drivenElements() const {
+        return m_drivenElements;
+    }
+
+    virtual QString toString() const override;
 };
 
 // TODO documentation

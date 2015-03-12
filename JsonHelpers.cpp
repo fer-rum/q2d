@@ -6,7 +6,7 @@
 #include "DocumentEntry.h"
 #include "Project.h"
 #include "gui/ComponentGraphicsItem.h"
-#include "gui/SchematicsSceneChild.h"
+#include "gui/SchematicElement.h"
 #include "model/ModelElement.h"
 #include "metamodel/ComponentDescriptor.h"
 
@@ -236,7 +236,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
 }
 
 QJsonObject
-q2d::SchematicsSceneChildToJson(gui::SchematicsSceneChild* ssc) {
+q2d::SchematicsSceneChildToJson(gui::SchematicElement* ssc) {
     QJsonObject result = QJsonObject();
 
     result.insert(JSON_SCHEMATIC_SUB_TYPE, QJsonValue(ssc->specificType()));
