@@ -31,23 +31,16 @@ PortDescriptor::PortDescriptor(QString name,
     QString setting;
     switch (direction) {
     case model::enums::PortDirection::IN :
-        setting = KEY_FILE_PORT_IN;
+        this->setIcon(QIcon(":/icons/ressources/icons/port_in.svg"));
         break;
     case model::enums::PortDirection::OUT :
-        setting = KEY_FILE_PORT_OUT;
+        this->setIcon(QIcon(":/icons/ressources/icons/port_out.svg"));
         break;
     case model::enums::PortDirection::IN_OUT :
-        setting = KEY_FILE_PORT_INOUT;
+        this->setIcon(QIcon(":/icons/ressources/icons/port_inout.svg"));
         break;
     default:
         setting = QString();
-    }
-
-    QString fileName = Application::instance()->getSetting(setting).toString();
-
-    if (!fileName.isEmpty()) {
-        QIcon icon = QIcon(fileName);
-        this->setIcon(icon);
     }
 }
 

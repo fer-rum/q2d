@@ -44,7 +44,7 @@ private:
 
     /**
      * @brief instantiateModulePort is a helper method. It does not do everything needed, but a subset,
-     * so do not call it on its own.
+     * so do not call it on its own. Use instantiateInputPort() or instantiateOutputPort() respectively.
      * @param document
      * @param position
      * @param id

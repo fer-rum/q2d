@@ -49,6 +49,8 @@ metamodel::enums::intToElementType(int i) {
         return ElementType::CONFIG_BIT;
     case (int)ElementType::PORT :
         return ElementType::PORT;
+    case (int) ElementType::FUNCTION:
+        return ElementType::FUNCTION;
     default :
         return ElementType::INVALID;
     }

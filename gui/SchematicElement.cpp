@@ -109,3 +109,7 @@ SchematicElement::paint(QPainter* painter,
         actual->paint(painter, option, widget);
     }
 }
+QString
+SchematicElement::id() const {
+    return m_relatedEntry->id();
+}

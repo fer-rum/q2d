@@ -53,6 +53,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
     case model::enums::PortDirection::IN:
         this->m_defaultPen = PEN_INPUT_PORT;
         this->m_defaultBrush = BRUSH_INPUT_PORT;
+        this->setAcceptDrops(true); // input ports can receive wire drops
         break;
     case model::enums::PortDirection::IN_OUT:
         this->m_defaultPen = PEN_IN_OUT_PORT;
@@ -61,6 +62,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
     case model::enums::PortDirection::OUT:
         this->m_defaultPen = PEN_OUTPUT_PORT;
         this->m_defaultBrush = BRUSH_OUTPUT_PORT;
+        this->setAcceptedMouseButtons(Qt::LeftButton); // output ports can be dragged from
         break;
     default:
         this->m_defaultPen = PEN_UNDEFINED_PORT;
@@ -74,8 +76,6 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
     this->addActual(newActual);
 
     this->setAcceptHoverEvents(true);
-    this->setAcceptedMouseButtons(Qt::LeftButton);
-    this->setAcceptDrops(true);
     Q_ASSERT(this->actual()->isVisible());
 }
 
@@ -133,18 +133,6 @@ PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     // we indeed are dragging
     this->performDrag();
     event->accept();
-}
-
-/**
- * @brief PortGraphicsItem::id is a convenience function
- * @return
- */
-QString
-PortGraphicsItem::id() const {
-    // TODO asserts
-    // TODO this is a solution by spiraling in…
-    Document* container = m_scene->document();
-    return container->entry(this)->id();
 }
 
 /**

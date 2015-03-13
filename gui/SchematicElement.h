@@ -52,11 +52,10 @@ private:
      */
     QRectF m_boundingRect;
 
-    DocumentEntry* m_relatedEntry;
-
 protected:
     static const QJsonObject EMPTY_JSON;
 
+    DocumentEntry* m_relatedEntry;
     Schematic* m_scene;
 
     void setBoundingRect(QRectF rect) {
@@ -82,6 +81,12 @@ public:
     SchematicElement(QPointF position, DocumentEntry* relatedEntry);
 
     Schematic* scene() const;
+
+    /**
+     * @brief id is a convenience shortcut for querying the id of the related document entry
+     * @return
+     */
+    QString id() const;
 
     // for JSON generation
     // you must/may want to override these.

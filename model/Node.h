@@ -33,6 +33,10 @@ public:
         return m_drivenElements;
     }
 
+    bool hasDriver(){
+        return m_driver != nullptr;
+    }
+
     virtual QString toString() const override;
 };
 

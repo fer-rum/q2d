@@ -5,6 +5,7 @@
 
 #include "Category.h"
 #include "ConfigurationBitDescriptor.h"
+#include "FunctionDescriptor.h"
 #include "PortDescriptor.h"
 
 #include <QtDebug>
@@ -103,6 +104,10 @@ ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup)
 void
 ComponentDescriptor::addFunction(QString function) {
     m_functions.append(function);
+
+    // also create a function descripor item
+    FunctionDescriptor* funcDes = new FunctionDescriptor(function, this);
+    this->appendRow(funcDes);
 }
 
 QString

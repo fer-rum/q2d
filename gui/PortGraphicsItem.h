@@ -103,7 +103,6 @@ public:
     static bool wireDrawingMode();
     static void setWireDrawingMode(bool mode, QPointF* origin = nullptr);
 
-    QString id() const;
 signals:
 
 public slots:

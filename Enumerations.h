@@ -47,6 +47,7 @@ enum class ElementType {
     CONFIG_BIT_GROUP,
     CONFIG_BIT,
     PORT,
+    FUNCTION,
     INVALID
 };
 

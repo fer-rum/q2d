@@ -42,14 +42,7 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned i
                 this);
         this->appendRow(descriptor);
     }
-
-    // fetch the icon for the group
-    QString fileName = Application::instance()->getSetting(KEY_FILE_BIT_GROUP).toString();
-
-    if (!fileName.isEmpty()) {
-        QIcon icon = QIcon(fileName);
-        this->setIcon(icon);
-    }
+        this->setIcon(QIcon(":/icons/ressources/icons/bit_group.svg"));
 }
 
 QString

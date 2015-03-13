@@ -15,7 +15,9 @@ using namespace q2d::gui;
 using namespace q2d::constants;
 
 ComponentTreeView::ComponentTreeView(QWidget* parent) :
-    QTreeView(parent) {}
+    QTreeView(parent) {
+    this->setWordWrap(true);
+}
 
 void
 ComponentTreeView::mousePressEvent(QMouseEvent* event) {

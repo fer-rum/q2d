@@ -77,7 +77,8 @@ SOURCES +=\
     MapModel.cpp \
     model/Port.cpp \
     gui/Schematic.cpp \
-    gui/SchematicElement.cpp
+    gui/SchematicElement.cpp \
+    metamodel/FunctionDescriptor.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -124,7 +125,8 @@ HEADERS  +=\
     MapModel.h \
     model/Port.h \
     gui/Schematic.h \
-    gui/SchematicElement.h
+    gui/SchematicElement.h \
+    metamodel/FunctionDescriptor.h
 
 INCLUDEPATH +=\
     $$picosatDir \
