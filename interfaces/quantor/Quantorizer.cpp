@@ -1,4 +1,4 @@
-#line 70 "Quantorizer.ypp"
+#line 74 "Quantorizer.ypp"
 
 #include "Quantorizer.hpp"
 
@@ -11,6 +11,26 @@ extern "C" {
 }
 
 using namespace q2d::quantor;
+
+class q2d::quantor::SVal {
+  std::vector<int>  lits;
+
+public:
+  SVal() {}
+  SVal(int const  v) { lits.push_back(v); }
+  ~SVal() {}
+
+public:
+  operator int() const {
+    assert(lits.size() == 1);
+    return  lits[0];
+  }
+  void add(int const  v) { lits.push_back(v); }
+
+public:
+  auto begin() const -> decltype(lits.begin()) { return  lits.begin(); }
+  auto end()   const -> decltype(lits.end())   { return  lits.end(); }
+};
 
 //- Life Cycle ---------------------------------------------------------------
 Quantorizer::Quantorizer() : max_var(0), context(0), formula(0) {}
@@ -27,10 +47,12 @@ unsigned Quantorizer::nextToken(YYSVal &sval) {
     char const  c = *formula++;
     switch(c) {
     case '\0':
-      formula = 0;
     case '(':
     case ')':
+    case '[':
+    case ']':
     case '=':
+    case ',':
       return  c;
     case '!':
     case '~':
@@ -106,6 +128,10 @@ inline unsigned Quantorizer::makeAuxiliary() {
   return  id;
 }
 
+inline void Quantorizer::addClause(SVal const& clause) {
+  for(int const  lit : clause)  clauses.push_back(lit);
+  clauses.push_back(0);
+}
 inline void Quantorizer::addClause(int const  a) {
   clauses.push_back(a);
   clauses.push_back(0);
@@ -175,7 +201,7 @@ Result Quantorizer::solve(std::vector<int> &sol) {
 }
 
 
-#line 178 "Quantorizer.cpp"
+#line 204 "Quantorizer.cpp"
 #include <vector>
 class q2d::quantor::Quantorizer::YYStack {
   class Ele {
@@ -212,22 +238,22 @@ public:
   unsigned short operator*() const { return  stack.back().state; }
 };
 
-char const *const  q2d::quantor::Quantorizer::yyterms[] = { "EOF",
+char const *const  q2d::quantor::Quantorizer::yyterms[] = { "EOF", 
 "NOT", "AND", "OR", "XOR", "NAND", "NOR", "XNOR", "VAR",
-"'='", "'('", "')'", };
+"'='", "'['", "']'", "','", "'('", "')'", };
 unsigned short const  q2d::quantor::Quantorizer::yyintern[] = {
      0,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
-    10,     11,    264,    264,    264,    264,    264,    264,
+    13,     14,    264,    264,     12,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,      9,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
-   264,    264,    264,    264,    264,    264,    264,    264,
+   264,    264,    264,     10,    264,     11,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
    264,    264,    264,    264,    264,    264,    264,    264,
@@ -256,77 +282,94 @@ char const *const  q2d::quantor::Quantorizer::yyrules[] = {
 "   0: [ 0] $        -> spec",
 "   1: [ 0] spec     -> expr",
 "   2: [ 0] spec     -> expr '=' expr",
-"   3: [ 2] expr     -> expr AND expr",
-"   4: [ 2] expr     -> expr OR expr",
-"   5: [ 2] expr     -> expr XOR expr",
-"   6: [ 2] expr     -> expr NAND expr",
-"   7: [ 2] expr     -> expr NOR expr",
-"   8: [ 2] expr     -> expr XNOR expr",
-"   9: [ 2] expr     -> prim",
-"  10: [ 3] prim     -> VAR",
-"  11: [ 0] prim     -> '(' expr ')'",
-"  12: [ 1] prim     -> NOT prim",
+"   3: [ 0] spec     -> '[' list ']'",
+"   4: [ 0] list     -> expr",
+"   5: [ 0] list     -> list ',' expr",
+"   6: [ 2] expr     -> expr AND expr",
+"   7: [ 2] expr     -> expr OR expr",
+"   8: [ 2] expr     -> expr XOR expr",
+"   9: [ 2] expr     -> expr NAND expr",
+"  10: [ 2] expr     -> expr NOR expr",
+"  11: [ 2] expr     -> expr XNOR expr",
+"  12: [ 2] expr     -> prim",
+"  13: [ 3] prim     -> VAR",
+"  14: [ 1] prim     -> NOT prim",
+"  15: [ 0] prim     -> '(' expr ')'",
 };
 #endif
 unsigned short const q2d::quantor::Quantorizer::yylength[] = {
-     1,      1,      3,      3,      3,      3,      3,      3,
-     3,      1,      1,      3,      2, };
+     1,      1,      3,      3,      1,      3,      3,      3,
+     3,      3,      3,      3,      1,      1,      2,      3,
+};
 unsigned short const q2d::quantor::Quantorizer::yylhs   [] = {
-   (unsigned short)~0u,      0,      0,      1,      1,      1,      1,      1,
-     1,      1,      2,      2,      2, };
-
-unsigned short const  q2d::quantor::Quantorizer::yygoto  [][3] = {
-{      3,      2,      1,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,     21,  },
-{      0,      0,      0,  },
-{      0,      7,      1,  },
-{      0,      0,      0,  },
-{      0,     20,      1,  },
-{      0,     19,      1,  },
-{      0,     18,      1,  },
-{      0,     17,      1,  },
-{      0,     16,      1,  },
-{      0,     15,      1,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,      0,      0,  },
-{      0,     23,      1,  },
-{      0,      0,      0,  },
+   (unsigned short)~0u,      0,      0,      0,      2,      2,      1,      1,
+     1,      1,      1,      1,      1,      3,      3,      3,
 };
 
-signed short const  q2d::quantor::Quantorizer::yyaction[][12] = {
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{     -9,      0,     -9,     -9,     -9,     -9,     -9,     -9,      0,     -9,      0,     -9,  },
-{     -1,      0,      8,      9,     10,     11,     12,     13,      0,     22,      0,      0,  },
-{      1,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{    -10,      0,    -10,    -10,    -10,    -10,    -10,    -10,      0,    -10,      0,    -10,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      0,      8,      9,     10,     11,     12,     13,      0,      0,      0,     14,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{    -11,      0,    -11,    -11,    -11,    -11,    -11,    -11,      0,    -11,      0,    -11,  },
-{     -8,      0,     -8,     -8,     -8,     -8,     -8,     -8,      0,     -8,      0,     -8,  },
-{     -7,      0,     -7,     -7,     -7,     -7,     -7,     -7,      0,     -7,      0,     -7,  },
-{     -6,      0,     -6,     -6,     -6,     -6,     -6,     -6,      0,     -6,      0,     -6,  },
-{     -5,      0,     -5,     -5,     -5,     -5,     -5,     -5,      0,     -5,      0,     -5,  },
-{     -4,      0,     -4,     -4,     -4,     -4,     -4,     -4,      0,     -4,      0,     -4,  },
-{     -3,      0,     -3,     -3,     -3,     -3,     -3,     -3,      0,     -3,      0,     -3,  },
-{    -12,      0,    -12,    -12,    -12,    -12,    -12,    -12,      0,    -12,      0,    -12,  },
-{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,  },
-{     -2,      0,      8,      9,     10,     11,     12,     13,      0,      0,      0,      0,  },
+unsigned short const  q2d::quantor::Quantorizer::yygoto  [][4] = {
+{      3,      2,      0,      1,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,     27,  },
+{      0,      0,      0,      0,  },
+{      0,     23,     22,      1,  },
+{      0,      8,      0,      1,  },
+{      0,      0,      0,      0,  },
+{      0,     21,      0,      1,  },
+{      0,     20,      0,      1,  },
+{      0,     19,      0,      1,  },
+{      0,     18,      0,      1,  },
+{      0,     17,      0,      1,  },
+{      0,     16,      0,      1,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,     26,      0,      1,  },
+{      0,      0,      0,      0,  },
+{      0,      0,      0,      0,  },
+{      0,     29,      0,      1,  },
+{      0,      0,      0,      0,  },
+};
+
+signed short const  q2d::quantor::Quantorizer::yyaction[][15] = {
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      6,      0,      0,      7,      0,  },
+{    -12,      0,    -12,    -12,    -12,    -12,    -12,    -12,      0,    -12,      0,    -12,    -12,      0,    -12,  },
+{     -1,      0,      9,     10,     11,     12,     13,     14,      0,     28,      0,      0,      0,      0,      0,  },
+{      1,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{    -13,      0,    -13,    -13,    -13,    -13,    -13,    -13,      0,    -13,      0,    -13,    -13,      0,    -13,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      0,      9,     10,     11,     12,     13,     14,      0,      0,      0,      0,      0,      0,     15,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{    -15,      0,    -15,    -15,    -15,    -15,    -15,    -15,      0,    -15,      0,    -15,    -15,      0,    -15,  },
+{    -11,      0,    -11,    -11,    -11,    -11,    -11,    -11,      0,    -11,      0,    -11,    -11,      0,    -11,  },
+{    -10,      0,    -10,    -10,    -10,    -10,    -10,    -10,      0,    -10,      0,    -10,    -10,      0,    -10,  },
+{     -9,      0,     -9,     -9,     -9,     -9,     -9,     -9,      0,     -9,      0,     -9,     -9,      0,     -9,  },
+{     -8,      0,     -8,     -8,     -8,     -8,     -8,     -8,      0,     -8,      0,     -8,     -8,      0,     -8,  },
+{     -7,      0,     -7,     -7,     -7,     -7,     -7,     -7,      0,     -7,      0,     -7,     -7,      0,     -7,  },
+{     -6,      0,     -6,     -6,     -6,     -6,     -6,     -6,      0,     -6,      0,     -6,     -6,      0,     -6,  },
+{      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,     24,     25,      0,      0,  },
+{      0,      0,      9,     10,     11,     12,     13,     14,      0,      0,      0,     -4,     -4,      0,      0,  },
+{     -3,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,      0,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{      0,      0,      9,     10,     11,     12,     13,     14,      0,      0,      0,     -5,     -5,      0,      0,  },
+{    -14,      0,    -14,    -14,    -14,    -14,    -14,    -14,      0,    -14,      0,    -14,    -14,      0,    -14,  },
+{      0,      4,      0,      0,      0,      0,      0,      0,      5,      0,      0,      0,      0,      7,      0,  },
+{     -2,      0,      9,     10,     11,     12,     13,     14,      0,      0,      0,      0,      0,      0,      0,  },
 };
 
 void q2d::quantor::Quantorizer::parse() {
@@ -351,7 +394,7 @@ void q2d::quantor::Quantorizer::parse() {
       if(yyact == 0) {
         std::string                yymsg("Expecting (");
         signed short const *const  yyrow = yyaction[*yystack];
-        for(unsigned  i = 0; i < 12; i++) {
+        for(unsigned  i = 0; i < 15; i++) {
           if(yyrow[i])  yymsg.append(yyterms[i]) += '|';
         }
         *yymsg.rbegin() = ')';
@@ -369,7 +412,7 @@ void q2d::quantor::Quantorizer::parse() {
         YYSVal                yylval;
         unsigned short const  yyrno = (yyact < 0)? -yyact : 0;
         unsigned short const  yylen = yylength[yyrno];
-
+        
 #ifdef TRACE
         std::cerr << "Reduce by " << yyrules[yyrno] << std::endl;
 #endif
@@ -377,48 +420,64 @@ void q2d::quantor::Quantorizer::parse() {
         case 0:         // accept
           return;
 case 1: {
-#line 254 "Quantorizer.ypp"
-
-        addClause(yystack[yylen - 1]);
-
-#line 384 "Quantorizer.cpp"
+#line 284 "Quantorizer.ypp"
+ addClause((int)yystack[yylen - 1]); 
+#line 425 "Quantorizer.cpp"
 break;
 }
 case 2: {
-#line 257 "Quantorizer.ypp"
+#line 285 "Quantorizer.ypp"
 
         addClause( yystack[yylen - 1], -yystack[yylen - 3]);
         addClause(-yystack[yylen - 1],  yystack[yylen - 3]);
-
-#line 393 "Quantorizer.cpp"
+       
+#line 434 "Quantorizer.cpp"
 break;
 }
 case 3: {
-#line 261 "Quantorizer.ypp"
+#line 289 "Quantorizer.ypp"
+ addClause(yystack[yylen - 2]); 
+#line 440 "Quantorizer.cpp"
+break;
+}
+case 4: {
+#line 290 "Quantorizer.ypp"
+ yylval = yystack[yylen - 1]; 
+#line 446 "Quantorizer.cpp"
+break;
+}
+case 5: {
+#line 291 "Quantorizer.ypp"
+ yylval = yystack[yylen - 1]; yylval.add(yystack[yylen - 3]); 
+#line 452 "Quantorizer.cpp"
+break;
+}
+case 6: {
+#line 293 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
         addClause(-res,  yystack[yylen - 1]);
         addClause(-res,  yystack[yylen - 3]);
         yylval = res;
-
-#line 405 "Quantorizer.cpp"
+       
+#line 464 "Quantorizer.cpp"
 break;
 }
-case 4: {
-#line 268 "Quantorizer.ypp"
+case 7: {
+#line 300 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res,  yystack[yylen - 1], yystack[yylen - 3]);
         addClause( res, -yystack[yylen - 1]);
         addClause( res, -yystack[yylen - 3]);
         yylval = res;
-
-#line 417 "Quantorizer.cpp"
+       
+#line 476 "Quantorizer.cpp"
 break;
 }
-case 5: {
-#line 275 "Quantorizer.ypp"
+case 8: {
+#line 307 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -426,36 +485,36 @@ case 5: {
         addClause( res, -yystack[yylen - 1],  yystack[yylen - 3]);
         addClause( res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
-
-#line 430 "Quantorizer.cpp"
+       
+#line 489 "Quantorizer.cpp"
 break;
 }
-case 6: {
-#line 283 "Quantorizer.ypp"
+case 9: {
+#line 315 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause(-res, -yystack[yylen - 1], -yystack[yylen - 3]);
         addClause( res,  yystack[yylen - 1]);
         addClause( res,  yystack[yylen - 3]);
         yylval = res;
-
-#line 442 "Quantorizer.cpp"
+       
+#line 501 "Quantorizer.cpp"
 break;
 }
-case 7: {
-#line 290 "Quantorizer.ypp"
+case 10: {
+#line 322 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res,  yystack[yylen - 1], yystack[yylen - 3]);
         addClause(-res, -yystack[yylen - 1]);
         addClause(-res, -yystack[yylen - 3]);
         yylval = res;
-
-#line 454 "Quantorizer.cpp"
+       
+#line 513 "Quantorizer.cpp"
 break;
 }
-case 8: {
-#line 297 "Quantorizer.ypp"
+case 11: {
+#line 329 "Quantorizer.ypp"
 
         unsigned const  res = makeAuxiliary();
         addClause( res, -yystack[yylen - 1], -yystack[yylen - 3]);
@@ -463,41 +522,36 @@ case 8: {
         addClause(-res, -yystack[yylen - 1],  yystack[yylen - 3]);
         addClause(-res,  yystack[yylen - 1], -yystack[yylen - 3]);
         yylval = res;
-
-#line 467 "Quantorizer.cpp"
-break;
-}
-case 9: {
-#line 305 "Quantorizer.ypp"
- yylval = yystack[yylen - 1];
-#line 473 "Quantorizer.cpp"
-break;
-}
-case 10: {
-#line 307 "Quantorizer.ypp"
- yylval = yystack[yylen - 1];
-#line 479 "Quantorizer.cpp"
-break;
-}
-case 11: {
-#line 308 "Quantorizer.ypp"
- yylval = yystack[yylen - 2];
-#line 485 "Quantorizer.cpp"
+       
+#line 526 "Quantorizer.cpp"
 break;
 }
 case 12: {
-#line 309 "Quantorizer.ypp"
-
-        unsigned const  res = makeAuxiliary();
-        addClause( res,  yystack[yylen - 2]);
-        addClause(-res, -yystack[yylen - 2]);
-        yylval = res;
-
-#line 496 "Quantorizer.cpp"
+#line 337 "Quantorizer.ypp"
+ yylval = yystack[yylen - 1]; 
+#line 532 "Quantorizer.cpp"
+break;
+}
+case 13: {
+#line 339 "Quantorizer.ypp"
+ yylval =  yystack[yylen - 1]; 
+#line 538 "Quantorizer.cpp"
+break;
+}
+case 14: {
+#line 340 "Quantorizer.ypp"
+ yylval = -yystack[yylen - 2]; 
+#line 544 "Quantorizer.cpp"
+break;
+}
+case 15: {
+#line 341 "Quantorizer.ypp"
+ yylval =  yystack[yylen - 2]; 
+#line 550 "Quantorizer.cpp"
 break;
 }
         }
-
+        
         yystack.pop(yylen);
         yystack.push(yygoto[*yystack][yylhs[yyrno]], yylval);
       }
