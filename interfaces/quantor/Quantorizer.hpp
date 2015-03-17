@@ -36,8 +36,8 @@ class Quantorizer {
   std::vector<int>       clauses;
 
   // Current Parsing State
-  Context    *context;
-  char const *formula;
+  Context const *context;
+  char    const *formula;
 
 //- Life Cycle ---------------------------------------------------------------
 public:
@@ -61,7 +61,7 @@ private:
 //- Usage Interface ----------------------------------------------------------
 public:
   // Builds a problem by adding contexts with formulae.
-  void set(Context &ctx) {
+  void set(Context const &ctx) {
     context = &ctx;
   }
   void parse(char const *fct) throw (ParseException);
