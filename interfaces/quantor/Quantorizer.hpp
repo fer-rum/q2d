@@ -5,21 +5,24 @@
 #include <vector>
 #include <map>
 
-#include "QIContext.h"
+#include "Context.h"
 #include "ParseException.h"
 #include "Result.h"
 
-using namespace q2d::quantor;
+namespace q2d {
+  namespace quantor {
+    class SVal;
+  }
+}
 
-#line 14 "Quantorizer.hpp"
+#line 18 "Quantorizer.hpp"
 #include <string>
 namespace q2d {
 namespace quantor {
 class Quantorizer {
-  typedef unsigned YYSVal;
+  typedef SVal YYSVal;
   class YYStack;
-#line 22 "Quantorizer.ypp"
-
+#line 26 "Quantorizer.ypp"
 
   // Variable Bookkeeping
   unsigned  max_var;
@@ -33,8 +36,8 @@ class Quantorizer {
   std::vector<int>       clauses;
 
   // Current Parsing State
-  QIContext const *context;
-  char      const *formula;
+  Context    *context;
+  char const *formula;
 
 //- Life Cycle ---------------------------------------------------------------
 public:
@@ -50,6 +53,7 @@ private:
 private:
   unsigned getVar(std::string const &name);
   unsigned makeAuxiliary();
+  void addClause(SVal const &clause);
   void addClause(int const  a);
   void addClause(int const  a, int const  b);
   void addClause(int const  a, int const  b, int const  c);
@@ -57,7 +61,7 @@ private:
 //- Usage Interface ----------------------------------------------------------
 public:
   // Builds a problem by adding contexts with formulae.
-  void set(QIContext const &ctx) {
+  void set(Context &ctx) {
     context = &ctx;
   }
   void parse(char const *fct) throw (ParseException);
@@ -65,7 +69,7 @@ public:
   // Solves the current problem and clears this Quantorizers state.
   Result solve(std::vector<int> &sol);
 
-#line 68 "Quantorizer.hpp"
+#line 72 "Quantorizer.hpp"
 private:
   void parse();
 public:
@@ -90,8 +94,8 @@ static unsigned short const  yylhs   [];
 static char const    *const  yyrules [];
 
 private:
-static unsigned short const  yygoto  [][3];
-static signed   short const  yyaction[][12];
+static unsigned short const  yygoto  [][4];
+static signed   short const  yyaction[][15];
 };
 }}
 #endif

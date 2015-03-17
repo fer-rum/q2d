@@ -2,6 +2,7 @@
 #define Q2D_QUANTOR_QICONTEXT_H
 
 #include "VariableType.h"
+#include "Context.h"
 
 #include <QString>
 #include <QStringList>
@@ -18,7 +19,7 @@ namespace quantor {
 /**
  * @brief The QIContext class wraps the access to the context-based information of the QuantorInterface.
  */
-class QIContext {
+class QIContext : public Context {
 
 private:
 
@@ -69,8 +70,8 @@ public:
 
     /** Fetches the global variable number for a given variable name in the context.
      */
-    unsigned int operator[](std::string const &varName) const; // TBP-compat
-    VariableType typeOf(unsigned int variable) const;
+    unsigned int operator[](std::string const &varName) override;
+    VariableType typeOf(unsigned int variable) override;
     VariableType typeOf(std::string varName) const;
 
     /**
