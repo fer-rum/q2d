@@ -19,13 +19,13 @@ using namespace q2d::constants;
  */
 PortDescriptor::PortDescriptor(QString name,
                                model::enums::PortDirection direction,
-                               QPointF position,
+                               QPoint position,
                                metamodel::ComponentDescriptor* parent)
     : ComponentElement(name, parent) {
 
     this->setData(q2d::model::enums::PortDirectionToString(direction),
                   ComponentDescriptorRole::PORT_DIRECTION);
-    this->setData(position, ComponentDescriptorRole::PORT_POSITION);
+    this->setPosition(position);
 
     // find and set the icon
     QString setting;
@@ -51,6 +51,11 @@ PortDescriptor::PortDescriptor(QString name,
 QPoint
 PortDescriptor::position() {
     return this->data(ComponentDescriptorRole::PORT_POSITION).toPoint();
+}
+
+void
+PortDescriptor::setPosition(QPoint position){
+    this->setData(position, ComponentDescriptorRole::PORT_POSITION);
 }
 
 /**

@@ -88,7 +88,7 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument) {
     // TODO check if there is already a tab opened for the document
 
     SchematicsTab* newTab = new SchematicsTab(this->m_ui->schematicsTabWidget, relatedDocument);
-    this->m_ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
+    m_ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
     // connect signals and slots
     connect(newTab, &SchematicsTab::signal_triggerQuantor,
@@ -118,7 +118,7 @@ MainWindow::slot_createProject() {
         return;
     }
 
-    emit this->signal_createProjectRequested(name);
+    emit signal_createProjectRequested(name);
 }
 
 void
@@ -146,7 +146,7 @@ MainWindow::slot_createDocument() {
 
     // make sure the model is set up properly
     // so we can enter the documents
-    Q_CHECK_PTR(this->m_ui->documentListView->model());
+    Q_CHECK_PTR(m_ui->documentListView->model());
 
     // get name
     bool ok;
@@ -161,14 +161,13 @@ MainWindow::slot_createDocument() {
 
     // validate name
     if (name.isEmpty()) {
-        QMessageBox::critical(this,
+       slot_displayErrorMessage(
                               tr("Error: Document name was empty"),
-                              tr("The documents name must not be empty."),
-                              QMessageBox::Ok);
+                              tr("The documents name must not be empty."));
         return;
     }
 
-    emit this->signal_createDocumentRequested(name);
+    emit signal_createDocumentRequested(name);
 }
 
 void
@@ -178,17 +177,17 @@ MainWindow::slot_updateProjectName(QString name) {
         name = "(none)";
     }
 
-    this->m_ui->lbl_projectName->setText(name);
+    m_ui->lbl_projectName->setText(name);
 }
 
 void
 MainWindow::slot_enableProjectSaving(bool enabled) {
-    this->m_ui->action_saveProject->setEnabled(enabled);
+    m_ui->action_saveProject->setEnabled(enabled);
 }
 
 void
 MainWindow::slot_enableDocumentMenus(bool enabled) {
-    this->m_ui->action_createDocument->setEnabled(enabled);
+    m_ui->action_createDocument->setEnabled(enabled);
 }
 
 /**
@@ -200,8 +199,6 @@ MainWindow::slot_enableDocumentMenus(bool enabled) {
  */
 void
 MainWindow::slot_setDocumentModel(QStandardItemModel* model) {
-    qDebug() << "SLOT setDocumentModel(" << model << ")";
-
 
     // close all tabs related to the old model
     m_ui->schematicsTabWidget->clear();
@@ -243,21 +240,21 @@ MainWindow::slot_openDocumentTab(Document* document) {
 
 void
 MainWindow::slot_setComponentModel(QStandardItemModel* model) {
-    this->m_ui->componentTreeView->setModel(model);
+    m_ui->componentTreeView->setModel(model);
 }
 
 void
 MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
-    this->m_ui->schematicsTabWidget->removeTab(index);
+    m_ui->schematicsTabWidget->removeTab(index);
 }
 
 void
 MainWindow::on_btn_addType_clicked() {
 
 
-    Q_CHECK_PTR(this->m_ui->componentTreeView->model());
+    Q_CHECK_PTR(m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->m_context->componentFactory();
+    ComponentFactory* componentFactory = m_context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
@@ -269,7 +266,7 @@ MainWindow::on_btn_addType_clicked() {
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setNameFilter(tr("Component Descriptions (*.json)"));
-    dialog.setDirectory(this->m_application->getSetting(constants::KEY_DIR_COMPONENTS).toString());
+    dialog.setDirectory(m_application->getSetting(constants::KEY_DIR_COMPONENTS).toString());
 
     int userAction = dialog.exec();
     if (userAction == QDialog::Rejected) {
@@ -279,15 +276,15 @@ MainWindow::on_btn_addType_clicked() {
     fileName = dialog.selectedFiles().first();
     qDebug() << "Selected " << fileName;
 
-    emit this->signal_loadType(fileName, parent);
+    emit signal_loadType(fileName, parent);
 }
 
 void
 MainWindow::on_btn_addCategory_clicked() {
 
-    Q_CHECK_PTR(this->m_ui->componentTreeView->model());
+    Q_CHECK_PTR(m_ui->componentTreeView->model());
 
-    ComponentFactory* componentFactory = this->m_context->componentFactory();
+    ComponentFactory* componentFactory = m_context->componentFactory();
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
@@ -321,7 +318,6 @@ void
 MainWindow::slot_displayQuantorResult(QString textualRepresentation,
                                       const QMap<QString, bool>* resultMapping) {
 
-    qDebug() << "Show Quantor result dialog";
     // TODO extend the result dialog so the instance can be reused,
     // instead of been created anew every time
     if (m_resultDialog != nullptr) {
@@ -332,4 +328,9 @@ MainWindow::slot_displayQuantorResult(QString textualRepresentation,
     m_resultDialog->show();
     m_resultDialog->raise();
     m_resultDialog->activateWindow();
+}
+
+void
+MainWindow::slot_displayErrorMessage(QString title, QString text){
+    QMessageBox::critical(this, title, text, QMessageBox::Ok);
 }

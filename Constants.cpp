@@ -5,7 +5,8 @@ namespace constants {
 
 QSize ICON_SIZE = QSize(48, 48);
 
-QString HIERARCHY_SEPERATOR    = "/";
+QString HIERARCHY_SEPERATOR = "/";
+QString NO_SYMBOL_FILE      = "(None)";
 
 QString KEY_DIR_COMPONENTS  = "paths/componentsFolder";
 QString KEY_DIR_PROJECTS    = "paths/projectsFolder";

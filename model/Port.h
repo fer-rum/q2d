@@ -16,7 +16,6 @@ protected:
     enums::PortDirection m_direction;
 public:
 
-    // FIXME deprecated
     /**
      * @brief Port
      * @param direction
@@ -47,7 +46,6 @@ public:
     virtual QStringList nodeVariables() const override;
 };
 
-// TODO class ModulePort
 /**
  * @brief The ModulePort class abstracts connections of a whole module to the outside.
  * Keep in mind that ports are always viewed from the inside of a module,

@@ -93,6 +93,8 @@ extern QString MIME_COMPONENT_TYPE;
 extern QString MIME_PORT_PLACEMENT;
 extern QString MIME_WIRE_START_POS;
 
+extern QString NO_SYMBOL_FILE;
+
 } // namespace constants
 } // namespace q2d
 

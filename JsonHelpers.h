@@ -20,6 +20,7 @@ class SchematicElement;
 
 namespace metamodel {
 class ConfigBitGroupDescriptor;
+class PortDescriptor;
 }
 
 // TODO move this to namespace json
@@ -40,6 +41,8 @@ QJsonDocument readJsonFile(QString path);
 
 // json -> *
 metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json);
+metamodel::PortDescriptor* toPortDescriptor(QJsonObject json);
+QPoint toPoint(QJsonObject json);
 QPointF toPointF(QJsonObject json);
 Document* toDocument(QJsonObject json, QString name, Project* parent);
 
@@ -50,6 +53,7 @@ metamodel::ComponentDescriptor* toComponentDescriptor (
     metamodel::Category* parent);
 
 // * -> json
+QJsonObject fromPoint(QPoint point);
 QJsonObject fromPointF(QPointF point);
 QJsonObject fromDocument(Document* doc);
 

@@ -36,7 +36,6 @@ TEMPLATE = app
 SOURCES +=\
     gui/MainWindow.cpp \
     model/ModelElement.cpp \
-    patterns/Observable.cpp \
     model/Node.cpp \
     model/Conductor.cpp \
     model/Component.cpp \
@@ -78,13 +77,13 @@ SOURCES +=\
     model/Port.cpp \
     gui/Schematic.cpp \
     gui/SchematicElement.cpp \
-    metamodel/FunctionDescriptor.cpp
+    metamodel/FunctionDescriptor.cpp \
+    factories/DocumentEntryFactory.cpp \
+    factories/ComponentGIFactory.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
     model/ModelElement.h \
-    patterns/Observable.h \
-    patterns/Observer.h \
     model/Node.h \
     model/Conductor.h \
     model/Component.h \
@@ -126,7 +125,9 @@ HEADERS  +=\
     model/Port.h \
     gui/Schematic.h \
     gui/SchematicElement.h \
-    metamodel/FunctionDescriptor.h
+    metamodel/FunctionDescriptor.h \
+    factories/DocumentEntryFactory.h \
+    factories/ComponentGIFactory.h
 
 INCLUDEPATH +=\
     $$picosatDir \

@@ -31,6 +31,7 @@ void
 SchematicElement::addActual(QGraphicsItem* actual) {
     m_actuals.append(actual);
     this->recalculateBoundingRect();
+    actual->setParentItem(this);
 }
 
 /**

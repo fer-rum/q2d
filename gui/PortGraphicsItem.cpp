@@ -15,8 +15,8 @@
 using namespace q2d::gui;
 using namespace q2d::constants;
 
-int PortGraphicsItem::DIAMETER = 8;
-int PortGraphicsItem::RADIUS = DIAMETER / 2;
+unsigned int PortGraphicsItem::DIAMETER = 8;
+unsigned int PortGraphicsItem::RADIUS = DIAMETER / 2;
 QPointF PortGraphicsItem::CENTER_OFFSET = QPointF(RADIUS, RADIUS);
 
 QPen PortGraphicsItem::PEN_INPUT_PORT  = QPen(Qt::darkGreen);

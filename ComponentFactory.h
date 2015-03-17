@@ -42,20 +42,6 @@ private:
     void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
     void jsonToEntry(QJsonObject json, metamodel::Category* parent);
 
-    /**
-     * @brief instantiateModulePort is a helper method. It does not do everything needed, but a subset,
-     * so do not call it on its own. Use instantiateInputPort() or instantiateOutputPort() respectively.
-     * @param document
-     * @param position
-     * @param id
-     * @param direction
-     * @return
-     */
-    DocumentEntry* instantiateModulePort(Document* document,
-                                         QPointF position,
-                                         QString id,
-                                         model::enums::PortDirection direction);
-
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
 
@@ -63,34 +49,6 @@ public:
     metamodel::Category* getCategoryForIndex(const QModelIndex &index);
     metamodel::ComponentDescriptor* getTypeForIndex(const QModelIndex &index);
     metamodel::ComponentDescriptor* getTypeForHierarchyName(QString hierarchyName);
-
-
-    // TODO instantiations should no longer be added to the document automatically
-    // TODO can instantiations be made independent of documents until they are added?
-    DocumentEntry* instantiateComponent(Document* document, QString hierarchyName,
-                                        QPointF scenePosition, QString id = "");
-    DocumentEntry* instantiateComponent(Document* document,
-                                        metamodel::ComponentDescriptor* type,
-                                        QPointF scenePosition,
-                                        QString id = "");
-    QList<DocumentEntry*> instantiatePorts(Document* document,
-                                           metamodel::ComponentDescriptor* type,
-                                           DocumentEntry* parentComponent);
-    DocumentEntry* instantiatePort(Document* document,
-                                   DocumentEntry* parentComponent,
-                                   QPointF position,
-                                   model::enums::PortDirection direction,
-                                   QString id);
-    DocumentEntry* instantiateWire(Document* document,
-                                   DocumentEntry* sender,
-                                   DocumentEntry* receiver,
-                                   QString id);
-    DocumentEntry* instantiateInputPort(Document* document,
-                                        QPointF position,
-                                        QString id);
-    DocumentEntry* instantiateOutputPort(Document* document,
-                                         QPointF position,
-                                         QString id);
 
     QJsonDocument exportHierarchy();
     void importHierarchy(QJsonDocument source);

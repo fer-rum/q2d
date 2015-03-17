@@ -1,5 +1,6 @@
 #include "ComponentDescriptor.h"
 
+#include "../Constants.h"
 #include "../Enumerations.h"
 #include "../Util.h"
 
@@ -11,6 +12,7 @@
 #include <QtDebug>
 #include <QtSvg/QtSvg>
 
+using namespace q2d::constants;
 using namespace q2d::metamodel;
 
 ComponentDescriptor::ComponentDescriptor(QString name,
@@ -38,7 +40,7 @@ ComponentDescriptor::loadCircuitSymbol(QString symbolFilePath) {
 
 /**
  * @brief ComponentType::symbolPath is a getter for convenience.
- * @return the path to the symbol file
+ * @return the path to the symbol file or an empty string.
  */
 QString
 ComponentDescriptor::symbolPath() {
@@ -49,8 +51,13 @@ void
 ComponentDescriptor::setSymbolPath(QString symbolPath) {
     Q_ASSERT(!(symbolPath.isEmpty()));
 
-    this->setData(QVariant::fromValue(symbolPath), (int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
-    this->loadCircuitSymbol(symbolPath); // update the circuit symbol
+    if(symbolPath == NO_SYMBOL_FILE){
+        this->setData(QVariant::Invalid, (int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
+    } else {
+        this->setData(QVariant::fromValue(symbolPath),
+                      (int)ComponentDescriptorRole::CIRCUIT_SYMBOL_FILE);
+        this->loadCircuitSymbol(symbolPath); // update the circuit symbol
+    }
 }
 
 /**
@@ -69,11 +76,25 @@ ComponentDescriptor::setDescriptorPath(const QString path) {
 }
 
 // FIXME make sure port names are unique within a component descriptor
-void
-ComponentDescriptor::addPort(QString name, QPointF relativePosition,
-                             q2d::model::enums::PortDirection direction) {
-    PortDescriptor* portDescriptor = new PortDescriptor(name, direction, relativePosition, this);
-    this->appendRow(portDescriptor);
+void ComponentDescriptor::addPort(PortDescriptor* port){
+    Q_CHECK_PTR(port);
+    port->setParent(this);
+    this->appendRow(port);
+}
+
+QList<PortDescriptor*>
+ComponentDescriptor::ports(){
+
+    QList<PortDescriptor*> result = QList<PortDescriptor*>();
+
+    for(QObject* child : this->children()){
+        PortDescriptor* casted = qobject_cast<PortDescriptor*>(child);
+        if(casted != nullptr){
+            result.append(casted);
+        }
+    }
+
+    return result;
 }
 
 /**

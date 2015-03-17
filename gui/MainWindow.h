@@ -55,7 +55,6 @@ signals:
     void signal_loadType(QString fileName, metamodel::Category* parent = 0);
     void signal_clearComponentTypes();
 
-    // TODO check visibility
 public slots:
     void slot_createProject();
     void slot_loadProject();
@@ -69,6 +68,7 @@ public slots:
     void slot_setComponentModel(QStandardItemModel* model);
     void slot_displayQuantorResult(QString textualRepresentation,
                                    const QMap<QString, bool>* resultMapping);
+    void slot_displayErrorMessage(QString title, QString text);
 
 private slots:
     // created by the Qt Designer

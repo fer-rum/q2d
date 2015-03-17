@@ -5,10 +5,12 @@
 #include "Document.h"
 #include "DocumentEntry.h"
 #include "Project.h"
+#include "factories/DocumentEntryFactory.h"
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicElement.h"
 #include "model/ModelElement.h"
 #include "metamodel/ComponentDescriptor.h"
+#include "metamodel/PortDescriptor.h"
 
 #include <QFile>
 #include <QJsonArray>
@@ -16,6 +18,7 @@
 #include <QtDebug>
 
 using namespace q2d::constants;
+using namespace q2d::factories;
 using namespace q2d::json;
 
 void
@@ -73,6 +76,18 @@ q2d::json::fromPointF(QPointF point) {
     return result;
 }
 
+QJsonObject
+q2d::json::fromPoint(QPoint point) {
+    Q_ASSERT(!point.isNull());
+
+    QJsonObject result = QJsonObject();
+
+    result.insert(JSON_GENERAL_POSITION_X, QJsonValue(point.x()));
+    result.insert(JSON_GENERAL_POSITION_Y, QJsonValue(point.y()));
+
+    return result;
+}
+
 QPointF
 q2d::json::toPointF(QJsonObject json) {
     Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
@@ -82,6 +97,17 @@ q2d::json::toPointF(QJsonObject json) {
     float y = json.value(JSON_GENERAL_POSITION_Y).toInt();
 
     return QPointF(x, y);
+}
+
+QPoint
+q2d::json::toPoint(QJsonObject json) {
+    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
+    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_Y));
+
+    int x = json.value(JSON_GENERAL_POSITION_X).toInt();
+    int y = json.value(JSON_GENERAL_POSITION_Y).toInt();
+
+    return QPoint(x, y);
 }
 
 QJsonObject
@@ -188,13 +214,15 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     }
 
     switch (type) {
-    case enums::DocumentEntryType::COMPONENT :
-        document->componentFactory()->instantiateComponent(
-            document, typeId, position, id);
-        break;
+    case enums::DocumentEntryType::COMPONENT : {
+        metamodel::ComponentDescriptor* descriptor =
+                document->componentFactory()->getTypeForHierarchyName(typeId);
+        DocumentEntryFactory::instantiateComponent(document, descriptor, position, id, false);
+    }
+    break;
     case enums::DocumentEntryType::COMPONENT_PORT : {
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
-        document->componentFactory()->instantiatePort(
+        DocumentEntryFactory::instantiatePort(
             document, parent, position, model::enums::StringToPortDirection(directionString), id);
     }
     break;
@@ -203,10 +231,10 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
         model::enums::PortDirection direction = model::enums::StringToPortDirection(directionString);
         switch(direction) {
         case model::enums::PortDirection::IN :
-        document->componentFactory()->instantiateInputPort(document, position, id);
-        break;
+            DocumentEntryFactory::instantiateInputPort(document, position, id);
+            break;
         case model::enums::PortDirection::OUT :
-            document->componentFactory()->instantiateOutputPort(document, position, id);
+            DocumentEntryFactory::instantiateOutputPort(document, position, id);
             break;
         default: // should not happen
             Q_ASSERT(false);
@@ -223,7 +251,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
         DocumentEntry* receiver = document->entry(additional.value(JSON_WIRE_END).toString());
         Q_CHECK_PTR(receiver);
 
-        document->componentFactory()->instantiateWire(document, sender, receiver, id);
+        DocumentEntryFactory::instantiateWire(document, sender, receiver, id);
     }
     break;
     default:
@@ -300,11 +328,13 @@ q2d::json::toComponentDescriptor (
     result->setDescriptorPath(filePath);
 
     // load the symbol file
-    // defaults to basePath/unknown.svg
     QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
-    QString symbolFilePath =
-        baseDirPath + QDir::separator() + symbolPathValue.toString("unknown.svg");
-    result->setSymbolPath(symbolFilePath);
+
+    if(!symbolPathValue.isUndefined()){
+        QString symbolFilePath =
+        baseDirPath + QDir::separator() + symbolPathValue.toString(NO_SYMBOL_FILE);
+        result->setSymbolPath(symbolFilePath);
+    }
 
     // read ports
     // defaults to an empty port array
@@ -313,14 +343,9 @@ q2d::json::toComponentDescriptor (
         if (currentValue.isUndefined()) {
             continue;
         }
-        QJsonObject     portObject      = currentValue.toObject();
-        QJsonObject     posObject       = portObject.value(JSON_GENERAL_POSITION).toObject();
-        QString         portName        = portObject.value(JSON_GENERAL_NAME).toString();
-        QString         dirString       = portObject.value(JSON_PORT_DIRECTION).toString();
-        QPointF         portPosition    = json::toPointF(posObject);
-        model::enums::PortDirection portDirection = model::enums::StringToPortDirection(dirString);
+       metamodel::PortDescriptor* portDescriptor = json::toPortDescriptor(currentValue.toObject());
+       result->addPort(portDescriptor);
 
-        result->addPort(portName, portPosition, portDirection);
     }
 
     // get the config bits if there are some
@@ -343,4 +368,19 @@ q2d::json::toComponentDescriptor (
         }
     }
     return result;
+}
+
+q2d::metamodel::PortDescriptor*
+q2d::json::toPortDescriptor(QJsonObject json){
+
+    QJsonObject     posObject       = json.value(JSON_GENERAL_POSITION).toObject();
+    QString         portName        = json.value(JSON_GENERAL_NAME).toString();
+    QString         dirString       = json.value(JSON_PORT_DIRECTION).toString();
+    QPoint         portPosition    = json::toPoint(posObject);
+    model::enums::PortDirection portDirection = model::enums::StringToPortDirection(dirString);
+
+    metamodel::PortDescriptor* portDescriptor =
+            new metamodel::PortDescriptor(portName, portDirection, portPosition);
+
+    return portDescriptor;
 }

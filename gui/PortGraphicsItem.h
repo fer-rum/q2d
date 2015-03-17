@@ -27,10 +27,9 @@ class ComponentGraphicsItem;
 class PortGraphicsItem : public SchematicElement {
 
 private:
-    // TODO make these changeable via the settings
-    static int DIAMETER;
-    static int RADIUS;
 
+    static unsigned int DIAMETER;
+    static unsigned int RADIUS;
 
     static QPen PEN_INPUT_PORT;
     static QPen PEN_IN_OUT_PORT;
@@ -67,6 +66,10 @@ public:
 
     static QPointF centerOffset() {
         return CENTER_OFFSET;
+    }
+
+    static unsigned int radius() {
+        return RADIUS;
     }
 
     // overridden.

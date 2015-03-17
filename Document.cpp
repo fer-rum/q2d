@@ -1,5 +1,6 @@
 #include "Document.h"
 
+#include "factories/DocumentEntryFactory.h"
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/Schematic.h"
 #include "gui/SchematicElement.h"
@@ -23,6 +24,7 @@
 
 using namespace q2d;
 using namespace q2d::constants;
+using namespace q2d::factories;
 using namespace q2d::metamodel;
 
 /**
@@ -42,7 +44,6 @@ Document::Document(QString name, Project* parent) :
     QStandardItem(name) {
     Q_CHECK_PTR(parent);
     Q_ASSERT(this->text() == name);
-    qDebug() << "Create document with name" << name;
 
     // obtain the component factory
     ApplicationContext* context =
@@ -83,6 +84,7 @@ Document::componentFactory() const {
  * @brief Document::addComponent instantiates a new component from a ComponentType,
  * given by its path in the component hierarchy.
  * The new component will be placed at the given position in the schematic.
+ * Also all component ports will be initialized accordingly.
  *
  * @param typeId is the full id path of the ComponentType
  * in the component hierarchy.
@@ -94,22 +96,18 @@ Document::addComponent(QString typeId, QPoint position) {
     metamodel::ComponentDescriptor* type = m_componentFactory->getTypeForHierarchyName(typeId);
     Q_CHECK_PTR(type);
 
-    DocumentEntry* entry =
-        m_componentFactory->instantiateComponent(this, type, position);
-
-    // also add the ports
-    m_componentFactory->instantiatePorts(this, type, entry);
+    DocumentEntryFactory::instantiateComponent(this, type, position);
 }
 
 
 void
 Document::addInputPort(QString id, QPointF pos) {
-    m_componentFactory->instantiateInputPort(this, pos, id);
+    DocumentEntryFactory::instantiateInputPort(this, pos, id);
 }
 
 void
 Document::addOutputPort(QString id, QPointF pos) {
-    m_componentFactory->instantiateOutputPort(this, pos, id);
+    DocumentEntryFactory::instantiateOutputPort(this, pos, id);
 }
 
 /**
@@ -166,7 +164,7 @@ Document::addWire(QString senderNodeId, QString receiverNodeId) {
 
     QString id = "wire:" + senderNodeId + "--" + receiverNodeId;
 
-    m_componentFactory->instantiateWire(this, sender, receiver, id);
+    DocumentEntryFactory::instantiateWire(this, sender, receiver, id);
 }
 
 void
@@ -182,9 +180,6 @@ Document::save(QDir saveDir) {
 
     // create the JSON document
     // the name is implicitly in the file name
-    // TODO: should this be written in the JSON too?
-    // TODO: should the component Factories state be saved?
-    // maybe in project…
     QJsonDocument jsonDocument = QJsonDocument();
     jsonDocument.setObject(json::fromDocument(this));
 

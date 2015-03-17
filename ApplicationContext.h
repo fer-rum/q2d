@@ -63,6 +63,7 @@ signals:
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);
     void signal_quantorSolutionAvailable(QString, const QMap<QString, bool>*);
+    void signal_error(QString title, QString text);
 
 public slots:
     void slot_newDocument(QString name);
