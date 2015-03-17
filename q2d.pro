@@ -127,7 +127,8 @@ HEADERS  +=\
     gui/SchematicElement.h \
     metamodel/FunctionDescriptor.h \
     factories/DocumentEntryFactory.h \
-    factories/ComponentGIFactory.h
+    factories/ComponentGIFactory.h \
+    interfaces/quantor/Context.h
 
 INCLUDEPATH +=\
     $$picosatDir \
