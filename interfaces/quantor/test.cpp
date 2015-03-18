@@ -17,27 +17,27 @@ public:
   ~MyContext() {}
 
 public:
-  unsigned operator[](std::string const &name) override;
-  VariableType typeOf(unsigned var) override;
+  unsigned operator[](std::string const &name) const override;
+  VariableType typeOf(unsigned var) const override;
 
 public:
   std::string const &nameOf(unsigned var) const;
 };
 
-unsigned MyContext::operator[](std::string const &name) {
+unsigned MyContext::operator[](std::string const &name) const {
   {
     auto const  it = name2id.find(name);
     if(it != name2id.end())  return  it->second;
   }
   {
     unsigned const  id = id2name.size();
-    id2name.push_back(name);
-    name2id[name] = id;
+    const_cast<std::remove_const<decltype(id2name)>::type&>(id2name).push_back(name);
+    const_cast<std::remove_const<decltype(name2id)>::type&>(name2id)[name] = id;
     return  id;
   }
 }
 
-VariableType MyContext::typeOf(unsigned var) {
+VariableType MyContext::typeOf(unsigned var) const {
   if(var < id2name.size()) {
     switch(id2name[var][0]) {
     case 'x':  return  VariableType::INPUT;
@@ -57,7 +57,7 @@ int main(int const  argc, char const *const  argv[]) {
   Quantorizer  q;
 
   // Parse Specification
-  MyContext  ctx;
+  MyContext const  ctx;
   q.set(ctx);
   for(int  i = 1; i < argc; i++) {
     try {
