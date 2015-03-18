@@ -24,8 +24,8 @@ WireGraphicsItem::WireGraphicsItem(
           m_startPoint,
         relatedEntry) {
 
-    this->setPos(this->mapFromScene(start->scenePos() + PortGraphicsItem::centerOffset()));
-     m_endPoint = this->mapFromScene(end->scenePos() + PortGraphicsItem::centerOffset());
+    this->setPos(this->mapFromScene(start->scenePos()));
+     m_endPoint = this->mapFromScene(end->scenePos());
      this->route();
      this->setVisible(true);
      // move this to the background to be overdrawn by the ports
@@ -34,6 +34,11 @@ WireGraphicsItem::WireGraphicsItem(
     m_additionalInfo = QJsonObject();
     m_additionalInfo.insert(JSON_WIRE_START, QJsonValue(start->id()));
     m_additionalInfo.insert(JSON_WIRE_END, QJsonValue(end->id()));
+
+    // FIXME do this properly
+    // as signal/ slot setup
+    start->slot_drawConnected();
+    end->slot_drawConnected();
 }
 
 QString

@@ -34,6 +34,8 @@ SchematicsTab::SchematicsTab(QWidget* parent, Document* relatedDocument) :
             this, &SchematicsTab::slot_addInPortButtonClicked);
     connect(m_ui->btn_addOutPort, &QToolButton::clicked,
             this, &SchematicsTab::slot_addOutPortButtonClicked);
+    connect(relatedDocument->schematic(), &Schematic::signal_mousePosChanged,
+            this, &SchematicsTab::signal_mousePosChanged);
 
     // TODO set up sel_direction properly to avoid nasty string comparison when reading its state
 }

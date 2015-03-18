@@ -10,13 +10,13 @@
 #include <QtDebug>
 #include <QtSvg/QGraphicsSvgItem>
 
+#include "../Util.h"
+
 using namespace q2d::gui;
 using namespace q2d::constants;
 
 Schematic::Schematic(Document* parent)
-    : QGraphicsScene(parent) {
-
-}
+    : QGraphicsScene(parent) {}
 
 q2d::Document*
 Schematic::document() const {
@@ -86,7 +86,6 @@ Schematic::dropEvent(QGraphicsSceneDragDropEvent* event) {
     if (m_dragOver) {
         if (mimeData->hasFormat(MIME_COMPONENT_TYPE)) {
             QString path = mimeData->text();
-
             parent->addComponent(path, dropPosition);
         } else if (mimeData->hasFormat(MIME_PORT_PLACEMENT)) {
             this->handleMimePortPlacement(mimeData, dropPosition);
@@ -119,4 +118,10 @@ Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPositio
 void
 Schematic::addItem(QGraphicsItem* item) {
     QGraphicsScene::addItem(item);
+}
+
+void
+Schematic::mouseMoveEvent(QMouseEvent* event){
+    QPointF pos = event->pos();
+    emit signal_mousePosChanged((int)pos.x(), (int)pos.y());
 }

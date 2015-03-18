@@ -93,6 +93,8 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument) {
     // connect signals and slots
     connect(newTab, &SchematicsTab::signal_triggerQuantor,
             m_context, &ApplicationContext::signal_triggerQuantor);
+    connect(newTab, &SchematicsTab::signal_mousePosChanged,
+            this, &MainWindow::slot_displaySchematicMousePos);
 }
 
 void
@@ -333,4 +335,11 @@ MainWindow::slot_displayQuantorResult(QString textualRepresentation,
 void
 MainWindow::slot_displayErrorMessage(QString title, QString text){
     QMessageBox::critical(this, title, text, QMessageBox::Ok);
+}
+
+void
+MainWindow::slot_displaySchematicMousePos(int x, int y){
+    QString text = QString::number(x) + ", " + QString::number(y);
+    m_ui->statusBar->showMessage(text);
+    qDebug() << text;
 }

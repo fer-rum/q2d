@@ -69,6 +69,7 @@ public slots:
     void slot_displayQuantorResult(QString textualRepresentation,
                                    const QMap<QString, bool>* resultMapping);
     void slot_displayErrorMessage(QString title, QString text);
+    void slot_displaySchematicMousePos(int x, int y);
 
 private slots:
     // created by the Qt Designer

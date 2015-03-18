@@ -5,20 +5,21 @@
 #include "../gui/PortGraphicsItem.h"
 #include "../metamodel/ComponentDescriptor.h"
 #include "../metamodel/PortDescriptor.h"
-#include "ComponentGIFactory.h"
+#include "GIFactory.h"
 
 #include <QString>
 #include <QtDebug>
 
+using namespace q2d::constants;
 using namespace q2d::factories;
 using namespace q2d::gui;
 using namespace q2d::metamodel;
 
 unsigned int
-ComponentGIFactory::TEXT_PADDING = 5;
+GIFactory::TEXT_PADDING = 5;
 
 QGraphicsItem*
-ComponentGIFactory::createComponentGI(
+GIFactory::createComponentGI(
         ComponentDescriptor *type){
 
     qDebug() << "Generating Graphics item for" << type->text();
@@ -141,7 +142,7 @@ ComponentGIFactory::createComponentGI(
         inIter.value()->setPos(currentPos.x() + TEXT_PADDING, currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
         inIter.key()->setPosition(QPoint(
-                    currentPos.x() - PortGraphicsItem::radius(),
+                    currentPos.x() - PORT_RADIUS,
                     currentPos.y()));
         currentPos.ry() += portSection_lineHeight /2;
     }
@@ -156,11 +157,54 @@ ComponentGIFactory::createComponentGI(
                     currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
         outIter.key()->setPosition(QPoint(
-                                       currentPos.x() + PortGraphicsItem::radius(),
+                                       currentPos.x() + PORT_RADIUS,
                                        currentPos.y()));
         currentPos.ry() += portSection_lineHeight /2;
     }
 
     parent->setVisible(true);
     return parent;
+}
+
+
+QAbstractGraphicsShapeItem*
+GIFactory::createPortAdapterGI(){
+    // cast here otherwise -PORT_RADIUS will be about 4 billion and something
+    // since PORT_RADIUS is unsigned
+    const qreal r = (qreal)PORT_RADIUS;
+    QPainterPath path;
+    path.moveTo(0, -r);
+    path.lineTo(r, -r);
+    path.lineTo(r, r);
+    path.lineTo(0, r);
+    // and now back to close it
+    path.lineTo(r, r);
+    path.lineTo(r, -r);
+    path.closeSubpath();
+
+    QGraphicsPathItem* adapter = new QGraphicsPathItem(path);
+    adapter->setVisible(true);
+    return adapter;
+}
+
+QAbstractGraphicsShapeItem* GIFactory::createPortAdapteeGI(){
+    // cast here otherwise -PORT_RADIUS will be about 4 billion and something
+    // since PORT_RADIUS is unsigned
+    const qreal r = (qreal)PORT_RADIUS;
+    QGraphicsRectItem* adaptee = new QGraphicsRectItem(-r/2, -r/2, r, r);
+    adaptee->setVisible(true);
+    return adaptee;
+}
+
+QAbstractGraphicsShapeItem*
+GIFactory::createPortInvalidGI(){
+    // cast here otherwise -PORT_RADIUS will be about 4 billion and something
+    // since PORT_RADIUS is unsigned
+    const qreal r = (qreal)PORT_RADIUS;
+    QPainterPath path;
+    path.moveTo(-r, -r);
+    path.lineTo(r, r);
+    path.moveTo(r, -r);
+    path.lineTo(-r, r);
+    return new QGraphicsPathItem(path);
 }

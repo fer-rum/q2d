@@ -5,6 +5,10 @@
 #include "Schematic.h"
 #include "SchematicElement.h"
 
+// debug
+#include <QtDebug>
+#include "../Util.h"
+
 using namespace q2d::gui;
 using namespace q2d::constants;
 
@@ -30,8 +34,9 @@ SchematicElement::scene() const {
 void
 SchematicElement::addActual(QGraphicsItem* actual) {
     m_actuals.append(actual);
-    this->recalculateBoundingRect();
     actual->setParentItem(this);
+    this->recalculateBoundingRect();
+
 }
 
 /**
@@ -70,10 +75,11 @@ SchematicElement::recalculateBoundingRect() {
 
     // start with some value
     // not using (0,0) because items may all be in negative X and Y
-    QRectF currentRect = m_actuals.first()->boundingRect();
+    QGraphicsItem* first = m_actuals.first();
+    QRectF currentRect = first->boundingRect();
 
-    minX = currentRect.x();
-    minY = currentRect.y();
+    minX = currentRect.x() + first->pos().x();
+    minY = currentRect.y() + first->pos().y();
 
     maxX = minX + currentRect.width();
     maxY = minY + currentRect.height();
@@ -81,8 +87,8 @@ SchematicElement::recalculateBoundingRect() {
     for (QGraphicsItem * actual : m_actuals) {
         currentRect = actual->boundingRect();
 
-        qreal tempMinX = currentRect.x();
-        qreal tempMinY = currentRect.y();
+        qreal tempMinX = currentRect.x() + actual->pos().x();
+        qreal tempMinY = currentRect.y() + actual->pos().y();
 
         qreal tempMaxX = tempMinX + currentRect.width();
         qreal tempMaxY = tempMinY + currentRect.height();

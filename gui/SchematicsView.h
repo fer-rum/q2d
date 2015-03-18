@@ -11,7 +11,9 @@
 namespace q2d {
 namespace gui {
 
-class SchematicsView : public QGraphicsView {
+class SchematicsView :
+        public QGraphicsView {
+    Q_OBJECT
 protected:
 
     // override for custom handling
@@ -24,7 +26,16 @@ protected:
 public:
     explicit SchematicsView(QWidget* parent = nullptr);
 
+    void resizeEvent( QResizeEvent* e )
+    {
+    double w = ( e->size().width());
+    double h = ( e->size().height());
+    QGraphicsView::resizeEvent(e);
+    this->scene()->setSceneRect(0, 0, w, h);
+    }
+
 };
+
 
 } // namespace gui
 } // namespace q2d

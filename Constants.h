@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QPoint>
 #include <QSize>
 #include <QString>
 
@@ -94,6 +95,12 @@ extern QString MIME_PORT_PLACEMENT;
 extern QString MIME_WIRE_START_POS;
 
 extern QString NO_SYMBOL_FILE;
+
+
+// --- gui constants ---
+extern unsigned int PORT_DIAMETER;
+extern unsigned int PORT_RADIUS;
+extern QPoint PORT_CENTER_OFFSET;
 
 } // namespace constants
 } // namespace q2d

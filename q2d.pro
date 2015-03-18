@@ -79,7 +79,7 @@ SOURCES +=\
     gui/SchematicElement.cpp \
     metamodel/FunctionDescriptor.cpp \
     factories/DocumentEntryFactory.cpp \
-    factories/ComponentGIFactory.cpp
+    factories/GIFactory.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -127,8 +127,8 @@ HEADERS  +=\
     gui/SchematicElement.h \
     metamodel/FunctionDescriptor.h \
     factories/DocumentEntryFactory.h \
-    factories/ComponentGIFactory.h \
-    interfaces/quantor/Context.h
+    interfaces/quantor/Context.h \
+    factories/GIFactory.h
 
 INCLUDEPATH +=\
     $$picosatDir \

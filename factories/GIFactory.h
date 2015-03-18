@@ -1,6 +1,7 @@
 #ifndef COMPONENTGIFACTORY_H
 #define COMPONENTGIFACTORY_H
 
+#include "../Enumerations.h"
 #include <QGraphicsItem>
 #include <QPointF>
 
@@ -13,15 +14,16 @@ class ComponentDescriptor;
 
 namespace factories {
 
-class ComponentGIFactory {
+class GIFactory {
 private:
     /**
      * @brief TEXT_PADDING the amount of whitespace around any text in pixels.
      */
     static unsigned int TEXT_PADDING;
 
+
 public:
-    ComponentGIFactory();
+    GIFactory();
 
     /**
  * @brief createComponentGI generates a new QGraphicsItem for a given component type.
@@ -30,6 +32,19 @@ public:
  * @return
  */
 static QGraphicsItem* createComponentGI(metamodel::ComponentDescriptor* type);
+
+/**
+ * @brief createPortAdapterGI whichis used for the IN port direction.
+ * @return
+ */
+static QAbstractGraphicsShapeItem* createPortAdapterGI();
+
+/**
+ * @brief createPortAdapteeGI which is used for the OUT port direction
+ * @return
+ */
+static QAbstractGraphicsShapeItem* createPortAdapteeGI();
+static QAbstractGraphicsShapeItem* createPortInvalidGI();
 
 };
 

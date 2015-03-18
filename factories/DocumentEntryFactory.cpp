@@ -158,9 +158,9 @@ DocumentEntry*
 DocumentEntryFactory::instantiateModulePort(
         Document* document,
         QPointF position,
-
         model::enums::PortDirection direction,
         QString id){
+
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT, document);
     Q_CHECK_PTR(entry);
 

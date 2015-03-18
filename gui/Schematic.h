@@ -5,6 +5,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsLineItem>
+#include <QMouseEvent>
 #include <QObject>
 
 namespace q2d {
@@ -39,6 +40,10 @@ public:
 
     // debug hook
     virtual void addItem(QGraphicsItem* item);
+    virtual void mouseMoveEvent(QMouseEvent* event);
+
+signals:
+    void signal_mousePosChanged(int x, int y);
 };
 
 } // namespace gui

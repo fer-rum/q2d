@@ -28,9 +28,6 @@ class PortGraphicsItem : public SchematicElement {
 
 private:
 
-    static unsigned int DIAMETER;
-    static unsigned int RADIUS;
-
     static QPen PEN_INPUT_PORT;
     static QPen PEN_IN_OUT_PORT;
     static QPen PEN_OUTPUT_PORT;
@@ -58,19 +55,10 @@ private:
     void performDrag();
 
 protected:
-    static QPointF CENTER_OFFSET;
     model::enums::PortDirection m_direction;
     virtual QString specificType() override;
 
 public:
-
-    static QPointF centerOffset() {
-        return CENTER_OFFSET;
-    }
-
-    static unsigned int radius() {
-        return RADIUS;
-    }
 
     // overridden.
     // The position of a port is measured from the center
@@ -109,6 +97,7 @@ public:
 signals:
 
 public slots:
+        void slot_drawConnected();
 
 };
 

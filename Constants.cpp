@@ -54,5 +54,10 @@ QString MIME_WIRE_START_POS = "application/wire-start-pos";
 
 QString FILE_COMPONENT_TREE    = "/components.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
+
+unsigned int PORT_DIAMETER = 8;
+unsigned int PORT_RADIUS = PORT_DIAMETER / 2;
+QPoint PORT_CENTER_OFFSET = QPoint(PORT_RADIUS, PORT_RADIUS);
+
 } // namespace constants
 } // namespace q2d

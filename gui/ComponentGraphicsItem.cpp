@@ -1,5 +1,5 @@
 
-#include "../factories/ComponentGIFactory.h"
+#include "../factories/GIFactory.h"
 #include "../metamodel/ComponentDescriptor.h"
 #include "../metamodel/PortDescriptor.h"
 #include "ComponentGraphicsItem.h"
@@ -20,7 +20,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
     if(!type->symbolPath().isEmpty()){
         this->addActual(new QGraphicsSvgItem(type->symbolPath()));
     } else {
-        QGraphicsItem* actual = factories::ComponentGIFactory::createComponentGI(type);
+        QGraphicsItem* actual = factories::GIFactory::createComponentGI(type);
         m_scene->addItem(actual);
         this->addActual(actual);
         actual->setVisible(true);
