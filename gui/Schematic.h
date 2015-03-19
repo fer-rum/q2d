@@ -44,6 +44,7 @@ public:
 
 signals:
     void signal_mousePosChanged(int x, int y);
+    void signal_componentDetailRequested(model::Component* component);
 };
 
 } // namespace gui

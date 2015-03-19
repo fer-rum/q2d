@@ -1,7 +1,10 @@
 
+#include "../DocumentEntry.h"
 #include "../factories/GIFactory.h"
 #include "../metamodel/ComponentDescriptor.h"
 #include "../metamodel/PortDescriptor.h"
+#include "../model/ModelElement.h"
+#include "../model/Component.h"
 #include "ComponentGraphicsItem.h"
 #include "PortGraphicsItem.h"
 #include "Schematic.h"
@@ -41,4 +44,13 @@ ComponentGraphicsItem::ComponentGraphicsItem(
 QString
 ComponentGraphicsItem::specificType() {
     return m_type->hierarchyName();
+}
+
+void
+ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
+
+    model::Component* component = dynamic_cast<model::Component*>(m_relatedEntry->modelElement());
+
+    emit this->scene()->signal_componentDetailRequested(component);
+    event->accept();
 }

@@ -49,3 +49,27 @@ QStringList
 Component::functions() const {
     return m_descriptor->functions();
 }
+
+QList<ComponentPort*>*
+Component::inputPorts(){
+    QList<ComponentPort*>* result = new QList<ComponentPort*>();
+
+    for(ComponentPort* port : m_ports){
+        if(port->direction() == enums::PortDirection::IN){
+            result->append(port);
+        }
+    }
+    return result;
+}
+
+QList<ComponentPort*>*
+Component::outputPorts(){
+    QList<ComponentPort*>* result = new QList<ComponentPort*>();
+
+    for(ComponentPort* port : m_ports){
+        if(port->direction() == enums::PortDirection::OUT){
+            result->append(port);
+        }
+    }
+    return result;
+}

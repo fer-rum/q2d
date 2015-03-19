@@ -6,6 +6,7 @@
 #include "../metamodel/Category.h"
 #include "../ComponentFactory.h"
 #include "../Constants.h"
+#include"../model/Component.h"
 #include "SchematicsTab.h"
 
 #include <QFileDialog>
@@ -27,6 +28,7 @@ MainWindow::MainWindow(ApplicationContext* parent) :
     m_ui->setupUi(this);
     m_application = qobject_cast<Application*>(Application::instance());
     m_resultDialog = nullptr;
+    m_componentDetailDialog = nullptr;
 }
 
 MainWindow::~MainWindow() {}
@@ -91,10 +93,13 @@ MainWindow::addNewSchematicsTab(Document* relatedDocument) {
     m_ui->schematicsTabWidget->addTab(newTab, relatedDocument->text());
 
     // connect signals and slots
+    // TODO let the tab do it for itself
     connect(newTab, &SchematicsTab::signal_triggerQuantor,
             m_context, &ApplicationContext::signal_triggerQuantor);
     connect(newTab, &SchematicsTab::signal_mousePosChanged,
             this, &MainWindow::slot_displaySchematicMousePos);
+    connect(newTab, &SchematicsTab::signal_componentDetailRequested,
+            this, &MainWindow::slot_displayComponentDetail);
 }
 
 void
@@ -330,6 +335,22 @@ MainWindow::slot_displayQuantorResult(QString textualRepresentation,
     m_resultDialog->show();
     m_resultDialog->raise();
     m_resultDialog->activateWindow();
+}
+
+void
+MainWindow::slot_displayComponentDetail(model::Component* component) {
+    Q_CHECK_PTR(component);
+
+    // TODO extend the result dialog so the instance can be reused,
+    // instead of been created anew every time
+    if (m_componentDetailDialog != nullptr) {
+        delete m_componentDetailDialog;
+        m_componentDetailDialog = nullptr;
+    }
+    m_componentDetailDialog = new ComponentDetailView(component, this);
+    m_componentDetailDialog->show();
+    m_componentDetailDialog->raise();
+    m_componentDetailDialog->activateWindow();
 }
 
 void

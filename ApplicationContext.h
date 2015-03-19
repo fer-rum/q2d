@@ -14,6 +14,9 @@ namespace gui {
 class MainWindow;
 }
 
+namespace model {
+class Component;
+}
 class ComponentFactory;
 class Project;
 class Document;

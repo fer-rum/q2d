@@ -79,7 +79,9 @@ SOURCES +=\
     gui/SchematicElement.cpp \
     metamodel/FunctionDescriptor.cpp \
     factories/DocumentEntryFactory.cpp \
-    factories/GIFactory.cpp
+    factories/GIFactory.cpp \
+    gui/ComponentDetailView.cpp \
+    PortListModel.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -128,7 +130,9 @@ HEADERS  +=\
     metamodel/FunctionDescriptor.h \
     factories/DocumentEntryFactory.h \
     interfaces/quantor/Context.h \
-    factories/GIFactory.h
+    factories/GIFactory.h \
+    gui/ComponentDetailView.h \
+    PortListModel.h
 
 INCLUDEPATH +=\
     $$picosatDir \
@@ -137,7 +141,8 @@ INCLUDEPATH +=\
 FORMS    +=\
     gui/MainWindow.ui \
     gui/SchematicsTab.ui \
-    gui/QuantorResultDialog.ui
+    gui/QuantorResultDialog.ui \
+    gui/ComponentDetailView.ui
 
 # exclude quantorizer.ypp
 HEADERS -= interfaces/quantor/Quantorizer.ypp

@@ -1,6 +1,8 @@
 #ifndef SCHEMATICSVIEW_H
 #define SCHEMATICSVIEW_H
 
+//#include "SchematicsTab.h"
+
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
@@ -9,7 +11,12 @@
 #include <QWidget>
 
 namespace q2d {
+namespace model {
+class Component;
+}
+
 namespace gui {
+class Schematic;
 
 class SchematicsView :
         public QGraphicsView {
@@ -26,14 +33,11 @@ protected:
 public:
     explicit SchematicsView(QWidget* parent = nullptr);
 
-    void resizeEvent( QResizeEvent* e )
-    {
-    double w = ( e->size().width());
-    double h = ( e->size().height());
-    QGraphicsView::resizeEvent(e);
-    this->scene()->setSceneRect(0, 0, w, h);
-    }
+    void resizeEvent(QResizeEvent* e);
+    void setScene(q2d::gui::Schematic* scene);
 
+signals:
+     void signal_componentDetailRequested(model::Component* component);
 };
 
 

@@ -28,7 +28,10 @@ public:
             DocumentEntry* relatedEntry,
             metamodel::ComponentDescriptor* type);
 
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+
 signals:
+
 
 public slots:
 

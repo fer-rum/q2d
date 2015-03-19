@@ -3,6 +3,7 @@
 
 #include "../Constants.h"
 #include "../Application.h"
+#include "../model/Component.h"
 
 #include <QDrag>
 #include <QMessageBox>
@@ -36,8 +37,9 @@ SchematicsTab::SchematicsTab(QWidget* parent, Document* relatedDocument) :
             this, &SchematicsTab::slot_addOutPortButtonClicked);
     connect(relatedDocument->schematic(), &Schematic::signal_mousePosChanged,
             this, &SchematicsTab::signal_mousePosChanged);
+    connect(m_ui->schematicsView, &SchematicsView::signal_componentDetailRequested,
+            this, &SchematicsTab::signal_componentDetailRequested);
 
-    // TODO set up sel_direction properly to avoid nasty string comparison when reading its state
 }
 
 SchematicsTab::~SchematicsTab() {

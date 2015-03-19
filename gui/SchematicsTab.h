@@ -32,7 +32,7 @@ private:
     void initiatePortDrag(model::enums::PortDirection portDirection);
 
 public:
-    explicit SchematicsTab(QWidget* parent, Document* m_relatedDocument);
+    explicit SchematicsTab(QWidget* parent, Document* relatedDocument);
     virtual ~SchematicsTab();
 
 signals:
@@ -40,6 +40,7 @@ signals:
     void signal_addInputPort(Document* document, QString id);
     void signal_addOutputPort(Document* document, QString id);
     void signal_mousePosChanged(int x, int y);
+     void signal_componentDetailRequested(model::Component* component);
 
 private slots:
     void slot_requestedSatSolving();
