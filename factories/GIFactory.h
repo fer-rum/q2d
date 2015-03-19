@@ -46,6 +46,9 @@ static QAbstractGraphicsShapeItem* createPortAdapterGI();
 static QAbstractGraphicsShapeItem* createPortAdapteeGI();
 static QAbstractGraphicsShapeItem* createPortInvalidGI();
 
+static QAbstractGraphicsShapeItem* createModulePortDecalIn();
+static QAbstractGraphicsShapeItem* createModulePortDecalOut();
+
 };
 
 } // namespace factories

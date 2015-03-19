@@ -141,9 +141,11 @@ GIFactory::createComponentGI(
         inIter.next();
         inIter.value()->setPos(currentPos.x() + TEXT_PADDING, currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
-        inIter.key()->setPosition(QPoint(
-                    currentPos.x() - PORT_RADIUS,
-                    currentPos.y()));
+        QPoint portPos = QPoint(currentPos.x() - PORT_DIAMETER, currentPos.y());
+        inIter.key()->setPosition(portPos);
+
+        QGraphicsLineItem* lineToPort = new QGraphicsLineItem(QLineF(portPos, currentPos), parent);
+        parent->addToGroup(lineToPort);
         currentPos.ry() += portSection_lineHeight /2;
     }
 
@@ -156,9 +158,11 @@ GIFactory::createComponentGI(
                     currentPos.x() - TEXT_PADDING - outIter.value()->boundingRect().width(),
                     currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
-        outIter.key()->setPosition(QPoint(
-                                       currentPos.x() + PORT_RADIUS,
-                                       currentPos.y()));
+        QPoint portPos = QPoint(currentPos.x() + PORT_DIAMETER, currentPos.y());
+        outIter.key()->setPosition(portPos);
+
+        QGraphicsLineItem* lineToPort = new QGraphicsLineItem(QLineF(currentPos, portPos), parent);
+        parent->addToGroup(lineToPort);
         currentPos.ry() += portSection_lineHeight /2;
     }
 
@@ -168,18 +172,61 @@ GIFactory::createComponentGI(
 
 
 QAbstractGraphicsShapeItem*
+GIFactory::createModulePortDecalIn(){
+
+    const qreal r = (qreal)PORT_RADIUS;
+    QPainterPath path;
+
+    path.moveTo(0,0);
+    path.lineTo(-r,0);
+    path.lineTo(-2 * r, -r);
+    path.lineTo(-2 * r, r);
+    path.lineTo(-r, 0);
+    path.closeSubpath();
+
+    QGraphicsPathItem* decal = new QGraphicsPathItem(path);
+    decal->setBrush(PORT_DECAL_BRUSH);
+    decal->setVisible(true);
+    return decal;
+}
+
+QAbstractGraphicsShapeItem*
+GIFactory::createModulePortDecalOut(){
+
+    const qreal r = (qreal)PORT_RADIUS;
+    QPainterPath path;
+
+    path.moveTo(0,0);
+    path.lineTo(2 * r,0);
+    path.lineTo(2 * r, -r);
+    path.lineTo(3 * r, 0);
+    path.lineTo(2 * r, r);
+    path.lineTo(2 * r, 0);
+    path.closeSubpath();
+
+    QGraphicsPathItem* decal = new QGraphicsPathItem(path);
+    decal->setBrush(PORT_DECAL_BRUSH);
+    decal->setVisible(true);
+    return decal;
+}
+
+
+QAbstractGraphicsShapeItem*
 GIFactory::createPortAdapterGI(){
     // cast here otherwise -PORT_RADIUS will be about 4 billion and something
     // since PORT_RADIUS is unsigned
     const qreal r = (qreal)PORT_RADIUS;
+    const qreal r_34 = 3 * r / 4;
     QPainterPath path;
-    path.moveTo(0, -r);
-    path.lineTo(r, -r);
-    path.lineTo(r, r);
-    path.lineTo(0, r);
+    path.moveTo(0,  -r);
+    path.lineTo(r,  -r);
+    path.lineTo(r,  r);
+    path.lineTo(0,  r);
     // and now back to close it
-    path.lineTo(r, r);
-    path.lineTo(r, -r);
+    path.lineTo(0,     r_34);
+    path.lineTo(r_34,  r_34);
+    path.lineTo(r_34,  -r_34);
+    path.lineTo(0,     -r_34);
     path.closeSubpath();
 
     QGraphicsPathItem* adapter = new QGraphicsPathItem(path);

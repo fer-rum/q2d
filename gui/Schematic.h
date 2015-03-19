@@ -40,7 +40,7 @@ public:
 
     // debug hook
     virtual void addItem(QGraphicsItem* item);
-    virtual void mouseMoveEvent(QMouseEvent* event);
+//    virtual void mouseMoveEvent(QMouseEvent* event);
 
 signals:
     void signal_mousePosChanged(int x, int y);

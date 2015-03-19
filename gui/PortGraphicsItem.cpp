@@ -68,11 +68,17 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
 
     newActual->setPen(this->m_defaultPen);
     newActual->setBrush(this->m_defaultBrush);
-
     this->addActual(newActual);
 
-    newActual->setAcceptHoverEvents(true);
+    qreal r = (qreal)PORT_RADIUS;
+    QGraphicsRectItem* background = new QGraphicsRectItem(-r, -r, 2 * r, 2 * r, this);
+    background->setBrush(PORT_BACKGROUND_BRUSH);
+    background->setPen(PORT_BACKGROUND_PEN);
+    background->setZValue(-2);
+    this->addActual(background);
+
     Q_ASSERT(this->actual()->isVisible());
+    this->setAcceptHoverEvents(true);
 }
 
 QPointF
@@ -210,6 +216,7 @@ void PortGraphicsItem::slot_drawConnected()
     newActual->setBrush(m_defaultBrush);
     newActual->setPen(m_defaultPen);
     this->addActual(newActual);
+    this->setOpacity(0.25);
 }
 
 void
@@ -240,31 +247,19 @@ ModulePortGI::ModulePortGI(
         model::enums::PortDirection direction)
     : PortGraphicsItem(relativeCenterPosition, relatedEntry, model::enums::invert(direction)) {
 
-    int moveX;
-    int moveY;
-    QGraphicsSvgItem* decal;
+    QGraphicsItem* decal;
     switch(direction) {
     case model::enums::PortDirection::OUT :
-        decal = new QGraphicsSvgItem(":/icons/ressources/icons/outside_port_out.svg", this);
-        moveX = 0;
-        moveY = -decal->boundingRect().height()/2;
+        decal = factories::GIFactory::createModulePortDecalOut();
         break;
     case model::enums::PortDirection::IN :
-        decal = new QGraphicsSvgItem(":/icons/ressources/icons/outside_port_in.svg", this);
-        moveX = -decal->boundingRect().width();
-        moveY = -decal->boundingRect().height()/2;
+        decal = factories::GIFactory::createModulePortDecalIn();
         break;
     default : // should not happen
         Q_ASSERT(false);
     }
+    decal->setZValue(-1);
     this->addActual(decal);
-    Q_ASSERT(decal->parentItem() == this);
-    decal->moveBy(moveX, moveY);
-    this->recalculateBoundingRect();
-
-    // for debugging
-    this->setFlag(QGraphicsItem::ItemIsSelectable);
-
 }
 
 /**

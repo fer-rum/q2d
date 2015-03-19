@@ -55,9 +55,13 @@ QString MIME_WIRE_START_POS = "application/wire-start-pos";
 QString FILE_COMPONENT_TREE    = "/components.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
 
-unsigned int PORT_DIAMETER = 8;
+unsigned int PORT_DIAMETER = 16;
 unsigned int PORT_RADIUS = PORT_DIAMETER / 2;
 QPoint PORT_CENTER_OFFSET = QPoint(PORT_RADIUS, PORT_RADIUS);
+QBrush PORT_DECAL_BRUSH = QBrush(Qt::gray);
+QColor PORT_BACKGROUND_COLOR = QColor(196, 196, 196, 64);
+QBrush PORT_BACKGROUND_BRUSH = QBrush(PORT_BACKGROUND_COLOR);
+QPen PORT_BACKGROUND_PEN = QPen(PORT_BACKGROUND_COLOR);
 
 } // namespace constants
 } // namespace q2d

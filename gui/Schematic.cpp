@@ -120,8 +120,8 @@ Schematic::addItem(QGraphicsItem* item) {
     QGraphicsScene::addItem(item);
 }
 
-void
-Schematic::mouseMoveEvent(QMouseEvent* event){
-    QPointF pos = event->pos();
-    emit signal_mousePosChanged((int)pos.x(), (int)pos.y());
-}
+//void
+//Schematic::mouseMoveEvent(QMouseEvent* event){
+//    QPointF pos = event->pos();
+//    emit signal_mousePosChanged((int)pos.x(), (int)pos.y());
+//}

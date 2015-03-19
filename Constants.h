@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QBrush>
+#include <QPen>
 #include <QPoint>
 #include <QSize>
 #include <QString>
@@ -101,6 +103,9 @@ extern QString NO_SYMBOL_FILE;
 extern unsigned int PORT_DIAMETER;
 extern unsigned int PORT_RADIUS;
 extern QPoint PORT_CENTER_OFFSET;
+extern QBrush PORT_DECAL_BRUSH;
+extern QBrush PORT_BACKGROUND_BRUSH;
+extern QPen PORT_BACKGROUND_PEN;
 
 } // namespace constants
 } // namespace q2d
