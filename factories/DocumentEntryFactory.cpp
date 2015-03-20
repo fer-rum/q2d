@@ -128,11 +128,19 @@ DocumentEntryFactory::instantiatePort(
         (parentComponent->schematicElement());
     Q_CHECK_PTR(schematicComponent);
 
-    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT_PORT, document, parentComponent);
+    DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT_PORT,
+                                             document, parentComponent);
     Q_CHECK_PTR(entry);
 
-    // add port graphics to schematic
+    // create port graphics
     gui::PortGraphicsItem* schematicPort = new gui::PortGraphicsItem(position, entry, direction);
+    Q_CHECK_PTR(schematicPort);
+
+    // connect signals and slots
+    // inform the port if it has moved due to the parent moving
+    QObject::connect(schematicComponent, &gui::ComponentGraphicsItem::signal_positionChanged,
+            schematicPort, &gui::PortGraphicsItem::signal_posChanged);
+
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
     schematicPort->setToolTip(id);

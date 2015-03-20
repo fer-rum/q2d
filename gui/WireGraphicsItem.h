@@ -30,7 +30,10 @@ private:
     static QBrush BRUSH_DEFAULT;
     static QBrush BRUSH_HOVER;
 
-    static const QPointF m_startPoint;
+    PortGraphicsItem* m_start;
+    PortGraphicsItem* m_end;
+
+    QPointF m_startPoint;
     QPointF m_endPoint;
 
     // caches additional Info as JSON
@@ -62,6 +65,7 @@ signals:
 
 public slots:
     void slot_setHovered(bool isHovered);
+    void slot_handleEndMoved();
 
 };
 

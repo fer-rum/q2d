@@ -24,8 +24,9 @@ class ComponentGraphicsItem;
  * between QGraphicsItem and QObject and keep the code flexible, should one
  * decide, that an ellipse is not enough.
  */
-class PortGraphicsItem : public SchematicElement {
-
+class PortGraphicsItem
+        : public SchematicElement {
+Q_OBJECT
 private:
 
     static QPen PEN_INPUT_PORT;
@@ -60,12 +61,6 @@ protected:
 
 public:
 
-    // overridden.
-    // The position of a port is measured from the center
-    // In contrast to the scene position
-    // which is measured from the upper left coner
-    virtual QPointF pos() const;
-
     /**
      * @brief PortGraphicsItem
      * This is the more general constructor if one needs more special things
@@ -95,6 +90,7 @@ public:
     static void setWireDrawingMode(bool mode, QPointF* origin = nullptr);
 
 signals:
+    void signal_posChanged();
 
 public slots:
         void slot_drawConnected();

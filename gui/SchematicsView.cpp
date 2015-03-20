@@ -20,6 +20,5 @@ SchematicsView::setScene(Schematic *scene){
 
 void
 SchematicsView::updateScene(const QList<QRectF> & rects){
-    qDebug() << "SchematicsView::updateScene";
     QGraphicsView::updateScene(rects);
 }

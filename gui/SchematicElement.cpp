@@ -115,6 +115,17 @@ SchematicElement::paint(QPainter* painter,
         actual->paint(painter, option, widget);
     }
 }
+
+void
+SchematicElement::clearActuals() {
+    for(QGraphicsItem* actual : m_actuals){
+        m_scene->removeItem(actual);
+        delete actual;
+    }
+
+    m_actuals.clear();
+}
+
 QString
 SchematicElement::id() const {
     return m_relatedEntry->id();

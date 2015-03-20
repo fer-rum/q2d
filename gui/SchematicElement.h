@@ -38,7 +38,8 @@ class Schematic;
  * to be stored while saving.</li>
  * </ul>
  */
-class SchematicElement : public QGraphicsObject {
+class SchematicElement
+        : public QGraphicsObject {
 
     // TODO maybe cache and update the generated Json,
     // it may also be used as better dragging text or as tooltip?
@@ -66,9 +67,8 @@ protected:
 
     void addActual(QGraphicsItem* actual);
 
-    void clearActuals() {
-        m_actuals.clear();
-    }
+    void clearActuals();
+
     int countActuals() const {
         return m_actuals.count();
     }

@@ -4,6 +4,7 @@
 #include "PortGraphicsItem.h"
 #include "WireGraphicsItem.h"
 
+#include <QGraphicsItem>
 #include <QLineF>
 #include <QPainter>
 #include <QtDebug>
@@ -14,18 +15,16 @@ using namespace q2d::constants;
 QPen WireGraphicsItem::PEN_DEFAULT = QPen(Qt::black, 0);
 QPen WireGraphicsItem::PEN_HOVER = QPen(Qt::darkRed, 4);
 
-const QPointF WireGraphicsItem::m_startPoint = QPointF(0, 0);
 
 WireGraphicsItem::WireGraphicsItem(
         PortGraphicsItem* start,
         PortGraphicsItem* end,
         DocumentEntry* relatedEntry)
-    : SchematicElement(
-          m_startPoint,
-        relatedEntry) {
+    : SchematicElement(QPointF(0, 0), relatedEntry) {
 
-    this->setPos(this->mapFromScene(start->scenePos()));
-     m_endPoint = this->mapFromScene(end->scenePos());
+    m_start = start;
+    m_end = end;
+
      this->route();
      this->setVisible(true);
      // move this to the background to be overdrawn by the ports
@@ -39,6 +38,11 @@ WireGraphicsItem::WireGraphicsItem(
     // as signal/ slot setup
     start->slot_drawConnected();
     end->slot_drawConnected();
+
+    connect(start, &PortGraphicsItem::signal_posChanged,
+            this, &WireGraphicsItem::slot_handleEndMoved);
+    connect(end, &PortGraphicsItem::signal_posChanged,
+            this, &WireGraphicsItem::slot_handleEndMoved);
 }
 
 QString
@@ -73,7 +77,16 @@ WireGraphicsItem::addChild(QPointF start, QPointF end) {
 void
 WireGraphicsItem::route() {
 
+    qDebug() << "WireGraphicsItem::route()";
+
+    // update start and end points
+
+    m_startPoint = this->mapFromScene(m_start->scenePos());
+    m_endPoint = this->mapFromScene(m_end->scenePos());
+
     this->prepareGeometryChange();
+    this->clearActuals();
+
     // choose a routing algorithm
     if (m_endPoint.x() > m_startPoint.x()) { // end point right of start)
         this->routeLeftToRight();
@@ -81,20 +94,18 @@ WireGraphicsItem::route() {
     }
 
     this->routeStraight();
+    this->recalculateBoundingRect();
 }
 
 void
 WireGraphicsItem:: routeStraight() {
 
-    this->clearActuals();
     this->addChild(m_startPoint, m_endPoint);
     Q_ASSERT(this->countActuals() == 1);
 }
 
 void
 WireGraphicsItem::routeLeftToRight() {
-
-    this->clearActuals();
 
     qreal intermediateX = (m_startPoint.x() + m_endPoint.x()) / 2;
     QPointF routingPoint0 = QPointF(intermediateX, m_startPoint.y());
@@ -133,6 +144,11 @@ WireGraphicsItem::slot_setHovered(bool isHovered) {
     }
 }
 
+void
+WireGraphicsItem::slot_handleEndMoved(){
+        this->route();
+}
+
 WireGraphicsLineItem::WireGraphicsLineItem(
     QPointF start, QPointF end, WireGraphicsItem* parent) :
     QGraphicsLineItem(QLineF(start, end), parent) {
@@ -142,6 +158,7 @@ WireGraphicsLineItem::WireGraphicsLineItem(
 
     this->setAcceptHoverEvents(true);
 }
+
 
 void
 WireGraphicsLineItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
@@ -154,3 +171,4 @@ WireGraphicsLineItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
     m_parent->slot_setHovered(false);
     event->accept();
 }
+

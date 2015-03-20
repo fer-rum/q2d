@@ -5,6 +5,8 @@
 #include "SchematicElement.h"
 #include <QGraphicsSvgItem>
 
+#include <QtDebug>
+
 namespace q2d {
 
 // forward declaration
@@ -30,8 +32,15 @@ public:
 
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 
-signals:
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value){
+        if(change == ItemPositionHasChanged){
+            emit signal_positionChanged();
+        }
+        return QGraphicsItem::itemChange(change, value);
+    }
 
+signals:
+    QVariant signal_positionChanged();
 
 public slots:
 

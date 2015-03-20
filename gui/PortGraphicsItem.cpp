@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QCursor>
 #include <QDrag>
+#include <QGraphicsItem>
 #include <QMimeData>
 #include <QtDebug>
 
@@ -79,11 +80,6 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
 
     Q_ASSERT(this->actual()->isVisible());
     this->setAcceptHoverEvents(true);
-}
-
-QPointF
-PortGraphicsItem::pos() const {
-    return QGraphicsItem::pos();
 }
 
 /**
@@ -200,7 +196,8 @@ PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
     }
 }
 
-void PortGraphicsItem::slot_drawConnected()
+void
+PortGraphicsItem::slot_drawConnected()
 {
     QAbstractGraphicsShapeItem* newActual;
     switch(m_direction){

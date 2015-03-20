@@ -24,9 +24,9 @@ ComponentGraphicsItem::ComponentGraphicsItem(
         this->addActual(new QGraphicsSvgItem(type->symbolPath()));
     } else {
         QGraphicsItem* actual = factories::GIFactory::createComponentGI(type);
-        m_scene->addItem(actual);
+        m_scene->addItem(actual); // TODO duplicate?
         this->addActual(actual);
-        actual->setVisible(true);
+        actual->setVisible(true); // TODO duplicate?
 
         // NOTE debug
         for(QGraphicsItem* child : actual->childItems()){
@@ -35,6 +35,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
     }
     this->setFlag(QGraphicsItem::ItemIsMovable);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
+    this->setFlag(QGraphicsItem::ItemSendsGeometryChanges); // needed to detect movement
 }
 
 /**
