@@ -11,18 +11,15 @@ SchematicsView::SchematicsView(QWidget* parent)
     : QGraphicsView(parent) {}
 
 void
-SchematicsView::resizeEvent( QResizeEvent* e ) {
-    double w = ( e->size().width());
-    double h = ( e->size().height());
-    QGraphicsView::resizeEvent(e);
-    this->scene()->setSceneRect(0, 0, w, h);
+SchematicsView::setScene(Schematic *scene){
+    Q_CHECK_PTR(scene);
+
+    QGraphicsView::setScene(scene);
+
 }
 
 void
-SchematicsView::setScene(Schematic *scene){
-
-    QGraphicsView::setScene(scene);
-    connect(scene, &Schematic::signal_componentDetailRequested,
-            this, &SchematicsView::signal_componentDetailRequested);
-
+SchematicsView::updateScene(const QList<QRectF> & rects){
+    qDebug() << "SchematicsView::updateScene";
+    QGraphicsView::updateScene(rects);
 }

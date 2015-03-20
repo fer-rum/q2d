@@ -33,11 +33,17 @@ protected:
 public:
     explicit SchematicsView(QWidget* parent = nullptr);
 
-    void resizeEvent(QResizeEvent* e);
     void setScene(q2d::gui::Schematic* scene);
 
 signals:
      void signal_componentDetailRequested(model::Component* component);
+
+public slots:
+     /**
+      * @brief updateScene is overridden as a debug hook. It calls its parents method.
+      * @param rects
+      */
+     void updateScene(const QList<QRectF> & rects);
 };
 
 

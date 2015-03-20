@@ -46,6 +46,13 @@ public:
     }
 
     /**
+     * @brief id is an abbreviation for calling relatedEntry()->id()
+     * @return
+     */
+    QString id() const {
+       return m_relatedEntry->id();
+    }
+    /**
      * @brief toString offers a string representation of the model element.
      * This might be used for example in tooltips or for debugging.
      * @return

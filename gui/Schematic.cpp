@@ -117,6 +117,8 @@ Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPositio
 
 void
 Schematic::addItem(QGraphicsItem* item) {
+    qDebug() << "Scene: adding Item" << util::ptrToString(item);
+    qDebug() << "Bounding Rect is" << item->boundingRect();
     QGraphicsScene::addItem(item);
 }
 
