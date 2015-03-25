@@ -88,8 +88,8 @@ model::enums::PortDirectionToString(const PortDirection direction) {
 }
 
 model::enums::PortDirection
-model::enums::invert(const PortDirection initial){
-    switch(initial){
+model::enums::invert(const PortDirection initial) {
+    switch (initial) {
     case PortDirection::IN :
         return PortDirection::OUT;
     case PortDirection::OUT:

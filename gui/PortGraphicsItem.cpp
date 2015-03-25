@@ -96,7 +96,7 @@ void
 PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 
     // only recognize hover as long as over active area
-    if(event->pos().manhattanLength() > PORT_DIAMETER){
+    if (event->pos().manhattanLength() > PORT_DIAMETER) {
         return;
     }
 
@@ -204,15 +204,14 @@ PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-PortGraphicsItem::slot_drawConnected()
-{
+PortGraphicsItem::slot_drawConnected() {
     QAbstractGraphicsShapeItem* newActual;
-    switch(m_direction){
+    switch (m_direction) {
     case model::enums::PortDirection::IN:
         newActual = factories::GIFactory::createPortAdapteeGI();
         break;
     case model::enums::PortDirection::OUT:
-       newActual = factories::GIFactory::createPortAdapterGI();
+        newActual = factories::GIFactory::createPortAdapterGI();
         break;
     default: // should not happen
         Q_ASSERT(false);

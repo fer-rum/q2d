@@ -13,26 +13,26 @@ namespace util {
 
 class PortListModel
         : public QAbstractListModel {
-            Q_OBJECT
+    Q_OBJECT
 private:
-            const QList<model::ComponentPort*>* m_list;
+    const QList<model::ComponentPort*>* m_list;
 public:
 
-            enum ListRoles {
-                TooltipRole = Qt::UserRole + 1,
-            };
+    enum ListRoles {
+        TooltipRole = Qt::UserRole + 1,
+    };
 
-            explicit PortListModel(QObject* parent = 0);
-            virtual ~PortListModel();
-            int rowCount(const QModelIndex &parent = QModelIndex()) const;
-            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    explicit PortListModel(QObject* parent = 0);
+    virtual ~PortListModel();
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-            inline void setList(const QList<model::ComponentPort*>* list) {
-                m_list = list;
-            }
-        };
+    inline void setList(const QList<model::ComponentPort*>* list) {
+        m_list = list;
+    }
+};
 
-        } // namespace util
-        } // namespace q2d
+} // namespace util
+} // namespace q2d
 
 #endif // LISTMODEL_H

@@ -30,9 +30,9 @@ protected :
 
 public:
     ModulePortGI(QPointF position, DocumentEntry* relatedEntry,
-                     model::enums::PortDirection direction);
+                 model::enums::PortDirection direction);
 
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
 
 } // namespace gui

@@ -40,7 +40,7 @@ public:
         return m_drivenElements;
     }
 
-    bool hasDriver(){
+    bool hasDriver() {
         return m_driver != nullptr;
     }
 

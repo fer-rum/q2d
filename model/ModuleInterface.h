@@ -22,7 +22,7 @@ public:
     void addPort(ModulePort* port);
     ModulePort* port();
 
-    enums::PortDirection direction(){
+    enums::PortDirection direction() {
         return m_direction;
     }
 };

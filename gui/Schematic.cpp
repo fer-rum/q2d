@@ -99,11 +99,11 @@ Schematic::dropEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition){
+Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition) {
     model::enums::PortDirection direction =
-            model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
+        model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
 
-    switch(direction) {
+    switch (direction) {
     case model::enums::PortDirection::IN :
         this->document()->addInputPort(mimeData->text(), dropPosition);
         break;
@@ -111,7 +111,7 @@ Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPositio
         this->document()->addOutputPort(mimeData->text(), dropPosition);
         break;
     default: // should not happen
-    Q_ASSERT(false);
+        Q_ASSERT(false);
     }
 }
 

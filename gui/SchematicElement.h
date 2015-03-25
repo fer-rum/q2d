@@ -117,7 +117,7 @@ class ParentSchematicElement
     Q_OBJECT
 protected:
     explicit ParentSchematicElement(QPointF position, DocumentEntry* relatedEntry)
-        : SchematicElement(position, relatedEntry){}
+        : SchematicElement(position, relatedEntry) {}
 signals:
     void signal_posChanged();
 };

@@ -51,7 +51,7 @@ public:
      * @return
      */
     QString id() const {
-       return m_relatedEntry->id();
+        return m_relatedEntry->id();
     }
     /**
      * @brief toString offers a string representation of the model element.
@@ -76,12 +76,12 @@ protected:
     QList<Port*> m_ports;
 
     InterfacingME(DocumentEntry* relatedEntry)
-        : ModelElement(relatedEntry){
+        : ModelElement(relatedEntry) {
         m_ports = QList<Port*>();
     }
 
 public:
-    void addPort(Port* port){
+    void addPort(Port* port) {
         Q_CHECK_PTR(port);
         m_ports.append(port);
     }

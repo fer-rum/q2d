@@ -11,7 +11,7 @@ SchematicsView::SchematicsView(QWidget* parent)
     : QGraphicsView(parent) {}
 
 void
-SchematicsView::setScene(Schematic *scene){
+SchematicsView::setScene(Schematic* scene) {
     Q_CHECK_PTR(scene);
 
     QGraphicsView::setScene(scene);
@@ -19,6 +19,6 @@ SchematicsView::setScene(Schematic *scene){
 }
 
 void
-SchematicsView::updateScene(const QList<QRectF> & rects){
+SchematicsView::updateScene(const QList<QRectF> &rects) {
     QGraphicsView::updateScene(rects);
 }

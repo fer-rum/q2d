@@ -9,15 +9,15 @@
 using namespace q2d::gui;
 
 ModulePortGI::ModulePortGI(
-        QPointF position,
-        DocumentEntry* relatedEntry,
-        model::enums::PortDirection direction)
+    QPointF position,
+    DocumentEntry* relatedEntry,
+    model::enums::PortDirection direction)
     : ParentSchematicElement(position, relatedEntry) {
 
     m_moduleDirection = direction;
 
     QGraphicsItem* decal;
-    switch(direction) {
+    switch (direction) {
     case model::enums::PortDirection::OUT :
         decal = factories::GIFactory::createModulePortDecalOut();
         break;
@@ -40,9 +40,9 @@ ModulePortGI::specificType() {
 }
 
 QVariant
-ModulePortGI::itemChange(GraphicsItemChange change, const QVariant & value){
-        if(change == ItemPositionHasChanged){
-            emit signal_posChanged();
-        }
-        return QGraphicsItem::itemChange(change, value);
+ModulePortGI::itemChange(GraphicsItemChange change, const QVariant &value) {
+    if (change == ItemPositionHasChanged) {
+        emit signal_posChanged();
     }
+    return QGraphicsItem::itemChange(change, value);
+}

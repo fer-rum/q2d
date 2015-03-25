@@ -40,7 +40,7 @@ signals:
     void signal_addInputPort(Document* document, QString id);
     void signal_addOutputPort(Document* document, QString id);
     void signal_mousePosChanged(int x, int y);
-     void signal_componentDetailRequested(model::Component* component);
+    void signal_componentDetailRequested(model::Component* component);
 
 private slots:
     void slot_requestedSatSolving();

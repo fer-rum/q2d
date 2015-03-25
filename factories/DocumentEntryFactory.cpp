@@ -25,7 +25,7 @@ QMap<QString, unsigned>
 DocumentEntryFactory::instanceCount = QMap<QString, unsigned>();
 
 unsigned int
-DocumentEntryFactory::countInstance(QString typeName){
+DocumentEntryFactory::countInstance(QString typeName) {
     unsigned int count = instanceCount.value(typeName, 0);
     instanceCount.insert(typeName, ++count);
     return count;
@@ -33,7 +33,7 @@ DocumentEntryFactory::countInstance(QString typeName){
 
 QString
 DocumentEntryFactory::generateComponentId(
-        metamodel::ComponentDescriptor* type){
+    metamodel::ComponentDescriptor* type) {
     Q_CHECK_PTR(type);
 
     QString typeName = type->text();
@@ -50,7 +50,7 @@ DocumentEntryFactory::instantiateComponent(Document* document,
     Q_CHECK_PTR(document);
     Q_CHECK_PTR(type);
 
-    if(id.isEmpty()){
+    if (id.isEmpty()) {
         id = DocumentEntryFactory::generateComponentId(type);
     } else {
         // TODO validity check
@@ -62,7 +62,7 @@ DocumentEntryFactory::instantiateComponent(Document* document,
     Q_CHECK_PTR(entry);
 
     gui::ComponentGraphicsItem* schematicComponent =
-            new gui::ComponentGraphicsItem(scenePosition, entry, type);
+        new gui::ComponentGraphicsItem(scenePosition, entry, type);
     Q_CHECK_PTR(schematicComponent);
     document->schematic()->addItem(schematicComponent);
 
@@ -79,7 +79,7 @@ DocumentEntryFactory::instantiateComponent(Document* document,
     schematicComponent->setToolTip(entry->id());
     document->addEntry(entry);
 
-    if(autoInstancePorts){
+    if (autoInstancePorts) {
         DocumentEntryFactory::instantiatePorts(document, type, entry);
     }
 
@@ -88,9 +88,9 @@ DocumentEntryFactory::instantiateComponent(Document* document,
 
 QList<DocumentEntry*>
 DocumentEntryFactory::instantiatePorts(
-        Document* document,
-        ComponentDescriptor* type,
-        DocumentEntry* parentComponent) {
+    Document* document,
+    ComponentDescriptor* type,
+    DocumentEntry* parentComponent) {
 
     Q_CHECK_PTR(parentComponent);
     Q_CHECK_PTR(type);
@@ -121,11 +121,11 @@ DocumentEntryFactory::instantiatePorts(
 // TODO this function needs code cleaning
 DocumentEntry*
 DocumentEntryFactory::instantiatePort(
-        Document* document,
-        DocumentEntry* parentDocumentEntry,
-        QPointF position,
-        model::enums::PortDirection direction,
-        QString id) {
+    Document* document,
+    DocumentEntry* parentDocumentEntry,
+    QPointF position,
+    model::enums::PortDirection direction,
+    QString id) {
 
     DocumentEntry* entry;
     model::Port* modelPort;
@@ -134,26 +134,28 @@ DocumentEntryFactory::instantiatePort(
     model::ModelElement* parentME = parentDocumentEntry->modelElement();
 
     // check, what kind of paren we add a port to and act accordingly
-    switch(parentDocumentEntry->type()){
+    switch (parentDocumentEntry->type()) {
     case enums::DocumentEntryType::COMPONENT : {
         entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT_PORT,
                                   document, parentDocumentEntry);
         modelPort  = new model::ComponentPort(direction, entry,
                                               dynamic_cast<model::Component*>(parentME));
-    } break;
+    }
+    break;
     case enums::DocumentEntryType::MODULE_INTERFACE : {
         entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT,
                                   document, parentDocumentEntry);
         modelPort  = new model::ModulePort(direction, entry,
-                      dynamic_cast<model::ModuleInterface*>(parentME));
-    } break;
+                                           dynamic_cast<model::ModuleInterface*>(parentME));
+    }
+    break;
     default:
         Q_ASSERT(false); // should not happen
     }
     Q_CHECK_PTR(entry);
 
     gui::ParentSchematicElement* schematicComponent =
-            qobject_cast<gui::ParentSchematicElement*>(parentDocumentEntry->schematicElement());
+        qobject_cast<gui::ParentSchematicElement*>(parentDocumentEntry->schematicElement());
     Q_CHECK_PTR(schematicComponent);
 
     // create port graphics
@@ -163,7 +165,7 @@ DocumentEntryFactory::instantiatePort(
     // connect signals and slots
     // inform the port if it has moved due to the parent moving
     QObject::connect(schematicComponent, &gui::ParentSchematicElement::signal_posChanged,
-            schematicPort, &gui::PortGraphicsItem::signal_posChanged);
+                     schematicPort, &gui::PortGraphicsItem::signal_posChanged);
 
     // no need to add this to the scene, since the parent already is
     // in the scene and the child inherits this
@@ -184,10 +186,10 @@ DocumentEntryFactory::instantiatePort(
 
 DocumentEntry*
 DocumentEntryFactory::instantiateModuleInterface(
-        Document* document,
-        QPointF position,
-        model::enums::PortDirection direction,
-        QString id){
+    Document* document,
+    QPointF position,
+    model::enums::PortDirection direction,
+    QString id) {
 
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::MODULE_INTERFACE, document);
     Q_CHECK_PTR(entry);
@@ -202,7 +204,7 @@ DocumentEntryFactory::instantiateModuleInterface(
     entry->setSchematicElement(schematicPort);
 
     // instantiate the actual
-    instantiatePort(document, entry, QPointF(0,0), model::enums::invert(direction), id);
+    instantiatePort(document, entry, QPointF(0, 0), model::enums::invert(direction), id);
 
     document->addEntry(entry);
     return entry;
@@ -210,32 +212,34 @@ DocumentEntryFactory::instantiateModuleInterface(
 
 DocumentEntry*
 DocumentEntryFactory::instantiateInputPort(
-        Document* document,
-        QPointF position,
-        QString id) {
+    Document* document,
+    QPointF position,
+    QString id) {
 
-    DocumentEntry* entry = instantiateModuleInterface(document, position, model::enums::PortDirection::IN, id);
+    DocumentEntry* entry = instantiateModuleInterface(document, position,
+                           model::enums::PortDirection::IN, id);
     document->model()->addInputPort(static_cast<model::ModuleInterface*>(entry->modelElement()));
     return entry;
 }
 
 DocumentEntry*
 DocumentEntryFactory::instantiateOutputPort(
-        Document* document,
-        QPointF position,
-        QString id) {
+    Document* document,
+    QPointF position,
+    QString id) {
 
-    DocumentEntry* entry = instantiateModuleInterface(document, position, model::enums::PortDirection::OUT, id);
+    DocumentEntry* entry = instantiateModuleInterface(document, position,
+                           model::enums::PortDirection::OUT, id);
     document->model()->addOutputPort(static_cast<model::ModuleInterface*>(entry->modelElement()));
     return entry;
 }
 
 DocumentEntry*
 DocumentEntryFactory::instantiateWire(
-        Document* document,
-        DocumentEntry* sender,
-        DocumentEntry* receiver,
-        QString id) {
+    Document* document,
+    DocumentEntry* sender,
+    DocumentEntry* receiver,
+    QString id) {
     Q_CHECK_PTR(sender);
     Q_CHECK_PTR(receiver);
     Q_ASSERT(!id.isEmpty());

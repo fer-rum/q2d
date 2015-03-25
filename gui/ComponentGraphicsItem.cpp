@@ -13,14 +13,14 @@ using namespace q2d::gui;
 using namespace q2d::metamodel;
 
 ComponentGraphicsItem::ComponentGraphicsItem(
-        QPointF position,
-        DocumentEntry* relatedEntry,
-        metamodel::ComponentDescriptor* type)
+    QPointF position,
+    DocumentEntry* relatedEntry,
+    metamodel::ComponentDescriptor* type)
     : ParentSchematicElement(position, relatedEntry) {
     Q_CHECK_PTR(type);
 
     m_type = type;
-    if(!type->symbolPath().isEmpty()){
+    if (!type->symbolPath().isEmpty()) {
         this->addActual(new QGraphicsSvgItem(type->symbolPath()));
     } else {
         QGraphicsItem* actual = factories::GIFactory::createComponentGI(type);
@@ -29,7 +29,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
         actual->setVisible(true); // TODO duplicate?
 
         // NOTE debug
-        for(QGraphicsItem* child : actual->childItems()){
+        for (QGraphicsItem * child : actual->childItems()) {
             Q_ASSERT(child->isVisible());
         }
     }
@@ -48,7 +48,7 @@ ComponentGraphicsItem::specificType() {
 }
 
 void
-ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
+ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 
     model::Component* component = dynamic_cast<model::Component*>(m_relatedEntry->modelElement());
 
@@ -57,9 +57,9 @@ ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
 }
 
 QVariant
-ComponentGraphicsItem::itemChange(GraphicsItemChange change, const QVariant & value){
-        if(change == ItemPositionHasChanged){
-            emit signal_posChanged();
-        }
-        return QGraphicsItem::itemChange(change, value);
+ComponentGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &value) {
+    if (change == ItemPositionHasChanged) {
+        emit signal_posChanged();
     }
+    return QGraphicsItem::itemChange(change, value);
+}

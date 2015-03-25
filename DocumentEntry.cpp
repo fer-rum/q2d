@@ -12,7 +12,7 @@ using namespace q2d::model;
 DocumentEntry::DocumentEntry(QString id,
                              enums::DocumentEntryType type, Document* document,
                              DocumentEntry* parent)
-    : QObject(document){
+    : QObject(document) {
     Q_CHECK_PTR(document);
     Q_ASSERT(!id.isEmpty());
     // TODO better id validation
@@ -26,7 +26,7 @@ DocumentEntry::DocumentEntry(QString id,
 }
 
 void
-DocumentEntry::setModelElement(ModelElement* modelElement){
+DocumentEntry::setModelElement(ModelElement* modelElement) {
     Q_CHECK_PTR(modelElement);
     m_modelElement = modelElement;
     m_modelElement->setRelatedEntry(this);
@@ -38,7 +38,7 @@ DocumentEntry::setModelElement(ModelElement* modelElement){
 }
 
 void
-DocumentEntry::setSchematicElement(SchematicElement* schematicElement){
+DocumentEntry::setSchematicElement(SchematicElement* schematicElement) {
     Q_CHECK_PTR(schematicElement);
     m_schematicElement = schematicElement;
     this->slot_updateToolTip();
@@ -70,7 +70,7 @@ DocumentEntry::parent() const {
 }
 
 Document*
-DocumentEntry::document() const{
+DocumentEntry::document() const {
     return m_document;
 }
 
@@ -80,18 +80,18 @@ DocumentEntry::model() const {
 }
 
 Schematic*
-DocumentEntry::scene() const{
+DocumentEntry::scene() const {
     return m_document->schematic();
 }
 
 
 void
-DocumentEntry::slot_updateToolTip(){
-    if(m_schematicElement == nullptr){
+DocumentEntry::slot_updateToolTip() {
+    if (m_schematicElement == nullptr) {
         return;
     }
 
-    if(m_modelElement != nullptr){
+    if (m_modelElement != nullptr) {
         m_schematicElement->setToolTip(m_modelElement->toString());
     } else {
         m_schematicElement->setToolTip(this->id());

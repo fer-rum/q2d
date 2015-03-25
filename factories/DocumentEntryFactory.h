@@ -13,8 +13,8 @@ namespace metamodel {
 class ComponentDescriptor;
 } // namespace metamodel
 
-namespace model{
-namespace enums{
+namespace model {
+namespace enums {
 enum class PortDirection;
 } // namespace enums
 } // namespace model
@@ -50,9 +50,9 @@ private:
      * @return A list with containing a DocumentEntry for each instantiated port
      */
     static QList<DocumentEntry*> instantiatePorts(
-            Document* document,
-            metamodel::ComponentDescriptor* type,
-            DocumentEntry* parentComponent);
+        Document* document,
+        metamodel::ComponentDescriptor* type,
+        DocumentEntry* parentComponent);
 
     /**
      * @brief instantiateModulePort is a helper method. It does not do everything needed, but a subset,
@@ -64,10 +64,10 @@ private:
      * @return
      */
     static DocumentEntry* instantiateModuleInterface(
-            Document* document,
-            QPointF position,
-            model::enums::PortDirection direction,
-            QString id);
+        Document* document,
+        QPointF position,
+        model::enums::PortDirection direction,
+        QString id);
 
 public:
 
@@ -84,11 +84,11 @@ public:
      * @return
      */
     static DocumentEntry* instantiatePort(
-            Document* document,
-            DocumentEntry* parentComponent,
-            QPointF position,
-            model::enums::PortDirection direction,
-            QString id);
+        Document* document,
+        DocumentEntry* parentComponent,
+        QPointF position,
+        model::enums::PortDirection direction,
+        QString id);
 
     /**
      * @brief instantiateComponent
@@ -107,20 +107,20 @@ public:
             bool autoInstancePorts = true);
 
     static DocumentEntry* instantiateWire(
-            Document* document,
-            DocumentEntry* sender,
-            DocumentEntry* receiver,
-            QString id);
+        Document* document,
+        DocumentEntry* sender,
+        DocumentEntry* receiver,
+        QString id);
 
     static DocumentEntry* instantiateInputPort(
-            Document* document,
-            QPointF position,
-            QString id);
+        Document* document,
+        QPointF position,
+        QString id);
 
     static DocumentEntry* instantiateOutputPort(
-            Document* document,
-            QPointF position,
-            QString id);
+        Document* document,
+        QPointF position,
+        QString id);
 };
 
 } // namespcae factories

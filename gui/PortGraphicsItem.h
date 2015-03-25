@@ -26,7 +26,7 @@ class ComponentGraphicsItem;
  */
 class PortGraphicsItem
         : public SchematicElement {
-Q_OBJECT
+    Q_OBJECT
 private:
 
     static QPen PEN_INPUT_PORT;
@@ -71,7 +71,7 @@ public:
      * @param parent
      */
     explicit PortGraphicsItem(QPointF position, DocumentEntry* relatedEntry,
-                     model::enums::PortDirection direction);
+                              model::enums::PortDirection direction);
 
     model::enums::PortDirection direction() const {
         return m_direction;
@@ -97,7 +97,7 @@ signals:
     void signal_posChanged();
 
 public slots:
-        void slot_drawConnected();
+    void slot_drawConnected();
 
 };
 

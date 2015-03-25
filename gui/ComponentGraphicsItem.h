@@ -26,13 +26,13 @@ protected:
 
 public:
     explicit ComponentGraphicsItem(
-            QPointF position,
-            DocumentEntry* relatedEntry,
-            metamodel::ComponentDescriptor* type);
+        QPointF position,
+        DocumentEntry* relatedEntry,
+        metamodel::ComponentDescriptor* type);
 
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 public slots:
 

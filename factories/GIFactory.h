@@ -26,28 +26,28 @@ public:
     GIFactory();
 
     /**
- * @brief createComponentGI generates a new QGraphicsItem for a given component type.
- * Note that this function has side effects: it changes the position of the port descriptors to match the generated graphics.
- * @param type
- * @return
- */
-static QGraphicsItem* createComponentGI(metamodel::ComponentDescriptor* type);
+    * @brief createComponentGI generates a new QGraphicsItem for a given component type.
+    * Note that this function has side effects: it changes the position of the port descriptors to match the generated graphics.
+    * @param type
+    * @return
+    */
+    static QGraphicsItem* createComponentGI(metamodel::ComponentDescriptor* type);
 
-/**
- * @brief createPortAdapterGI whichis used for the IN port direction.
- * @return
- */
-static QAbstractGraphicsShapeItem* createPortAdapterGI();
+    /**
+     * @brief createPortAdapterGI whichis used for the IN port direction.
+     * @return
+     */
+    static QAbstractGraphicsShapeItem* createPortAdapterGI();
 
-/**
- * @brief createPortAdapteeGI which is used for the OUT port direction
- * @return
- */
-static QAbstractGraphicsShapeItem* createPortAdapteeGI();
-static QAbstractGraphicsShapeItem* createPortInvalidGI();
+    /**
+     * @brief createPortAdapteeGI which is used for the OUT port direction
+     * @return
+     */
+    static QAbstractGraphicsShapeItem* createPortAdapteeGI();
+    static QAbstractGraphicsShapeItem* createPortInvalidGI();
 
-static QAbstractGraphicsShapeItem* createModulePortDecalIn();
-static QAbstractGraphicsShapeItem* createModulePortDecalOut();
+    static QAbstractGraphicsShapeItem* createModulePortDecalIn();
+    static QAbstractGraphicsShapeItem* createModulePortDecalOut();
 
 };
 

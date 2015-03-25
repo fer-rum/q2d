@@ -3,10 +3,10 @@
 
 using namespace q2d::util;
 
-PortListModel::PortListModel(QObject *parent) :
-    QAbstractListModel(parent){}
+PortListModel::PortListModel(QObject* parent) :
+    QAbstractListModel(parent) {}
 
-PortListModel::~PortListModel(){
+PortListModel::~PortListModel() {
     delete m_list;
 }
 
@@ -25,7 +25,7 @@ PortListModel::data(const QModelIndex &index, int role) const {
         return QVariant();
     }
 
-    switch(role){
+    switch (role) {
     case Qt::DisplayRole :
         return m_list->value(index.row())->relatedEntry()->id();
     case TooltipRole:

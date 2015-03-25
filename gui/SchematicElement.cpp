@@ -15,8 +15,8 @@ using namespace q2d::constants;
 const QJsonObject SchematicElement::EMPTY_JSON = QJsonObject();
 
 SchematicElement::SchematicElement(QPointF position, q2d::DocumentEntry* relatedEntry)
-    : QGraphicsObject(relatedEntry->parent() != nullptr? relatedEntry->parent()->schematicElement()
-                                      : nullptr) {
+    : QGraphicsObject(relatedEntry->parent() != nullptr ? relatedEntry->parent()->schematicElement()
+                      : nullptr) {
     Q_CHECK_PTR(relatedEntry);
     m_relatedEntry = relatedEntry;
     m_scene = relatedEntry->scene();
@@ -104,8 +104,8 @@ SchematicElement::recalculateBoundingRect() {
 
 void
 SchematicElement::paint(QPainter* painter,
-                            const QStyleOptionGraphicsItem* option,
-                            QWidget* widget) {
+                        const QStyleOptionGraphicsItem* option,
+                        QWidget* widget) {
 
     if (m_actuals.isEmpty()) {
         return;
@@ -118,7 +118,7 @@ SchematicElement::paint(QPainter* painter,
 
 void
 SchematicElement::clearActuals() {
-    for(QGraphicsItem* actual : m_actuals){
+    for (QGraphicsItem * actual : m_actuals) {
         m_scene->removeItem(actual);
         delete actual;
     }

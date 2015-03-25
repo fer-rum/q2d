@@ -50,11 +50,11 @@ Component::functions() const {
 }
 
 QList<ComponentPort*>*
-Component::inputPorts(){
+Component::inputPorts() {
     QList<ComponentPort*>* result = new QList<ComponentPort*>();
 
-    for(Port* port : m_ports){
-        if(port->direction() == enums::PortDirection::IN){
+    for (Port * port : m_ports) {
+        if (port->direction() == enums::PortDirection::IN) {
             result->append(static_cast<ComponentPort*>(port));
         }
     }
@@ -62,11 +62,11 @@ Component::inputPorts(){
 }
 
 QList<ComponentPort*>*
-Component::outputPorts(){
+Component::outputPorts() {
     QList<ComponentPort*>* result = new QList<ComponentPort*>();
 
-    for(Port* port : m_ports){
-        if(port->direction() == enums::PortDirection::OUT){
+    for (Port * port : m_ports) {
+        if (port->direction() == enums::PortDirection::OUT) {
             result->append(static_cast<ComponentPort*>(port));
         }
     }

@@ -11,7 +11,7 @@
 
 using namespace q2d::gui;
 
-ComponentDetailView::ComponentDetailView(model::Component* component, MainWindow *parent) :
+ComponentDetailView::ComponentDetailView(model::Component* component, MainWindow* parent) :
     QDialog(parent),
     m_ui(new Ui::ComponentDetailView) {
     Q_CHECK_PTR(component);
@@ -33,6 +33,6 @@ ComponentDetailView::ComponentDetailView(model::Component* component, MainWindow
     m_ui->list_functions->setModel(functionModel);
 }
 
-ComponentDetailView::~ComponentDetailView(){
+ComponentDetailView::~ComponentDetailView() {
     delete m_ui;
 }

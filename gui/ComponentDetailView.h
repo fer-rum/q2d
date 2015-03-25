@@ -20,10 +20,10 @@ class ComponentDetailView : public QDialog {
     Q_OBJECT
 
 private:
-    Ui::ComponentDetailView *m_ui;
+    Ui::ComponentDetailView* m_ui;
 
 public:
-    explicit ComponentDetailView(model::Component* component, MainWindow *parent);
+    explicit ComponentDetailView(model::Component* component, MainWindow* parent);
     ~ComponentDetailView();
 
 };

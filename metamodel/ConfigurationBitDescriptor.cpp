@@ -42,7 +42,7 @@ ConfigBitGroupDescriptor::ConfigBitGroupDescriptor(QString groupName, unsigned i
                 this);
         this->appendRow(descriptor);
     }
-        this->setIcon(QIcon(":/icons/ressources/icons/bit_group.svg"));
+    this->setIcon(QIcon(":/icons/ressources/icons/bit_group.svg"));
 }
 
 QString

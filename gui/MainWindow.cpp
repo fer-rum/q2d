@@ -168,9 +168,9 @@ MainWindow::slot_createDocument() {
 
     // validate name
     if (name.isEmpty()) {
-       slot_displayErrorMessage(
-                              tr("Error: Document name was empty"),
-                              tr("The documents name must not be empty."));
+        slot_displayErrorMessage(
+            tr("Error: Document name was empty"),
+            tr("The documents name must not be empty."));
         return;
     }
 
@@ -354,12 +354,12 @@ MainWindow::slot_displayComponentDetail(model::Component* component) {
 }
 
 void
-MainWindow::slot_displayErrorMessage(QString title, QString text){
+MainWindow::slot_displayErrorMessage(QString title, QString text) {
     QMessageBox::critical(this, title, text, QMessageBox::Ok);
 }
 
 void
-MainWindow::slot_displaySchematicMousePos(int x, int y){
+MainWindow::slot_displaySchematicMousePos(int x, int y) {
     QString text = QString::number(x) + ", " + QString::number(y);
     m_ui->statusBar->showMessage(text);
     qDebug() << text;

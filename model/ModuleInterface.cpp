@@ -7,10 +7,10 @@ using namespace q2d::model;
 
 void
 ModuleInterface::addPort(ModulePort* port) {
-        InterfacingME::addPort(port);
-    }
+    InterfacingME::addPort(port);
+}
 
 ModulePort*
-ModuleInterface::port(){
+ModuleInterface::port() {
     return static_cast<ModulePort*>(m_ports.first());
 }

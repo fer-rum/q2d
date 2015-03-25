@@ -51,7 +51,7 @@ SchematicsTab::~SchematicsTab() {
 }
 
 QString
-SchematicsTab::requestPortName(){
+SchematicsTab::requestPortName() {
     bool ok;
     QString name = QInputDialog::getText(this,
                                          tr("Port name required"),
@@ -75,11 +75,11 @@ SchematicsTab::requestPortName(){
 }
 
 void
-SchematicsTab::initiatePortDrag(model::enums::PortDirection portDirection){
+SchematicsTab::initiatePortDrag(model::enums::PortDirection portDirection) {
     QString name;
     try {
         name = this->requestPortName();
-    } catch( QString msg) {
+    } catch ( QString msg) {
         qDebug() << msg;
         return;
     }
@@ -91,7 +91,7 @@ SchematicsTab::initiatePortDrag(model::enums::PortDirection portDirection){
     QIcon icon;
     QString directionString = model::enums::PortDirectionToString(portDirection);
     // create the pixmap for the drag operation
-    switch(portDirection){
+    switch (portDirection) {
     case model::enums::PortDirection::IN :
         icon = QIcon(":/icons/ressources/icons/outside_port_in.svg");
         break;

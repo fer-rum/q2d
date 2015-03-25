@@ -61,11 +61,11 @@ Model::outsidePorts() const {
 
     QList<ModulePort*> result = QList<ModulePort*>();
 
-    for(ModuleInterface* interface : m_inputPorts){
+    for (ModuleInterface * interface : m_inputPorts) {
         result.append(interface->port());
     }
 
-    for(ModuleInterface* interface : m_outputPorts){
+    for (ModuleInterface * interface : m_outputPorts) {
         result.append(interface->port());
     }
 

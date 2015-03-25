@@ -26,7 +26,7 @@ class ModelElement;
  * DocumentEntry may have parents, to maintain potential hierarchical relations.
  */
 class DocumentEntry
-    : public QObject {
+        : public QObject {
     Q_OBJECT
 private:
     QString                     m_id;

@@ -17,18 +17,18 @@ QPen WireGraphicsItem::PEN_HOVER = QPen(Qt::darkRed, 4);
 
 
 WireGraphicsItem::WireGraphicsItem(
-        PortGraphicsItem* start,
-        PortGraphicsItem* end,
-        DocumentEntry* relatedEntry)
+    PortGraphicsItem* start,
+    PortGraphicsItem* end,
+    DocumentEntry* relatedEntry)
     : SchematicElement(QPointF(0, 0), relatedEntry) {
 
     m_start = start;
     m_end = end;
 
-     this->route();
-     this->setVisible(true);
-     // move this to the background to be overdrawn by the ports
-     this->setZValue(-1);
+    this->route();
+    this->setVisible(true);
+    // move this to the background to be overdrawn by the ports
+    this->setZValue(-1);
 
     m_additionalInfo = QJsonObject();
     m_additionalInfo.insert(JSON_WIRE_START, QJsonValue(start->id()));
@@ -143,8 +143,8 @@ WireGraphicsItem::slot_setHovered(bool isHovered) {
 }
 
 void
-WireGraphicsItem::slot_handleEndMoved(){
-        this->route();
+WireGraphicsItem::slot_handleEndMoved() {
+    this->route();
 }
 
 WireGraphicsLineItem::WireGraphicsLineItem(

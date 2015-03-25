@@ -38,7 +38,8 @@ class ComponentPort : public Port {
 private:
     Component* m_component;
 public:
-    ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry, Component* interfacedComponent);
+    ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+                  Component* interfacedComponent);
 
     /**
      * @brief component is a getter for the component the port provides an interface for.
@@ -63,7 +64,8 @@ public:
      * It will be translated to the opposing direction to fit the <i>inside the module</i> point of view.
      * @param relatedEntry
      */
-    ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry, ModuleInterface* moduleInterface);
+    ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+               ModuleInterface* moduleInterface);
 
     virtual QStringList nodeVariables() const override;
     virtual QStringList inputVariables() const override;

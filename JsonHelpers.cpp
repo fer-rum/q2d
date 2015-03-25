@@ -216,7 +216,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     switch (type) {
     case enums::DocumentEntryType::COMPONENT : {
         metamodel::ComponentDescriptor* descriptor =
-                document->componentFactory()->getTypeForHierarchyName(typeId);
+            document->componentFactory()->getTypeForHierarchyName(typeId);
         DocumentEntryFactory::instantiateComponent(document, descriptor, position, id, false);
     }
     break;
@@ -229,7 +229,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     case enums::DocumentEntryType::OUTSIDE_PORT: {
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         model::enums::PortDirection direction = model::enums::StringToPortDirection(directionString);
-        switch(direction) {
+        switch (direction) {
         case model::enums::PortDirection::IN :
             DocumentEntryFactory::instantiateInputPort(document, position, id);
             break;
@@ -240,7 +240,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
             Q_ASSERT(false);
         }
     }
-        break;
+    break;
     case enums::DocumentEntryType::WIRE : {
         QJsonObject additional = schematicJson.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
         Q_ASSERT(!additional.isEmpty());
@@ -330,9 +330,9 @@ q2d::json::toComponentDescriptor (
     // load the symbol file
     QJsonValue symbolPathValue = jsonObject.value(JSON_SYMBOL_PATH);
 
-    if(!symbolPathValue.isUndefined()){
+    if (!symbolPathValue.isUndefined()) {
         QString symbolFilePath =
-        baseDirPath + QDir::separator() + symbolPathValue.toString(NO_SYMBOL_FILE);
+            baseDirPath + QDir::separator() + symbolPathValue.toString(NO_SYMBOL_FILE);
         result->setSymbolPath(symbolFilePath);
     }
 
@@ -343,8 +343,8 @@ q2d::json::toComponentDescriptor (
         if (currentValue.isUndefined()) {
             continue;
         }
-       metamodel::PortDescriptor* portDescriptor = json::toPortDescriptor(currentValue.toObject());
-       result->addPort(portDescriptor);
+        metamodel::PortDescriptor* portDescriptor = json::toPortDescriptor(currentValue.toObject());
+        result->addPort(portDescriptor);
 
     }
 
@@ -371,7 +371,7 @@ q2d::json::toComponentDescriptor (
 }
 
 q2d::metamodel::PortDescriptor*
-q2d::json::toPortDescriptor(QJsonObject json){
+q2d::json::toPortDescriptor(QJsonObject json) {
 
     QJsonObject     posObject       = json.value(JSON_GENERAL_POSITION).toObject();
     QString         portName        = json.value(JSON_GENERAL_NAME).toString();
@@ -380,7 +380,7 @@ q2d::json::toPortDescriptor(QJsonObject json){
     model::enums::PortDirection portDirection = model::enums::StringToPortDirection(dirString);
 
     metamodel::PortDescriptor* portDescriptor =
-            new metamodel::PortDescriptor(portName, portDirection, portPosition);
+        new metamodel::PortDescriptor(portName, portDirection, portPosition);
 
     return portDescriptor;
 }

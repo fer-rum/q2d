@@ -54,7 +54,7 @@ PortDescriptor::position() {
 }
 
 void
-PortDescriptor::setPosition(QPoint position){
+PortDescriptor::setPosition(QPoint position) {
     this->setData(position, ComponentDescriptorRole::PORT_POSITION);
 }
 

@@ -34,13 +34,13 @@ Node::toString() const {
     QString text = ModelElement::toString();
     ModelElement* driver = this->driver();
     text += "\nDriver: ";
-    if(driver != nullptr){
+    if (driver != nullptr) {
         text += driver->relatedEntry()->id();
     } else {
         text += "(None)";
     }
 
-    for(ModelElement* current : this->drivenElements()){
+    for (ModelElement * current : this->drivenElements()) {
         text += "\n-> " + current->relatedEntry()->id();
     }
 
