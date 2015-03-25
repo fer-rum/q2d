@@ -105,6 +105,8 @@ protected :
 public:
     ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry,
                      model::enums::PortDirection direction);
+
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 };
 
 } // namespace gui

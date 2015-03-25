@@ -32,12 +32,7 @@ public:
 
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value){
-        if(change == ItemPositionHasChanged){
-            emit signal_positionChanged();
-        }
-        return QGraphicsItem::itemChange(change, value);
-    }
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
 signals:
     QVariant signal_positionChanged();

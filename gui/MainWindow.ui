@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>q2d</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../icons.qrc">
+    <normaloff>:/icons/ressources/icons/logo.svg</normaloff>:/icons/ressources/icons/logo.svg</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout" rowstretch="1,5" columnstretch="1,4" rowminimumheight="0,0" columnminimumwidth="0,0">
     <item row="0" column="0">
@@ -183,7 +187,7 @@ Edit your description for the current document here</string>
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -267,6 +271,8 @@ Edit your description for the current document here</string>
    <header>gui/ComponentTreeView.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

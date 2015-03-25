@@ -35,7 +35,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
     }
     this->setFlag(QGraphicsItem::ItemIsMovable);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
-    this->setFlag(QGraphicsItem::ItemSendsGeometryChanges); // needed to detect movement
+    this->setFlag(QGraphicsItem::ItemSendsScenePositionChanges); // needed to detect movement
 }
 
 /**
@@ -55,3 +55,11 @@ ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
     emit this->scene()->signal_componentDetailRequested(component);
     event->accept();
 }
+
+QVariant
+ComponentGraphicsItem::itemChange(GraphicsItemChange change, const QVariant & value){
+        if(change == ItemPositionHasChanged){
+            emit signal_positionChanged();
+        }
+        return QGraphicsItem::itemChange(change, value);
+    }

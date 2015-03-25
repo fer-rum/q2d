@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/icons">
         <file>ressources/icons/port_out.svg</file>
-        <file>ressources/icons/port_inout.svg</file>
         <file>ressources/icons/port_in.svg</file>
         <file>ressources/icons/outside_port_out.svg</file>
         <file>ressources/icons/outside_port_in.svg</file>
         <file>ressources/icons/bit_group.svg</file>
         <file>ressources/icons/function.svg</file>
+        <file>ressources/icons/logo.svg</file>
     </qresource>
 </RCC>

@@ -77,8 +77,6 @@ WireGraphicsItem::addChild(QPointF start, QPointF end) {
 void
 WireGraphicsItem::route() {
 
-    qDebug() << "WireGraphicsItem::route()";
-
     // update start and end points
 
     m_startPoint = this->mapFromScene(m_start->scenePos());

@@ -94,6 +94,12 @@ PortGraphicsItem::specificType() {
 
 void
 PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
+
+    // only recognize hover as long as over active area
+    if(event->pos().manhattanLength() > PORT_DIAMETER){
+        return;
+    }
+
     this->actual()->setPen(PEN_HOVER_PORT);
     this->actual()->setBrush(BRUSH_HOVER_PORT);
     this->setCursor(QCursor(Qt::CrossCursor));
@@ -110,6 +116,7 @@ PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 
 void
 PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+
     if (event->button() == Qt::LeftButton) {
         m_dragStartPosition = event->scenePos();
         event->accept();
@@ -257,6 +264,9 @@ ModulePortGI::ModulePortGI(
     }
     decal->setZValue(-1);
     this->addActual(decal);
+    this->setFlag(QGraphicsItem::ItemIsMovable);
+    this->setFlag(QGraphicsItem::ItemIsSelectable);
+    this->setFlag(QGraphicsItem::ItemSendsScenePositionChanges); // needed to detect movement
 }
 
 /**
@@ -269,3 +279,11 @@ QString
 ModulePortGI::specificType() {
     return model::enums::PortDirectionToString(model::enums::invert(m_direction));
 }
+
+QVariant
+ModulePortGI::itemChange(GraphicsItemChange change, const QVariant & value){
+        if(change == ItemPositionHasChanged){
+            emit signal_posChanged();
+        }
+        return QGraphicsItem::itemChange(change, value);
+    }
