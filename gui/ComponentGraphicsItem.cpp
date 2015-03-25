@@ -16,7 +16,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
         QPointF position,
         DocumentEntry* relatedEntry,
         metamodel::ComponentDescriptor* type)
-    : SchematicElement(position, relatedEntry) {
+    : ParentSchematicElement(position, relatedEntry) {
     Q_CHECK_PTR(type);
 
     m_type = type;
@@ -59,7 +59,7 @@ ComponentGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
 QVariant
 ComponentGraphicsItem::itemChange(GraphicsItemChange change, const QVariant & value){
         if(change == ItemPositionHasChanged){
-            emit signal_positionChanged();
+            emit signal_posChanged();
         }
         return QGraphicsItem::itemChange(change, value);
     }

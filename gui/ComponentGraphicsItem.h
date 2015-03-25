@@ -16,7 +16,7 @@ class ComponentDescriptor;
 
 namespace gui {
 
-class ComponentGraphicsItem : public SchematicElement {
+class ComponentGraphicsItem : public ParentSchematicElement {
     Q_OBJECT
 private:
     metamodel::ComponentDescriptor* m_type;
@@ -33,9 +33,6 @@ public:
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
 
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
-
-signals:
-    QVariant signal_positionChanged();
 
 public slots:
 

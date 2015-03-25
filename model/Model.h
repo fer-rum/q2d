@@ -14,6 +14,7 @@ namespace model {
 class Component;
 class Conductor;
 class Node;
+class ModuleInterface;
 class ModulePort;
 class Port;
 
@@ -29,14 +30,14 @@ private:
     QString m_name;
     QList<Component*> m_components;
     QList<Conductor*> m_conductors;
-    QList<ModulePort*> m_inputPorts;
-    QList<ModulePort*> m_outputPorts;
+    QList<ModuleInterface*> m_inputPorts;
+    QList<ModuleInterface*> m_outputPorts;
 public:
     Model(Document* parent);
 
     void addComponent(Component* toAdd);
-    void addInputPort(ModulePort* inputPort);
-    void addOutputPort(ModulePort* outputPort);
+    void addInputPort(ModuleInterface* inputPort);
+    void addOutputPort(ModuleInterface* outputPort);
     void addConductor(model::Conductor* conductor);
 
     QList<Component*> components() const {
@@ -47,11 +48,7 @@ public:
         return m_conductors;
     }
 
-    QList<ModulePort*> outsidePorts() const {
-        QList<ModulePort*> result = QList<ModulePort*>(m_inputPorts);
-        result.append(m_outputPorts);
-        return result;
-    }
+    QList<ModulePort*> outsidePorts() const;
 };
 
 } // namespace model

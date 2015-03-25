@@ -12,6 +12,7 @@ namespace model {
 
 // forward declaration
 class Model;
+class Port;
 
 // TODO documentation
 class ModelElement : public QObject {
@@ -63,6 +64,27 @@ public:
 
 signals:
     void signal_changed();
+};
+
+class InterfacingME
+        : public ModelElement {
+    Q_OBJECT
+private:
+
+protected:
+
+    QList<Port*> m_ports;
+
+    InterfacingME(DocumentEntry* relatedEntry)
+        : ModelElement(relatedEntry){
+        m_ports = QList<Port*>();
+    }
+
+public:
+    void addPort(Port* port){
+        Q_CHECK_PTR(port);
+        m_ports.append(port);
+    }
 };
 
 } // namespace model

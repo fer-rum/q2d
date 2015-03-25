@@ -81,7 +81,9 @@ SOURCES +=\
     factories/DocumentEntryFactory.cpp \
     factories/GIFactory.cpp \
     gui/ComponentDetailView.cpp \
-    PortListModel.cpp
+    PortListModel.cpp \
+    gui/ModulePortGI.cpp \
+    model/ModuleInterface.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -132,7 +134,9 @@ HEADERS  +=\
     interfaces/quantor/Context.h \
     factories/GIFactory.h \
     gui/ComponentDetailView.h \
-    PortListModel.h
+    PortListModel.h \
+    gui/ModulePortGI.h \
+    model/ModuleInterface.h
 
 INCLUDEPATH +=\
     $$picosatDir \

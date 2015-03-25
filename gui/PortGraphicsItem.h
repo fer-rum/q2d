@@ -73,6 +73,10 @@ public:
     explicit PortGraphicsItem(QPointF position, DocumentEntry* relatedEntry,
                      model::enums::PortDirection direction);
 
+    model::enums::PortDirection direction() const {
+        return m_direction;
+    }
+
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
@@ -95,18 +99,6 @@ signals:
 public slots:
         void slot_drawConnected();
 
-};
-
-class ModulePortGI : public PortGraphicsItem {
-
-protected :
-    virtual QString specificType() override;
-
-public:
-    ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry,
-                     model::enums::PortDirection direction);
-
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 };
 
 } // namespace gui

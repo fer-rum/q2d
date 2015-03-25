@@ -1,15 +1,30 @@
 #include "../DocumentEntry.h"
 #include "../Enumerations.h"
 #include "Component.h"
+#include "ModelElement.h"
+#include "ModuleInterface.h"
 #include "Port.h"
 
 using namespace q2d::model;
 
-Port::Port(enums::PortDirection direction, DocumentEntry *relatedEntry)
+Port::Port(enums::PortDirection direction, DocumentEntry *relatedEntry, InterfacingME* interfaced)
     : Node(relatedEntry){
     Q_ASSERT(direction == enums::PortDirection::IN
              || direction == enums::PortDirection::OUT);
     m_direction = direction;
+
+    interfaced->addPort(this);
+
+    switch(m_direction){
+    case enums::PortDirection::IN :
+        this->addDrivenElement(interfaced);
+        break;
+    case enums::PortDirection::OUT :
+        this->addDriver(interfaced);
+        break;
+    default: // this should not happen
+        Q_ASSERT(false);
+    }
 }
 
 QString
@@ -24,23 +39,11 @@ ComponentPort::nodeVariables() const {
     return QStringList(this->relatedEntry()->id());
 }
 
-ComponentPort::ComponentPort(enums::PortDirection direction, Component *interfacedComponent, DocumentEntry *relatedEntry)
-    : Port(direction, relatedEntry) {
+ComponentPort::ComponentPort(enums::PortDirection direction, DocumentEntry *relatedEntry, Component *interfacedComponent)
+    : Port(direction, relatedEntry, interfacedComponent) {
     Q_CHECK_PTR(interfacedComponent);
 
     m_component = interfacedComponent;
-    m_component->addPort(this);
-
-    switch(m_direction){
-    case enums::PortDirection::IN :
-        this->addDrivenElement(interfacedComponent);
-        break;
-    case enums::PortDirection::OUT :
-        this->addDriver(interfacedComponent);
-        break;
-    default: // this should not happen
-        Q_ASSERT(false);
-    }
 }
 
 Component*
@@ -48,8 +51,8 @@ ComponentPort::component() const {
     return m_component;
 }
 
-ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry)
-    : Port(enums::invert(direction), relatedEntry){
+ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry, ModuleInterface* moduleInterface)
+    : Port(direction, relatedEntry, moduleInterface) {
     Q_CHECK_PTR(relatedEntry);
     Q_ASSERT(m_direction == enums::PortDirection::IN
              || m_direction == enums::PortDirection::OUT);

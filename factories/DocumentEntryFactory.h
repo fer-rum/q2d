@@ -63,7 +63,7 @@ private:
      * @param direction
      * @return
      */
-    static DocumentEntry* instantiateModulePort(
+    static DocumentEntry* instantiateModuleInterface(
             Document* document,
             QPointF position,
             model::enums::PortDirection direction,
@@ -74,6 +74,9 @@ public:
     /**
      * @brief ComponentFactory::instentiatePort
      * Instantiates a single Port and adds it to the document as DocumentEntry.
+     * The schematic item of the parent entry is required to provide
+     * <code> void signal_posChanged() </code>
+     * A tooltip for the new ports schematic item will be set, containing its ID.
      * @param parentComponent
      * @param position
      * @param direction
