@@ -1,23 +1,32 @@
 #include "DocumentEntry.h"
 #include "Document.h"
 #include "Enumerations.h"
+
+#include "factories/ToolTipFactory.h"
 #include "model/ModelElement.h"
 
 #include <QtDebug>
 
 using namespace q2d;
+using namespace q2d::core;
 using namespace q2d::gui;
 using namespace q2d::model;
+
+
+Identifiable*
+DocumentEntry::chooseParentIdentifier(Identifiable* document, Identifiable* parentEntry){
+    if(parentEntry == nullptr){ return document; }
+    return parentEntry;
+}
 
 DocumentEntry::DocumentEntry(QString id,
                              enums::DocumentEntryType type, Document* document,
                              DocumentEntry* parent)
-    : QObject(document) {
-    Q_CHECK_PTR(document);
-    Q_ASSERT(!id.isEmpty());
-    // TODO better id validation
+    : QObject(document),
+    Identifiable(id, chooseParentIdentifier(document, parent)) {
 
-    m_id = id;
+    Q_CHECK_PTR(document);
+
     m_type = type;
     m_modelElement = nullptr;
     m_schematicElement = nullptr;
@@ -44,10 +53,6 @@ DocumentEntry::setSchematicElement(SchematicElement* schematicElement) {
     this->slot_updateToolTip();
 }
 
-QString
-DocumentEntry::id() const {
-    return m_id;
-}
 
 q2d::enums::DocumentEntryType
 DocumentEntry::type() const {
@@ -91,9 +96,5 @@ DocumentEntry::slot_updateToolTip() {
         return;
     }
 
-    if (m_modelElement != nullptr) {
-        m_schematicElement->setToolTip(m_modelElement->toString());
-    } else {
-        m_schematicElement->setToolTip(this->id());
-    }
+    m_schematicElement->setToolTip(factories::ToolTipFactory::generateToolTip(this));
 }

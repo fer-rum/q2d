@@ -64,6 +64,8 @@ public:
     virtual int type() const {
         return enums::elementTypeToInt(enums::ElementType::COMPONENT);
     }
+
+    QPoint portPosition(QString portName);
 };
 
 } // namespace metamodel

@@ -83,7 +83,9 @@ SOURCES +=\
     gui/ComponentDetailView.cpp \
     PortListModel.cpp \
     gui/ModulePortGI.cpp \
-    model/ModuleInterface.cpp
+    model/ModuleInterface.cpp \
+    core/Identifiable.cpp \
+    factories/ToolTipFactory.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -136,7 +138,9 @@ HEADERS  +=\
     gui/ComponentDetailView.h \
     PortListModel.h \
     gui/ModulePortGI.h \
-    model/ModuleInterface.h
+    model/ModuleInterface.h \
+    core/Identifiable.h \
+    factories/ToolTipFactory.h
 
 INCLUDEPATH +=\
     $$picosatDir \

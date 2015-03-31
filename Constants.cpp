@@ -55,6 +55,15 @@ QString MIME_WIRE_START_POS = "application/wire-start-pos";
 QString FILE_COMPONENT_TREE    = "/components.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
 
+QString TOOLTIP_FULL_ID = QObject::tr("Full ID");
+QString TOOLTIP_TYPE    = QObject::tr("Type");
+QString TOOLTIP_DRIVER  = QObject::tr("Driver");
+QString TOOLTIP_NONE    = QObject::tr("(None)");
+QString TOOLTIP_DRIVEN  = QObject::tr("Driven");
+QString TOOLTIP_DIRECTION  = QObject::tr("Direction");
+
+// drawing stuff
+
 unsigned int PORT_DIAMETER = 16;
 unsigned int PORT_RADIUS = PORT_DIAMETER / 2;
 QPoint PORT_CENTER_OFFSET = QPoint(PORT_RADIUS, PORT_RADIUS);

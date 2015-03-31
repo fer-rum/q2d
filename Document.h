@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include "DocumentEntry.h"
+#include "core/Identifiable.h"
 #include "model/Model.h"
 #include "gui/Schematic.h"
 #include "metamodel/ComponentDescriptor.h"
@@ -28,11 +29,23 @@ enum DocumentRole {
 
 // TODO documentation
 // TODO referenced Documents?
-// TODO description text
-
+/**
+ * @brief Document::Document
+ *
+ * Upon creation of a document an empty described model
+ * and an empty schematic view are created.
+ *
+ * @param name is the name of the document and also the name of the component
+ * which is described by the document.
+ * It also serves as the root of all IDs of elements contained in the document.
+ *
+ * @param parent the Project the document belongs to; Must not be null,
+ * since the component factory is cached from it
+ */
 class Document :
     public QObject,
-    public QStandardItem {
+    public QStandardItem,
+    public core::Identifiable {
     Q_OBJECT
 private:
     /**
@@ -45,7 +58,6 @@ private:
      * @brief m_entries keeps all the relations between model and
      * schematic elements.
      */
-    // TODO no pointer
     QList<DocumentEntry*> m_entries;
 
     void addComponentPorts(metamodel::ComponentDescriptor* type,
@@ -68,9 +80,7 @@ public:
     void addEntry(DocumentEntry* entry);
 
     // access helpers
-    DocumentEntry* entry(const QString id) const;
-    DocumentEntry* entry(const gui::SchematicElement* schematicElement) const;
-    DocumentEntry* entry(const model::ModelElement* modelElement) const;
+    DocumentEntry* entryForFullId(const QString fullId) const;
 
     QList<DocumentEntry*> entries() const;
 

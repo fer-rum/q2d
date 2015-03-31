@@ -44,7 +44,7 @@ public:
         return m_driver != nullptr;
     }
 
-    virtual QString toString() const override;
+    virtual QMap<QString, QString> propertyMap() const override;
 };
 
 // TODO documentation

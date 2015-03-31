@@ -24,24 +24,16 @@
 
 using namespace q2d;
 using namespace q2d::constants;
+using namespace q2d::core;
 using namespace q2d::factories;
 using namespace q2d::metamodel;
 
-/**
- * @brief Document::Document
- *
- * Upon creation of a document an empty described model
- * and an empty schematic view are created.
- *
- * @param name is the name of the document and also the name of the component
- * which is described by the document.
- *
- * @param parent the Project the document belongs to; Must not be null,
- * since the component factory is cached from it
- */
+
 Document::Document(QString name, Project* parent) :
     QObject(parent),
-    QStandardItem(name) {
+    QStandardItem(name),
+    Identifiable(name) {
+
     Q_CHECK_PTR(parent);
     Q_ASSERT(this->text() == name);
 
@@ -116,35 +108,11 @@ Document::addOutputPort(QString id, QPointF pos) {
  * @return The entry identified by id or a nullptr if there is no such entry.
  */
 DocumentEntry*
-Document::entry(const QString id) const {
-    Q_ASSERT(!id.isEmpty());
+Document::entryForFullId(const QString fullId) const {
+    Q_ASSERT(!fullId.isEmpty());
 
     for (DocumentEntry * entry : m_entries) {
-        if (entry->id() == id) {
-            return entry;
-        }
-    }
-    return nullptr;
-}
-
-DocumentEntry*
-Document::entry(const gui::SchematicElement* schematicElement) const {
-    Q_CHECK_PTR(schematicElement);
-
-    for (DocumentEntry * entry : m_entries) {
-        if (entry->schematicElement() == schematicElement) {
-            return entry;
-        }
-    }
-    return nullptr;
-}
-
-DocumentEntry*
-Document::entry(const model::ModelElement* modelElement) const {
-    Q_CHECK_PTR(modelElement);
-
-    for (DocumentEntry * entry : m_entries) {
-        if (entry->modelElement() == modelElement) {
+        if (entry->fullId() == fullId) {
             return entry;
         }
     }
@@ -159,12 +127,10 @@ Document::entries() const {
 
 void
 Document::addWire(QString senderNodeId, QString receiverNodeId) {
-    DocumentEntry* sender = this->entry(senderNodeId);
-    DocumentEntry* receiver = this->entry(receiverNodeId);
+    DocumentEntry* sender = this->entryForFullId(senderNodeId);
+    DocumentEntry* receiver = this->entryForFullId(receiverNodeId);
 
-    QString id = "wire:" + senderNodeId + "--" + receiverNodeId;
-
-    DocumentEntryFactory::instantiateWire(this, sender, receiver, id);
+    DocumentEntryFactory::instantiateWire(this, sender, receiver);
 }
 
 void

@@ -8,6 +8,7 @@
 #include "factories/DocumentEntryFactory.h"
 #include "gui/ComponentGraphicsItem.h"
 #include "gui/SchematicElement.h"
+#include "model/Component.h"
 #include "model/ModelElement.h"
 #include "metamodel/ComponentDescriptor.h"
 #include "metamodel/PortDescriptor.h"
@@ -66,7 +67,6 @@ q2d::json::readJsonFile(QString path) {
 
 QJsonObject
 q2d::json::fromPointF(QPointF point) {
-    Q_ASSERT(!point.isNull());
 
     QJsonObject result = QJsonObject();
 
@@ -116,8 +116,43 @@ q2d::json::fromDocument(Document* doc) {
     QJsonArray entriesArray = QJsonArray();
 
     // Write the entries
+
+    // Since in JSON the entries are read from top to bottom, it is important to ensure,
+    // that parents were written before their children
+
+    QList<DocumentEntry*> written = QList<DocumentEntry*>();
+    QList<DocumentEntry*> delayed = QList<DocumentEntry*>();
+
     for (DocumentEntry * entry : doc->entries()) {
-        entriesArray.append(QJsonValue(DocumentEntryToJson(entry)));
+        if(entry->parent() == nullptr ||
+                written.contains(entry->parent())){
+            entriesArray.append(QJsonValue(DocumentEntryToJson(entry)));
+            written.append(entry);
+            qDebug() << "Wrote entry" << entry->fullId();
+        } else {
+            delayed.append(entry);
+            qDebug() << "Delayed entry" << entry->fullId();
+        }
+    }
+
+    while(!delayed.empty()){
+        int amountDelayed = delayed.size();
+
+        for(int i = 0; i < amountDelayed; ++i){
+            // do not iterate over the list, but indices
+            // since otherwise things might clas
+            DocumentEntry* current = delayed.takeFirst();
+            if(written.contains(current->parent())){
+                entriesArray.append(QJsonValue(DocumentEntryToJson(current)));
+                written.append(current);
+                qDebug() << "Wrote entry" << current->fullId();
+            } else {
+                delayed.append(current);
+                qDebug() << "Delayed entry" << current->fullId();
+            }
+        }
+        Q_ASSERT(amountDelayed > delayed.size());
+        // if we could not reduce the delayed elements, there is a problem
     }
 
     QJsonObject entriesWrapper = QJsonObject();
@@ -161,7 +196,7 @@ q2d::DocumentEntryToJson(DocumentEntry* entry) {
     // parentDocument is implicitly given by the JSON document,
     // this object will be passed into.
 
-    result.insert(JSON_DOCENTRY_ID, QJsonValue(entry->id()));
+    result.insert(JSON_DOCENTRY_ID, QJsonValue(entry->localId()));
     result.insert(JSON_DOCENTRY_SCHEMATIC_ELEMENT,
                   QJsonValue(SchematicsSceneChildToJson(
                                  entry->schematicElement())));
@@ -171,7 +206,7 @@ q2d::DocumentEntryToJson(DocumentEntry* entry) {
                   QJsonValue(DocumentEntryTypeToString(entry->type())));
     // the parent id, if there is one
     if (entry->parent() != nullptr) {
-        result.insert(JSON_DOCENTRY_PARENT, QJsonValue(entry->parent()->id()));
+        result.insert(JSON_DOCENTRY_PARENT, QJsonValue(entry->parent()->fullId()));
     } else {
         result.insert(JSON_DOCENTRY_PARENT, QJsonValue::Null);
     }
@@ -201,8 +236,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     QJsonObject schematicJson =
         json.value(JSON_DOCENTRY_SCHEMATIC_ELEMENT).toObject();
     QString typeId = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
-    QPointF position = toPointF(
-                           schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
+    QPointF position = toPointF(schematicJson.value(JSON_SCHEMATIC_POSITION).toObject());
 
     // reconstruct the parent
     QJsonValue parentValue = json.value(JSON_DOCENTRY_PARENT);
@@ -210,7 +244,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     if (parentValue.isNull()) {
         parent = nullptr;
     } else {
-        parent = document->entry(parentValue.toString());
+        parent = document->entryForFullId(parentValue.toString());
     }
 
     switch (type) {
@@ -220,13 +254,20 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
         DocumentEntryFactory::instantiateComponent(document, descriptor, position, id, false);
     }
     break;
-    case enums::DocumentEntryType::COMPONENT_PORT : {
+    case enums::DocumentEntryType::PORT : {
+        Q_CHECK_PTR(parent);
+
+        model::InterfacingME* interfacing = dynamic_cast<model::InterfacingME*>(parent->modelElement());
+        Q_CHECK_PTR(interfacing);
+        QPoint position = interfacing->portPosition(id);
+
+
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         DocumentEntryFactory::instantiatePort(
             document, parent, position, model::enums::StringToPortDirection(directionString), id);
     }
     break;
-    case enums::DocumentEntryType::OUTSIDE_PORT: {
+    case enums::DocumentEntryType::MODULE_INTERFACE: {
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         model::enums::PortDirection direction = model::enums::StringToPortDirection(directionString);
         switch (direction) {
@@ -245,18 +286,17 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
         QJsonObject additional = schematicJson.value(JSON_SCHEMATIC_ADDITIONAL).toObject();
         Q_ASSERT(!additional.isEmpty());
 
-        DocumentEntry* sender = document->entry(additional.value(JSON_WIRE_START).toString());
+        DocumentEntry* sender = document->entryForFullId(additional.value(JSON_WIRE_START).toString());
         Q_CHECK_PTR(sender);
 
-        DocumentEntry* receiver = document->entry(additional.value(JSON_WIRE_END).toString());
+        DocumentEntry* receiver = document->entryForFullId(additional.value(JSON_WIRE_END).toString());
         Q_CHECK_PTR(receiver);
 
         DocumentEntryFactory::instantiateWire(document, sender, receiver, id);
     }
     break;
     default:
-        qDebug() << "Unknown type of component entry"
-                 ;
+        qDebug() << "Unknown type of component entry";
         // ignore everything else for now
     }
 

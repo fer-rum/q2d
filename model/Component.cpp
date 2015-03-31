@@ -77,3 +77,8 @@ void
 Component::addPort(ComponentPort* port) {
     InterfacingME::addPort(port);
 }
+
+QPoint
+Component::portPosition(QString portLocalId) {
+    return m_descriptor->portPosition(portLocalId);
+}

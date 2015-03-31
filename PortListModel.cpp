@@ -1,3 +1,4 @@
+#include "factories/ToolTipFactory.h"
 #include "model/Port.h"
 #include "PortListModel.h"
 
@@ -27,9 +28,9 @@ PortListModel::data(const QModelIndex &index, int role) const {
 
     switch (role) {
     case Qt::DisplayRole :
-        return m_list->value(index.row())->relatedEntry()->id();
+        return m_list->value(index.row())->relatedEntry()->fullId();
     case TooltipRole:
-        return m_list->value(index.row())->toString();
+        return factories::ToolTipFactory::toHtmlTable(m_list->value(index.row())->propertyMap());
     default:
         return QVariant();
     }

@@ -22,9 +22,8 @@ namespace enums {
 
 enum class DocumentEntryType {
     COMPONENT,
-    COMPONENT_PORT,
     MODULE_INTERFACE,
-    OUTSIDE_PORT,
+    PORT,
     WIRE,
     UNDEFINED
 };

@@ -147,3 +147,26 @@ QStringList
 ComponentDescriptor::functions() const {
     return m_functions;
 }
+
+QPoint
+ComponentDescriptor::portPosition(QString portName){
+
+    // FIXME this is a hack. Fix, when IDs are re-implemented
+    portName = portName.split(HIERARCHY_SEPERATOR).last();
+
+    qDebug() << "Looking for port" << portName;
+
+    for(QObject* child :  this->children()){
+        PortDescriptor* port = qobject_cast<PortDescriptor*>(child);
+        if(port == nullptr){
+            continue;
+        }
+
+        qDebug() << "Found port" << port->name();
+
+        if(port->name() == portName){
+            return port->position();
+        }
+    }
+    return QPoint();
+}

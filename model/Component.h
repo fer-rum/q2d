@@ -41,6 +41,8 @@ public:
     QStringList functions() const override;
 
     metamodel::ComponentDescriptor* descriptor() const;
+
+    virtual QPoint portPosition(QString portLocalId) override;
 };
 
 } // namespace model

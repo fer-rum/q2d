@@ -128,5 +128,5 @@ SchematicElement::clearActuals() {
 
 QString
 SchematicElement::id() const {
-    return m_relatedEntry->id();
+    return m_relatedEntry->fullId();
 }

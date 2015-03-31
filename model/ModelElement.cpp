@@ -1,6 +1,7 @@
 #include "../DocumentEntry.h"
 #include "Model.h"
 #include "ModelElement.h"
+#include "../factories/ToolTipFactory.h"
 
 using namespace q2d;
 using namespace q2d::model;
@@ -22,4 +23,9 @@ ModelElement::relatedEntry() const {
 void
 ModelElement::setRelatedEntry(DocumentEntry* relatedEntry) {
     m_relatedEntry = relatedEntry;
+}
+
+QMap<QString, QString>
+ModelElement::propertyMap() const {
+    return factories::ToolTipFactory::propertyMap(this);
 }

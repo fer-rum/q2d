@@ -98,6 +98,14 @@ extern QString MIME_WIRE_START_POS;
 
 extern QString NO_SYMBOL_FILE;
 
+// tooltip keys
+extern QString TOOLTIP_DIRECTION;
+extern QString TOOLTIP_DRIVEN;
+extern QString TOOLTIP_DRIVER;
+extern QString TOOLTIP_FULL_ID;
+extern QString TOOLTIP_NONE;
+extern QString TOOLTIP_TYPE;
+
 
 // --- gui constants ---
 extern unsigned int PORT_DIAMETER;

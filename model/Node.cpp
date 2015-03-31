@@ -1,5 +1,6 @@
 
 #include "../DocumentEntry.h"
+#include "../factories/ToolTipFactory.h"
 #include "Node.h"
 #include "Component.h"
 
@@ -29,20 +30,7 @@ Node::addDrivenElement(ModelElement* drivenElement) {
     emit this->signal_changed();
 }
 
-QString
-Node::toString() const {
-    QString text = ModelElement::toString();
-    ModelElement* driver = this->driver();
-    text += "\nDriver: ";
-    if (driver != nullptr) {
-        text += driver->relatedEntry()->id();
-    } else {
-        text += "(None)";
-    }
-
-    for (ModelElement * current : this->drivenElements()) {
-        text += "\n-> " + current->relatedEntry()->id();
-    }
-
-    return text;
+QMap<QString, QString>
+Node::propertyMap() const {
+    return factories::ToolTipFactory::propertyMap(this);
 }

@@ -36,7 +36,7 @@ ModulePortGI::ModulePortGI(
 
 QString
 ModulePortGI::specificType() {
-    return model::enums::PortDirectionToString(model::enums::invert(m_moduleDirection));
+    return model::enums::PortDirectionToString(m_moduleDirection);
 }
 
 QVariant

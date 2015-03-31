@@ -23,6 +23,10 @@ public:
         QObject::setParent(parent);
     }
 
+    virtual QString name() const {
+        return this->text();
+    }
+
     virtual int type() const override = 0;
 };
 

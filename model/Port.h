@@ -31,7 +31,7 @@ public:
         return m_direction;
     }
 
-    virtual QString toString() const override;
+    QMap<QString, QString> propertyMap() const override;
 };
 
 class ComponentPort : public Port {

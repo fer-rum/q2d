@@ -1,5 +1,6 @@
 #include "../DocumentEntry.h"
 #include "../Enumerations.h"
+#include "../factories/ToolTipFactory.h"
 #include "Component.h"
 #include "ModelElement.h"
 #include "ModuleInterface.h"
@@ -27,16 +28,14 @@ Port::Port(enums::PortDirection direction, DocumentEntry* relatedEntry, Interfac
     }
 }
 
-QString
-Port::toString() const {
-    QString text = Node::toString();
-    text += "\nDirection " + enums::PortDirectionToString(m_direction);
-    return text;
+QMap<QString, QString>
+Port::propertyMap() const {
+    return factories::ToolTipFactory::propertyMap(this);
 }
 
 QStringList
 ComponentPort::nodeVariables() const {
-    return QStringList(this->relatedEntry()->id());
+    return QStringList(this->relatedEntry()->localId());
 }
 
 ComponentPort::ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry,
@@ -63,7 +62,7 @@ ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEnt
 QStringList
 ModulePort::inputVariables() const {
     if (m_direction == enums::PortDirection::OUT) {
-        return QStringList(this->relatedEntry()->id());
+        return QStringList(this->relatedEntry()->localId());
     } else {
         return Port::inputVariables();
     }
@@ -72,7 +71,7 @@ ModulePort::inputVariables() const {
 QStringList
 ModulePort::nodeVariables() const {
     if (m_direction == enums::PortDirection::IN) {
-        return QStringList(this->relatedEntry()->id());
+        return QStringList(this->relatedEntry()->localId());
     } else {
         return Port::nodeVariables();
     }

@@ -51,7 +51,7 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     for (model::ModelElement * c : contextSource.components()) {
         QIContext newContext = QIContext(currentIndex, c, &globalContext);
         currentIndex = newContext.highestIndex() + 1;
-        m_contexts.insert(c->relatedEntry()->id(), newContext);
+        m_contexts.insert(c->relatedEntry()->localId(), newContext);
         newContext.dumpMaps();
     }
 }

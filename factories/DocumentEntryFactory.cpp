@@ -25,10 +25,18 @@ QMap<QString, unsigned>
 DocumentEntryFactory::instanceCount = QMap<QString, unsigned>();
 
 unsigned int
+DocumentEntryFactory::wireCount = 0;
+
+unsigned int
 DocumentEntryFactory::countInstance(QString typeName) {
     unsigned int count = instanceCount.value(typeName, 0);
     instanceCount.insert(typeName, ++count);
     return count;
+}
+
+unsigned int
+DocumentEntryFactory::countWire(){
+    return wireCount++;
 }
 
 QString
@@ -39,6 +47,11 @@ DocumentEntryFactory::generateComponentId(
     QString typeName = type->text();
 
     return typeName + QString::number(DocumentEntryFactory::countInstance(typeName));
+}
+
+QString
+DocumentEntryFactory::generateWireId(){
+    return QObject::tr("wire") + QString::number(countWire());
 }
 
 DocumentEntry*
@@ -76,7 +89,6 @@ DocumentEntryFactory::instantiateComponent(Document* document,
     entry->setSchematicElement(schematicComponent);
 
     // finishing touch
-    schematicComponent->setToolTip(entry->id());
     document->addEntry(entry);
 
     if (autoInstancePorts) {
@@ -106,12 +118,10 @@ DocumentEntryFactory::instantiatePorts(
         }
         Q_ASSERT(!descriptor->position().isNull());
 
-        QString id = parentComponent->id()
-                     + HIERARCHY_SEPERATOR + descriptor->text();
-
         DocumentEntry* entry = DocumentEntryFactory::instantiatePort(document, parentComponent,
                                descriptor->position(),
-                               descriptor->direction(), id);
+                               descriptor->direction(),
+                               descriptor->text());
         result.append(entry);
     }
 
@@ -136,14 +146,14 @@ DocumentEntryFactory::instantiatePort(
     // check, what kind of paren we add a port to and act accordingly
     switch (parentDocumentEntry->type()) {
     case enums::DocumentEntryType::COMPONENT : {
-        entry = new DocumentEntry(id, enums::DocumentEntryType::COMPONENT_PORT,
+        entry = new DocumentEntry(id, enums::DocumentEntryType::PORT,
                                   document, parentDocumentEntry);
         modelPort  = new model::ComponentPort(direction, entry,
                                               dynamic_cast<model::Component*>(parentME));
     }
     break;
     case enums::DocumentEntryType::MODULE_INTERFACE : {
-        entry = new DocumentEntry(id, enums::DocumentEntryType::OUTSIDE_PORT,
+        entry = new DocumentEntry(id, enums::DocumentEntryType::PORT,
                                   document, parentDocumentEntry);
         modelPort  = new model::ModulePort(direction, entry,
                                            dynamic_cast<model::ModuleInterface*>(parentME));
@@ -242,7 +252,13 @@ DocumentEntryFactory::instantiateWire(
     QString id) {
     Q_CHECK_PTR(sender);
     Q_CHECK_PTR(receiver);
-    Q_ASSERT(!id.isEmpty());
+
+    if(id.isEmpty()){
+        id = generateWireId();
+    } else {
+        countWire();
+        // count the wire nonetheless to avoid clashes.
+    }
 
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::WIRE, document);
 

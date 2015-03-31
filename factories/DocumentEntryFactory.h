@@ -28,6 +28,8 @@ private:
 
     // TODO instance counts should probably be document-dependent
     static QMap<QString, unsigned int> instanceCount;
+    static unsigned int wireCount;
+
     /**
      * @brief countInstance is an accessor to the component instance count.
      * It increments the actual count for the type and returns the new count.
@@ -35,9 +37,11 @@ private:
      * @return
      */
     static unsigned int countInstance(QString typeName);
+    static unsigned int countWire();
 
     // --- ID generators ---
     static QString generateComponentId(q2d::metamodel::ComponentDescriptor* type);
+    static QString generateWireId();
 
     // --- instantiation helpers ---
 
@@ -110,7 +114,7 @@ public:
         Document* document,
         DocumentEntry* sender,
         DocumentEntry* receiver,
-        QString id);
+        QString id = "");
 
     static DocumentEntry* instantiateInputPort(
         Document* document,

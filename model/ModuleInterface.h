@@ -3,6 +3,8 @@
 
 #include "ModelElement.h"
 
+#include <QPoint>
+
 namespace q2d {
 namespace model {
 class ModulePort;

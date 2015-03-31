@@ -47,24 +47,20 @@ public:
     }
 
     /**
-     * @brief id is an abbreviation for calling relatedEntry()->id()
+     * @brief id is an abbreviation for calling relatedEntry()->fullId()
      * @return
      */
     QString id() const {
-        return m_relatedEntry->id();
+        return m_relatedEntry->fullId();
     }
-    /**
-     * @brief toString offers a string representation of the model element.
-     * This might be used for example in tooltips or for debugging.
-     * @return
-     */
-    virtual QString toString()              const {
-        return m_relatedEntry->id();
-    }
+
+    virtual QMap<QString, QString> propertyMap() const;
 
 signals:
     void signal_changed();
 };
+
+// --- --- ---
 
 class InterfacingME
         : public ModelElement {
@@ -84,6 +80,11 @@ public:
     void addPort(Port* port) {
         Q_CHECK_PTR(port);
         m_ports.append(port);
+    }
+
+    virtual QPoint portPosition(QString portLocalId){
+        Q_UNUSED(portLocalId);
+        return QPoint();
     }
 };
 

@@ -15,15 +15,15 @@ using namespace q2d::metamodel;
 ComponentGraphicsItem::ComponentGraphicsItem(
     QPointF position,
     DocumentEntry* relatedEntry,
-    metamodel::ComponentDescriptor* type)
+    metamodel::ComponentDescriptor* descriptor)
     : ParentSchematicElement(position, relatedEntry) {
-    Q_CHECK_PTR(type);
+    Q_CHECK_PTR(descriptor);
 
-    m_type = type;
-    if (!type->symbolPath().isEmpty()) {
-        this->addActual(new QGraphicsSvgItem(type->symbolPath()));
+    m_descriptor = descriptor;
+    if (!descriptor->symbolPath().isEmpty()) {
+        this->addActual(new QGraphicsSvgItem(descriptor->symbolPath()));
     } else {
-        QGraphicsItem* actual = factories::GIFactory::createComponentGI(type);
+        QGraphicsItem* actual = factories::GIFactory::createComponentGI(descriptor);
         m_scene->addItem(actual); // TODO duplicate?
         this->addActual(actual);
         actual->setVisible(true); // TODO duplicate?
@@ -44,7 +44,7 @@ ComponentGraphicsItem::ComponentGraphicsItem(
  */
 QString
 ComponentGraphicsItem::specificType() {
-    return m_type->hierarchyName();
+    return m_descriptor->hierarchyName();
 }
 
 void
