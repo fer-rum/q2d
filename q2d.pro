@@ -12,12 +12,12 @@ quantorDir = "$$OUT_PWD/quantor-3.2"
 !exists($$picosatDir){
     error(No picosat directory)
 } {
-    error(picosat directory is $$picosatDir)
+    message(picosat directory is $$picosatDir)
 }
 
 
 !exists($$quantorDir){
-    message(No quantor directory)
+    error(No quantor directory)
 } {
     message(quantor directory is $$quantorDir)
 }
