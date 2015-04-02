@@ -40,27 +40,29 @@ MainWindow::setupSignalsAndSlots() {
     // Menus
     connect(m_ui->action_Exit, &QAction::triggered,
             m_application, &Application::quit);
+    connect(m_ui->action_resetSettings, &QAction::triggered,
+            m_application, &Application::slot_resetSettings);
+    // Project menus
     connect(m_ui->action_createProject, &QAction::triggered,
             this, &MainWindow::slot_createProject);
-    connect(m_ui->action_createDocument, &QAction::triggered,
-            this, &MainWindow::slot_createDocument);
     connect(m_ui->action_saveProject, &QAction::triggered,
             m_context, &ApplicationContext::signal_saveProject);
     connect(m_ui->action_loadProject, &QAction::triggered,
             this, &MainWindow::slot_loadProject);
-    connect(m_ui->action_resetSettings, &QAction::triggered,
-            m_application, &Application::slot_resetSettings);
-
-
-    // buttons
-    connect(m_ui->btn_newProject, &QPushButton::clicked,
-            this, &MainWindow::slot_createProject);
-    connect(m_ui->btn_clearHierarchy, &QPushButton::clicked,
-            this, &MainWindow::signal_clearComponentTypes);
-    connect(m_ui->btn_unloadProject, &QPushButton::clicked,
+    connect(m_ui->action_closeProject, &QAction::triggered,
             this, &MainWindow::signal_unloadProjectRequested);
-    connect(m_ui->btn_loadProject, &QPushButton::clicked,
-            this, &MainWindow::slot_loadProject);
+
+    // document menus
+    connect(m_ui->action_createDocument, &QAction::triggered,
+            this, &MainWindow::slot_createDocument);
+
+    // Category menus
+    connect(m_ui->action_AddCategory, &QAction::triggered,
+            this, &MainWindow::slot_addComponentCategory);
+    connect(m_ui->action_AddComponentType, &QAction::triggered,
+            this, &MainWindow::slot_addComponentType);
+    connect(m_ui->action_ClearHierarchy, &QAction::triggered,
+            this, &MainWindow::signal_clearComponentTypes);
 
     // connections to the application context
     // TODO move to applicationContext
@@ -73,7 +75,7 @@ MainWindow::setupSignalsAndSlots() {
     connect(this, &MainWindow::signal_unloadProjectRequested,
             m_context, &ApplicationContext::slot_unloadProject);
     connect(this, &MainWindow::signal_createCategory,
-            m_context, &ApplicationContext::signal_clearComponentTypes);
+            m_context, &ApplicationContext::signal_createComponentCategory);
 
     // This only needs to be called once since the sender (the ListView)
     // remains the same, even when the model changes
@@ -151,9 +153,16 @@ MainWindow::slot_loadProject() {
 void
 MainWindow::slot_createDocument() {
 
+    // TODO instead request if a new project shall be created.
     // make sure the model is set up properly
     // so we can enter the documents
-    Q_CHECK_PTR(m_ui->documentListView->model());
+    if(m_ui->documentListView->model() == nullptr){
+        this->slot_displayErrorMessage(
+                    tr("Active project required"),
+                    tr("A document can be created only if there is an active project.<br>"
+                       "Create or load a project first."));
+        return;
+    }
 
     // get name
     bool ok;
@@ -256,7 +265,7 @@ MainWindow::on_schematicsTabWidget_tabCloseRequested(int index) {
 }
 
 void
-MainWindow::on_btn_addType_clicked() {
+MainWindow::slot_addComponentType() {
 
 
     Q_CHECK_PTR(m_ui->componentTreeView->model());
@@ -287,7 +296,7 @@ MainWindow::on_btn_addType_clicked() {
 }
 
 void
-MainWindow::on_btn_addCategory_clicked() {
+MainWindow::slot_addComponentCategory() {
 
     Q_CHECK_PTR(m_ui->componentTreeView->model());
 

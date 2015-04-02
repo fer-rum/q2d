@@ -34,7 +34,7 @@ ToolTipFactory::propertyMap(const ModelElement* source){
     Q_CHECK_PTR(source);
 
     QMap<QString, QString> properties = {
-      {TOOLTIP_FULL_ID + ":", source->id()}
+      {TOOLTIP_FULL_ID + ":", source->fullId()}
     };
 
     return properties;
@@ -47,10 +47,10 @@ ToolTipFactory::propertyMap(const Node* source){
     model::ModelElement* driver = source->driver();
 
     QMap<QString, QString> properties = source->ModelElement::propertyMap();
-    properties.insert(TOOLTIP_DRIVER + ":", (driver == nullptr? TOOLTIP_NONE : driver->id()));
+    properties.insert(TOOLTIP_DRIVER + ":", (driver == nullptr? TOOLTIP_NONE : driver->fullId()));
 
     for (model::ModelElement * current : source->drivenElements()) {
-        properties.insert(TOOLTIP_DRIVEN, current->id());
+        properties.insert(TOOLTIP_DRIVEN, current->fullId());
     }
 
     return properties;

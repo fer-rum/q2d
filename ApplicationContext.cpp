@@ -61,6 +61,9 @@ void
 ApplicationContext::setupSignalsAndSlots() {
     Q_CHECK_PTR(this->m_mainWindow);
 
+    // FIXME enforce proper connection setup
+    // caller established connection
+
     // ApplicationContext -> MainWindow
     connect(this, &ApplicationContext::signal_projectNameChanged,
             m_mainWindow, &MainWindow::slot_updateProjectName);
@@ -84,6 +87,8 @@ ApplicationContext::setupSignalsAndSlots() {
     // ApplicationContext -> ComponentFactory
     connect(this, &ApplicationContext::signal_clearComponentTypes,
             m_componentFactory, &ComponentFactory::slot_clearHierarchy);
+    connect(this, &ApplicationContext::signal_createComponentCategory,
+            m_componentFactory, &ComponentFactory::slot_addCategory);
 
     // MainWindow -> ComponentFactory
     connect(m_mainWindow, &MainWindow::signal_loadType,

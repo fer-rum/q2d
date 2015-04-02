@@ -29,9 +29,7 @@ public:
      * @brief model is a shurtcut to querying the related document entry for the model.
      * @return
      */
-    inline Model* model() const {
-        return m_relatedEntry->model();
-    }
+    inline Model* model() const { return m_relatedEntry->model(); }
 
     virtual QStringList inputVariables()     const {
         return QStringList();
@@ -47,14 +45,23 @@ public:
     }
 
     /**
-     * @brief id is an abbreviation for calling relatedEntry()->fullId()
+     * @brief fullId is an abbreviation for calling relatedEntry()->fullId()
+     * @return the full id of the DocumentEntry related to this ModelElement.
+     */
+    inline QString fullId() const { return m_relatedEntry->fullId(); }
+
+    /**
+     * @brief localId is an abbreviation for calling relatedEntry()->localId()
+     * @return the local id of the DocumentEntry related to this ModelElement.
+     */
+    inline QString localId() const { return m_relatedEntry->localId(); }
+
+    /**
+     * @brief propertyMap is used for the generation of tooltips.
      * @return
      */
-    QString id() const {
-        return m_relatedEntry->fullId();
-    }
-
     virtual QMap<QString, QString> propertyMap() const;
+    // TODO move properties into an enum class to do this correctly.
 
 signals:
     void signal_changed();

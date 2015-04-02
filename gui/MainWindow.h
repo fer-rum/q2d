@@ -79,8 +79,8 @@ public slots:
 private slots:
     // created by the Qt Designer
     void on_schematicsTabWidget_tabCloseRequested(int index);
-    void on_btn_addType_clicked();
-    void on_btn_addCategory_clicked();
+    void slot_addComponentType();
+    void slot_addComponentCategory();
 };
 
 } // namespace gui

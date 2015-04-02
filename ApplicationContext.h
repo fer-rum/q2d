@@ -14,6 +14,10 @@ namespace gui {
 class MainWindow;
 }
 
+namespace metamodel {
+class Category;
+}
+
 namespace model {
 class Component;
 }
@@ -61,7 +65,7 @@ signals:
     void signal_saveProject();
     void signal_clearComponentTypes();
     void signal_triggerQuantor(Document* document, QString targetFunction);
-
+    void signal_createComponentCategory(QString name, metamodel::Category* parent);
 
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);

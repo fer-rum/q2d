@@ -18,10 +18,6 @@ private:
     const QList<model::ComponentPort*>* m_list;
 public:
 
-    enum ListRoles {
-        TooltipRole = Qt::UserRole + 1,
-    };
-
     explicit PortListModel(QObject* parent = 0);
     virtual ~PortListModel();
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

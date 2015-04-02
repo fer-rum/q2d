@@ -1,4 +1,5 @@
 
+#include "../metamodel/ComponentDescriptor.h"
 #include "../model/Component.h"
 #include "../model/ModelElement.h"
 #include "../PortListModel.h"
@@ -19,7 +20,9 @@ ComponentDetailView::ComponentDetailView(model::Component* component, MainWindow
 
     m_ui->setupUi(this);
 
-    this->setWindowTitle(tr("Details for %1").arg(component->id()));
+    this->setWindowTitle(tr("%1 - Details").arg(component->fullId()));
+    m_ui->lbl_name->setText(component->localId());
+    m_ui->lbl_typeName->setText(component->descriptor()->name());
 
     util::PortListModel* inPortModel = new util::PortListModel(this);
     inPortModel->setList(component->inputPorts());

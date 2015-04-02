@@ -21,15 +21,14 @@ QVariant
 PortListModel::data(const QModelIndex &index, int role) const {
 
     if (index.row() < 0 ||
-            index.row() >= m_list->count() ||
-            role != Qt::DisplayRole) {
+            index.row() >= m_list->count()) {
         return QVariant();
     }
 
     switch (role) {
     case Qt::DisplayRole :
-        return m_list->value(index.row())->relatedEntry()->fullId();
-    case TooltipRole:
+        return m_list->value(index.row())->relatedEntry()->localId();
+    case Qt::ToolTipRole:
         return factories::ToolTipFactory::toHtmlTable(m_list->value(index.row())->propertyMap());
     default:
         return QVariant();
