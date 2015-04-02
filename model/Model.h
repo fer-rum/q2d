@@ -48,7 +48,7 @@ public:
         return m_conductors;
     }
 
-    QList<ModulePort*> outsidePorts() const;
+    QList<ModuleInterface*> outsidePorts() const;
 };
 
 } // namespace model

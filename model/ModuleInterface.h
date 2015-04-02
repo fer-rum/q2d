@@ -27,6 +27,8 @@ public:
     enums::PortDirection direction() {
         return m_direction;
     }
+
+
 };
 
 } // namespace model

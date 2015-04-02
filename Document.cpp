@@ -136,6 +136,7 @@ Document::addWire(QString senderNodeId, QString receiverNodeId) {
 void
 Document::addEntry(DocumentEntry* entry) {
     Q_CHECK_PTR(entry);
+    qDebug() << "Added document entry" << entry->fullId();
     m_entries.append(entry);
 }
 

@@ -86,6 +86,8 @@ public:
         Q_UNUSED(portLocalId);
         return QPoint();
     }
+
+    virtual QStringList nodeVariables() const override;
 };
 
 } // namespace model

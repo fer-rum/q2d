@@ -5,6 +5,7 @@
 #include "../model/Conductor.h"
 #include "../model/Model.h"
 #include "../model/ModelElement.h"
+#include "../model/ModuleInterface.h"
 #include "../model/Port.h"
 #include "../Util.h"
 
@@ -35,8 +36,11 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
 
     // IMPORTANT: build the ports before the wires
     // otherwise the generated context is wrong
-    for (model::ModulePort * port : contextSource.outsidePorts()) {
-        globalContext.addModelElement(*port);
+    qDebug() << "\tBuilding Port contexts";
+    for (model::ModuleInterface * port : contextSource.outsidePorts()) {
+
+        // catch outside ports as they are abbreviated to be used in the target function
+        globalContext.addModelElement(*(port->port()));
     }
 
     for (model::ModelElement * wire : contextSource.conductors()) {
@@ -45,14 +49,17 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
 
     currentIndex = globalContext.highestIndex() + 1;
     m_contexts.insert(GLOBAL_CONTEXT_NAME, globalContext);
-    globalContext.dumpMaps();
 
     qDebug() << "Building component contexts";
     for (model::ModelElement * c : contextSource.components()) {
         QIContext newContext = QIContext(currentIndex, c, &globalContext);
         currentIndex = newContext.highestIndex() + 1;
         m_contexts.insert(c->relatedEntry()->localId(), newContext);
-        newContext.dumpMaps();
+    }
+
+    // NOTE debug output
+    for(QIContext ctx : m_contexts){
+        ctx.dumpMaps();
     }
 }
 

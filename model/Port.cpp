@@ -35,7 +35,7 @@ Port::propertyMap() const {
 
 QStringList
 ComponentPort::nodeVariables() const {
-    return QStringList(this->relatedEntry()->localId());
+    return QStringList(this->relatedEntry()->fullId());
 }
 
 ComponentPort::ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry,
@@ -62,7 +62,7 @@ ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEnt
 QStringList
 ModulePort::inputVariables() const {
     if (m_direction == enums::PortDirection::OUT) {
-        return QStringList(this->relatedEntry()->localId());
+        return QStringList(relatedEntry()->localId());
     } else {
         return Port::inputVariables();
     }
@@ -71,8 +71,13 @@ ModulePort::inputVariables() const {
 QStringList
 ModulePort::nodeVariables() const {
     if (m_direction == enums::PortDirection::IN) {
-        return QStringList(this->relatedEntry()->localId());
+        return QStringList(relatedEntry()->localId());
     } else {
         return Port::nodeVariables();
     }
+}
+
+QStringList
+ModulePort::functions() const {
+    return QStringList(relatedEntry()->localId() + " = " + relatedEntry()->fullId());
 }

@@ -36,7 +36,6 @@ public:
     QList<ComponentPort*>* inputPorts();
     QList<ComponentPort*>* outputPorts();
 
-    QStringList nodeVariables() const override;
     QStringList configVariables() const override;
     QStringList functions() const override;
 

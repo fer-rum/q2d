@@ -213,10 +213,19 @@ DocumentEntryFactory::instantiateModuleInterface(
     entry->setModelElement(moduleInterface);
     entry->setSchematicElement(schematicPort);
 
-    // instantiate the actual
-    instantiatePort(document, entry, QPointF(0, 0), model::enums::invert(direction), id);
-
     document->addEntry(entry);
+
+    switch(direction){
+    case model::enums::PortDirection::IN :
+        document->model()->addInputPort(moduleInterface);
+        break;
+    case model::enums::PortDirection::OUT :
+        document->model()->addOutputPort(moduleInterface);
+        break;
+    default : // should not happen
+        Q_ASSERT(false);
+    }
+
     return entry;
 }
 
@@ -228,7 +237,10 @@ DocumentEntryFactory::instantiateInputPort(
 
     DocumentEntry* entry = instantiateModuleInterface(document, position,
                            model::enums::PortDirection::IN, id);
-    document->model()->addInputPort(static_cast<model::ModuleInterface*>(entry->modelElement()));
+
+    // instantiate the actual
+    instantiatePort(document, entry, QPointF(0, 0), model::enums::PortDirection::OUT, id);
+
     return entry;
 }
 
@@ -240,7 +252,10 @@ DocumentEntryFactory::instantiateOutputPort(
 
     DocumentEntry* entry = instantiateModuleInterface(document, position,
                            model::enums::PortDirection::OUT, id);
-    document->model()->addOutputPort(static_cast<model::ModuleInterface*>(entry->modelElement()));
+
+    // instantiate the actual
+    instantiatePort(document, entry, QPointF(0, 0), model::enums::PortDirection::IN, id);
+
     return entry;
 }
 

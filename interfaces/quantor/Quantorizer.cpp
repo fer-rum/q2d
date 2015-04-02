@@ -6,9 +6,7 @@
 #include <cassert>
 #include <string.h>
 
-extern "C" {
 #include "Quantor.h"
-}
 
 using namespace q2d::quantor;
 

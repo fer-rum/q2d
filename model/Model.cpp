@@ -56,17 +56,17 @@ Model::addConductor(Conductor* conductor) {
     m_conductors.append(conductor);
 }
 
-QList<ModulePort*>
+QList<ModuleInterface*>
 Model::outsidePorts() const {
 
-    QList<ModulePort*> result = QList<ModulePort*>();
+    QList<ModuleInterface*> result = QList<ModuleInterface*>();
 
     for (ModuleInterface * interface : m_inputPorts) {
-        result.append(interface->port());
+        result.append(interface);
     }
 
     for (ModuleInterface * interface : m_outputPorts) {
-        result.append(interface->port());
+        result.append(interface);
     }
 
     return result;

@@ -119,14 +119,21 @@ q2d::json::fromDocument(Document* doc) {
 
     // Since in JSON the entries are read from top to bottom, it is important to ensure,
     // that parents were written before their children
+    // Also wires need to be written last
 
     QList<DocumentEntry*> written = QList<DocumentEntry*>();
     QList<DocumentEntry*> delayed = QList<DocumentEntry*>();
+    QList<DocumentEntry*> wires = QList<DocumentEntry*>();
 
     for (DocumentEntry * entry : doc->entries()) {
+        if(entry->type() == enums::DocumentEntryType::WIRE){
+            wires.append(entry);
+            continue;
+        }
+
         if(entry->parent() == nullptr ||
                 written.contains(entry->parent())){
-            entriesArray.append(QJsonValue(DocumentEntryToJson(entry)));
+            entriesArray.append(QJsonValue(fromDocumentEntry(entry)));
             written.append(entry);
             qDebug() << "Wrote entry" << entry->fullId();
         } else {
@@ -143,7 +150,7 @@ q2d::json::fromDocument(Document* doc) {
             // since otherwise things might clas
             DocumentEntry* current = delayed.takeFirst();
             if(written.contains(current->parent())){
-                entriesArray.append(QJsonValue(DocumentEntryToJson(current)));
+                entriesArray.append(QJsonValue(fromDocumentEntry(current)));
                 written.append(current);
                 qDebug() << "Wrote entry" << current->fullId();
             } else {
@@ -153,6 +160,13 @@ q2d::json::fromDocument(Document* doc) {
         }
         Q_ASSERT(amountDelayed > delayed.size());
         // if we could not reduce the delayed elements, there is a problem
+    }
+
+    // now for all the wires
+    for(DocumentEntry* wireEntry : wires){
+        entriesArray.append(QJsonValue(fromDocumentEntry(wireEntry)));
+        written.append(wireEntry);
+        qDebug() << "Wrote entry" << wireEntry->fullId();
     }
 
     QJsonObject entriesWrapper = QJsonObject();
@@ -180,14 +194,14 @@ q2d::json::toDocument(QJsonObject json, QString name, Project* parent) {
 
     // Read the entries
     for (QJsonValue jsonEntry : entries) {
-        parseDocumentEntry(jsonEntry.toObject(), doc);
+        toDocumentEntry(jsonEntry.toObject(), doc);
     }
 
     return doc;
 }
 
 QJsonObject
-q2d::DocumentEntryToJson(DocumentEntry* entry) {
+q2d::json::fromDocumentEntry(DocumentEntry* entry) {
     Q_CHECK_PTR(entry);
 
     QJsonObject result = QJsonObject();
@@ -216,14 +230,8 @@ q2d::DocumentEntryToJson(DocumentEntry* entry) {
     return result;
 }
 
-/**
- * @brief q2d::parseDocumentEntry
- * The parsed DocumentEntry will automatically be added to the given document.
- * @param json
- * @param document
- */
 void
-q2d::parseDocumentEntry(QJsonObject json, Document* document) {
+q2d::json::toDocumentEntry(QJsonObject json, Document* document) {
     Q_ASSERT(json.contains(JSON_DOCENTRY_ID));
 
     QString id = json.value(JSON_DOCENTRY_ID).toString();
@@ -270,16 +278,7 @@ q2d::parseDocumentEntry(QJsonObject json, Document* document) {
     case enums::DocumentEntryType::MODULE_INTERFACE: {
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         model::enums::PortDirection direction = model::enums::StringToPortDirection(directionString);
-        switch (direction) {
-        case model::enums::PortDirection::IN :
-            DocumentEntryFactory::instantiateInputPort(document, position, id);
-            break;
-        case model::enums::PortDirection::OUT :
-            DocumentEntryFactory::instantiateOutputPort(document, position, id);
-            break;
-        default: // should not happen
-            Q_ASSERT(false);
-        }
+        DocumentEntryFactory::instantiateModuleInterface(document, position, direction, id);
     }
     break;
     case enums::DocumentEntryType::WIRE : {

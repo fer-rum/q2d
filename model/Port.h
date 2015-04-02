@@ -69,6 +69,7 @@ public:
 
     virtual QStringList nodeVariables() const override;
     virtual QStringList inputVariables() const override;
+    virtual QStringList functions() const override;
 };
 
 } // namespace model

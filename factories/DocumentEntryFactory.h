@@ -58,9 +58,11 @@ private:
         metamodel::ComponentDescriptor* type,
         DocumentEntry* parentComponent);
 
+public:
     /**
      * @brief instantiateModulePort is a helper method. It does not do everything needed, but a subset,
-     * so do not call it on its own. Use instantiateInputPort() or instantiateOutputPort() respectively.
+     * so do not call it on its own, if you do not know what you are doing.
+     * Instead use instantiateInputPort() or instantiateOutputPort() respectively.
      * @param document
      * @param position
      * @param id
@@ -72,8 +74,6 @@ private:
         QPointF position,
         model::enums::PortDirection direction,
         QString id);
-
-public:
 
     /**
      * @brief ComponentFactory::instentiatePort

@@ -27,8 +27,8 @@ class PortDescriptor;
 // TODO adapt naming
 
 
-QJsonObject DocumentEntryToJson(DocumentEntry* entry);
-void parseDocumentEntry(QJsonObject json, Document* document);
+
+
 
 QJsonObject SchematicsSceneChildToJson(gui::SchematicElement* ssc);
 
@@ -46,6 +46,14 @@ QPoint toPoint(QJsonObject json);
 QPointF toPointF(QJsonObject json);
 Document* toDocument(QJsonObject json, QString name, Project* parent);
 
+/**
+ * @brief q2d::parseDocumentEntry
+ * The parsed DocumentEntry will automatically be added to the given document.
+ * @param json
+ * @param document
+ */
+void toDocumentEntry(QJsonObject json, Document* document); // TODO should return DocumentEntry*
+
 // TODO fix parameters
 metamodel::ComponentDescriptor* toComponentDescriptor (
     const QJsonDocument jsonSource,
@@ -56,6 +64,7 @@ metamodel::ComponentDescriptor* toComponentDescriptor (
 QJsonObject fromPoint(QPoint point);
 QJsonObject fromPointF(QPointF point);
 QJsonObject fromDocument(Document* doc);
+QJsonObject fromDocumentEntry(DocumentEntry* entry);
 
 } // namespace json
 } // namespace q2d

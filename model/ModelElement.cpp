@@ -1,6 +1,7 @@
 #include "../DocumentEntry.h"
 #include "Model.h"
 #include "ModelElement.h"
+#include "Port.h"
 #include "../factories/ToolTipFactory.h"
 
 using namespace q2d;
@@ -28,4 +29,15 @@ ModelElement::setRelatedEntry(DocumentEntry* relatedEntry) {
 QMap<QString, QString>
 ModelElement::propertyMap() const {
     return factories::ToolTipFactory::propertyMap(this);
+}
+
+QStringList
+InterfacingME::nodeVariables() const {
+
+    QStringList result;
+
+    for (Port * p : m_ports) {
+        result.append((p->nodeVariables()));
+    }
+    return result;
 }

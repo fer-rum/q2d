@@ -28,17 +28,6 @@ Component::configVariables() const {
     return m_descriptor->configVariables();
 }
 
-QStringList
-Component::nodeVariables() const {
-
-    QStringList result;
-
-    for (Port * p : m_ports) {
-        result.append((p->nodeVariables()));
-    }
-    return result;
-}
-
 /**
  * @brief Component::functions
  * The returned functions use the component-local namespace.

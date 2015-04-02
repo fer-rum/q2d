@@ -91,12 +91,14 @@ QIContext::assignVariable(QString varName, VariableType type) {
         m_highestIndex ++;
         if (m_parent == nullptr) {
             m_variableMapping.insert(varName, m_highestIndex);
+            qDebug() << logPrefix << "Variable assignment:"
+                     << varName << "->" << util::intToString(m_highestIndex);
         } else {
             m_variableMapping.insert(varNameShort, m_highestIndex);
+            qDebug() << logPrefix << "Variable assignment:"
+                     << varNameShort << "->" << util::intToString(m_highestIndex);
         }
         m_typeMapping.insert(m_highestIndex, type);
-        qDebug() << logPrefix << "Variable assignment:"
-                 << varName << "->" << util::intToString(m_highestIndex);
     }
 }
 
@@ -114,7 +116,9 @@ unsigned int
 QIContext::operator[](std::string const &varName) const {
     QString name = QString::fromStdString(varName);
     if (m_variableMapping.contains(name)) {
-        return m_variableMapping[name];
+        unsigned int result = m_variableMapping[name];
+        qDebug() << "QIContext::operator[" << varName.c_str() << "] returned" << result;
+        return result;
     } else {
         qDebug() << "QIContext::operator[" << varName.c_str() << "] failed";
         return 0;
