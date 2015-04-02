@@ -30,3 +30,7 @@ Makefile*
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+#Individual sub-sourcedirs
+picosat*
+quantor*
