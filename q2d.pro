@@ -10,9 +10,9 @@ picosatDir = "$$OUT_PWD/picosat-960"
 quantorDir = "$$OUT_PWD/quantor-3.2"
 
 !exists($$picosatDir){
-    message(No picosat directory)
+    error(No picosat directory)
 } {
-    message(picosat directory is $$picosatDir)
+    error(picosat directory is $$picosatDir)
 }
 
 
