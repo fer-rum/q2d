@@ -13,6 +13,9 @@ quantorDir = "$$OUT_PWD/quantor-3.2"
     error(No picosat directory)
 } {
     message(picosat directory is $$picosatDir)
+    !exists($$picosatDir/config.h) {
+        system(cd $$picosatDir && ./configure && make config.h)
+    }
 }
 
 
@@ -20,6 +23,9 @@ quantorDir = "$$OUT_PWD/quantor-3.2"
     error(No quantor directory)
 } {
     message(quantor directory is $$quantorDir)
+    !exists($$quantorDir/config.h) {
+        system(cd $$quantorDir && ./configure && make options.c)
+    }
 }
 
 QT       += core gui svg
