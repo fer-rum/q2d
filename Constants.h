@@ -1,6 +1,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QBrush>
+#include <QPen>
+#include <QPoint>
 #include <QSize>
 #include <QString>
 
@@ -92,6 +95,25 @@ extern QString KEY_FILE_OPORT_OUT;
 extern QString MIME_COMPONENT_TYPE;
 extern QString MIME_PORT_PLACEMENT;
 extern QString MIME_WIRE_START_POS;
+
+extern QString NO_SYMBOL_FILE;
+
+// tooltip keys
+extern QString TOOLTIP_DIRECTION;
+extern QString TOOLTIP_DRIVEN;
+extern QString TOOLTIP_DRIVER;
+extern QString TOOLTIP_FULL_ID;
+extern QString TOOLTIP_NONE;
+extern QString TOOLTIP_TYPE;
+
+
+// --- gui constants ---
+extern unsigned int PORT_DIAMETER;
+extern unsigned int PORT_RADIUS;
+extern QPoint PORT_CENTER_OFFSET;
+extern QBrush PORT_DECAL_BRUSH;
+extern QBrush PORT_BACKGROUND_BRUSH;
+extern QPen PORT_BACKGROUND_PEN;
 
 } // namespace constants
 } // namespace q2d

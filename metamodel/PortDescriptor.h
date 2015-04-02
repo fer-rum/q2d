@@ -16,13 +16,15 @@ class ComponentDescriptor;
 
 class PortDescriptor :
     public ComponentElement {
+    Q_OBJECT
 public:
     explicit PortDescriptor(QString name,
                             model::enums::PortDirection direction,
-                            QPointF position,
-                            metamodel::ComponentDescriptor* parent);
+                            QPoint position,
+                            metamodel::ComponentDescriptor* parent = nullptr);
 
     QPoint position();
+    void setPosition(QPoint position);
     model::enums::PortDirection direction();
 
     virtual int type() const {

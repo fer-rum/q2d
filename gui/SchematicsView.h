@@ -1,6 +1,8 @@
 #ifndef SCHEMATICSVIEW_H
 #define SCHEMATICSVIEW_H
 
+//#include "SchematicsTab.h"
+
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
@@ -9,9 +11,16 @@
 #include <QWidget>
 
 namespace q2d {
-namespace gui {
+namespace model {
+class Component;
+}
 
-class SchematicsView : public QGraphicsView {
+namespace gui {
+class Schematic;
+
+class SchematicsView :
+    public QGraphicsView {
+    Q_OBJECT
 protected:
 
     // override for custom handling
@@ -24,7 +33,19 @@ protected:
 public:
     explicit SchematicsView(QWidget* parent = nullptr);
 
+    void setScene(q2d::gui::Schematic* scene);
+
+signals:
+    void signal_componentDetailRequested(model::Component* component);
+
+public slots:
+    /**
+     * @brief updateScene is overridden as a debug hook. It calls its parents method.
+     * @param rects
+     */
+    void updateScene(const QList<QRectF> &rects);
 };
+
 
 } // namespace gui
 } // namespace q2d

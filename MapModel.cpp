@@ -42,19 +42,20 @@ MapModel::data(const QModelIndex &index, int role) const {
 }
 
 QVariant
-MapModel::headerData(int section, Qt::Orientation orientation, int role) const{
-    if(role == Qt::DisplayRole){
-    if(orientation == Qt::Horizontal){
-        switch(section) {
-       case 0: return tr("Variable");
-       case 1: return tr("Assignment");
-       default:
-       return QString("Column %1").arg(section + 1);
-       }
-    }
-    else {
-        return QString::number(section);
-    }
+MapModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (role == Qt::DisplayRole) {
+        if (orientation == Qt::Horizontal) {
+            switch (section) {
+            case 0:
+                return tr("Variable");
+            case 1:
+                return tr("Assignment");
+            default:
+                return QString("Column %1").arg(section + 1);
+            }
+        } else {
+            return QString::number(section);
+        }
     } else {
         return QVariant();
     }

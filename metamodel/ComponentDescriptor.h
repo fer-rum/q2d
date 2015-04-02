@@ -14,8 +14,8 @@ namespace metamodel {
 
 class Category;
 class ConfigBitGroupDescriptor;
+class PortDescriptor;
 
-// TODO support seperate Icon files as determined by json
 /**
 * @brief The ComponentType class contains common elements of all components of a certain type.
 *
@@ -29,7 +29,7 @@ private:
      * instantiated so far to be able to generate unique names.
      * The counting is done via tracking calls of generateId().
      */
-    int m_instanceIndex;
+    int m_instanceIndex; // FIXME deprecated
 
     /**
      * @brief m_variables contains all variable names that are valid  in the context of the described component.
@@ -49,20 +49,23 @@ public:
     QString descriptorPath() const;
     void setDescriptorPath(const QString path);
 
-    // TODO transform
-    // void addPort(PortDescriptor*);
-    void addPort(QString name, QPointF relativePosition, model::enums::PortDirection direction);
+    void addPort(PortDescriptor* port);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);
     void addFunction(QString function);
+
+    QList<PortDescriptor*> ports();
 
     QStringList configVariables() const;
     QStringList functions() const;
 
+    // FIXME deprecated
     QString generateId();
 
     virtual int type() const {
         return enums::elementTypeToInt(enums::ElementType::COMPONENT);
     }
+
+    QPoint portPosition(QString portName);
 };
 
 } // namespace metamodel

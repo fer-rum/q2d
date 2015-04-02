@@ -3,9 +3,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_MainWindow.h"
+
+#include "../metamodel/Category.h"
+
+#include "ComponentDetailView.h"
 #include "QuantorResultDialog.h"
-#include "metamodel/Category.h"
+#include "ui_MainWindow.h"
 
 #include <QDir>
 #include <QStandardItemModel>
@@ -32,6 +35,7 @@ private:
     q2d::ApplicationContext*    m_context;
 
     QuantorResultDialog*        m_resultDialog;
+    ComponentDetailView*        m_componentDetailDialog;
 
 
     void addNewSchematicsTab(Document* relatedDocument);
@@ -55,7 +59,6 @@ signals:
     void signal_loadType(QString fileName, metamodel::Category* parent = 0);
     void signal_clearComponentTypes();
 
-    // TODO check visibility
 public slots:
     void slot_createProject();
     void slot_loadProject();
@@ -69,6 +72,9 @@ public slots:
     void slot_setComponentModel(QStandardItemModel* model);
     void slot_displayQuantorResult(QString textualRepresentation,
                                    const QMap<QString, bool>* resultMapping);
+    void slot_displayErrorMessage(QString title, QString text);
+    void slot_displaySchematicMousePos(int x, int y);
+    void slot_displayComponentDetail(model::Component* component);
 
 private slots:
     // created by the Qt Designer

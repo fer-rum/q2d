@@ -36,7 +36,6 @@ TEMPLATE = app
 SOURCES +=\
     gui/MainWindow.cpp \
     model/ModelElement.cpp \
-    patterns/Observable.cpp \
     model/Node.cpp \
     model/Conductor.cpp \
     model/Component.cpp \
@@ -78,13 +77,19 @@ SOURCES +=\
     model/Port.cpp \
     gui/Schematic.cpp \
     gui/SchematicElement.cpp \
-    metamodel/FunctionDescriptor.cpp
+    metamodel/FunctionDescriptor.cpp \
+    factories/DocumentEntryFactory.cpp \
+    factories/GIFactory.cpp \
+    gui/ComponentDetailView.cpp \
+    PortListModel.cpp \
+    gui/ModulePortGI.cpp \
+    model/ModuleInterface.cpp \
+    core/Identifiable.cpp \
+    factories/ToolTipFactory.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
     model/ModelElement.h \
-    patterns/Observable.h \
-    patterns/Observer.h \
     model/Node.h \
     model/Conductor.h \
     model/Component.h \
@@ -126,7 +131,16 @@ HEADERS  +=\
     model/Port.h \
     gui/Schematic.h \
     gui/SchematicElement.h \
-    metamodel/FunctionDescriptor.h
+    metamodel/FunctionDescriptor.h \
+    factories/DocumentEntryFactory.h \
+    interfaces/quantor/Context.h \
+    factories/GIFactory.h \
+    gui/ComponentDetailView.h \
+    PortListModel.h \
+    gui/ModulePortGI.h \
+    model/ModuleInterface.h \
+    core/Identifiable.h \
+    factories/ToolTipFactory.h
 
 INCLUDEPATH +=\
     $$picosatDir \
@@ -135,7 +149,8 @@ INCLUDEPATH +=\
 FORMS    +=\
     gui/MainWindow.ui \
     gui/SchematicsTab.ui \
-    gui/QuantorResultDialog.ui
+    gui/QuantorResultDialog.ui \
+    gui/ComponentDetailView.ui
 
 # exclude quantorizer.ypp
 HEADERS -= interfaces/quantor/Quantorizer.ypp

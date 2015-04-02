@@ -15,7 +15,7 @@ using namespace q2d::quantor;
 QIContext::QIContext(unsigned int lowestIndex,
                      model::ModelElement* const contextSource , QIContext* parent)
     : QIContext(lowestIndex, parent) {
-    qDebug() << "Creating context for" << contextSource->relatedEntry()->id();
+    qDebug() << "Creating context for" << contextSource->relatedEntry()->fullId();
     this->addModelElement(*contextSource);
 }
 

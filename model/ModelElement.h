@@ -12,6 +12,7 @@ namespace model {
 
 // forward declaration
 class Model;
+class Port;
 
 // TODO documentation
 class ModelElement : public QObject {
@@ -46,16 +47,45 @@ public:
     }
 
     /**
-     * @brief toString offers a string representation of the model element.
-     * This might be used for example in tooltips or for debugging.
+     * @brief id is an abbreviation for calling relatedEntry()->fullId()
      * @return
      */
-    virtual QString toString()              const {
-        return m_relatedEntry->id();
+    QString id() const {
+        return m_relatedEntry->fullId();
     }
+
+    virtual QMap<QString, QString> propertyMap() const;
 
 signals:
     void signal_changed();
+};
+
+// --- --- ---
+
+class InterfacingME
+        : public ModelElement {
+    Q_OBJECT
+private:
+
+protected:
+
+    QList<Port*> m_ports;
+
+    InterfacingME(DocumentEntry* relatedEntry)
+        : ModelElement(relatedEntry) {
+        m_ports = QList<Port*>();
+    }
+
+public:
+    void addPort(Port* port) {
+        Q_CHECK_PTR(port);
+        m_ports.append(port);
+    }
+
+    virtual QPoint portPosition(QString portLocalId){
+        Q_UNUSED(portLocalId);
+        return QPoint();
+    }
 };
 
 } // namespace model

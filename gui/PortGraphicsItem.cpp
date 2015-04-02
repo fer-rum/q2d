@@ -3,21 +3,19 @@
 #include "../Application.h"
 #include "../Constants.h"
 #include "../Document.h"
+#include "../factories/GIFactory.h"
 #include "ComponentGraphicsItem.h"
 #include "Schematic.h"
 
 #include <QApplication>
 #include <QCursor>
 #include <QDrag>
+#include <QGraphicsItem>
 #include <QMimeData>
 #include <QtDebug>
 
 using namespace q2d::gui;
 using namespace q2d::constants;
-
-int PortGraphicsItem::DIAMETER = 8;
-int PortGraphicsItem::RADIUS = DIAMETER / 2;
-QPointF PortGraphicsItem::CENTER_OFFSET = QPointF(RADIUS, RADIUS);
 
 QPen PortGraphicsItem::PEN_INPUT_PORT  = QPen(Qt::darkGreen);
 QPen PortGraphicsItem::PEN_IN_OUT_PORT = QPen(Qt::darkYellow);
@@ -41,47 +39,47 @@ QLineF* PortGraphicsItem::m_wireDrawingLine = nullptr;
 PortGraphicsItem::PortGraphicsItem(QPointF position,
                                    DocumentEntry* relatedEntry,
                                    model::enums::PortDirection direction)
-    : SchematicElement(position - CENTER_OFFSET, relatedEntry) {
+    : SchematicElement(position, relatedEntry) {
     // Ports are measured from the center, not the upper left corner
 
-    QAbstractGraphicsShapeItem* newActual = new QGraphicsEllipseItem(0, 0, DIAMETER, DIAMETER, this);
-    Q_CHECK_PTR(newActual);
+    QAbstractGraphicsShapeItem* newActual;
 
     m_direction = direction;
     // select the Pen and Brush based on the Port direction
     switch (direction) {
     case model::enums::PortDirection::IN:
+        newActual = factories::GIFactory::createPortAdapterGI();
         this->m_defaultPen = PEN_INPUT_PORT;
         this->m_defaultBrush = BRUSH_INPUT_PORT;
         this->setAcceptDrops(true); // input ports can receive wire drops
         break;
-    case model::enums::PortDirection::IN_OUT:
-        this->m_defaultPen = PEN_IN_OUT_PORT;
-        this->m_defaultBrush = BRUSH_IN_OUT_PORT;
-        break;
     case model::enums::PortDirection::OUT:
+        newActual = factories::GIFactory::createPortAdapteeGI();
         this->m_defaultPen = PEN_OUTPUT_PORT;
         this->m_defaultBrush = BRUSH_OUTPUT_PORT;
         this->setAcceptedMouseButtons(Qt::LeftButton); // output ports can be dragged from
         break;
     default:
+        newActual = factories::GIFactory::createPortInvalidGI();
         this->m_defaultPen = PEN_UNDEFINED_PORT;
         this->m_defaultBrush = BRUSH_UNDEFINED_PORT;
         break;
     }
+    Q_CHECK_PTR(newActual);
 
     newActual->setPen(this->m_defaultPen);
     newActual->setBrush(this->m_defaultBrush);
-
     this->addActual(newActual);
 
-    this->setAcceptHoverEvents(true);
-    Q_ASSERT(this->actual()->isVisible());
-}
+    qreal r = (qreal)PORT_RADIUS;
+    QGraphicsRectItem* background = new QGraphicsRectItem(-r, -r, 2 * r, 2 * r, this);
+    background->setBrush(PORT_BACKGROUND_BRUSH);
+    background->setPen(PORT_BACKGROUND_PEN);
+    background->setZValue(-2);
+    this->addActual(background);
 
-QPointF
-PortGraphicsItem::pos() const {
-    return QGraphicsItem::pos() + CENTER_OFFSET;
+    Q_ASSERT(this->actual()->isVisible());
+    this->setAcceptHoverEvents(true);
 }
 
 /**
@@ -96,6 +94,12 @@ PortGraphicsItem::specificType() {
 
 void
 PortGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
+
+    // only recognize hover as long as over active area
+    if (event->pos().manhattanLength() > PORT_DIAMETER) {
+        return;
+    }
+
     this->actual()->setPen(PEN_HOVER_PORT);
     this->actual()->setBrush(BRUSH_HOVER_PORT);
     this->setCursor(QCursor(Qt::CrossCursor));
@@ -112,6 +116,7 @@ PortGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
 
 void
 PortGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+
     if (event->button() == Qt::LeftButton) {
         m_dragStartPosition = event->scenePos();
         event->accept();
@@ -156,7 +161,7 @@ PortGraphicsItem::performDrag() {
     m_wireDrawingEnd = QPointF();
     m_wireDrawingLine = new QLineF(QPointF(), m_wireDrawingEnd);
     m_wireDrawingLineItem = m_scene->addLine(*m_wireDrawingLine);
-    m_wireDrawingLineItem->setPos(this->mapToScene(RADIUS, RADIUS));
+    m_wireDrawingLineItem->setPos(this->mapToScene(PORT_RADIUS, PORT_RADIUS));
     m_wireDrawingLineItem->setVisible(true);
 
     // TODO the returned Action should be LINK?
@@ -199,11 +204,30 @@ PortGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
+PortGraphicsItem::slot_drawConnected() {
+    QAbstractGraphicsShapeItem* newActual;
+    switch (m_direction) {
+    case model::enums::PortDirection::IN:
+        newActual = factories::GIFactory::createPortAdapteeGI();
+        break;
+    case model::enums::PortDirection::OUT:
+        newActual = factories::GIFactory::createPortAdapterGI();
+        break;
+    default: // should not happen
+        Q_ASSERT(false);
+    }
+    newActual->setBrush(m_defaultBrush);
+    newActual->setPen(m_defaultPen);
+    this->addActual(newActual);
+    this->setOpacity(0.25);
+}
+
+void
 PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
 
     // TODO
     // make sure target is not source
-    // inform the document about the happenings via signal/slot
+    // better inform the document about the happenings via signal/slot
 
     if (m_dragOver && m_wireDrawingMode) {
         m_dragOver = false;
@@ -218,36 +242,4 @@ PortGraphicsItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
 
     m_wireDrawingMode = false;
     this->scene()->removeItem(m_wireDrawingLineItem);
-}
-
-ModulePortGI::ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry, model::enums::PortDirection direction)
-    : PortGraphicsItem(relativeCenterPosition, relatedEntry, model::enums::invert(direction)) {
-
-    QString filePath;
-    switch(direction) {
-    case model::enums::PortDirection::OUT :
-        filePath = Application::instance()->getSetting(KEY_FILE_OPORT_OUT).toString();
-        break;
-    case model::enums::PortDirection::IN :
-        filePath = Application::instance()->getSetting(KEY_FILE_OPORT_IN).toString();
-        break;
-    default : // should not happen
-        Q_ASSERT(false);
-    }
-    QGraphicsSvgItem* decal = new QGraphicsSvgItem(filePath);
-
-    if (decal != nullptr) {
-        this->addActual(decal);
-    }
-}
-
-/**
- * @brief ModulePortGI::specificType is the PortDirection as viewed from outside the module.
- * Therefore, the internal value is to be reversed.
- * So an input port will return <i>in</i> and an output port will return <i>out</i>.
- * @return The (inverted) PortDirection as String
- */
-QString
-ModulePortGI::specificType() {
-    return model::enums::PortDirectionToString(model::enums::invert(m_direction));
 }

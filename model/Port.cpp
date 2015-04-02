@@ -1,46 +1,49 @@
 #include "../DocumentEntry.h"
 #include "../Enumerations.h"
+#include "../factories/ToolTipFactory.h"
 #include "Component.h"
+#include "ModelElement.h"
+#include "ModuleInterface.h"
 #include "Port.h"
 
 using namespace q2d::model;
 
-Port::Port(enums::PortDirection direction, DocumentEntry *relatedEntry)
-    : Node(relatedEntry){
+Port::Port(enums::PortDirection direction, DocumentEntry* relatedEntry, InterfacingME* interfaced)
+    : Node(relatedEntry) {
     Q_ASSERT(direction == enums::PortDirection::IN
              || direction == enums::PortDirection::OUT);
     m_direction = direction;
-}
 
-QString
-Port::toString() const {
-    QString text = Node::toString();
-    text += "\nDirection " + enums::PortDirectionToString(m_direction);
-    return text;
-}
+    interfaced->addPort(this);
 
-QStringList
-ComponentPort::nodeVariables() const {
-    return QStringList(this->relatedEntry()->id());
-}
-
-ComponentPort::ComponentPort(enums::PortDirection direction, Component *interfacedComponent, DocumentEntry *relatedEntry)
-    : Port(direction, relatedEntry) {
-    Q_CHECK_PTR(interfacedComponent);
-
-    m_component = interfacedComponent;
-    m_component->addPort(this);
-
-    switch(m_direction){
+    switch (m_direction) {
     case enums::PortDirection::IN :
-        this->addDrivenElement(interfacedComponent);
+        this->addDrivenElement(interfaced);
         break;
     case enums::PortDirection::OUT :
-        this->addDriver(interfacedComponent);
+        this->addDriver(interfaced);
         break;
     default: // this should not happen
         Q_ASSERT(false);
     }
+}
+
+QMap<QString, QString>
+Port::propertyMap() const {
+    return factories::ToolTipFactory::propertyMap(this);
+}
+
+QStringList
+ComponentPort::nodeVariables() const {
+    return QStringList(this->relatedEntry()->localId());
+}
+
+ComponentPort::ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+                             Component* interfacedComponent)
+    : Port(direction, relatedEntry, interfacedComponent) {
+    Q_CHECK_PTR(interfacedComponent);
+
+    m_component = interfacedComponent;
 }
 
 Component*
@@ -48,8 +51,9 @@ ComponentPort::component() const {
     return m_component;
 }
 
-ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry)
-    : Port(enums::invert(direction), relatedEntry){
+ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+                       ModuleInterface* moduleInterface)
+    : Port(direction, relatedEntry, moduleInterface) {
     Q_CHECK_PTR(relatedEntry);
     Q_ASSERT(m_direction == enums::PortDirection::IN
              || m_direction == enums::PortDirection::OUT);
@@ -57,8 +61,8 @@ ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEnt
 
 QStringList
 ModulePort::inputVariables() const {
-    if(m_direction == enums::PortDirection::OUT){
-        return QStringList(this->relatedEntry()->id());
+    if (m_direction == enums::PortDirection::OUT) {
+        return QStringList(this->relatedEntry()->localId());
     } else {
         return Port::inputVariables();
     }
@@ -66,8 +70,8 @@ ModulePort::inputVariables() const {
 
 QStringList
 ModulePort::nodeVariables() const {
-    if(m_direction == enums::PortDirection::IN){
-        return QStringList(this->relatedEntry()->id());
+    if (m_direction == enums::PortDirection::IN) {
+        return QStringList(this->relatedEntry()->localId());
     } else {
         return Port::nodeVariables();
     }

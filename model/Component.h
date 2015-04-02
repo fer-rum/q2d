@@ -17,26 +17,32 @@ class ComponentPort;
 
 // TODO documentation
 // TODO a component should observe its internal model to be informed of changes
-class Component : public ModelElement {
+class Component
+        : public InterfacingME {
 private:
     metamodel::ComponentDescriptor* m_descriptor;
-    QList<ComponentPort*> m_ports;
     Model* m_internalModel;
 public:
     Component(metamodel::ComponentDescriptor* descriptor,
               DocumentEntry* relatedEntry,
               Model* internalModel = nullptr);
 
-    void addPort(ComponentPort* port) {
-        Q_CHECK_PTR(port);
-        m_ports.append(port);
-    }
+    /**
+     * @brief addPort is a public facade to the accessor providing type specialization
+     * @param port
+     */
+    void addPort(ComponentPort* port);
+
+    QList<ComponentPort*>* inputPorts();
+    QList<ComponentPort*>* outputPorts();
 
     QStringList nodeVariables() const override;
     QStringList configVariables() const override;
     QStringList functions() const override;
 
     metamodel::ComponentDescriptor* descriptor() const;
+
+    virtual QPoint portPosition(QString portLocalId) override;
 };
 
 } // namespace model

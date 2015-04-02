@@ -10,13 +10,13 @@
 #include <QtDebug>
 #include <QtSvg/QGraphicsSvgItem>
 
+#include "../Util.h"
+
 using namespace q2d::gui;
 using namespace q2d::constants;
 
 Schematic::Schematic(Document* parent)
-    : QGraphicsScene(parent) {
-
-}
+    : QGraphicsScene(parent) {}
 
 q2d::Document*
 Schematic::document() const {
@@ -86,7 +86,6 @@ Schematic::dropEvent(QGraphicsSceneDragDropEvent* event) {
     if (m_dragOver) {
         if (mimeData->hasFormat(MIME_COMPONENT_TYPE)) {
             QString path = mimeData->text();
-
             parent->addComponent(path, dropPosition);
         } else if (mimeData->hasFormat(MIME_PORT_PLACEMENT)) {
             this->handleMimePortPlacement(mimeData, dropPosition);
@@ -100,11 +99,11 @@ Schematic::dropEvent(QGraphicsSceneDragDropEvent* event) {
 }
 
 void
-Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition){
+Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPosition) {
     model::enums::PortDirection direction =
-            model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
+        model::enums::StringToPortDirection(QString(mimeData->data(MIME_PORT_PLACEMENT)));
 
-    switch(direction) {
+    switch (direction) {
     case model::enums::PortDirection::IN :
         this->document()->addInputPort(mimeData->text(), dropPosition);
         break;
@@ -112,11 +111,18 @@ Schematic::handleMimePortPlacement(const QMimeData* mimeData, QPoint dropPositio
         this->document()->addOutputPort(mimeData->text(), dropPosition);
         break;
     default: // should not happen
-    Q_ASSERT(false);
+        Q_ASSERT(false);
     }
 }
 
 void
 Schematic::addItem(QGraphicsItem* item) {
+    // use this for debug hooks if needed
     QGraphicsScene::addItem(item);
 }
+
+//void
+//Schematic::mouseMoveEvent(QMouseEvent* event){
+//    QPointF pos = event->pos();
+//    emit signal_mousePosChanged((int)pos.x(), (int)pos.y());
+//}

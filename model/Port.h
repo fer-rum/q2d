@@ -5,6 +5,8 @@
 
 namespace q2d {
 namespace model {
+class InterfacingME;
+class ModuleInterface;
 
 /**
  * @brief The Port class is an abstraction for data flow interfaces.
@@ -16,27 +18,28 @@ protected:
     enums::PortDirection m_direction;
 public:
 
-    // FIXME deprecated
     /**
      * @brief Port
      * @param direction
      * @param relatedEntry
      */
     Port(enums::PortDirection direction,
-         DocumentEntry* relatedEntry);
+         DocumentEntry* relatedEntry,
+         InterfacingME* interfaced);
 
     enums::PortDirection direction() const {
         return m_direction;
     }
 
-    virtual QString toString() const override;
+    QMap<QString, QString> propertyMap() const override;
 };
 
 class ComponentPort : public Port {
 private:
     Component* m_component;
 public:
-    ComponentPort(enums::PortDirection direction, Component* interfacedComponent, DocumentEntry* relatedEntry);
+    ComponentPort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+                  Component* interfacedComponent);
 
     /**
      * @brief component is a getter for the component the port provides an interface for.
@@ -47,7 +50,6 @@ public:
     virtual QStringList nodeVariables() const override;
 };
 
-// TODO class ModulePort
 /**
  * @brief The ModulePort class abstracts connections of a whole module to the outside.
  * Keep in mind that ports are always viewed from the inside of a module,
@@ -62,7 +64,8 @@ public:
      * It will be translated to the opposing direction to fit the <i>inside the module</i> point of view.
      * @param relatedEntry
      */
-    ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry);
+    ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry,
+               ModuleInterface* moduleInterface);
 
     virtual QStringList nodeVariables() const override;
     virtual QStringList inputVariables() const override;

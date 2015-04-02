@@ -2,6 +2,7 @@
 #define DOCUMENTENTRY_H
 
 #include "Enumerations.h"
+#include "core/Identifiable.h"
 #include "gui/SchematicElement.h"
 
 #include <QGraphicsItem>
@@ -26,15 +27,25 @@ class ModelElement;
  * DocumentEntry may have parents, to maintain potential hierarchical relations.
  */
 class DocumentEntry
-    : public QObject {
+        : public QObject,
+        public core::Identifiable {
     Q_OBJECT
 private:
-    QString                     m_id;
     enums::DocumentEntryType    m_type;
     model::ModelElement*        m_modelElement;
     gui::SchematicElement*      m_schematicElement;
     DocumentEntry*              m_parent;
     Document*                   m_document;
+
+    /**
+     * @brief chooseParentId is a helper method for correctly determining the parentId.
+     * When given the choice between a parent DocumentEntries ID and a Documents ID,
+     * the DocumentEntry will be preferred.
+     * @param document
+     * @param parentEntry
+     * @return
+     */
+    static Identifiable* chooseParentIdentifier(Identifiable* document, Identifiable* parentEntry);
 
 public:
     /**

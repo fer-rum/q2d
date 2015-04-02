@@ -11,12 +11,11 @@ using namespace q2d::metamodel;
 
 Component::Component(ComponentDescriptor* type, DocumentEntry* relatedEntry,
                      Model* internalModel)
-    : ModelElement(relatedEntry) {
+    : InterfacingME(relatedEntry) {
     Q_CHECK_PTR(type);
 
     m_internalModel = internalModel;
     m_descriptor = type;
-    m_ports = QList<ComponentPort*>();
 }
 
 ComponentDescriptor*
@@ -48,4 +47,38 @@ Component::nodeVariables() const {
 QStringList
 Component::functions() const {
     return m_descriptor->functions();
+}
+
+QList<ComponentPort*>*
+Component::inputPorts() {
+    QList<ComponentPort*>* result = new QList<ComponentPort*>();
+
+    for (Port * port : m_ports) {
+        if (port->direction() == enums::PortDirection::IN) {
+            result->append(static_cast<ComponentPort*>(port));
+        }
+    }
+    return result;
+}
+
+QList<ComponentPort*>*
+Component::outputPorts() {
+    QList<ComponentPort*>* result = new QList<ComponentPort*>();
+
+    for (Port * port : m_ports) {
+        if (port->direction() == enums::PortDirection::OUT) {
+            result->append(static_cast<ComponentPort*>(port));
+        }
+    }
+    return result;
+}
+
+void
+Component::addPort(ComponentPort* port) {
+    InterfacingME::addPort(port);
+}
+
+QPoint
+Component::portPosition(QString portLocalId) {
+    return m_descriptor->portPosition(portLocalId);
 }

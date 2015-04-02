@@ -36,7 +36,7 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     // IMPORTANT: build the ports before the wires
     // otherwise the generated context is wrong
     for (model::ModulePort * port : contextSource.outsidePorts()) {
-            globalContext.addModelElement(*port);
+        globalContext.addModelElement(*port);
     }
 
     for (model::ModelElement * wire : contextSource.conductors()) {
@@ -51,7 +51,7 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     for (model::ModelElement * c : contextSource.components()) {
         QIContext newContext = QIContext(currentIndex, c, &globalContext);
         currentIndex = newContext.highestIndex() + 1;
-        m_contexts.insert(c->relatedEntry()->id(), newContext);
+        m_contexts.insert(c->relatedEntry()->localId(), newContext);
         newContext.dumpMaps();
     }
 }
@@ -76,7 +76,8 @@ QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunc
                 try {
                     quantorizer.parse(function.c_str());
                 } catch (ParseException const &exc) {
-                    qWarning() << "ParseException in context" << m_contexts.key(context) << ".\"" << function.c_str() << "\"@" << QString::number(exc.position()) << ":" ;
+                    qWarning() << "ParseException in context" << m_contexts.key(context) << ".\"" << function.c_str() <<
+                               "\"@" << QString::number(exc.position()) << ":" ;
                     qWarning() << exc.message().c_str();
                     return;
                 }

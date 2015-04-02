@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ComponentDetailView</class>
+ <widget class="QWidget" name="ComponentDetailView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>768</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <item>
+    <widget class="QLabel" name="lbl_name">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="lbl_portsIn">
+         <property name="text">
+          <string>Input ports</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListView" name="list_portsIn"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="lbl_configs">
+           <property name="text">
+            <string>Configuration variables</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTreeView" name="tree_configs"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="lbl_functions">
+           <property name="text">
+            <string>Functions</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListView" name="list_functions"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="lbl_portsOut">
+         <property name="text">
+          <string>Output Ports</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListView" name="list_portsOut"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

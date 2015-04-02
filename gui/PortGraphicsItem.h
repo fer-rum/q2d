@@ -24,13 +24,10 @@ class ComponentGraphicsItem;
  * between QGraphicsItem and QObject and keep the code flexible, should one
  * decide, that an ellipse is not enough.
  */
-class PortGraphicsItem : public SchematicElement {
-
+class PortGraphicsItem
+        : public SchematicElement {
+    Q_OBJECT
 private:
-    // TODO make these changeable via the settings
-    static int DIAMETER;
-    static int RADIUS;
-
 
     static QPen PEN_INPUT_PORT;
     static QPen PEN_IN_OUT_PORT;
@@ -59,21 +56,10 @@ private:
     void performDrag();
 
 protected:
-    static QPointF CENTER_OFFSET;
     model::enums::PortDirection m_direction;
     virtual QString specificType() override;
 
 public:
-
-    static QPointF centerOffset() {
-        return CENTER_OFFSET;
-    }
-
-    // overridden.
-    // The position of a port is measured from the center
-    // In contrast to the scene position
-    // which is measured from the upper left coner
-    virtual QPointF pos() const;
 
     /**
      * @brief PortGraphicsItem
@@ -85,7 +71,11 @@ public:
      * @param parent
      */
     explicit PortGraphicsItem(QPointF position, DocumentEntry* relatedEntry,
-                     model::enums::PortDirection direction);
+                              model::enums::PortDirection direction);
+
+    model::enums::PortDirection direction() const {
+        return m_direction;
+    }
 
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
@@ -104,19 +94,11 @@ public:
     static void setWireDrawingMode(bool mode, QPointF* origin = nullptr);
 
 signals:
+    void signal_posChanged();
 
 public slots:
+    void slot_drawConnected();
 
-};
-
-class ModulePortGI : public PortGraphicsItem {
-
-protected :
-    virtual QString specificType() override;
-
-public:
-    ModulePortGI(QPointF relativeCenterPosition, DocumentEntry* relatedEntry,
-                     model::enums::PortDirection direction);
 };
 
 } // namespace gui

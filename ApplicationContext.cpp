@@ -57,7 +57,6 @@ ApplicationContext::componentFactory() {
     return this->m_componentFactory;
 }
 
-//TODO: Convert to new Signal/Slot Syntax
 void
 ApplicationContext::setupSignalsAndSlots() {
     Q_CHECK_PTR(this->m_mainWindow);
@@ -78,6 +77,8 @@ ApplicationContext::setupSignalsAndSlots() {
             (&MainWindow::slot_openDocumentTab)); // ship around overloaded function
     connect(this, &ApplicationContext::signal_quantorSolutionAvailable,
             m_mainWindow, &MainWindow::slot_displayQuantorResult);
+    connect(this, &ApplicationContext::signal_error,
+            m_mainWindow, &MainWindow::slot_displayErrorMessage);
     // saving signal has to be set up by project
 
     // ApplicationContext -> ComponentFactory
@@ -229,7 +230,7 @@ ApplicationContext::slot_loadProject(QString projectDirPath) {
 
     // load documents
 
-    // TODO find all files with appropriate extension
+    // find all files with appropriate extension
     QDir projectDir(projectDirPath);
     projectDir.setFilter(QDir::Files | QDir::Readable);
     projectDir.setNameFilters(QStringList("*" + EXTENSION_DOCFILE));

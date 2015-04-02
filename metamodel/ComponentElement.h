@@ -4,6 +4,8 @@
 #include "Element.h"
 #include "ComponentDescriptor.h"
 
+#include <QObject>
+
 namespace q2d {
 namespace metamodel {
 
@@ -12,6 +14,7 @@ class ComponentDescriptor;
 
 class ComponentElement :
     public Element {
+    Q_OBJECT
 public:
     explicit ComponentElement(QString name, metamodel::ComponentDescriptor* parent);
 

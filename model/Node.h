@@ -13,7 +13,14 @@ namespace model {
 // forward declaration
 class Component;
 
-// TODO documentation
+/**
+ * @brief The Node class abstracts interfacing elements between
+ * <ul>
+ *  <li>components and the wires connecting them</li>
+ *  <li>multiple wires</li>
+ *  <li>the outside world and the wire net</li
+ * </ul>
+ */
 class Node : public ModelElement {
 private:
     QList<ModelElement*> m_drivenElements;
@@ -33,11 +40,11 @@ public:
         return m_drivenElements;
     }
 
-    bool hasDriver(){
+    bool hasDriver() {
         return m_driver != nullptr;
     }
 
-    virtual QString toString() const override;
+    virtual QMap<QString, QString> propertyMap() const override;
 };
 
 // TODO documentation

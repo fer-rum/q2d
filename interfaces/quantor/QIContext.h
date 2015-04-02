@@ -70,8 +70,8 @@ public:
 
     /** Fetches the global variable number for a given variable name in the context.
      */
-    unsigned int operator[](std::string const &varName) override;
-    VariableType typeOf(unsigned int variable) override;
+    unsigned int operator[](std::string const &varName) const override;
+    VariableType typeOf(unsigned int variable) const override;
     VariableType typeOf(std::string varName) const;
 
     /**

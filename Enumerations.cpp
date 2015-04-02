@@ -7,11 +7,11 @@ using namespace q2d::enums;
 // initialize the mappings from enums to strings
 QMap<DocumentEntryType, QString>
 q2d::enums::map_DocumentEntryType {
-    {DocumentEntryType::COMPONENT,      "component"     },
-    {DocumentEntryType::COMPONENT_PORT, "component_port"},
-    {DocumentEntryType::OUTSIDE_PORT,   "outside_port"  },
-    {DocumentEntryType::WIRE,           "wire"          },
-    {DocumentEntryType::UNDEFINED,      "undefined"     }
+    {DocumentEntryType::COMPONENT,          "component"     },
+    {DocumentEntryType::PORT,               "port"},
+    {DocumentEntryType::MODULE_INTERFACE,   "module_interface"  },
+    {DocumentEntryType::WIRE,               "wire"          },
+    {DocumentEntryType::UNDEFINED,          "undefined"     }
 };
 
 QString
@@ -88,8 +88,8 @@ model::enums::PortDirectionToString(const PortDirection direction) {
 }
 
 model::enums::PortDirection
-model::enums::invert(const PortDirection initial){
-    switch(initial){
+model::enums::invert(const PortDirection initial) {
+    switch (initial) {
     case PortDirection::IN :
         return PortDirection::OUT;
     case PortDirection::OUT:

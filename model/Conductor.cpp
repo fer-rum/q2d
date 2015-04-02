@@ -28,8 +28,8 @@ Conductor::nodeVariables() const {
     Q_CHECK_PTR(m_end->relatedEntry());
 
     QStringList result;
-    result.append(m_start->relatedEntry()->id());
-    result.append(m_end->relatedEntry()->id());
+    result.append(m_start->relatedEntry()->fullId());
+    result.append(m_end->relatedEntry()->fullId());
 
     return result;
 }
@@ -40,7 +40,7 @@ Conductor::functions() const {
     Q_CHECK_PTR(m_start->relatedEntry());
     Q_CHECK_PTR(m_end->relatedEntry());
 
-    QString function(m_start->relatedEntry()->id() + " = " + m_end->relatedEntry()->id());
+    QString function(m_start->relatedEntry()->fullId() + " = " + m_end->relatedEntry()->fullId());
 
     return QStringList(function);
 }

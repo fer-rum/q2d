@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "Conductor.h"
 #include "Model.h"
+#include "ModuleInterface.h"
 #include "Node.h"
 #include "Port.h"
 
@@ -36,16 +37,16 @@ Model::addComponent(Component* toAdd) {
 }
 
 void
-Model::addInputPort(ModulePort* inputPort) {
+Model::addInputPort(ModuleInterface* inputPort) {
     Q_CHECK_PTR(inputPort);
-    Q_ASSERT(inputPort->direction() == enums::PortDirection::OUT);
+    Q_ASSERT(inputPort->direction() == enums::PortDirection::IN);
     m_inputPorts.append(inputPort);
 }
 
 void
-Model::addOutputPort(ModulePort* outputPort) {
+Model::addOutputPort(ModuleInterface* outputPort) {
     Q_CHECK_PTR(outputPort);
-    Q_ASSERT(outputPort->direction() == enums::PortDirection::IN);
+    Q_ASSERT(outputPort->direction() == enums::PortDirection::OUT);
     m_outputPorts.append(outputPort);
 }
 
@@ -53,4 +54,20 @@ Model::addOutputPort(ModulePort* outputPort) {
 void
 Model::addConductor(Conductor* conductor) {
     m_conductors.append(conductor);
+}
+
+QList<ModulePort*>
+Model::outsidePorts() const {
+
+    QList<ModulePort*> result = QList<ModulePort*>();
+
+    for (ModuleInterface * interface : m_inputPorts) {
+        result.append(interface->port());
+    }
+
+    for (ModuleInterface * interface : m_outputPorts) {
+        result.append(interface->port());
+    }
+
+    return result;
 }
