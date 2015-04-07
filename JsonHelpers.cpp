@@ -101,6 +101,7 @@ q2d::json::toPointF(QJsonObject json) {
 
 QPoint
 q2d::json::toPoint(QJsonObject json) {
+
     Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
     Q_ASSERT(json.contains(JSON_GENERAL_POSITION_Y));
 
@@ -412,10 +413,18 @@ q2d::json::toComponentDescriptor (
 q2d::metamodel::PortDescriptor*
 q2d::json::toPortDescriptor(QJsonObject json) {
 
-    QJsonObject     posObject       = json.value(JSON_GENERAL_POSITION).toObject();
+
     QString         portName        = json.value(JSON_GENERAL_NAME).toString();
     QString         dirString       = json.value(JSON_PORT_DIRECTION).toString();
-    QPoint         portPosition    = json::toPoint(posObject);
+
+    QPoint portPosition = QPoint();
+    // if no position is explicitly specified, the default (0, 0) will be used.
+    // this might be the case if the symbol is auto-generated anyway.
+    if(json.contains(JSON_GENERAL_POSITION)){
+        QJsonObject posObject = json.value(JSON_GENERAL_POSITION).toObject();
+        portPosition = json::toPoint(posObject);
+    }
+
     model::enums::PortDirection portDirection = model::enums::StringToPortDirection(dirString);
 
     metamodel::PortDescriptor* portDescriptor =
