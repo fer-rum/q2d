@@ -12,4 +12,4 @@ Dependencies
 * [*Quantor*](http://fmv.jku.at/quantor/) release 3.2 
 * [*picosat*](http://fmv.jku.at/picosat/) release 960
 
-Currently their source code will be delivered with *q2d*. This might change in the future though.
+Their source code must be put in the main q2d directory or the q2d.pro file must be adjusted to contain the correct paths.

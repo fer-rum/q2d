@@ -10,16 +10,30 @@ picosatDir = "$$OUT_PWD/picosat-960"
 quantorDir = "$$OUT_PWD/quantor-3.2"
 
 !exists($$picosatDir){
-    message(No picosat directory)
+    downPico = $$prompt(Could not find picosat. Download? [N/y])
+    equals(downPico, "y") {
+        system(wget -q http://fmv.jku.at/picosat/picosat-960.tar.gz && tar -xaf picosat-960.tar.gz)
+    } else {
+        error(No picosat directory)
+    }
 } {
-    message(picosat directory is $$picosatDir)
+message(picosat directory is $$picosatDir)
+!exists($$picosatDir/config.h) {
+    system(cd $$picosatDir && ./configure && make config.h)
 }
 
 
 !exists($$quantorDir){
-    message(No quantor directory)
-} {
-    message(quantor directory is $$quantorDir)
+    downQuantor = $$prompt(Could not find quantor. Download? [N/y])
+    equals(downQuantor, "y") {
+        system(wget -q http://fmv.jku.at/quantor/quantor-3.2.tar.gz && tar -xaf quantor-3.2.tar.gz)
+    } else {
+        error(No quantor directory)
+    }
+}
+message(quantor directory is $$quantorDir)
+!exists($$quantorDir/config.h) {
+    system(cd $$quantorDir && ./configure && make options.c)
 }
 
 QT       += core gui svg
