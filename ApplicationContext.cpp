@@ -89,6 +89,8 @@ ApplicationContext::setupSignalsAndSlots() {
             m_componentFactory, &ComponentFactory::slot_clearHierarchy);
     connect(this, &ApplicationContext::signal_createComponentCategory,
             m_componentFactory, &ComponentFactory::slot_addCategory);
+    connect(this, &ApplicationContext::signal_saveLibraryRequested,
+            m_componentFactory, &ComponentFactory::slot_saveHierarchy);
 
     // MainWindow -> ComponentFactory
     connect(m_mainWindow, &MainWindow::signal_loadType,

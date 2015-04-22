@@ -17,6 +17,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QStandardItemModel>
 #include <QtDebug>
 
 using namespace q2d::constants;
@@ -63,6 +64,24 @@ q2d::json::readJsonFile(QString path) {
 
     qDebug() << logPrefix << "successfully read file";
 
+    return result;
+}
+
+
+QJsonDocument
+q2d::json::exportComponentHierarchy(QStandardItemModel* componentHierarchy) {
+    QJsonDocument result = QJsonDocument();
+    QJsonArray hierarchy = QJsonArray();
+
+    QStandardItem* rootItem = componentHierarchy->invisibleRootItem();
+
+    for (int rIndex = 0; rIndex < rootItem->rowCount(); ++rIndex) {
+        for (int cIndex = 0; cIndex < rootItem->columnCount(); ++cIndex) {
+            hierarchy.append(QJsonValue(fromHierarchyEntry(rootItem->child(rIndex, cIndex))));
+        }
+    }
+
+    result.setArray(hierarchy);
     return result;
 }
 

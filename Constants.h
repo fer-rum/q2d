@@ -16,6 +16,7 @@ extern QSize ICON_SIZE;
 // File extensions for saving and loading
 
 extern QString EXTENSION_DOCFILE;
+extern QString EXTENSION_LIBFILE;
 
 /**
  * @brief FILE_COMPONENT_TREE is the file name,
@@ -83,6 +84,7 @@ extern QString JSON_WIRE_END;
 // Keys for QSettings (application wide)
 extern QString KEY_DIR_COMPONENTS;
 extern QString KEY_DIR_PROJECTS;
+extern QString KEY_DIR_LIBRARIES;
 
 extern QString KEY_FILE_BIT_GROUP;
 extern QString KEY_FILE_PORT_IN;

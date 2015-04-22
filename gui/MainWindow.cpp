@@ -57,6 +57,8 @@ MainWindow::setupSignalsAndSlots() {
             this, &MainWindow::slot_createDocument);
 
     // Category menus
+    connect(m_ui->action_SaveLibrary, &QAction::triggered,
+            this, &MainWindow::slot_saveLibrary);
     connect(m_ui->action_AddCategory, &QAction::triggered,
             this, &MainWindow::slot_addComponentCategory);
     connect(m_ui->action_AddComponentType, &QAction::triggered,
@@ -76,6 +78,8 @@ MainWindow::setupSignalsAndSlots() {
             m_context, &ApplicationContext::slot_unloadProject);
     connect(this, &MainWindow::signal_createCategory,
             m_context, &ApplicationContext::signal_createComponentCategory);
+    connect(this, &MainWindow::signal_saveLibraryRequested,
+            m_context, &ApplicationContext::signal_saveLibraryRequested);
 
     // This only needs to be called once since the sender (the ListView)
     // remains the same, even when the model changes
@@ -372,4 +376,36 @@ MainWindow::slot_displaySchematicMousePos(int x, int y) {
     QString text = QString::number(x) + ", " + QString::number(y);
     m_ui->statusBar->showMessage(text);
     qDebug() << text;
+}
+
+void
+MainWindow::slot_saveLibrary(){
+
+    // get name
+    bool ok;
+    QString name = QInputDialog::getText(this,
+                                         tr("Library name required"),
+                                         tr("Enter the name of the new library:"),
+                                         QLineEdit::Normal, "newLibrary", &ok);
+
+    if (!ok) { // action canceled
+        return;
+    }
+
+    // validate name
+    if (name.isEmpty()) {
+        slot_displayErrorMessage(
+            tr("Error: Library name was empty"),
+            tr("The libraries name must not be empty."));
+        return;
+    }
+
+    // TODO instead, this should inform the user and ask to create the directory or let chosse another dir
+    QDir libraryFolder = QDir(m_application->getSetting(constants::KEY_DIR_LIBRARIES).toString());
+    if(!libraryFolder.exists()){
+        libraryFolder.mkpath(libraryFolder.absolutePath());
+    }
+
+    emit signal_saveLibraryRequested(libraryFolder.absolutePath() + QDir::separator() + name
+                                     + constants::EXTENSION_LIBFILE);
 }

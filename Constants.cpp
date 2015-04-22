@@ -10,6 +10,7 @@ QString NO_SYMBOL_FILE      = "(None)";
 
 QString KEY_DIR_COMPONENTS  = "paths/componentsFolder";
 QString KEY_DIR_PROJECTS    = "paths/projectsFolder";
+QString KEY_DIR_LIBRARIES   = "paths/librariesFolder";
 
 QString KEY_FILE_BIT_GROUP  = "paths/symbols/bit_group";
 QString KEY_FILE_PORT_IN    = "paths/symbols/port_in";
@@ -54,6 +55,7 @@ QString MIME_WIRE_START_POS = "application/wire-start-pos";
 
 QString FILE_COMPONENT_TREE    = "/components.q2tree";
 QString EXTENSION_DOCFILE           = ".q2doc";
+QString EXTENSION_LIBFILE           = ".q2lib";
 
 QString TOOLTIP_FULL_ID = QObject::tr("Full ID");
 QString TOOLTIP_TYPE    = QObject::tr("Type");

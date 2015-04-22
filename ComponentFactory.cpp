@@ -170,24 +170,6 @@ ComponentFactory::getComponentHierarchy() {
 }
 
 // FIXME move this and all helpers to JsonHelpers
-QJsonDocument
-ComponentFactory::exportHierarchy() {
-    QJsonDocument result = QJsonDocument();
-    QJsonArray hierarchy = QJsonArray();
-
-    QStandardItem* rootItem = componentHierarchy.invisibleRootItem();
-
-    for (int rIndex = 0; rIndex < rootItem->rowCount(); ++rIndex) {
-        for (int cIndex = 0; cIndex < rootItem->columnCount(); ++cIndex) {
-            hierarchy.append(QJsonValue(
-                                 json::fromHierarchyEntry(rootItem->child(rIndex, cIndex))
-                             ));
-        }
-    }
-
-    result.setArray(hierarchy);
-    return result;
-}
 
 void
 ComponentFactory::importHierarchy(QJsonDocument source) {
@@ -237,4 +219,9 @@ ComponentFactory::jsonToEntry(QJsonObject json, Category* parent) {
 void
 ComponentFactory::slot_clearHierarchy() {
     componentHierarchy.clear();
+}
+
+void
+ComponentFactory::slot_saveHierarchy(QString filePath){
+    json::writeJsonFile(filePath, json::exportComponentHierarchy(&componentHierarchy));
 }

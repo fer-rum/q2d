@@ -53,15 +53,17 @@ Project::save(QDir projectDirectory) {
         Q_ASSERT(ok);
     }
     // switch to that folder
+    // NOTE why?
     bool ok = projectDirectory.cd(m_name);
     Q_ASSERT(ok);
 
     // TODO Save the project settings
 
     // make sure the component tree in use is saved
-    json::writeJsonFile(
-        projectDirectory.absolutePath() + FILE_COMPONENT_TREE,
-        m_applicationContext->componentFactory()->exportHierarchy());
+    QString hierarchyFilePath = projectDirectory.absolutePath() + FILE_COMPONENT_TREE;
+
+    // TODO proper signal/slot usage
+    m_applicationContext->componentFactory()->slot_saveHierarchy(hierarchyFilePath);
 
     // TODO make sure the component tree is rebuild before loading documents
 

@@ -44,7 +44,6 @@ public:
     metamodel::ComponentDescriptor* getTypeForIndex(const QModelIndex &index);
     metamodel::ComponentDescriptor* getTypeForHierarchyName(QString hierarchyName);
 
-    QJsonDocument exportHierarchy();
     void importHierarchy(QJsonDocument source);
 
 
@@ -52,6 +51,7 @@ public slots:
     void slot_loadType(QString filePath, metamodel::Category* parent);
     metamodel::Category* slot_addCategory(QString name, metamodel::Category* parent);
     void slot_clearHierarchy();
+    void slot_saveHierarchy(QString filePath);
 
 };
 

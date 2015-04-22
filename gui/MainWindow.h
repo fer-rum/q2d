@@ -58,6 +58,7 @@ signals:
     void signal_createCategory(QString name, metamodel::Category* parent = 0);
     void signal_loadType(QString fileName, metamodel::Category* parent = 0);
     void signal_clearComponentTypes();
+    void signal_saveLibraryRequested(QString filePath);
 
 public slots:
     void slot_createProject();
@@ -81,6 +82,7 @@ private slots:
     void on_schematicsTabWidget_tabCloseRequested(int index);
     void slot_addComponentType();
     void slot_addComponentCategory();
+    void slot_saveLibrary();
 };
 
 } // namespace gui

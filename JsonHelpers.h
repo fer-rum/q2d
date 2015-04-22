@@ -36,6 +36,8 @@ namespace json {
 void writeJsonFile(QString path, QJsonDocument doc);
 QJsonDocument readJsonFile(QString path);
 
+QJsonDocument exportComponentHierarchy(QStandardItemModel* componentHierarchy);
+
 // json -> *
 metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json);
 metamodel::PortDescriptor* toPortDescriptor(QJsonObject json);
