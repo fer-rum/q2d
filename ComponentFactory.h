@@ -52,6 +52,7 @@ public slots:
     metamodel::Category* slot_addCategory(QString name, metamodel::Category* parent);
     void slot_clearHierarchy();
     void slot_saveHierarchy(QString filePath);
+    void slot_loadHierarchy(QString filePath);
 
 };
 

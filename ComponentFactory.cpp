@@ -225,3 +225,21 @@ void
 ComponentFactory::slot_saveHierarchy(QString filePath){
     json::writeJsonFile(filePath, json::exportComponentHierarchy(&componentHierarchy));
 }
+
+void
+ComponentFactory::slot_loadHierarchy(QString filePath){
+
+    // logging prefix
+    const QString logPrefix = QString("%1::slot_loadHierarchy(%2)").arg(this->objectName()).arg(filePath);
+
+
+    QJsonDocument jsonDocument = json::readJsonFile(filePath);
+
+    // validity check
+    if (jsonDocument.isNull()) {
+        qWarning() << logPrefix << "json document seems to be invalid";
+        return;
+    }
+
+    this->importHierarchy(jsonDocument);
+}

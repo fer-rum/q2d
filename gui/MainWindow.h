@@ -59,6 +59,7 @@ signals:
     void signal_loadType(QString fileName, metamodel::Category* parent = 0);
     void signal_clearComponentTypes();
     void signal_saveLibraryRequested(QString filePath);
+    void signal_loadLibraryRequested(QString filePath);
 
 public slots:
     void slot_createProject();
@@ -83,6 +84,7 @@ private slots:
     void slot_addComponentType();
     void slot_addComponentCategory();
     void slot_saveLibrary();
+    void slot_loadLibrary();
 };
 
 } // namespace gui

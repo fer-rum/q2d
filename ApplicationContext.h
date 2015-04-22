@@ -69,6 +69,7 @@ signals:
     void signal_createComponentCategory(QString name, metamodel::Category* parent);
     void signal_clearComponentTypes();
     void signal_saveLibraryRequested(QString filePath);
+    void signal_loadLibraryRequested(QString filePath);
 
     // forwarding signal to MainWindow
     void signal_showDocument(Document* document);

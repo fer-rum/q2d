@@ -65,6 +65,8 @@ MainWindow::setupSignalsAndSlots() {
             this, &MainWindow::slot_addComponentType);
     connect(m_ui->action_ClearHierarchy, &QAction::triggered,
             this, &MainWindow::signal_clearComponentTypes);
+    connect(m_ui->action_LoadLibrary, &QAction::triggered,
+            this, &MainWindow::slot_loadLibrary);
 
     // connections to the application context
     // TODO move to applicationContext
@@ -80,6 +82,8 @@ MainWindow::setupSignalsAndSlots() {
             m_context, &ApplicationContext::signal_createComponentCategory);
     connect(this, &MainWindow::signal_saveLibraryRequested,
             m_context, &ApplicationContext::signal_saveLibraryRequested);
+    connect(this, &MainWindow::signal_loadLibraryRequested,
+            m_context, &ApplicationContext::signal_loadLibraryRequested);
 
     // This only needs to be called once since the sender (the ListView)
     // remains the same, even when the model changes
@@ -140,8 +144,9 @@ MainWindow::slot_loadProject() {
     QString dirPath;
 
     QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::DirectoryOnly);
+    dialog.setFileMode(QFileDialog::Directory);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
     dialog.setDirectory(m_application->getSetting(constants::KEY_DIR_PROJECTS).toString());
 
     int userAction = dialog.exec();
@@ -408,4 +413,26 @@ MainWindow::slot_saveLibrary(){
 
     emit signal_saveLibraryRequested(libraryFolder.absolutePath() + QDir::separator() + name
                                      + constants::EXTENSION_LIBFILE);
+}
+
+void
+MainWindow::slot_loadLibrary(){
+
+    QString filePath;
+    QString filter = QString(tr("Component Libraries (*%1)").arg(constants::EXTENSION_LIBFILE));
+
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setNameFilter(filter);
+    dialog.setDirectory(m_application->getSetting(constants::KEY_DIR_LIBRARIES).toString());
+
+    int userAction = dialog.exec();
+    if (userAction == QDialog::Rejected) {
+        return;
+    }
+
+    filePath = dialog.selectedFiles().first();
+
+    emit this->signal_loadLibraryRequested(filePath);
 }
