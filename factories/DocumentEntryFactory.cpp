@@ -204,8 +204,8 @@ DocumentEntryFactory::instantiateModuleInterface(
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::MODULE_INTERFACE, document);
     Q_CHECK_PTR(entry);
 
-    gui::ModulePortGI* schematicPort =
-        new gui::ModulePortGI(position, entry, direction);
+    gui::ModuleInterfaceGI* schematicPort =
+        new gui::ModuleInterfaceGI(position, entry, direction);
     document->schematic()->addItem(schematicPort);
 
     model::ModuleInterface* moduleInterface = new model::ModuleInterface(entry, direction);

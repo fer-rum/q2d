@@ -27,7 +27,7 @@ class Model : public QObject {
     Q_OBJECT
 
 private:
-    QString m_name;
+    QString m_name; // TODO deprecated, parents name suffices
     QList<Component*> m_components;
     QList<Conductor*> m_conductors;
     QList<ModuleInterface*> m_inputPorts;
@@ -36,8 +36,8 @@ public:
     Model(Document* parent);
 
     void addComponent(Component* toAdd);
-    void addInputPort(ModuleInterface* inputPort);
-    void addOutputPort(ModuleInterface* outputPort);
+    void addInputPort(ModuleInterface* inputPort); // TODO rename input interface
+    void addOutputPort(ModuleInterface* outputPort); // TODO rename output interface
     void addConductor(model::Conductor* conductor);
 
     QList<Component*> components() const {

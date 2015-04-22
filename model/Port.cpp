@@ -59,6 +59,12 @@ ModulePort::ModulePort(enums::PortDirection direction, DocumentEntry* relatedEnt
              || m_direction == enums::PortDirection::OUT);
 }
 
+/**
+ * @brief ModulePort::inputVariables
+ * If the instances direction is out, the associated module interface has an IN direction.
+ * Therefore the port is to be represented by an input variable.
+ * @return
+ */
 QStringList
 ModulePort::inputVariables() const {
     if (m_direction == enums::PortDirection::OUT) {

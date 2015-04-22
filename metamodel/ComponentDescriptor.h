@@ -37,6 +37,7 @@ private:
      */
     QStringList m_configVariables;
     QStringList m_functions;
+    // TODO move this into the appropriate descriptors
 
     void loadCircuitSymbol(QString symbolFilePath);
 
@@ -44,10 +45,10 @@ public:
     explicit ComponentDescriptor(QString name, Category* parent = nullptr);
 
     QString symbolPath();
-    void setSymbolPath(QString symbolPath);
+    void setSymbolPath(QString symbolPath); // TODO better use QPath?
 
     QString descriptorPath() const;
-    void setDescriptorPath(const QString path);
+    void setDescriptorPath(const QString path); // TODO better use QPath?
 
     void addPort(PortDescriptor* port);
     void addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup);

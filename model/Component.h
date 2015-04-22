@@ -41,6 +41,7 @@ public:
 
     metamodel::ComponentDescriptor* descriptor() const;
 
+    // TODO this is not really clever, query the descriptor from the schematics item instead
     virtual QPoint portPosition(QString portLocalId) override;
 };
 

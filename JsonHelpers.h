@@ -19,16 +19,13 @@ class SchematicElement;
 }
 
 namespace metamodel {
+class Category;
 class ConfigBitGroupDescriptor;
 class PortDescriptor;
 }
 
 // TODO move this to namespace json
 // TODO adapt naming
-
-
-
-
 
 QJsonObject SchematicsSceneChildToJson(gui::SchematicElement* ssc);
 
@@ -65,6 +62,9 @@ QJsonObject fromPoint(QPoint point);
 QJsonObject fromPointF(QPointF point);
 QJsonObject fromDocument(Document* doc);
 QJsonObject fromDocumentEntry(DocumentEntry* entry);
+QJsonObject fromHierarchyEntry(QStandardItem* item);
+QJsonObject fromCategoryEntry(metamodel::Category* category);
+QJsonObject fromTypeEntry(metamodel::ComponentDescriptor* descriptor);
 
 } // namespace json
 } // namespace q2d

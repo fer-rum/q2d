@@ -7,7 +7,7 @@ namespace q2d {
 namespace core {
 
 /**
- * @brief The Identifiable interface abstracts all things that carry an ID.
+ * @brief The Identifiable class abstracts all things that carry an ID.
  * An identifieable contains a local ID and a parent.
  * A full ID can be derived by recursively appending local ID to the parents full ID.
  * If no parent is present, the full ID equals the local ID.

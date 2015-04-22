@@ -8,7 +8,7 @@
 
 using namespace q2d::gui;
 
-ModulePortGI::ModulePortGI(
+ModuleInterfaceGI::ModuleInterfaceGI(
     QPointF position,
     DocumentEntry* relatedEntry,
     model::enums::PortDirection direction)
@@ -35,12 +35,12 @@ ModulePortGI::ModulePortGI(
 }
 
 QString
-ModulePortGI::specificType() {
+ModuleInterfaceGI::specificType() {
     return model::enums::PortDirectionToString(m_moduleDirection);
 }
 
 QVariant
-ModulePortGI::itemChange(GraphicsItemChange change, const QVariant &value) {
+ModuleInterfaceGI::itemChange(GraphicsItemChange change, const QVariant &value) {
     if (change == ItemPositionHasChanged) {
         emit signal_posChanged();
     }

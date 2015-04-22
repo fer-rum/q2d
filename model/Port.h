@@ -60,8 +60,7 @@ class ModulePort : public Port {
 public:
     /**
      * @brief ModulePort
-     * @param direction is the direction of the Port <b>as viewed from the outside of the module</b>.
-     * It will be translated to the opposing direction to fit the <i>inside the module</i> point of view.
+     * @param direction is the direction of the Port <b>as viewed from the inside of the module</b>.
      * @param relatedEntry
      */
     ModulePort(enums::PortDirection direction, DocumentEntry* relatedEntry,

@@ -39,7 +39,7 @@ public:
     virtual void dropEvent(QGraphicsSceneDragDropEvent* event);
 
     // debug hook
-    virtual void addItem(QGraphicsItem* item);
+    virtual void addItem(QGraphicsItem* item); // TODO specialize to SchematicElement?
 //    virtual void mouseMoveEvent(QMouseEvent* event);
 
 signals:

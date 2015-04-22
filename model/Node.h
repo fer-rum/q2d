@@ -47,13 +47,6 @@ public:
     virtual QMap<QString, QString> propertyMap() const override;
 };
 
-// TODO documentation
-// NOTE currently unused
-class ConductorNode : public Node {
-public:
-    ConductorNode();
-};
-
 } // namespace model
 } // namespace q2d
 

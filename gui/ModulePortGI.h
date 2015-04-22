@@ -13,7 +13,7 @@ class DocumentEntry;
 namespace gui {
 class PortGraphicsItem;
 
-class ModulePortGI : public ParentSchematicElement {
+class ModuleInterfaceGI : public ParentSchematicElement {
 
 private:
 
@@ -29,7 +29,7 @@ protected :
     virtual QString specificType() override;
 
 public:
-    ModulePortGI(QPointF position, DocumentEntry* relatedEntry,
+    ModuleInterfaceGI(QPointF position, DocumentEntry* relatedEntry,
                  model::enums::PortDirection direction);
 
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);

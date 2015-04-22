@@ -102,7 +102,7 @@ ComponentDescriptor::ports() {
  * @param groupName
  *      must not be empty
  * @param memberCount
- *      must be greater then 0
+ *      must be greater than 0
  */
 void
 ComponentDescriptor::addConfigBitGroup(ConfigBitGroupDescriptor* configBitGroup) {

@@ -32,12 +32,6 @@ class ComponentFactory : public QObject {
 private:
     QStandardItemModel componentHierarchy;
 
-    // FIXME deprecated functions, move to json namespace
-    // and create proper calling
-    QJsonObject entryToJson(QStandardItem* item);
-    QJsonObject categoryEntryToJson(QStandardItem* item);
-    QJsonObject typeEntryToJson(QStandardItem* item);
-
     void jsonToCategoryEntry(QJsonObject json, metamodel::Category* parent = nullptr);
     void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
     void jsonToEntry(QJsonObject json, metamodel::Category* parent);

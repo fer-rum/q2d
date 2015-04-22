@@ -41,9 +41,6 @@ private:
     // helper functions
     void buildContexts(const q2d::model::Model &contextSource, const QString targetFunction);
     QList<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
-
-    // creates the TODO thread and collects the result once it finfished
-    void solve();
     void interpreteSolution(const Result &result);
 public:
     QuantorInterface();

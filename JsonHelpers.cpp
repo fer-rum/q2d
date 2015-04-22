@@ -10,6 +10,7 @@
 #include "gui/SchematicElement.h"
 #include "model/Component.h"
 #include "model/ModelElement.h"
+#include "metamodel/Category.h"
 #include "metamodel/ComponentDescriptor.h"
 #include "metamodel/PortDescriptor.h"
 
@@ -431,4 +432,60 @@ q2d::json::toPortDescriptor(QJsonObject json) {
         new metamodel::PortDescriptor(portName, portDirection, portPosition);
 
     return portDescriptor;
+}
+
+QJsonObject
+q2d::json::fromHierarchyEntry(QStandardItem* item) {
+    Q_CHECK_PTR(item);
+
+    QJsonObject result;
+
+    switch (item->type()) {
+    case (int)metamodel::enums::ElementType::COMPONENT:
+        result = fromTypeEntry(dynamic_cast<metamodel::ComponentDescriptor*>(item));
+        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_COMPONENT));
+        break;
+    case (int)metamodel::enums::ElementType::CATEGORY:
+        result = fromCategoryEntry(dynamic_cast<metamodel::Category*>(item));
+        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_CATEGORY));
+        break;
+    case (int)metamodel::enums::ElementType::PORT:
+        // nothing to save, since they are bound to the component
+        // this should not happen anyways
+        Q_ASSERT(false);
+    default:; // nothing useful to do, we should not end up here
+        Q_ASSERT(false);
+    }
+
+    return result;
+}
+
+QJsonObject
+q2d::json::fromCategoryEntry(q2d::metamodel::Category* category) {
+    Q_CHECK_PTR(category);
+
+    QJsonObject result = QJsonObject();
+    QJsonArray children = QJsonArray();
+    result.insert(JSON_HIERARCHY_CATEGORY_NAME, QJsonValue(category->text()));
+    // child recursion
+    for (int rIndex = 0; rIndex < category->rowCount(); ++rIndex) {
+        for (int cIndex = 0; cIndex < category->columnCount(); ++cIndex) {
+            children.append(QJsonValue(
+                                json::fromHierarchyEntry(category->child(rIndex, cIndex))
+                            ));
+        }
+    }
+    result.insert(JSON_HIERARCHY_CHILD, children);
+    return result;
+}
+
+QJsonObject
+q2d::json::fromTypeEntry(metamodel::ComponentDescriptor* descriptor) {
+    Q_CHECK_PTR(descriptor);
+
+    QJsonObject result = QJsonObject();
+
+    result.insert(JSON_HIERARCHY_SOURCE,
+                  QJsonValue(descriptor->descriptorPath()));
+    return result;
 }

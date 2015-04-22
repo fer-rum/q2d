@@ -89,7 +89,7 @@ public:
      * @brief id is a convenience shortcut for querying the id of the related document entry
      * @return
      */
-    QString id() const;
+    QString id() const; // TODO fullID vs local ID
 
     // for JSON generation
     // you must/may want to override these.

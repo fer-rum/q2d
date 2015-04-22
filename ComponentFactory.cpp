@@ -180,7 +180,7 @@ ComponentFactory::exportHierarchy() {
     for (int rIndex = 0; rIndex < rootItem->rowCount(); ++rIndex) {
         for (int cIndex = 0; cIndex < rootItem->columnCount(); ++cIndex) {
             hierarchy.append(QJsonValue(
-                                 this->entryToJson(rootItem->child(rIndex, cIndex))
+                                 json::fromHierarchyEntry(rootItem->child(rIndex, cIndex))
                              ));
         }
     }
@@ -188,7 +188,6 @@ ComponentFactory::exportHierarchy() {
     result.setArray(hierarchy);
     return result;
 }
-
 
 void
 ComponentFactory::importHierarchy(QJsonDocument source) {
@@ -233,70 +232,6 @@ ComponentFactory::jsonToEntry(QJsonObject json, Category* parent) {
     } else {
         Q_ASSERT(false);
     }
-}
-
-
-QJsonObject
-ComponentFactory::categoryEntryToJson(QStandardItem* item) {
-    Category* category = dynamic_cast<Category*>(item);
-    Q_CHECK_PTR(category);
-
-    QJsonObject result = QJsonObject();
-    QJsonArray children = QJsonArray();
-    result.insert(JSON_HIERARCHY_CATEGORY_NAME, QJsonValue(category->text()));
-    // child recursion
-    for (int rIndex = 0; rIndex < item->rowCount(); ++rIndex) {
-        for (int cIndex = 0; cIndex < item->columnCount(); ++cIndex) {
-            children.append(QJsonValue(
-                                this->entryToJson(item->child(rIndex, cIndex))
-                            ));
-        }
-    }
-    result.insert(JSON_HIERARCHY_CHILD, children);
-    return result;
-}
-
-/**
- * @brief ComponentFactory::typeEntryToJson converts a QStandardItem describing a ComponentType
- * into a QJsonObject
- * @param item
- * @return
- */
-QJsonObject
-ComponentFactory::typeEntryToJson(QStandardItem* item) {
-    QJsonObject result = QJsonObject();
-    ComponentDescriptor* componentType = dynamic_cast<ComponentDescriptor*>(item);
-    Q_CHECK_PTR(componentType);
-
-    result.insert(JSON_HIERARCHY_SOURCE,
-                  QJsonValue(componentType->descriptorPath()));
-    return result;
-}
-
-QJsonObject
-ComponentFactory::entryToJson(QStandardItem* item) {
-
-    QJsonObject result;
-
-    switch (item->type()) {
-    case (int)metamodel::enums::ElementType::COMPONENT:
-        result = typeEntryToJson(item);
-        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_COMPONENT));
-        break;
-    case (int)metamodel::enums::ElementType::CATEGORY:
-        result = categoryEntryToJson(item);
-        result.insert(JSON_HIERARCHY_TYPE, QJsonValue(JSON_HIERARCHY_TYPE_CATEGORY));
-        break;
-    case (int)metamodel::enums::ElementType::PORT:
-        // nothing to save, since they are bound to the component
-        // this should not happen anyways
-        Q_ASSERT(false);
-    default:; // nothing useful to do, we should not end up here
-        Q_ASSERT(false);
-        result = QJsonObject();
-    }
-
-    return result;
 }
 
 void

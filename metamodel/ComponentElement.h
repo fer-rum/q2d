@@ -16,10 +16,10 @@ class ComponentElement :
     public Element {
     Q_OBJECT
 public:
-    explicit ComponentElement(QString name, metamodel::ComponentDescriptor* parent);
+    explicit ComponentElement(QString name, ComponentDescriptor* parent);
 
-    virtual metamodel::ComponentDescriptor* parent() const;
-    virtual void setParent(metamodel::ComponentDescriptor* parent);
+    virtual ComponentDescriptor* parent() const;
+    virtual void setParent(ComponentDescriptor* parent);
 
     virtual int type() const override = 0;
 };
