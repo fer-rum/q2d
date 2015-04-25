@@ -33,7 +33,7 @@ signals:
 
     // --- forwarded signals ---
     // ApplicationContext -> Quantor
-    void signal_quantorTriggered(Document* document, QString targetFunction);
+    void signal_quantorTriggered(Document* document, QStringList targetFunctions);
 
     // Quantor -> ApplicationContext -> MainWindow
     void signal_quantorSolutionAvailable(QString, const QMap<QString, bool>*);

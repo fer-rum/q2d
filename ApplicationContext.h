@@ -63,7 +63,7 @@ signals:
     void signal_documentModelChanged(QStandardItemModel* model);
     void signal_componentModelChanged(QStandardItemModel* model);
     void signal_saveProject();
-    void signal_triggerQuantor(Document* document, QString targetFunction);
+    void signal_triggerQuantor(Document* document, QStringList targetFunctions);
 
     // forwards to component factory
     void signal_createComponentCategory(QString name, metamodel::Category* parent);

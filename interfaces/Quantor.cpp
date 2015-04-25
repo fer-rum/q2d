@@ -22,7 +22,7 @@ QuantorInterface::QuantorInterface() {}
 
 void
 QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
-                                QString const targetFunction) {
+                                QStringList const targetFunction) {
 
     const QString GLOBAL_CONTEXT_NAME = "global";
 
@@ -32,7 +32,9 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
     // create the global context
     qDebug() << "Building global context";
     QIContext globalContext = QIContext(currentIndex);
-    globalContext.addFunction(targetFunction);
+    for(QString term : targetFunction){
+        globalContext.addFunction(term);
+    }
 
     // IMPORTANT: build the ports before the wires
     // otherwise the generated context is wrong
@@ -64,13 +66,13 @@ QuantorInterface::buildContexts(q2d::model::Model const &contextSource,
 }
 
 void
-QuantorInterface::slot_solveProblem(Document* targetDocument, QString targetFunction) {
+QuantorInterface::slot_solveProblem(Document* targetDocument, QStringList targetFunctions) {
 
     qDebug() << "SLOT QuantorInterface::solveProblem called.";
 
     // get the model
     const model::Model* contextSource = targetDocument->model();
-    this->buildContexts(*contextSource, targetFunction);
+    this->buildContexts(*contextSource, targetFunctions);
 
     // call the solver
 

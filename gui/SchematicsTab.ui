@@ -15,9 +15,12 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <layout class="QVBoxLayout" name="tabLayout">
+    <layout class="QVBoxLayout" name="tabLayout" stretch="1,9">
      <item>
       <layout class="QHBoxLayout" name="toolsLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
        <item>
         <widget class="QLabel" name="lbl_function">
          <property name="text">
@@ -26,7 +29,26 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="input_function"/>
+        <widget class="QPlainTextEdit" name="input_function">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="btn_solve">
@@ -84,20 +106,20 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="q2d::gui::SchematicsView" name="schematicsView">
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="dragMode">
+        <enum>QGraphicsView::NoDrag</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
-   </item>
-   <item row="3" column="0">
-    <widget class="q2d::gui::SchematicsView" name="schematicsView">
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustToContents</enum>
-     </property>
-     <property name="dragMode">
-      <enum>QGraphicsView::NoDrag</enum>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

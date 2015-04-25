@@ -120,7 +120,7 @@ SchematicsTab::slot_requestedSatSolving() {
     // after the button was clicked, to avoid cluttering the tab.
     // Which would depend on variable tracking
     // TODO implement a more comfortable "edit function window"
-    QString targetFunction = m_ui->input_function->text();
+    QStringList targetFunction = m_ui->input_function->document()->toPlainText().split("\n");
 
     if (targetFunction.isEmpty()) {
         QMessageBox::warning(this, tr("Function was empty"),

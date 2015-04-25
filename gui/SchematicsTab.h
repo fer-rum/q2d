@@ -36,7 +36,7 @@ public:
     virtual ~SchematicsTab();
 
 signals:
-    void signal_triggerQuantor(Document* document, QString targetFunction);
+    void signal_triggerQuantor(Document* document, QStringList targetFunctions);
     void signal_addInputPort(Document* document, QString id);
     void signal_addOutputPort(Document* document, QString id);
     void signal_mousePosChanged(int x, int y);

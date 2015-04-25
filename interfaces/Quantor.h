@@ -39,7 +39,7 @@ private:
     QList<int> m_solution;
 
     // helper functions
-    void buildContexts(const q2d::model::Model &contextSource, const QString targetFunction);
+    void buildContexts(const q2d::model::Model &contextSource, const QStringList targetFunction);
     QList<unsigned int> varsForType(VariableType requestedType, QList<unsigned int>* container);
     void interpreteSolution(const Result &result);
 public:
@@ -49,7 +49,7 @@ public:
     }
 
 public slots:
-    void slot_solveProblem(q2d::Document* targetDocument, QString targetFunction);
+    void slot_solveProblem(q2d::Document* targetDocument, QStringList targetFunctions);
 
 signals:
     /**
