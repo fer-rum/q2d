@@ -1,6 +1,9 @@
 #ifndef COMPONENTGIFACTORY_H
 #define COMPONENTGIFACTORY_H
 
+
+#include "../metamodel/PortDescriptor.h"
+
 #include "../Enumerations.h"
 #include <QGraphicsItem>
 #include <QPointF>
@@ -21,6 +24,28 @@ private:
      */
     static unsigned int TEXT_PADDING;
 
+    /**
+     * @brief The PortEntry class is a helper class for component and module interface creation.
+     * It provides the operator< for sorting.
+     */
+    class PortEntry {
+    private:
+        metamodel::PortDescriptor* m_descriptor;
+        QGraphicsTextItem* m_textGraphics;
+    public:
+        PortEntry(metamodel::PortDescriptor* descriptor, QGraphicsItemGroup* parent);
+        metamodel::PortDescriptor* descriptor()const { return m_descriptor; }
+        QGraphicsTextItem* textGraphics(){ return m_textGraphics; }
+
+
+        friend inline bool operator<(const GIFactory::PortEntry& left, const GIFactory::PortEntry& right){
+            const QString textLeft = left.descriptor()->text();
+            const QString textRight = right.descriptor()->text();
+
+            return QString::compare(textLeft, textRight);
+        }
+
+    };
 
 public:
     GIFactory();

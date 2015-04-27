@@ -4,9 +4,9 @@
 #include "../gui/ComponentGraphicsItem.h"
 #include "../gui/PortGraphicsItem.h"
 #include "../metamodel/ComponentDescriptor.h"
-#include "../metamodel/PortDescriptor.h"
 #include "GIFactory.h"
 
+#include <algorithm>
 #include <QString>
 #include <QtDebug>
 
@@ -17,6 +17,13 @@ using namespace q2d::metamodel;
 
 unsigned int
 GIFactory::TEXT_PADDING = 5;
+
+GIFactory::PortEntry::PortEntry(metamodel::PortDescriptor* descriptor, QGraphicsItemGroup* parent){
+    Q_CHECK_PTR(descriptor);
+    m_descriptor = descriptor;
+    m_textGraphics = new QGraphicsTextItem(descriptor->text(), parent);
+    parent->addToGroup(m_textGraphics);
+}
 
 QGraphicsItem*
 GIFactory::createComponentGI(
@@ -35,14 +42,14 @@ GIFactory::createComponentGI(
     unsigned int outSection_minWidth = 0;
     unsigned int portSection_lineHeight = 0;
 
-    QMap<PortDescriptor*, QGraphicsTextItem*> inPorts = QMap<PortDescriptor*, QGraphicsTextItem*>();
-    QMap<PortDescriptor*, QGraphicsTextItem*> outPorts = QMap<PortDescriptor*, QGraphicsTextItem*>();
+    QList<PortEntry> inPorts = QList<PortEntry>();
+    QList<PortEntry> outPorts = QList<PortEntry>();
     for (PortDescriptor * port : type->ports()) {
 
-        QGraphicsTextItem* textItem = new QGraphicsTextItem(port->text(), parent);
-        parent->addToGroup(textItem);
-        unsigned int width = textItem->boundingRect().width() + 2 * TEXT_PADDING;
-        unsigned int height = textItem->boundingRect().height() + 2 * TEXT_PADDING;
+
+        PortEntry portEntry = PortEntry(port, parent);
+        unsigned int width = portEntry.textGraphics()->boundingRect().width() + 2 * TEXT_PADDING;
+        unsigned int height = portEntry.textGraphics()->boundingRect().height() + 2 * TEXT_PADDING;
 
         // adjust the line height, if needed
         if (height > portSection_lineHeight) {
@@ -51,7 +58,7 @@ GIFactory::createComponentGI(
 
         switch (port->direction()) {
         case model::enums::PortDirection::IN : {
-            inPorts.insert(port, textItem);
+            inPorts.append(portEntry);
             if (width > inSection_minWidth) {
                 inSection_minWidth = width;
             }
@@ -59,7 +66,7 @@ GIFactory::createComponentGI(
         break;
 
         case model::enums::PortDirection::OUT : {
-            outPorts.insert(port, textItem);
+            outPorts.append(portEntry);
             if (width > outSection_minWidth) {
                 outSection_minWidth = width;
             }
@@ -70,6 +77,10 @@ GIFactory::createComponentGI(
         }
 
     }
+
+    std::sort(inPorts.begin(), inPorts.end());
+    std::sort(outPorts.begin(), outPorts.end());
+
 
     unsigned int portSection_height =
         inPorts.count() > outPorts.count() ?
@@ -137,13 +148,11 @@ GIFactory::createComponentGI(
 
     currentPos.setX(0);
     currentPos.setY(nameSection_height);
-    QMapIterator<PortDescriptor*, QGraphicsTextItem*> inIter(inPorts);
-    while (inIter.hasNext()) {
-        inIter.next();
-        inIter.value()->setPos(currentPos.x() + TEXT_PADDING, currentPos.y() + TEXT_PADDING);
+    for(PortEntry inIter : inPorts){
+        inIter.textGraphics()->setPos(currentPos.x() + TEXT_PADDING, currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
         QPoint portPos = QPoint(currentPos.x() - PORT_DIAMETER, currentPos.y());
-        inIter.key()->setPosition(portPos);
+        inIter.descriptor()->setPosition(portPos);
 
         QGraphicsLineItem* lineToPort = new QGraphicsLineItem(QLineF(portPos, currentPos), parent);
         parent->addToGroup(lineToPort);
@@ -152,15 +161,13 @@ GIFactory::createComponentGI(
 
     currentPos.setX(totalWidth);
     currentPos.setY(nameSection_height);
-    QMapIterator<PortDescriptor*, QGraphicsTextItem*> outIter(outPorts);
-    while (outIter.hasNext()) {
-        outIter.next();
-        outIter.value()->setPos(
-            currentPos.x() - TEXT_PADDING - outIter.value()->boundingRect().width(),
+   for(PortEntry outIter : outPorts){
+        outIter.textGraphics()->setPos(
+            currentPos.x() - TEXT_PADDING - outIter.textGraphics()->boundingRect().width(),
             currentPos.y() + TEXT_PADDING);
         currentPos.ry() += portSection_lineHeight / 2;
         QPoint portPos = QPoint(currentPos.x() + PORT_DIAMETER, currentPos.y());
-        outIter.key()->setPosition(portPos);
+        outIter.descriptor()->setPosition(portPos);
 
         QGraphicsLineItem* lineToPort = new QGraphicsLineItem(QLineF(currentPos, portPos), parent);
         parent->addToGroup(lineToPort);
