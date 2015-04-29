@@ -12,8 +12,17 @@ Features
 * Automatically generated circuit symbols for components
   * Alternatively, custom symbols can be specified if desired
 
+Releases
+========
+
+Currently the application is in the early *alpha* stage.
+Releses are provided as source code only and can be found [here](https://github.com/fer-rum/q2d/releases) (incl. release notes).
+
 Dependencies
 ============
+
+Required to buid and run:
+* [*Qt*](http://doc.qt.io/qt-5/), version 5.4 ([Download](http://www.qt.io/download-open-source/))
 
 *q2d* requires external tools to be able to solve the mapping of functions onto circuit designs:
 * [*Quantor*](http://fmv.jku.at/quantor/) release 3.2 
