@@ -98,6 +98,16 @@ public:
         return EMPTY_JSON;
     }
 
+    /**
+     * @brief savePosition determines whether the position of the element on the schematic
+     * should be saved or will be determined automatically.
+     * If not overridden, this returns true by default.
+     * @return
+     */
+    virtual bool savePosition() const {
+        return true;
+    }
+
     // necessary overrides
     virtual QRectF boundingRect() const override {
         return m_boundingRect;

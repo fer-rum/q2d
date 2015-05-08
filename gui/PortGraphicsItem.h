@@ -77,6 +77,10 @@ public:
         return m_direction;
     }
 
+    virtual bool savePosition() const {
+        return false;
+    }
+
     // ovverride for custom dragging
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

@@ -41,8 +41,23 @@ QJsonDocument exportComponentHierarchy(QStandardItemModel* componentHierarchy);
 // json -> *
 metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json);
 metamodel::PortDescriptor* toPortDescriptor(QJsonObject json);
+
+/**
+ * @brief toPoint
+ * If a coordinate is not present it will default to 0.
+ * @param json
+ * @return
+ */
 QPoint toPoint(QJsonObject json);
+
+/**
+ * @brief toPointF
+ * If a coordinate is not present it will default to 0.
+ * @param json
+ * @return
+ */
 QPointF toPointF(QJsonObject json);
+
 Document* toDocument(QJsonObject json, QString name, Project* parent);
 
 /**

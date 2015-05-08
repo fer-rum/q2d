@@ -110,11 +110,17 @@ q2d::json::fromPoint(QPoint point) {
 
 QPointF
 q2d::json::toPointF(QJsonObject json) {
-    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
-    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_Y));
 
-    float x = json.value(JSON_GENERAL_POSITION_X).toInt();
-    float y = json.value(JSON_GENERAL_POSITION_Y).toInt();
+    float x = 0;
+    float y = 0;
+
+    if(json.contains(JSON_GENERAL_POSITION_X)){
+            x = json.value(JSON_GENERAL_POSITION_X).toInt();
+    }
+
+    if(json.contains(JSON_GENERAL_POSITION_Y)){
+        y = json.value(JSON_GENERAL_POSITION_Y).toInt();
+    }
 
     return QPointF(x, y);
 }
@@ -122,11 +128,16 @@ q2d::json::toPointF(QJsonObject json) {
 QPoint
 q2d::json::toPoint(QJsonObject json) {
 
-    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_X));
-    Q_ASSERT(json.contains(JSON_GENERAL_POSITION_Y));
+    int x = 0;
+    int y = 0;
 
-    int x = json.value(JSON_GENERAL_POSITION_X).toInt();
-    int y = json.value(JSON_GENERAL_POSITION_Y).toInt();
+    if(json.contains(JSON_GENERAL_POSITION_X)){
+            x = json.value(JSON_GENERAL_POSITION_X).toInt();
+    }
+
+    if(json.contains(JSON_GENERAL_POSITION_Y)){
+        y = json.value(JSON_GENERAL_POSITION_Y).toInt();
+    }
 
     return QPoint(x, y);
 }
@@ -290,7 +301,6 @@ q2d::json::toDocumentEntry(QJsonObject json, Document* document) {
         Q_CHECK_PTR(interfacing);
         QPoint position = interfacing->portPosition(id);
 
-
         QString directionString = schematicJson.value(JSON_SCHEMATIC_SUB_TYPE).toString();
         DocumentEntryFactory::instantiatePort(
             document, parent, position, model::enums::StringToPortDirection(directionString), id);
@@ -328,7 +338,10 @@ q2d::SchematicsSceneChildToJson(gui::SchematicElement* ssc) {
     QJsonObject result = QJsonObject();
 
     result.insert(JSON_SCHEMATIC_SUB_TYPE, QJsonValue(ssc->specificType()));
-    result.insert(JSON_SCHEMATIC_POSITION, fromPointF(ssc->pos()));
+
+    if(ssc->savePosition()){
+        result.insert(JSON_SCHEMATIC_POSITION, fromPointF(ssc->pos()));
+    }
 
     QJsonObject additionalInfo = ssc->additionalJson();
     if (!additionalInfo.isEmpty()) {
