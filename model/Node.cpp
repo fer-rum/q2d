@@ -15,10 +15,12 @@ Node::Node(DocumentEntry* relatedEntry)
 void
 Node::addDriver(ModelElement* driver) {
     Q_CHECK_PTR(driver);
-    Q_ASSERT(m_driver == nullptr);
+    if(m_driver != nullptr){
     // no driver must be set yet
     // multiple drivers per node are not allowed for now.
-
+        // TODO emit error message
+        return;
+    }
     m_driver = driver;
     emit this->signal_changed();
 }

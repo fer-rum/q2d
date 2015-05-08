@@ -6,6 +6,7 @@ using namespace q2d::model;
 /**
  * @brief Conductor::Conductor
  * Conductors are assigned a default name for convenience. It can be changed later.
+ * This assumes that the end does not yet have a driver.
  *
  * @param start
  * @param end
@@ -14,6 +15,7 @@ Conductor::Conductor(Node* start, Node* end, DocumentEntry* relatedEntry)
     : ModelElement(relatedEntry) {
     Q_CHECK_PTR(start);
     Q_CHECK_PTR(end);
+    Q_ASSERT(end->driver() == nullptr);
 
     this->m_start = start;
     this->m_end = end;

@@ -268,6 +268,17 @@ DocumentEntryFactory::instantiateWire(
     Q_CHECK_PTR(sender);
     Q_CHECK_PTR(receiver);
 
+    // Fetch senders and receivers model elements
+    model::Node* startNode = dynamic_cast<model::Node*>(sender->modelElement());
+    Q_CHECK_PTR(startNode);
+    model::Node* endNode = dynamic_cast<model::Node*>(receiver->modelElement());
+    Q_CHECK_PTR(endNode);
+
+    if(endNode->driver() != nullptr){ // can not connect to a node that is already driven
+        qDebug() << "Can not create a wire to a node that is already driven.";
+        return nullptr;
+    }
+
     if(id.isEmpty()){
         id = generateWireId();
     } else {
@@ -276,6 +287,10 @@ DocumentEntryFactory::instantiateWire(
     }
 
     DocumentEntry* entry = new DocumentEntry(id, enums::DocumentEntryType::WIRE, document);
+
+    // Create the conductors model element
+    model::Conductor* modelWire = new model::Conductor(startNode, endNode, entry);
+    Q_CHECK_PTR(modelWire);
 
     // create the wire graphics
     gui::PortGraphicsItem* senderItem =
@@ -290,20 +305,10 @@ DocumentEntryFactory::instantiateWire(
         new gui::WireGraphicsItem(senderItem, receiverItem, entry);
     Q_CHECK_PTR(schematicWire);
 
-    document->schematic()->addItem(schematicWire);
-
-    // connect the nodes in the model
-    model::Node* startNode = dynamic_cast<model::Node*>(sender->modelElement());
-    Q_CHECK_PTR(startNode);
-    model::Node* endNode = dynamic_cast<model::Node*>(receiver->modelElement());
-    Q_CHECK_PTR(endNode);
-
-    model::Conductor* modelWire = new model::Conductor(startNode, endNode, entry);
-    Q_CHECK_PTR(modelWire);
-    document->model()->addConductor(modelWire);
-
     entry->setModelElement(modelWire);
     entry->setSchematicElement(schematicWire);
+    document->model()->addConductor(modelWire);
+    document->schematic()->addItem(schematicWire); // <- this should be done by the entry
 
     document->addEntry(entry);
 

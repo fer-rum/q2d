@@ -52,6 +52,7 @@ PortGraphicsItem::PortGraphicsItem(QPointF position,
         this->m_defaultPen = PEN_INPUT_PORT;
         this->m_defaultBrush = BRUSH_INPUT_PORT;
         this->setAcceptDrops(true); // input ports can receive wire drops
+        this->setAcceptedMouseButtons(0); // no way to click that
         break;
     case model::enums::PortDirection::OUT:
         newActual = factories::GIFactory::createPortAdapteeGI();
@@ -127,6 +128,11 @@ void
 PortGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     // check if we are dragging something
     if (!(event->buttons() & Qt::LeftButton)) {
+        return;
+    }
+
+    // you can not drag from an input port
+    if(m_direction == model::enums::PortDirection::IN){
         return;
     }
 
