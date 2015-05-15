@@ -99,7 +99,11 @@ SOURCES +=\
     gui/ModulePortGI.cpp \
     model/ModuleInterface.cpp \
     core/Identifiable.cpp \
-    factories/ToolTipFactory.cpp
+    factories/ToolTipFactory.cpp \
+    logging/LogLevel.cpp \
+    logging/LogEntry.cpp \
+    logging/Logger.cpp \
+    logging/LogManager.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -154,7 +158,11 @@ HEADERS  +=\
     gui/ModulePortGI.h \
     model/ModuleInterface.h \
     core/Identifiable.h \
-    factories/ToolTipFactory.h
+    factories/ToolTipFactory.h \
+    logging/LogLevel.h \
+    logging/LogEntry.h \
+    logging/Logger.h \
+    logging/LogManager.h
 
 INCLUDEPATH +=\
     $$picosatDir \

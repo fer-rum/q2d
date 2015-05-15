@@ -6,7 +6,8 @@
 #include <time.h>
 #include <chrono>
 
-namespace mycrqlog {
+namespace q2d {
+namespace logging {
 
 using std::chrono::steady_clock::time_point;
 
@@ -31,6 +32,7 @@ public:
     LogLevel severity() const { return m_severity; }
 };
 
-}
+} // namespace logging
+} // namespace q2d
 
 #endif // LOGENTRY_H

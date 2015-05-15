@@ -7,7 +7,8 @@
 #include <QList>
 #include <QString>
 
-namespace mycrqlog {
+namespace q2d {
+namespace logging {
 
 class Logger {
 private:
@@ -17,15 +18,15 @@ private:
      * Usually this is a class or module name.
      */
     QString m_name;
-
     QList<LogEntry> m_entries;
-public:
 
+public:
     void log(QString message, LogLevel& severity);
     QList<LogEntry> entries() const { return m_entries; }
 
 };
 
-}
+} // namespace logging
+} // namespace q2d
 
 #endif // LOGGER_H

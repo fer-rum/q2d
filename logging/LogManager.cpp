@@ -1,6 +1,6 @@
 #include "LogManager.h"
 
-using namespace mycrqlog;
+using namespace q2d::logging;
 
 Logger&
 LogManager::logger(QString name) const {

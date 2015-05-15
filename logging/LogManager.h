@@ -8,13 +8,14 @@
 #include <QStringList>
 #include <QMap>
 
-namespace mycrqlog {
+namespace q2d {
+namespace logging {
 
 class LogManager {
 private:
 
-    static QMap<QString, Logger> m_loggers;
-    static QMap<QString, LogLevel> m_logLevels;
+    QMap<QString, Logger> m_loggers;
+    QMap<QString, LogLevel> m_logLevels;
 
 public:
     /**
@@ -26,9 +27,9 @@ public:
      * It is assumed that the name is valid.
      * @return
      */
-    static Logger& logger(QString name) const;
+    Logger& logger(QString name) const;
 
-    static QStringList loggerNames() const;
+    QStringList loggerNames() const;
 
     /**
      * @brief logLevel will get the log level with the given name
@@ -40,11 +41,13 @@ public:
      * It is assumed that the name is valid.
      * @return
      */
-    static LogLevel& logLevel(QString name) const;
+    LogLevel& logLevel(QString name) const;
 
-    static QStringList logLevelNames() const;
+    QStringList logLevelNames() const;
 };
 
+} // namespace logging
+ // namespace q2d
 }
 
 #endif // LOGMANAGER_H
