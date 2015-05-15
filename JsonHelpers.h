@@ -43,7 +43,7 @@ metamodel::ConfigBitGroupDescriptor* toConfigBitGroupDescriptor(QJsonObject json
 metamodel::PortDescriptor* toPortDescriptor(QJsonObject json);
 
 /**
- * @brief toPoint
+ * @brief toPoint converts a QJsonObject into a QPoint.
  * If a coordinate is not present it will default to 0.
  * @param json
  * @return
@@ -51,7 +51,7 @@ metamodel::PortDescriptor* toPortDescriptor(QJsonObject json);
 QPoint toPoint(QJsonObject json);
 
 /**
- * @brief toPointF
+ * @brief toPointF converts a QJsonObject into a QPointF.
  * If a coordinate is not present it will default to 0.
  * @param json
  * @return
