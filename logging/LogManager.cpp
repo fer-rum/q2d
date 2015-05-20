@@ -1,15 +1,19 @@
 #include "LogManager.h"
 
 using namespace q2d::logging;
+using namespace std;
 
-Logger&
-LogManager::logger(QString name) const {
+LogManager::LogManager(QObject* parent)
+    : QObject(parent){}
+
+shared_ptr<Logger>
+LogManager::logger(QString name) {
 
     if(m_loggers.contains(name)){
         return m_loggers.value(name);
     }
 
-    Logger newLogger(name);
+    shared_ptr<Logger> newLogger( new Logger(name) );
     m_loggers.insert(name, newLogger);
     return newLogger;
 }
@@ -19,14 +23,14 @@ LogManager::loggerNames() const {
     return m_loggers.keys();
 }
 
-LogLevel&
-LogManager::logLevel(QString name) const {
+shared_ptr<LogLevel>
+LogManager::logLevel(QString name) {
 
     if(m_logLevels.contains(name)){
         return m_logLevels.value(name);
     }
 
-    LogLevel newLogLevel(name);
+    shared_ptr<LogLevel> newLogLevel( new LogLevel(name) );
     m_logLevels.insert(name, newLogLevel);
     return newLogLevel;
 

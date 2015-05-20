@@ -31,6 +31,9 @@ public:
     QString name() const;
     QColor fontColor() const;
     QColor backgroundColor() const;
+
+    void setFontColor(QColor color);
+    void setBackgroundColor(QColor color);
 };
 
 

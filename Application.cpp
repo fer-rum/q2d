@@ -1,9 +1,14 @@
 #include "Application.h"
 
+#include "logging/ConsoleLogger.h"
+#include "logging/LogManager.h"
+#include "logging/LogLevel.h"
+
 #include "Document.h"
 
-#include <QObject>
 #include <QDir>
+#include <QObject>
+#include <QString>
 #include <QtSvg/QGraphicsSvgItem>
 
 
@@ -16,12 +21,17 @@ Application::Application(int &argc, char** argv[])
     this->setApplicationName("q2d");
     this->setOrganizationName("Fredo Erxleben");
 
+    // Logging
+    this->setupLogging();
+
     // register metatypes
     qRegisterMetaType<QGraphicsSvgItem*>();
 
-    // TODO load settings
+    // load settings (implicitly done when creating QSettings)
     this->m_appSettings = new QSettings();
     this->checkSettings();
+
+    m_logManager->logger("General")->log("Settings loaded", m_logManager->logLevel("INFO"));
 
     // Application -> Quantor
     connect(this, &Application::signal_quantorTriggered,
@@ -30,11 +40,22 @@ Application::Application(int &argc, char** argv[])
     // Quantor -> Application
     connect(&m_quantorInterface, &quantor::QuantorInterface::signal_hasSolution,
             this, &Application::signal_quantorSolutionAvailable);
+
 }
 
 Application::~Application() {
     delete m_context;
     delete m_appSettings;
+}
+
+std::shared_ptr<logging::ConsoleLogger>
+Application::consoleLogger() const {
+    return m_consoleLogger;
+}
+
+std::shared_ptr<logging::LogManager>
+Application::logManager() const {
+    return m_logManager;
 }
 
 ApplicationContext*
@@ -47,6 +68,22 @@ Application::defaultSetting(QString name, QVariant defaultValue) {
     if (!this->m_appSettings->value(name).isValid()) {
         this->m_appSettings->setValue(name, defaultValue);
     }
+}
+
+void
+Application::setupLogging() {
+    m_logManager = std::shared_ptr<logging::LogManager>(new logging::LogManager(this));
+    // TODO put the default log levels in an enum
+    auto levelDebug = m_logManager->logLevel("DEBUG");
+    m_logManager->logLevel("INFO");
+    m_logManager->logLevel("ERROR");
+    auto generalLogger = m_logManager->logger("General");
+
+    m_consoleLogger = std::shared_ptr<logging::ConsoleLogger>(new logging::ConsoleLogger(this));
+    m_consoleLogger->connect(generalLogger);
+
+    // print an initial message to show it works
+    generalLogger->log("General logger says hello.", levelDebug);
 }
 
 void

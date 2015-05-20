@@ -19,6 +19,7 @@ quantorDir = "$$OUT_PWD/quantor-3.2"
 } {
 message(picosat directory is $$picosatDir)
 !exists($$picosatDir/config.h) {
+    message(Configuring picosat)
     system(cd $$picosatDir && ./configure && make config.h)
 }
 
@@ -33,6 +34,7 @@ message(picosat directory is $$picosatDir)
 }
 message(quantor directory is $$quantorDir)
 !exists($$quantorDir/config.h) {
+    message(Configuring quantor)
     system(cd $$quantorDir && ./configure && make options.c)
 }
 
@@ -103,7 +105,9 @@ SOURCES +=\
     logging/LogLevel.cpp \
     logging/LogEntry.cpp \
     logging/Logger.cpp \
-    logging/LogManager.cpp
+    logging/LogManager.cpp \
+    logging/LoggerListener.cpp \
+    logging/ConsoleLogger.cpp
 
 HEADERS  +=\
     gui/MainWindow.h \
@@ -162,7 +166,9 @@ HEADERS  +=\
     logging/LogLevel.h \
     logging/LogEntry.h \
     logging/Logger.h \
-    logging/LogManager.h
+    logging/LogManager.h \
+    logging/LoggerListener.h \
+    logging/ConsoleLogger.h
 
 INCLUDEPATH +=\
     $$picosatDir \

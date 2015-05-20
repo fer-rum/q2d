@@ -22,3 +22,13 @@ QColor
 LogLevel::backgroundColor() const {
     return m_backgroundColor;
 }
+
+void
+LogLevel::setFontColor(QColor color){
+    m_fontColor = color;
+}
+
+void
+LogLevel::setBackgroundColor(QColor color){
+    m_backgroundColor = color;
+}

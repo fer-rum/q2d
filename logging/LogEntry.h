@@ -1,15 +1,15 @@
 #ifndef LOGENTRY_H
 #define LOGENTRY_H
 
-#include "LogLevel.h"
+#include <QString>
 
-#include <time.h>
 #include <chrono>
+#include <memory>
 
 namespace q2d {
 namespace logging {
 
-using std::chrono::steady_clock::time_point;
+class LogLevel;
 
 /**
  * @brief The LogEntry class
@@ -19,17 +19,17 @@ using std::chrono::steady_clock::time_point;
 class LogEntry {
 private:
 
-    LogLevel m_severity;
+    std::shared_ptr<LogLevel> m_logLevel;
 
     QString m_message;
 
-    time_point m_timestamp;
+    std::chrono::time_point<std::chrono::steady_clock> m_timestamp;
 public:
-    LogEntry(QString message, LogLevel severity);
+    LogEntry(QString message, std::shared_ptr<LogLevel> logLevel);
 
-    QString message() const { return m_message; }
-    time_point timestamp() const { return m_timestamp; }
-    LogLevel severity() const { return m_severity; }
+    QString message() const;
+    std::chrono::time_point<std::chrono::steady_clock> timestamp() const;
+    std::shared_ptr<LogLevel> logLevel() const;
 };
 
 } // namespace logging
