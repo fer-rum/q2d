@@ -15,7 +15,8 @@ namespace q2d {
 namespace logging {
 
 class LogManager :
-    public QObject {
+    public QObject,
+    public std::enable_shared_from_this<LogManager> {
     Q_OBJECT
 
 private:

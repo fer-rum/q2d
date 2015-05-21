@@ -1,11 +1,20 @@
+#include "LogManager.h"
 #include "LogLevel.h"
 
-using namespace q2d::logging;
 
-LogLevel::LogLevel(QString name, QColor fontColor, QColor backgroundColor){
+using namespace q2d::logging;
+using namespace std;
+
+QString LogLevel::DEBUG = "Debug";
+QString LogLevel::ERROR = "Error";
+QString LogLevel::INFO = "Info";
+QString LogLevel::WARNING = "Warning";
+
+LogLevel::LogLevel(QString name, shared_ptr<LogManager> manager){
     m_name = name;
-    m_fontColor = fontColor;
-    m_backgroundColor = backgroundColor;
+    m_manager = manager;
+    m_fontColor = Qt::black;
+    m_backgroundColor = Qt::white;
 }
 
 QString

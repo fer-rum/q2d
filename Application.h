@@ -15,7 +15,8 @@
 
 namespace q2d {
 
-class Application : public QApplication {
+class Application
+        : public QApplication {
     Q_OBJECT
 private:
     QSettings* m_appSettings;
@@ -27,6 +28,11 @@ private:
     void defaultSetting(QString name, QVariant defaultValue);
     void checkSettings();
     void setupLogging();
+
+    /**
+     * @brief m_logger the logger used by everything related to the application itself.
+     */
+    std::shared_ptr<logging::Logger> m_logger;
 
 public:
 

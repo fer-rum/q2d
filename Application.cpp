@@ -14,6 +14,8 @@
 
 using namespace q2d;
 using namespace q2d::constants;
+using namespace q2d::logging;
+using namespace std;
 
 Application::Application(int &argc, char** argv[])
     : QApplication(argc, *argv), m_context(new ApplicationContext(this)), m_quantorInterface() {
@@ -31,7 +33,7 @@ Application::Application(int &argc, char** argv[])
     this->m_appSettings = new QSettings();
     this->checkSettings();
 
-    m_logManager->logger("General")->log("Settings loaded", m_logManager->logLevel("INFO"));
+    m_logger->log("Settings loaded", LogLevel::INFO);
 
     // Application -> Quantor
     connect(this, &Application::signal_quantorTriggered,
@@ -72,18 +74,15 @@ Application::defaultSetting(QString name, QVariant defaultValue) {
 
 void
 Application::setupLogging() {
-    m_logManager = std::shared_ptr<logging::LogManager>(new logging::LogManager(this));
+    m_logManager = shared_ptr<LogManager>(new LogManager(this));
     // TODO put the default log levels in an enum
-    auto levelDebug = m_logManager->logLevel("DEBUG");
-    m_logManager->logLevel("INFO");
-    m_logManager->logLevel("ERROR");
-    auto generalLogger = m_logManager->logger("General");
+    m_logger = m_logManager->logger("Application");
 
     m_consoleLogger = std::shared_ptr<logging::ConsoleLogger>(new logging::ConsoleLogger(this));
-    m_consoleLogger->connect(generalLogger);
+    m_consoleLogger->connect(m_logger);
 
     // print an initial message to show it works
-    generalLogger->log("General logger says hello.", levelDebug);
+    m_logger->log("Logging initialized", LogLevel::DEBUG);
 }
 
 void
