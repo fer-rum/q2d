@@ -4,25 +4,23 @@
 #include "LogLevel.h"
 
 using namespace q2d::logging;
-using namespace std;
 
-Logger::Logger(QString name, std::shared_ptr<LogManager> manager, QObject* parent)
-    : QObject(parent),
-      enable_shared_from_this<Logger>() {
+Logger::Logger(QString name, LogManager* manager, QObject* parent)
+    : QObject(parent) {
     m_manager = manager;
-    m_entries = QList<std::shared_ptr<LogEntry>>();
+    m_entries = QList<LogEntry*>();
     this->setObjectName(name);
 }
 
 void
-Logger::log(QString message, shared_ptr<LogLevel> severity) {
-    shared_ptr<LogEntry> newEntry = shared_ptr<LogEntry>( new LogEntry(message, severity) );
+Logger::log(QString message, LogLevel* severity) {
+    LogEntry* newEntry =  new LogEntry(message, severity);
     m_entries.append(newEntry);
-    emit signal_entryAdded(newEntry, shared_from_this());
+    emit signal_entryAdded(newEntry, this);
 }
 
 void
-Logger::log(QStringList messages, shared_ptr<LogLevel> severity) {
+Logger::log(QStringList messages, LogLevel* severity) {
     foreach(QString s, messages){
         this->log(s, severity);
     }
@@ -38,7 +36,7 @@ Logger::log(QStringList messages, QString severity){
     this->log(messages, m_manager->logLevel(severity));
 }
 
-QList<std::shared_ptr<LogEntry>>
+QList<LogEntry*>
 Logger::entries() const {
     return m_entries;
 }

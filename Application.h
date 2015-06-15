@@ -22,8 +22,9 @@ private:
     QSettings* m_appSettings;
     ApplicationContext* m_context;
     quantor::QuantorInterface m_quantorInterface;
-    std::shared_ptr<logging::LogManager> m_logManager;
-    std::shared_ptr<logging::ConsoleLogger> m_consoleLogger;
+
+    logging::LogManager* m_logManager;
+    logging::ConsoleLogger* m_consoleLogger;
 
     void defaultSetting(QString name, QVariant defaultValue);
     void checkSettings();
@@ -32,7 +33,7 @@ private:
     /**
      * @brief m_logger the logger used by everything related to the application itself.
      */
-    std::shared_ptr<logging::Logger> m_logger;
+    logging::Logger* m_logger;
 
 public:
 
@@ -42,8 +43,8 @@ public:
     ApplicationContext* getContext();
     QVariant getSetting(QString key);
 
-    std::shared_ptr<logging::ConsoleLogger> consoleLogger() const;
-    std::shared_ptr<logging::LogManager> logManager() const;
+    logging::ConsoleLogger* consoleLogger() const;
+    logging::LogManager* logManager() const;
 
     static Application* instance();
 signals:

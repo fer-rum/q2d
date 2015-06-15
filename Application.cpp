@@ -50,12 +50,12 @@ Application::~Application() {
     delete m_appSettings;
 }
 
-std::shared_ptr<logging::ConsoleLogger>
+logging::ConsoleLogger*
 Application::consoleLogger() const {
     return m_consoleLogger;
 }
 
-std::shared_ptr<logging::LogManager>
+logging::LogManager*
 Application::logManager() const {
     return m_logManager;
 }
@@ -74,11 +74,11 @@ Application::defaultSetting(QString name, QVariant defaultValue) {
 
 void
 Application::setupLogging() {
-    m_logManager = shared_ptr<LogManager>(new LogManager(this));
+    m_logManager = new LogManager(this);
     // TODO put the default log levels in an enum
     m_logger = m_logManager->logger("Application");
 
-    m_consoleLogger = std::shared_ptr<logging::ConsoleLogger>(new logging::ConsoleLogger(this));
+    m_consoleLogger = new logging::ConsoleLogger(this);
     m_consoleLogger->connect(m_logger);
 
     // print an initial message to show it works

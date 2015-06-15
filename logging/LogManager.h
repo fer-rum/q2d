@@ -9,20 +9,17 @@
 #include <QMap>
 #include <QObject>
 
-#include <memory>
-
 namespace q2d {
 namespace logging {
 
 class LogManager :
-    public QObject,
-    public std::enable_shared_from_this<LogManager> {
+    public QObject {
     Q_OBJECT
 
 private:
 
-    QMap<QString, std::shared_ptr<Logger>> m_loggers;
-    QMap<QString, std::shared_ptr<LogLevel>> m_logLevels;
+    QMap<QString, Logger*> m_loggers;
+    QMap<QString, LogLevel*> m_logLevels;
 
 public:
 
@@ -34,7 +31,7 @@ public:
      * @param name
      * @return
      */
-    std::shared_ptr<Logger> logger(QString name);
+    Logger* logger(QString name);
 
     QStringList loggerNames() const;
 
@@ -45,7 +42,7 @@ public:
      * @param name
      * @return
      */
-    std::shared_ptr<LogLevel> logLevel(QString name);
+    LogLevel* logLevel(QString name);
 
     QStringList logLevelNames() const;
 };

@@ -19,17 +19,17 @@ class LogLevel;
 class LogEntry {
 private:
 
-    std::shared_ptr<LogLevel> m_logLevel;
+    LogLevel* m_logLevel;
 
     QString m_message;
 
     std::chrono::time_point<std::chrono::steady_clock> m_timestamp;
 public:
-    LogEntry(QString message, std::shared_ptr<LogLevel> logLevel);
+    LogEntry(QString message, LogLevel* logLevel);
 
     QString message() const;
     std::chrono::time_point<std::chrono::steady_clock> timestamp() const;
-    std::shared_ptr<LogLevel> logLevel() const;
+    LogLevel* logLevel() const;
 };
 
 } // namespace logging

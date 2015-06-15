@@ -16,7 +16,7 @@ ConsoleLogger::ConsoleLogger(QObject* parent)
 {}
 
 void
-ConsoleLogger::handleEntry(shared_ptr<LogEntry> newEntry, shared_ptr<Logger> sender){
+ConsoleLogger::handleEntry(LogEntry* newEntry, Logger* sender){
 
     QString levelName = newEntry->logLevel()->name();
     QString message = newEntry->message();

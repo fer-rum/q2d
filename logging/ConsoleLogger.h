@@ -3,8 +3,6 @@
 
 #include "LoggerListener.h"
 
-#include <memory>
-
 namespace q2d {
 namespace logging {
 
@@ -17,7 +15,7 @@ class ConsoleLogger
 public:
     ConsoleLogger(QObject* parent = nullptr);
 
-    virtual void handleEntry(std::shared_ptr<LogEntry> newEntry, std::shared_ptr<Logger> sender) override;
+    virtual void handleEntry(LogEntry* newEntry, Logger* sender) override;
 };
 
 }   // namespace logging

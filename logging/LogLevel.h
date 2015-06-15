@@ -4,8 +4,6 @@
 #include <QColor>
 #include <QString>
 
-#include <memory>
-
 namespace q2d {
 namespace logging {
 
@@ -17,7 +15,7 @@ private:
     QString m_name;
     QColor m_fontColor;
     QColor m_backgroundColor;
-    std::shared_ptr<LogManager> m_manager;
+    LogManager* m_manager;
 
 
     // TODO store name in QObjects name property
@@ -36,7 +34,7 @@ private:
      * (if supported by the output interface).
      * The default background color is white.
      */
-    LogLevel(QString name, std::shared_ptr<LogManager> manager);
+    LogLevel(QString name, LogManager* manager);
 public:
 
 
