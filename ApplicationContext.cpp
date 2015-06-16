@@ -27,7 +27,7 @@ ApplicationContext::ApplicationContext(Application* parent)
 
     this->setupSignalsAndSlots();
 
-    QStandardItemModel* componentHierarchy = this->m_componentFactory->getComponentHierarchy();
+    QStandardItemModel* componentHierarchy = this->m_componentFactory->componentHierarchy();
     Q_CHECK_PTR(componentHierarchy);
     emit this->signal_componentModelChanged(componentHierarchy);
 }

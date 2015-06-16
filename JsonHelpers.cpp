@@ -290,7 +290,7 @@ q2d::json::toDocumentEntry(QJsonObject json, Document* document) {
     switch (type) {
     case enums::DocumentEntryType::COMPONENT : {
         metamodel::ComponentDescriptor* descriptor =
-            document->componentFactory()->getTypeForHierarchyName(typeId);
+            document->componentFactory()->componentDescriptor(typeId);
         DocumentEntryFactory::instantiateComponent(document, descriptor, position, id, false);
     }
     break;

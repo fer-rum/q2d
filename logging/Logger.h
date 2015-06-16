@@ -25,13 +25,27 @@ private:
      * @brief Logger
      * Loggers may only be created by the LoggerManager.
      * @param name will be stored in the objectName attribute of the QObject
-     * @param parent
+     * @param manager is the LogManager that created this instance.
+     * It acts as the parent in the QObject hierarchy.
      */
-    Logger(QString name, LogManager* manager, QObject* parent = nullptr);
+    Logger(QString name, LogManager* manager);
 
 public:
 
+    /**
+     * @brief log creates a new LogEntry with the given message and sevetity.
+     * The Logger::signal_entryAdded() will be triggered to inform connected listeners.
+     * @param message
+     * @param severity must not be null.
+     */
     void log(QString message, LogLevel* severity);
+
+    /**
+     * @brief log creates a new LogEntry from each list entry with given severity.
+     * This is a shortcut for calling Logger::log(QString, LogLevel*) upon each list entry.
+     * @param messages
+     * @param severity must not be null.
+     */
     void log(QStringList messages, LogLevel* severity);
     void log(QString message, QString severity);
     void log(QStringList messages, QString severity);

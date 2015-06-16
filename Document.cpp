@@ -85,7 +85,7 @@ Document::componentFactory() const {
 void
 Document::addComponent(QString typeId, QPoint position) {
 
-    metamodel::ComponentDescriptor* type = m_componentFactory->getTypeForHierarchyName(typeId);
+    metamodel::ComponentDescriptor* type = m_componentFactory->componentDescriptor(typeId);
     Q_CHECK_PTR(type);
 
     DocumentEntryFactory::instantiateComponent(this, type, position);

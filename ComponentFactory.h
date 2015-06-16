@@ -30,8 +30,9 @@ class ComponentFactory : public QObject {
     Q_OBJECT
 
 private:
-    QStandardItemModel componentHierarchy;
+    QStandardItemModel m_componentHierarchy;
 
+    // TODO: does not belong here
     void jsonToCategoryEntry(QJsonObject json, metamodel::Category* parent = nullptr);
     void jsonToTypeEntry(QJsonObject json, metamodel::Category* parent);
     void jsonToEntry(QJsonObject json, metamodel::Category* parent);
@@ -39,10 +40,10 @@ private:
 public:
     explicit ComponentFactory(ApplicationContext* parent = 0);
 
-    QStandardItemModel* getComponentHierarchy();
-    metamodel::Category* getCategoryForIndex(const QModelIndex &index);
-    metamodel::ComponentDescriptor* getTypeForIndex(const QModelIndex &index);
-    metamodel::ComponentDescriptor* getTypeForHierarchyName(QString hierarchyName);
+    QStandardItemModel* componentHierarchy();
+    metamodel::Category* categoryForIndex(const QModelIndex &index);
+    metamodel::ComponentDescriptor* componentDescriptor(const QModelIndex &index);
+    metamodel::ComponentDescriptor* componentDescriptor(const QString hierarchyName);
 
     void importHierarchy(QJsonDocument source);
 

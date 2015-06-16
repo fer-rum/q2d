@@ -3,8 +3,11 @@
 using namespace q2d::logging;
 using namespace std;
 
-LogManager::LogManager(QObject* parent)
-    : QObject(parent) {}
+LogManager::LogManager(QApplication* parent)
+    : QObject(parent) {
+    m_loggers = QMap<QString, Logger*>();
+    m_logLevels = QMap<QString, LogLevel*>();
+}
 
 Logger*
 LogManager::logger(QString name) {

@@ -5,8 +5,10 @@
 
 using namespace q2d::logging;
 
-Logger::Logger(QString name, LogManager* manager, QObject* parent)
-    : QObject(parent) {
+Logger::Logger(QString name, LogManager* manager)
+    : QObject(manager) {
+    Q_CHECK_PTR(manager);
+
     m_manager = manager;
     m_entries = QList<LogEntry*>();
     this->setObjectName(name);
@@ -14,6 +16,7 @@ Logger::Logger(QString name, LogManager* manager, QObject* parent)
 
 void
 Logger::log(QString message, LogLevel* severity) {
+    Q_CHECK_PTR(severity);
     LogEntry* newEntry =  new LogEntry(message, severity);
     m_entries.append(newEntry);
     emit signal_entryAdded(newEntry, this);
@@ -21,6 +24,7 @@ Logger::log(QString message, LogLevel* severity) {
 
 void
 Logger::log(QStringList messages, LogLevel* severity) {
+    Q_CHECK_PTR(severity);
     foreach(QString s, messages){
         this->log(s, severity);
     }

@@ -4,18 +4,22 @@
 #include "Logger.h"
 #include "LogLevel.h"
 
-#include <QString>
-#include <QStringList>
+#include <QApplication>
 #include <QMap>
 #include <QObject>
+#include <QString>
+#include <QStringList>
 
 namespace q2d {
 namespace logging {
 
+/**
+ * @brief The LogManager class
+ * The log manager is tied to a QApplication as a parent and should be instantiated by such.
+ */
 class LogManager :
     public QObject {
     Q_OBJECT
-
 private:
 
     QMap<QString, Logger*> m_loggers;
@@ -23,7 +27,7 @@ private:
 
 public:
 
-    LogManager(QObject* parent = nullptr);
+    LogManager(QApplication* parent);
 
     /**
      * @brief logger will get the logger with the given name

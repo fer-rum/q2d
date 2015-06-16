@@ -54,7 +54,7 @@ ComponentFactory::slot_addCategory(QString name, Category* parent) {
     Category* newCategory = new Category(name, parent);
 
     if (parent == nullptr) {
-        this->componentHierarchy.invisibleRootItem()->appendRow(newCategory);
+        this->m_componentHierarchy.invisibleRootItem()->appendRow(newCategory);
     } else {
         parent->addSubItem(newCategory);
     }
@@ -92,7 +92,7 @@ ComponentFactory::slot_loadType(QString filePath, Category* parent) {
     if (parent != nullptr) {
         parent->addSubItem(newType);
     } else {
-        this->componentHierarchy.invisibleRootItem()->appendRow(newType);
+        this->m_componentHierarchy.invisibleRootItem()->appendRow(newType);
     }
 }
 
@@ -106,12 +106,12 @@ ComponentFactory::slot_loadType(QString filePath, Category* parent) {
  * @return ; May return null
  */
 Category*
-ComponentFactory::getCategoryForIndex(const QModelIndex &index) {
+ComponentFactory::categoryForIndex(const QModelIndex &index) {
     if (!index.isValid()) {
         return nullptr;
     }
 
-    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
+    QStandardItem* item = this->m_componentHierarchy.itemFromIndex(index);
     return dynamic_cast<Category*>(item);
 }
 
@@ -125,24 +125,24 @@ ComponentFactory::getCategoryForIndex(const QModelIndex &index) {
  * @return ; May return null
  */
 ComponentDescriptor*
-ComponentFactory::getTypeForIndex(const QModelIndex &index) {
+ComponentFactory::componentDescriptor(const QModelIndex &index) {
 
     if (!index.isValid()) {
         return nullptr;
     }
 
-    QStandardItem* item = this->componentHierarchy.itemFromIndex(index);
+    QStandardItem* item = this->m_componentHierarchy.itemFromIndex(index);
     return static_cast<ComponentDescriptor*>(item);
 }
 
 ComponentDescriptor*
-ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
+ComponentFactory::componentDescriptor(const QString hierarchyName) {
     QStringList hierarchy = hierarchyName.split(HIERARCHY_SEPERATOR,
                             QString::SkipEmptyParts);
     // traverse the hierarchy and find the component
     // TODO use a more effective approach here, this is really a hack
 
-    QStandardItem* currentItem = this->componentHierarchy.invisibleRootItem();
+    QStandardItem* currentItem = this->m_componentHierarchy.invisibleRootItem();
 
     while (!hierarchy.isEmpty()) {
         // iterate over the current hierarcy level
@@ -165,8 +165,8 @@ ComponentFactory::getTypeForHierarchyName(QString hierarchyName) {
 }
 
 QStandardItemModel*
-ComponentFactory::getComponentHierarchy() {
-    return &(this->componentHierarchy);
+ComponentFactory::componentHierarchy() {
+    return &(this->m_componentHierarchy);
 }
 
 // FIXME move this and all helpers to JsonHelpers
@@ -218,12 +218,12 @@ ComponentFactory::jsonToEntry(QJsonObject json, Category* parent) {
 
 void
 ComponentFactory::slot_clearHierarchy() {
-    componentHierarchy.clear();
+    m_componentHierarchy.clear();
 }
 
 void
 ComponentFactory::slot_saveHierarchy(QString filePath){
-    json::writeJsonFile(filePath, json::exportComponentHierarchy(&componentHierarchy));
+    json::writeJsonFile(filePath, json::exportComponentHierarchy(&m_componentHierarchy));
 }
 
 void

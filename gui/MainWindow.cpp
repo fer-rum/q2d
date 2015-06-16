@@ -283,7 +283,7 @@ MainWindow::slot_addComponentType() {
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
-    Category* parent = componentFactory->getCategoryForIndex(currentIndex);
+    Category* parent = componentFactory->categoryForIndex(currentIndex);
 
     QString fileName;
 
@@ -313,7 +313,7 @@ MainWindow::slot_addComponentCategory() {
 
     // get the currently selected entry as parent (if eligible)
     QModelIndex currentIndex = m_ui->componentTreeView->currentIndex();
-    Category* parent = componentFactory->getCategoryForIndex(currentIndex);
+    Category* parent = componentFactory->categoryForIndex(currentIndex);
 
     // get the name for the new category
     bool ok;
