@@ -5,6 +5,12 @@ An editor for digital circuit schematics.
 The focus lies on circuits build from configurable components such as LUTs or CMUXs.
 It can evaluate if a given behaviour can be fulfilled by the designed circuit.
 
+Current State
+=============
+Not dead, only asleep. 
+Due to some questionable choices and lack of Qt-knowledge the current version has some design flaws.
+A better design is in active development and a rewrite into **q2d 0.2** is scheduled for early 2016.
+
 Features
 ========
 
@@ -21,7 +27,7 @@ Releses are provided as source code only and can be found [here](https://github.
 Dependencies
 ============
 
-Required to buid and run:
+Required to build and run:
 * [*Qt*](http://doc.qt.io/qt-5/), version 5.4 ([Download](http://www.qt.io/download-open-source/))
 
 *q2d* requires external tools to be able to solve the mapping of functions onto circuit designs:
