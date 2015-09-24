@@ -16,7 +16,7 @@ quantorDir = "$$OUT_PWD/quantor-3.2"
     } else {
         error(No picosat directory)
     }
-} {
+}
 message(picosat directory is $$picosatDir)
 !exists($$picosatDir/config.h) {
     message(Configuring picosat)
