@@ -2,6 +2,7 @@
 #include "LogEntry.h"
 #include "Logger.h"
 #include "LogLevel.h"
+#include "LogManager.h"
 
 #include <chrono>
 #include <ctime>
@@ -22,7 +23,7 @@ ConsoleLogger::handleEntry(LogEntry* newEntry, Logger* sender){
     QString message = newEntry->message();
 
     chrono::microseconds us = chrono::duration_cast<chrono::microseconds>(
-                                  chrono::steady_clock::now() - newEntry->timestamp());
+                                  newEntry->timestamp() - sender->manager()->startTime());
 
     /*
      * HACK: Converting to system_clock via the offsets

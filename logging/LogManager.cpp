@@ -7,6 +7,7 @@ LogManager::LogManager(QApplication* parent)
     : QObject(parent) {
     m_loggers = QMap<QString, Logger*>();
     m_logLevels = QMap<QString, LogLevel*>();
+    m_startTime = chrono::steady_clock::now();
 }
 
 Logger*
@@ -42,4 +43,9 @@ LogManager::logLevel(QString name) {
 QStringList
 LogManager::logLevelNames() const {
     return m_logLevels.keys();
+}
+
+chrono::time_point<chrono::steady_clock>
+LogManager::startTime() const {
+    return m_startTime;
 }

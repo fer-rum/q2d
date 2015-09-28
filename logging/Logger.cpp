@@ -9,9 +9,13 @@ Logger::Logger(QString name, LogManager* manager)
     : QObject(manager) {
     Q_CHECK_PTR(manager);
 
-    m_manager = manager;
     m_entries = QList<LogEntry*>();
     this->setObjectName(name);
+}
+
+LogManager*
+Logger::manager() const {
+    return dynamic_cast<LogManager*>(parent());
 }
 
 void
@@ -32,12 +36,12 @@ Logger::log(QStringList messages, LogLevel* severity) {
 
 void
 Logger::log(QString message, QString severity){
-    this->log(message, m_manager->logLevel(severity));
+    this->log(message, manager()->logLevel(severity));
 }
 
 void
 Logger::log(QStringList messages, QString severity){
-    this->log(messages, m_manager->logLevel(severity));
+    this->log(messages, manager()->logLevel(severity));
 }
 
 QList<LogEntry*>

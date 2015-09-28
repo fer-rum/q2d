@@ -4,6 +4,8 @@
 #include "Logger.h"
 #include "LogLevel.h"
 
+#include <chrono>
+
 #include <QApplication>
 #include <QMap>
 #include <QObject>
@@ -21,7 +23,7 @@ class LogManager :
     public QObject {
     Q_OBJECT
 private:
-
+    std::chrono::time_point<std::chrono::steady_clock> m_startTime;
     QMap<QString, Logger*> m_loggers;
     QMap<QString, LogLevel*> m_logLevels;
 
@@ -49,6 +51,8 @@ public:
     LogLevel* logLevel(QString name);
 
     QStringList logLevelNames() const;
+
+    std::chrono::time_point<std::chrono::steady_clock> startTime() const;
 };
 
 } // namespace logging

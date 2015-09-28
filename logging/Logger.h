@@ -18,7 +18,6 @@ class Logger
 friend class LogManager;
 private:
 
-    LogManager* m_manager;
     QList<LogEntry*> m_entries;
 
     /**
@@ -50,6 +49,8 @@ public:
     void log(QString message, QString severity);
     void log(QStringList messages, QString severity);
     QList<LogEntry*> entries() const;
+
+    LogManager* manager() const;
 
 signals:
     void signal_entryAdded(LogEntry* newEntry, Logger* sender);
