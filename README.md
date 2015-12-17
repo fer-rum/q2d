@@ -9,7 +9,7 @@ Current State
 =============
 Not dead, only asleep. 
 Due to some questionable choices and lack of Qt-knowledge the current version has some design flaws.
-A better design is in active development and a rewrite into **q2d 0.2** is scheduled for early 2016.
+A better design is in active development and a rewrite into [**q2d 0.2**](https://github.com/fer-rum/q2d2) has started in December 2015 and currently ongoing.
 
 Features
 ========
